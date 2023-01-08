@@ -11,7 +11,9 @@ public:
 	// 윈도우를 만들어 주는 기능
 	static void WindowCreate(HINSTANCE _hInstance, const std::string_view& _TitleName, float4 _Size, float4 _Pos);
 
+	//윈도우 크기
 	static void SettingWindowSize(float4 _Size);
+	//윈도우 위치
 	static void SettingWindowPos(float4 _Pos);
 
 	//Window Handle값을 반환하는 함수

@@ -6,4 +6,9 @@
   <ItemGroup>
     <ClCompile Include="GameEngineWindow.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{5fabad02-5844-4f40-baf8-1834b5729d22}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
 </Project>

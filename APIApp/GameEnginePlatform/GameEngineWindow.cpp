@@ -25,12 +25,14 @@ LRESULT CALLBACK MessageFunction(HWND _hWnd, UINT _message, WPARAM _wParam, LPAR
         int a = 0;
         break;
     }
-    // 내 윈도우 선택
+    //키보드의 포커스가 이돌될 때 함수 실행
+    //메시지를 받은 시점은 이미 포커스 이동이 완료된 후
     case WM_SETFOCUS:
     {
         int a = 0;
         break;
     }
+    //윈도우 활성화 | 비활성화
     case WM_ACTIVATE:
     {
         int a = 0;
@@ -46,6 +48,7 @@ LRESULT CALLBACK MessageFunction(HWND _hWnd, UINT _message, WPARAM _wParam, LPAR
     case WM_DESTROY:
     {
         //Message함수가 0을 리턴
+        //애플리케이션 종료 및 메시지 루프 중단을 위함
         PostQuitMessage(0);
         IsWindowUpdate = false;
         break;
@@ -134,7 +137,7 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
     }
 
 
-    MSG msg;
+    MSG msg;                                                    //MSG 구조체
 
 
     // 기본 메시지 루프
