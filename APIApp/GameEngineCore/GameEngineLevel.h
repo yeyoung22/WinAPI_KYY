@@ -19,9 +19,33 @@ public:
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
+	template<typename ActorType>
+	void CreateActor()
+	{
+		GameEngineActor* Actor = new ActorType();
+
+		ActorStart(Actor);
+
+		Actors.push_back(Actor);
+	}
+
 protected:
+	virtual void Loading() = 0;
+	virtual void Update() = 0;
 
 private:
+	// 하위에 있는 변수나 기능에 대해 알면 안됨
+	//std::list<Player*> Actors;
+	//std::list<Monster*> Actors;
+	//std::list<Background*> Actors;
 
+	// 하나의 자료형으로 모든 화면내에 등장하는 것들을 표현
+	std::list<GameEngineActor*> Actors;
+
+	void ActorsUpdate();
+	void ActorsRender();
+
+
+	void ActorStart(GameEngineActor* _Actor);
 };
 
