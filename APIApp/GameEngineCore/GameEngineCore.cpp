@@ -58,8 +58,7 @@ GameEngineCore::~GameEngineCore()
 
 void GameEngineCore::CoreStart(HINSTANCE _instance)
 {
-	//The pixel aspect ratio of both consoles is 8:7
-	GameEngineWindow::WindowCreate(_instance, "MainWindow", { 720, 630 }, { 0, 0 });
+	GameEngineWindow::WindowCreate(_instance, "MainWindow", { 1280, 720 }, { 0, 0 });
 	GameEngineWindow::WindowLoop(GameEngineCore::GlobalStart, GameEngineCore::GlobalUpdate, GameEngineCore::GlobalEnd);
 }
 

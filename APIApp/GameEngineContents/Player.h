@@ -1,7 +1,8 @@
 #pragma once
+#include <GameEngineCore/GameEngineActor.h>
 
 // Ό³Έν : Player(Mario)
-class Player
+class Player : public GameEngineActor
 {
 public:
 	// constrcuter destructer
@@ -15,6 +16,9 @@ public:
 	Player& operator=(Player&& _Other) noexcept = delete;
 
 protected:
+	void Start() override;
+	void Update() override;
+	void Render() override;
 
 private:
 

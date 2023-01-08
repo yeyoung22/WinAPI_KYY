@@ -2,8 +2,41 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="TitleLevel.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperMarioCore.h" />
+    <ClInclude Include="PlayLevel.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="OpeningLevel.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionLevel.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="TitleLevel.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="SuperMarioCore.cpp" />
+    <ClCompile Include="PlayLevel.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="OpeningLevel.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionLevel.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Levels">
+      <UniqueIdentifier>{6b48314c-a30c-4694-aa68-76c1100d8e3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

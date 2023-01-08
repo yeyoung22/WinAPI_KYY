@@ -16,6 +16,11 @@ public:
 	//윈도우 위치
 	static void SettingWindowPos(float4 _Pos);
 
+	static float4 GetScreenSize()
+	{
+		return ScreenSize;
+	}
+
 	//Window Handle값을 반환하는 함수
 	static HWND GetHWnd()
 	{
@@ -31,6 +36,8 @@ public:
 	//외부에서 오는 것을 실행시켜주기만 하면 됨
 	//다른 클래스 or 컨텐츠와의 관련을 맺지 않음
 	//Callback방식
+	//void(*Start)(), void(*Loop)(), void(*End)() 외부에서 함수포인터를 맡기는 방식
+	//=> 컨텐츠와 기능을 분리하기 위해서
 	static int WindowLoop(void(*Start)(), void(*Loop)(), void(*End)());
 
 
@@ -52,6 +59,6 @@ private:
 	static float4 WindowPos;
 
 	static HWND HWnd;
-	static HDC DrawHdc;			// 윈도우에 그림을 그릴수 있는 권한
+	static HDC DrawHdc;								// 윈도우에 그림을 그릴수 있는 권한
 };
 
