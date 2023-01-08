@@ -1,6 +1,6 @@
 #pragma once
 
-// 설명 :
+// 설명 : 장면에 들어갈 요소
 class GameEngineActor
 {
 public:
