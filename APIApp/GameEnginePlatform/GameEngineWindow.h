@@ -14,12 +14,13 @@ public:
 	static void SettingWindowSize(float4 _Size);
 	static void SettingWindowPos(float4 _Pos);
 
-
+	//Window Handle값을 반환하는 함수
 	static HWND GetHWnd()
 	{
 		return HWnd;
 	}
 
+	//그리기 권한을 반환하는 함수
 	static HDC GetDrawHdc()
 	{
 		return DrawHdc;
