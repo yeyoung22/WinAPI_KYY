@@ -20,7 +20,8 @@ void GameEngineCore::GlobalUpdate()
 		return;
 	}
 
-
+	Core->MainLevel->ActorsUpdate();
+	Core->MainLevel->ActorsRender();
 }
 
 void GameEngineCore::GlobalEnd()
@@ -86,5 +87,5 @@ void GameEngineCore::LevelLoading(GameEngineLevel* _Level)
 		return;
 	}
 
-	//_Level->Loading();
+	_Level->Loading();
 }

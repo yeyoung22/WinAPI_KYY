@@ -50,7 +50,7 @@ public:
 	//x, y, z 값의 절반 반환
 	float4 half()
 	{
-		return { x * 0.5f, y * 0.5f , z * 0.5f , w };
+		return { x * 0.5f,y * 0.5f,z * 0.5f,w };
 	}
 
 	float4 operator *(const float _Value) const
@@ -59,7 +59,6 @@ public:
 		Return.x = x * _Value;
 		Return.y = y * _Value;
 		Return.z = z * _Value;
-
 		return Return;
 	}
 

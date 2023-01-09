@@ -153,7 +153,7 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
         // 윈도우에 무슨 일이 발생하면 리턴되는 함수
         // 윈도우에 무슨일이 생기게 만들어야 함
         // => 게임은 쉴새없이 돌아야 하므로 내가 메세지를 줄때까지 멈추면 안 됨
-        if (GetMessage(&msg, nullptr, 0, 0))
+      /*  if (GetMessage(&msg, nullptr, 0, 0))
         {
             if (nullptr != _Loop)
             {
@@ -162,6 +162,26 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
 
             TranslateMessage(&msg);
             DispatchMessage(&msg);
+        }*/
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+            // 동기 메세지 존재 여부 관계X 진행
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+
+            // 메세지가 있을때도 게임을 실행
+            if (nullptr != _Loop)
+            {
+                _Loop();
+            }
+            continue;
+        }
+
+        // 데드타임
+        // 데드타임에 게임을 실행하는것. 
+        if (nullptr != _Loop)
+        {
+            _Loop();
         }
     }
 

@@ -1,7 +1,9 @@
 #pragma once
+#include <GameEngineCore/GameEngineActor.h>
+#include <GameEnginePlatform/GameEngineImage.h>
 
 // Ό³Έν :
-class Monster
+class Monster : public GameEngineActor
 {
 public:
 	// constrcuter destructer
@@ -15,6 +17,7 @@ public:
 	Monster& operator=(Monster&& _Other) noexcept = delete;
 
 protected:
+	// GameEngineImage* Image;
 
 private:
 

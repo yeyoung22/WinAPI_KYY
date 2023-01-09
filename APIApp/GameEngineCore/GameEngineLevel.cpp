@@ -47,7 +47,6 @@ void GameEngineLevel::ActorsRender()
 {
 	std::list<GameEngineActor*>::iterator StartIter = Actors.begin();
 	std::list<GameEngineActor*>::iterator EndIter = Actors.end();
-
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		(*StartIter)->Render();

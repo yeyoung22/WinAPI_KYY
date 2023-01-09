@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <GameEnginePlatform/GameEngineWindow.h>
+#include <GameEngineBase/GameEnginePath.h>
 
 Player::Player() 
 {

@@ -10,6 +10,15 @@
     <ClInclude Include="GameEngineString.h">
       <Filter>String</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineDirectory.h">
+      <Filter>IO%28File%29</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineFile.h">
+      <Filter>IO%28File%29</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEnginePath.h">
+      <Filter>IO%28File%29</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineDebug.cpp">
@@ -20,6 +29,15 @@
     </ClCompile>
     <ClCompile Include="GameEngineString.cpp">
       <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineDirectory.cpp">
+      <Filter>IO%28File%29</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineFile.cpp">
+      <Filter>IO%28File%29</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEnginePath.cpp">
+      <Filter>IO%28File%29</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
