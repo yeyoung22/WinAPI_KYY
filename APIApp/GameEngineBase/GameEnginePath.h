@@ -36,9 +36,17 @@ public:
 	//Path 변경
 	bool Move(const std::string_view& _Path);
 	
+
+	//지울거
+	std::string GetPathToStringTmp() const;
+
+
 protected:
 
 private:
 	std::filesystem::path Path;
+
+	
+	std::filesystem::path TmpPath = "C:\\Users\\User\\0_yeyoung\\0_Academy\\WinAPI_KYY\APIApp\\ContentsResources\\Image\\Luigi_test.bmp";
 };
 

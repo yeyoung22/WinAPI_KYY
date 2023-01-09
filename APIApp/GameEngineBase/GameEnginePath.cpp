@@ -94,3 +94,9 @@ bool GameEnginePath::IsExistsToPlusString(const std::string_view& _String)
 	return 0 == _access(Str.c_str(), 0);
 }
 
+
+//Áö¿ï°Å
+std::string GameEnginePath::GetPathToStringTmp() const
+{
+	return TmpPath.string();
+}

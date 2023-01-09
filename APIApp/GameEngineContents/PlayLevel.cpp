@@ -28,9 +28,17 @@ void PlayLevel::Loading()
 	//Dir.GetPlusFileName("Luigi_test.BMP");
 
 
+	GameEngineDirectory TmpDir ;
+
+	TmpDir.MoveParent();
+
+	TmpDir.LeaveFile("\\Luigi_test.bmp");
 	Dir.MoveParent();
 
 	int a = 0;
+	
+
+
 
 	CreateActor<Player>();
 }

@@ -35,6 +35,8 @@ public:
 	// std::vector<GameEngineFile> GetAllFile();
 
 
+	void LeaveFile(const std::string_view& _String);
+
 
 protected:
 

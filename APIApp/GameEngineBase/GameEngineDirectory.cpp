@@ -44,8 +44,24 @@ GameEnginePath GameEngineDirectory::GetPlusFileName(const std::string_view& _Str
 
 	PathString += "\\";
 	PathString += _String;
+
 	GameEnginePath NewPath = PathString;
 
 	return NewPath;
 }
 
+
+
+void GameEngineDirectory::LeaveFile(const std::string_view& _String)
+{
+	std::string tmpString = Path.GetPathToStringTmp();
+
+	
+
+	size_t tmpNum = tmpString.find(_String.data());
+	size_t length = _String.size();
+	tmpString.erase(tmpNum, length);
+	//tmpString.erase(tmpString.find(_String.data()), tmpString.end());
+
+	int a = 0;
+}
