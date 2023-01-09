@@ -35,7 +35,7 @@ public:
 
 	//Path º¯°æ
 	bool Move(const std::string_view& _Path);
-
+	
 protected:
 
 private:

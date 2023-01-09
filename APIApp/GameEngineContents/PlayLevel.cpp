@@ -22,8 +22,15 @@ void PlayLevel::Loading()
 	Dir.MoveParentToDirectory("ContentsResources");
 	Dir.Move("ContentsResources");
 	Dir.Move("Image");
+	//Dir.Move("Luigi_test.BMP");
 
-	Dir.GetPlusFileName("Luigi_test.BMP");
+
+	//Dir.GetPlusFileName("Luigi_test.BMP");
+
+
+	Dir.MoveParent();
+
+	int a = 0;
 
 	CreateActor<Player>();
 }

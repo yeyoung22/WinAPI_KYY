@@ -4,7 +4,7 @@
 #include <GameEngineBase/GameEngineDebug.h>
 
 GameEnginePath::GameEnginePath()
-	: Path(std::filesystem::current_path())
+	: Path(std::filesystem::current_path())			//현재 실행되는 파일 경로
 {
 }
 
@@ -93,3 +93,4 @@ bool GameEnginePath::IsExistsToPlusString(const std::string_view& _String)
 	std::string Str = GetPathToString() + _String.data();
 	return 0 == _access(Str.c_str(), 0);
 }
+
