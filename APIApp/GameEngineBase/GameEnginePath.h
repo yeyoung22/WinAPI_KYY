@@ -18,6 +18,7 @@ public:
 	GameEnginePath& operator=(const GameEnginePath& _Other) = delete;
 	GameEnginePath& operator=(GameEnginePath&& _Other) noexcept = delete;
 
+	std::string GetFileName() const;
 	std::string GetPathToString() const;
 
 	//상위 경로로 이동
@@ -28,6 +29,7 @@ public:
 
 	//존재 여부
 	bool IsExists();
+	//_String 파일(디렉토리)의 유효성 여부
 	bool IsExistsToPlusString(const std::string_view& _String);
 
 	//Root인지 여부
@@ -36,17 +38,13 @@ public:
 	//Path 변경
 	bool Move(const std::string_view& _Path);
 	
-
-	//지울거
-	std::string GetPathToStringTmp() const;
+	//Path 설정
+	void SetPath(const std::string_view& _Path);
 
 
 protected:
 
 private:
 	std::filesystem::path Path;
-
-	
-	std::filesystem::path TmpPath = "C:\\Users\\User\\0_yeyoung\\0_Academy\\WinAPI_KYY\APIApp\\ContentsResources\\Image\\Luigi_test.bmp";
 };
 

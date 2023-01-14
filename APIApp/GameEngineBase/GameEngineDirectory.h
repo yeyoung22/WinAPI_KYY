@@ -22,20 +22,21 @@ public:
 	//해당 디렉토리 내 파일 존재 여부
 	bool IsFile(const std::string_view& _FileName);
 
+	//상위로 이동
 	bool MoveParent();
 
+	//하위로 이동
 	void MoveParentToDirectory(const std::string_view& _String);
 
+	//이동
 	bool Move(const std::string_view& _String);
 
+	//파일명을 더한 경로 반환
 	GameEnginePath GetPlusFileName(const std::string_view& _String);
 
 
 
 	// std::vector<GameEngineFile> GetAllFile();
-
-
-	void LeaveFile(const std::string_view& _String);
 
 
 protected:

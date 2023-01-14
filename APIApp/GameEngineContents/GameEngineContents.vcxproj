@@ -159,10 +159,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="OptionLevel.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <SubType>
       </SubType>
@@ -186,10 +182,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="OpeningLevel.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="OptionLevel.cpp">
       <SubType>
       </SubType>
     </ClCompile>

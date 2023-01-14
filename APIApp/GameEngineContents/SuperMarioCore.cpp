@@ -4,7 +4,6 @@
 #include "TitleLevel.h"
 #include "OpeningLevel.h"
 #include "PlayLevel.h"
-#include "OptionLevel.h"
 
 //SuperMarioCore SuperMarioCore::Core = new SuperMarioCore();
 
@@ -31,7 +30,6 @@ void SuperMarioCore::Start()
 	CreateLevel<TitleLevel>("Title");
 	CreateLevel<OpeningLevel>("Opening");
 	CreateLevel<PlayLevel>("Play");
-	CreateLevel<OptionLevel>("Option");
 
 	//static_assert
 	//CreateLevel<Player>("Title1");

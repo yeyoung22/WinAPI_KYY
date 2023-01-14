@@ -13,9 +13,6 @@
     <ClInclude Include="OpeningLevel.h">
       <Filter>Levels</Filter>
     </ClInclude>
-    <ClInclude Include="OptionLevel.h">
-      <Filter>Levels</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp" />
@@ -28,9 +25,6 @@
       <Filter>Levels</Filter>
     </ClCompile>
     <ClCompile Include="OpeningLevel.cpp">
-      <Filter>Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="OptionLevel.cpp">
       <Filter>Levels</Filter>
     </ClCompile>
   </ItemGroup>

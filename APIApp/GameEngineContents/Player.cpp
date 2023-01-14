@@ -2,6 +2,7 @@
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEngineBase/GameEnginePath.h>
 
+
 Player::Player() 
 {
 }
@@ -31,12 +32,12 @@ void Player::Render()
 	// TextOutA(GameEngineWindow::GetDrawHdc(), 0, 0, PathText.c_str(), PathText.size());
 
 
-	Rectangle(
-		GameEngineWindow::GetDrawHdc(),
-		PlayerPos.ix() - 50,
-		PlayerPos.iy() - 50,
-		PlayerPos.ix() + 50,
-		PlayerPos.iy() + 50
-	);
+	//Rectangle(
+	//	GameEngineWindow::GetDoubleBufferImage()->GetImageDC(),
+	//	PlayerPos.ix() - 50,
+	//	PlayerPos.iy() - 50,
+	//	PlayerPos.ix() + 50,
+	//	PlayerPos.iy() + 50
+	//);
 
 }

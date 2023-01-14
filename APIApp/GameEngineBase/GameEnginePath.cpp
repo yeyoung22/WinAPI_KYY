@@ -35,6 +35,11 @@ GameEnginePath::GameEnginePath(const GameEnginePath& _Other)
 
 }
 
+std::string GameEnginePath::GetFileName() const
+{
+	return Path.filename().string();
+}
+
 std::string GameEnginePath::GetPathToString() const
 {
 	return Path.string();
@@ -91,12 +96,14 @@ bool GameEnginePath::IsExists()
 bool GameEnginePath::IsExistsToPlusString(const std::string_view& _String)
 {
 	std::string Str = GetPathToString() + _String.data();
+
+	//파일 존재 여부 및 쓰기 허용 여부
+	//                  경로        읽기/쓰기 특성
+	//mode == 00: 존재만
 	return 0 == _access(Str.c_str(), 0);
 }
 
-
-//지울거
-std::string GameEnginePath::GetPathToStringTmp() const
+void GameEnginePath::SetPath(const std::string_view& _Path)
 {
-	return TmpPath.string();
+	Path = _Path.data();
 }

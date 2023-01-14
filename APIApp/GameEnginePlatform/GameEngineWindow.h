@@ -5,6 +5,7 @@
 
 
 // 설명 :윈도우와 관련된 기능
+class GameEngineImage;
 class GameEngineWindow
 {
 public:
@@ -27,10 +28,9 @@ public:
 		return HWnd;
 	}
 
-	//그리기 권한을 반환하는 함수
-	static HDC GetDrawHdc()
+	static HDC GetWindowBackBufferHdc()
 	{
-		return DrawHdc;
+		return WindowBackBufferHdc;
 	}
 
 	//외부에서 오는 것을 실행시켜주기만 하면 됨
@@ -59,6 +59,7 @@ private:
 	static float4 WindowPos;
 
 	static HWND HWnd;
-	static HDC DrawHdc;								// 윈도우에 그림을 그릴수 있는 권한
+	static HDC WindowBackBufferHdc;								// 윈도우에 그림을 그릴수 있는 권한
+	static GameEngineImage* BackBufferImage;
 };
 

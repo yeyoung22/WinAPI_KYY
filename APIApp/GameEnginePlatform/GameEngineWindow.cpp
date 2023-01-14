@@ -1,15 +1,18 @@
 #include "GameEngineWindow.h"
 #include <GameEngineBase/GameEngineDebug.h>
+#include <GameEnginePlatform/GameEngineImage.h>
 
 // LRESULT(CALLBACK* WNDPROC)(HWND, UINT, WPARAM, LPARAM)
 
 HWND GameEngineWindow::HWnd = nullptr;
-HDC GameEngineWindow::DrawHdc = nullptr;
+HDC GameEngineWindow::WindowBackBufferHdc = nullptr;
 
-//옛날 게임 비율_4:3
+
 float4 GameEngineWindow::WindowSize = { 800, 600 };         //window 크기
 float4 GameEngineWindow::WindowPos = { 100, 100 };          //window 위치
 float4 GameEngineWindow::ScreenSize = { 800, 600 };
+GameEngineImage* GameEngineWindow::BackBufferImage = nullptr;
+
 
 //윈도우 업데이트 체크 여부
 bool IsWindowUpdate = true;
@@ -115,13 +118,18 @@ void GameEngineWindow::WindowCreate(HINSTANCE _hInstance, const std::string_view
         return;
     }
 
-    DrawHdc = GetDC(HWnd);
+    //윈도우가 만들어지면서 부터 생성된 색상 2차원 배열의 수정권한을 받음
+    WindowBackBufferHdc = GetDC(HWnd);
 
     ShowWindow(HWnd, SW_SHOW);
     UpdateWindow(HWnd);
 
     SettingWindowSize(_Size);
     SettingWindowPos(_Pos);
+
+    //크기 변경 후 가져옴
+    BackBufferImage = new GameEngineImage();
+    BackBufferImage->ImageCreate(WindowBackBufferHdc);
 
     return;
 }
@@ -190,6 +198,13 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
         _End();
     }
 
+    if (nullptr != BackBufferImage)
+    {
+
+        delete BackBufferImage;
+        BackBufferImage = nullptr;
+    }
+
     return (int)msg.wParam;
 }
 
@@ -203,12 +218,12 @@ void GameEngineWindow::SettingWindowSize(float4 _Size)
 
     ScreenSize = _Size;
 
-    // 내가 원하는 크기를 넣으면 타이틀바까지 고려한 크기를 리턴주는 함수
+    //원하는 크기를 넣으면 타이틀바까지 고려한 크기를 리턴하는 함수
     AdjustWindowRect(&Rc, WS_OVERLAPPEDWINDOW, FALSE);
 
     WindowSize = { static_cast<float>(Rc.right - Rc.left), static_cast<float>(Rc.bottom - Rc.top) };
 
-    // 0을 넣어주면 기존의 크기를 유지
+    //0을 넣어주면 기존의 크기를 유지
     SetWindowPos(HWnd, nullptr, WindowPos.ix(), WindowPos.iy(), WindowSize.ix(), WindowSize.iy(), SWP_NOZORDER);
 }
 void GameEngineWindow::SettingWindowPos(float4 _Pos)

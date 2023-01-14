@@ -32,7 +32,6 @@ void PlayLevel::Loading()
 
 	TmpDir.MoveParent();
 
-	TmpDir.LeaveFile("\\Luigi_test.bmp");
 	Dir.MoveParent();
 
 	int a = 0;
