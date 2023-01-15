@@ -33,6 +33,15 @@ public:
 		return WindowBackBufferHdc;
 	}
 
+	static GameEngineImage* GetDoubleBufferImage()
+	{
+		return DoubleBufferImage;
+	}
+
+	static void DoubleBufferClear();
+
+	static void DoubleBufferRender();
+
 	//외부에서 오는 것을 실행시켜주기만 하면 됨
 	//다른 클래스 or 컨텐츠와의 관련을 맺지 않음
 	//Callback방식
@@ -61,5 +70,6 @@ private:
 	static HWND HWnd;
 	static HDC WindowBackBufferHdc;								// 윈도우에 그림을 그릴수 있는 권한
 	static GameEngineImage* BackBufferImage;
+	static GameEngineImage* DoubleBufferImage;
 };
 

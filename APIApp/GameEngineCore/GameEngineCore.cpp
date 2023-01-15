@@ -2,6 +2,7 @@
 #include <GameEngineBase/GameEngineDebug.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include "GameEngineLevel.h"
+#include "GameEngineResources.h"
 
 GameEngineCore* Core;
 
@@ -21,12 +22,16 @@ void GameEngineCore::GlobalUpdate()
 	}
 
 	Core->MainLevel->ActorsUpdate();
+	GameEngineWindow::DoubleBufferClear();
 	Core->MainLevel->ActorsRender();
+	GameEngineWindow::DoubleBufferRender();
 }
 
 void GameEngineCore::GlobalEnd()
 {
 	Core->End();
+
+	GameEngineResources::GetInst().Release();
 }
 
 

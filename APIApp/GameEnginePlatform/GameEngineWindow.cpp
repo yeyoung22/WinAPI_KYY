@@ -12,11 +12,10 @@ float4 GameEngineWindow::WindowSize = { 800, 600 };         //window 크기
 float4 GameEngineWindow::WindowPos = { 100, 100 };          //window 위치
 float4 GameEngineWindow::ScreenSize = { 800, 600 };
 GameEngineImage* GameEngineWindow::BackBufferImage = nullptr;
-
+GameEngineImage* GameEngineWindow::DoubleBufferImage = nullptr;
 
 //윈도우 업데이트 체크 여부
 bool IsWindowUpdate = true;
-
 
 LRESULT CALLBACK MessageFunction(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam)
 {
@@ -134,6 +133,16 @@ void GameEngineWindow::WindowCreate(HINSTANCE _hInstance, const std::string_view
     return;
 }
 
+void GameEngineWindow::DoubleBufferClear()
+{
+    DoubleBufferImage->ImageClear();
+}
+
+void GameEngineWindow::DoubleBufferRender()
+{
+    BackBufferImage->BitCopy(DoubleBufferImage, { 0,0 }, WindowSize);
+}
+
 int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
 {
     // 단축키
@@ -200,6 +209,8 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
 
     if (nullptr != BackBufferImage)
     {
+        delete DoubleBufferImage;
+        DoubleBufferImage = nullptr;
 
         delete BackBufferImage;
         BackBufferImage = nullptr;
@@ -225,6 +236,15 @@ void GameEngineWindow::SettingWindowSize(float4 _Size)
 
     //0을 넣어주면 기존의 크기를 유지
     SetWindowPos(HWnd, nullptr, WindowPos.ix(), WindowPos.iy(), WindowSize.ix(), WindowSize.iy(), SWP_NOZORDER);
+
+    if (nullptr != DoubleBufferImage)
+    {
+        delete DoubleBufferImage;
+        DoubleBufferImage = nullptr;
+    }
+
+    DoubleBufferImage = new GameEngineImage();
+    DoubleBufferImage->ImageCreate(ScreenSize);
 }
 void GameEngineWindow::SettingWindowPos(float4 _Pos)
 {

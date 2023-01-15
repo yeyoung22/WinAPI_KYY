@@ -8,6 +8,9 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineCore.h" />
+    <ClInclude Include="GameEngineResources.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineActor.cpp">
@@ -17,10 +20,16 @@
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineCore.cpp" />
+    <ClCompile Include="GameEngineResources.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Object">
       <UniqueIdentifier>{8d50a177-260e-4009-b7db-ca93436bd543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{f2b4c1af-29f2-42bf-a80a-0d20a697f535}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

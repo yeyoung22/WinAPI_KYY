@@ -1,11 +1,19 @@
 #pragma once
-#include "GameEngineImage.h"
 #include <map>
 #include <string>
+#include <GameEnginePlatform/GameEngineImage.h>
 
-// 설명 : 모든 리소스 관리(사운드, 이미지)
+// 설명 : 사운드 이미지 전부 관리
+class GameEnginePath;
+class GameEngineImage;
 class GameEngineResources
 {
+public:
+	static GameEngineResources& GetInst()
+	{
+		return Inst;
+	}
+
 public:
 
 	// delete Function
@@ -14,23 +22,27 @@ public:
 	GameEngineResources& operator=(const GameEngineResources& _Other) = delete;
 	GameEngineResources& operator=(GameEngineResources&& _Other) noexcept = delete;
 
-	GameEngineResources& GetInst()
-	{
-		return Inst;
-	}
+	
+	bool ImageLoad(const GameEnginePath& _Path);
+
+	bool ImageLoad(const std::string_view& _Path, const std::string_view& _Name);
+
+	//이미지 탐색
+	GameEngineImage* ImageFind(const std::string_view& _Name);
+
+	//
+	void Release();
+
 
 protected:
-	void ImageLoad(const std::string_view& _Path);
 
 private:
-	//<싱글톤>
 	static GameEngineResources Inst;
 
 	// constrcuter destructer
 	GameEngineResources();
 	~GameEngineResources();
 
-	//이미지를 파일명으로 관리하기 위함
 	//        xxxx.bmp
 	std::map<std::string, GameEngineImage*> AllImage;
 };

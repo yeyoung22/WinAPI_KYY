@@ -45,9 +45,19 @@ protected:
 	//키입력을 받거나 인공지능을 점수를 계산하거나 하는 것들
 	virtual void Update() {}
 
+	//순서를 제어 함수를 한 번 더 실행
+	virtual void LateUpdate() {}
+
 	//화면에 그려지는 기능들
 	virtual void Render() {}
 
 private:
+	int Order;
 	float4 Pos = { 0.0f, 0.0f };
+	
+	
+	void SetOrder(int _Order)
+	{
+		Order = _Order;
+	}
 };

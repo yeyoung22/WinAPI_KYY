@@ -1,9 +1,13 @@
 #pragma once
+#include <string>
+#include <string_view>
 
 // 설명 :
 class GameEngineString
 {
 public:
+	//대문자 치환
+	static std::string ToUpper(const std::string_view& _Str);
 
 	// delete Function
 	GameEngineString(const GameEngineString& _Other) = delete;

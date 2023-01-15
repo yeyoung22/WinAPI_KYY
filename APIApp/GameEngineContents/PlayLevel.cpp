@@ -1,6 +1,7 @@
 #include "PlayLevel.h"
 #include "Player.h"
 #include <GameEngineBase/GameEngineDirectory.h>
+#include <GameEngineCore/GameEngineResources.h>
 
 PlayLevel::PlayLevel() 
 {
@@ -22,17 +23,9 @@ void PlayLevel::Loading()
 	Dir.MoveParentToDirectory("ContentsResources");
 	Dir.Move("ContentsResources");
 	Dir.Move("Image");
-	//Dir.Move("Luigi_test.BMP");
 
+	GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("MarioCustoms.bmp"));
 
-	//Dir.GetPlusFileName("Luigi_test.BMP");
-
-
-	GameEngineDirectory TmpDir ;
-
-	TmpDir.MoveParent();
-
-	Dir.MoveParent();
 
 	int a = 0;
 	
