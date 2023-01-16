@@ -68,8 +68,8 @@ private:
 	static float4 WindowPos;
 
 	static HWND HWnd;
-	static HDC WindowBackBufferHdc;								// 윈도우에 그림을 그릴수 있는 권한
-	static GameEngineImage* BackBufferImage;
-	static GameEngineImage* DoubleBufferImage;
+	static HDC WindowBackBufferHdc;								//윈도우에 그림을 그릴수 있는 권한
+	static GameEngineImage* BackBufferImage;					//윈도우 생성시 나오는 배경(흰 화면)
+	static GameEngineImage* DoubleBufferImage;					//DoubleBuffer에 이미지 여러 번 그리고 BackBuffer에서는 DuobleBuffer걸로 한 번 그려지게 함
 };
 

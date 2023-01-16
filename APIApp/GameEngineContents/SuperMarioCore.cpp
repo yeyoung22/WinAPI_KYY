@@ -23,16 +23,13 @@ void SuperMarioCore::Start()
 	//실수를 원한다면 실수를 넣어야 함
 
 	//The pixel aspect ratio of both consoles is 8:7
-	GameEngineWindow::SettingWindowSize({ 1200.0f, (1200.0f / 800.0f) * 700.0f });
+	GameEngineWindow::SettingWindowSize({ 1280.0f, (1280.0f / 800.0f) * 700.0f });
 
 	new int();
 
 	CreateLevel<TitleLevel>("Title");
 	CreateLevel<OpeningLevel>("Opening");
 	CreateLevel<PlayLevel>("Play");
-
-	//static_assert
-	//CreateLevel<Player>("Title1");
 
 	//우선 눈에 보이는게 좋으므로 Start지만 title이 아닌 play 사용
 	ChangeLevel("Play");

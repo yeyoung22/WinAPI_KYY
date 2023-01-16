@@ -22,10 +22,10 @@ public:
 	GameEngineResources& operator=(const GameEngineResources& _Other) = delete;
 	GameEngineResources& operator=(GameEngineResources&& _Other) noexcept = delete;
 
-	
-	bool ImageLoad(const GameEnginePath& _Path);
+	//이미지 로드
+	GameEngineImage* ImageLoad(const GameEnginePath& _Path);
 
-	bool ImageLoad(const std::string_view& _Path, const std::string_view& _Name);
+	GameEngineImage* ImageLoad(const std::string_view& _Path, const std::string_view& _Name);
 
 	//이미지 탐색
 	GameEngineImage* ImageFind(const std::string_view& _Name);

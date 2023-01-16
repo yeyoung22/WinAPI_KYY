@@ -29,12 +29,12 @@ void GameEngineResources::Release()
 }
 
 //이미지
-bool GameEngineResources::ImageLoad(const GameEnginePath& _Path)
+GameEngineImage* GameEngineResources::ImageLoad(const GameEnginePath& _Path)
 {
 	return ImageLoad(_Path.GetPathToString().c_str(), _Path.GetFileName().c_str());
 }
 
-bool GameEngineResources::ImageLoad(const std::string_view& _Path, const std::string_view& _Name)
+GameEngineImage* GameEngineResources::ImageLoad(const std::string_view& _Path, const std::string_view& _Name)
 {
 	// D:\\yeyoung\\0_Academy\\Portfolio\\WinAPI_KYY\\APIApp\\ContentsResources\\Image\\MarioCustoms.bmp
 
@@ -44,7 +44,7 @@ bool GameEngineResources::ImageLoad(const std::string_view& _Path, const std::st
 	if (AllImage.end() != AllImage.find(UpperName))
 	{
 		MsgAssert("이미 로드한 이미지를 또 로드하려고 했습니다." + UpperName);
-		return false;
+		return nullptr;
 	}
 
 	GameEngineImage* NewImage = new GameEngineImage();
@@ -52,7 +52,7 @@ bool GameEngineResources::ImageLoad(const std::string_view& _Path, const std::st
 	//map에 이미지를 넣음
 	AllImage.insert(std::make_pair(UpperName, NewImage));
 
-	return true;
+	return NewImage;
 }
 
 GameEngineImage* GameEngineResources::ImageFind(const std::string_view& _Name)

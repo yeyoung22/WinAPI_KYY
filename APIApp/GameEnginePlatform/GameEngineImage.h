@@ -93,8 +93,10 @@ public:
 	}
 	
 	//이미지 자르는 함수
+	//지정한 부분에서 지정한 만큼 자름
 	void Cut(float4 _Start, float4 _End, int _X, int _Y);
 
+	//자를 이미지 가로, 세로
 	void Cut(int _X, int _Y);
 
 	void BitCopy(const GameEngineImage* _OtherImage, float4 _Pos, float4 _Scale);

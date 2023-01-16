@@ -16,7 +16,6 @@ void PlayLevel::Loading()
 {
 	//절대 경로
 	//"D:\yeyoung\0_Academy\Portfolio\WinAPI_KYY\APIApp\ContentsResources\Image\Luigi_test.bmp";
-	// std::string Text = "D:\yeyoung\0_Academy\Portfolio\WinAPI_KYY\APIApp\ContentsResources\Image\Luigi_test.bmp";
 
 	GameEngineDirectory Dir;
 
@@ -24,10 +23,12 @@ void PlayLevel::Loading()
 	Dir.Move("ContentsResources");
 	Dir.Move("Image");
 
-	GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("MarioCustoms.bmp"));
+	//GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("MarioCustoms.bmp"));
 
-
-	int a = 0;
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("MarioCustoms.BMP"));
+		Image->Cut({41, 56}, {192, 74}, 10, 1);
+	}
 	
 
 

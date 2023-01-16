@@ -156,7 +156,7 @@ void GameEngineImage::BitCopy(const GameEngineImage* _OtherImage, float4 _Pos, f
 	);
 }
 
-void GameEngineImage::TransCopy(const GameEngineImage* _OtherImage, int _CutIndex, float4 _CopyCenterPos, float4 _CopySize, int _Color/* = RGB(255, 0, 255)*/)
+void GameEngineImage::TransCopy(const GameEngineImage* _OtherImage, int _CutIndex, float4 _CopyCenterPos, float4 _CopySize, int _Color)
 {
 	if (false == _OtherImage->IsCut)
 	{
@@ -169,41 +169,27 @@ void GameEngineImage::TransCopy(const GameEngineImage* _OtherImage, int _CutInde
 	TransCopy(_OtherImage, _CopyCenterPos, _CopySize, Data.GetStartPos(), Data.GetScale(), _Color);
 }
 
-void GameEngineImage::TransCopy(const GameEngineImage* _OtherImage, float4 _CopyPos, float4 _CopySize, float4 _OtherImagePos, float4 _OtherImageSize, int _Color)
-{
-	TransparentBlt(ImageDC,
-		_CopyPos.ix(),
-		_CopyPos.iy(),
-		100,
-		100,
-		_OtherImage->GetImageDC(),
-		0,
-		0,
-		100,
-		100,
-		_Color);					//투명으로 처리할 복사할 이미지의 RGB 색상
-}
-
 void GameEngineImage::TransCopy(const GameEngineImage* _OtherImage, float4 _CopyCenterPos, float4 _CopySize, float4 _OtherImagePos, float4 _OtherImageSize, int _Color)
 {
 
-	TransparentBlt(ImageDC,						//여기에 그려라.
-		_CopyCenterPos.ix() - _CopySize.hix(),	// 여기를 시작으로
+	TransparentBlt(ImageDC,						//이미지가 그려질 대상
+		_CopyCenterPos.ix() - _CopySize.hix(),	//그려질 위치의 시작
 		_CopyCenterPos.iy() - _CopySize.hiy(),
-		_CopySize.ix(),							// 이 크기로
+		_CopySize.ix(),							//그려질 크기로
 		_CopySize.iy(),
 		_OtherImage->GetImageDC(),
-		_OtherImagePos.ix(),					//이미지의 x y에서부터
+		_OtherImagePos.ix(),					//복사할 이미지 x y에서부터
 		_OtherImagePos.iy(),
-		_OtherImageSize.ix(),					//이미지의 x y까지의 위치를
+		_OtherImageSize.ix(),					//복사할 이미지 크기
 		_OtherImageSize.iy(),
-		_Color);
+		_Color);								//투명으로 처리할 복사할 이미지의 RGB 색상
 }
 
 void GameEngineImage::Cut(int _X, int _Y)
 {
 	ImageCutData Data;
 
+	//이미지를 가로로 _X만큼, 세로로 _Y만큼 자름
 	Data.SizeX = static_cast<float>(GetImageScale().ix() / _X);
 	Data.SizeY = static_cast<float>(GetImageScale().iy() / _Y);
 
@@ -211,14 +197,16 @@ void GameEngineImage::Cut(int _X, int _Y)
 	{
 		for (size_t i = 0; i < _X; i++)
 		{
+			//자른 이미지를 담음
 			ImageCutDatas.push_back(Data);
 			Data.StartX += Data.SizeX;
 		}
-
+		//한 줄 자르면 StartX의 위치는 다시 0(이미지의 X값 시작위치)
 		Data.StartX = 0.0f;
 		Data.StartY += Data.SizeY;
 	}
 
+	//다듬어졌음을 표시
 	IsCut = true;
 }
 
@@ -226,6 +214,7 @@ void GameEngineImage::Cut(float4 _Start, float4 _End, int _X, int _Y)
 {
 	ImageCutData Data;
 
+	//End-Start는 각각 너비 및 높이
 	Data.SizeX = static_cast<float>((_End.x - _Start.x) / _X);
 	Data.SizeY = static_cast<float>((_End.y - _Start.y) / _Y);
 
