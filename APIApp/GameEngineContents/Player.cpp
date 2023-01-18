@@ -42,7 +42,7 @@ void Player::Render()
 	//);
 
 
-	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind("MarioCustoms.bmp");
+	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind("Mario.bmp");
 
 	// 프레임 애니메이션이라고 합니다.
 	//GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, 4, PlayerPos, { 100, 200 });

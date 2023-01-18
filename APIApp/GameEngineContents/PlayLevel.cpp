@@ -22,12 +22,12 @@ void PlayLevel::Loading()
 	Dir.MoveParentToDirectory("ContentsResources");
 	Dir.Move("ContentsResources");
 	Dir.Move("Image");
+	Dir.Move("Play");
 
-	//GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("MarioCustoms.bmp"));
 
 	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("MarioCustoms.BMP"));
-		Image->Cut({41, 56}, {192, 74}, 10, 1);
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Mario.bmp"));
+		Image->Cut(4, 9);
 	}
 	
 
