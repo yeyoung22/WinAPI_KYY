@@ -114,6 +114,10 @@ public:
 		return Return;
 	}
 
+	float4 operator -() const
+	{
+		return { -x, -y, -z, 1.0f };
+	}
 
 	float4& operator +=(const float4& _Other)
 	{
