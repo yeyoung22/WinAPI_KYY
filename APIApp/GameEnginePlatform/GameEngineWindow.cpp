@@ -2,20 +2,21 @@
 #include <GameEngineBase/GameEngineDebug.h>
 #include <GameEnginePlatform/GameEngineImage.h>
 
-// LRESULT(CALLBACK* WNDPROC)(HWND, UINT, WPARAM, LPARAM)
+
 
 HWND GameEngineWindow::HWnd = nullptr;
 HDC GameEngineWindow::WindowBackBufferHdc = nullptr;
 
+//The pixel aspect ratio of both consoles is 8:7
+//GameEngineWindow::SettingWindowSize({ 720.0f, (720.0f / 800.0f) * 700.0f });
 
-float4 GameEngineWindow::WindowSize = { 800, 600 };         //window 크기
-float4 GameEngineWindow::WindowPos = { 100, 100 };          //window 위치
-float4 GameEngineWindow::ScreenSize = { 800, 600 };
+float4 GameEngineWindow::WindowSize = { 720, 630 };         //window 크기
+float4 GameEngineWindow::WindowPos = { 80, 80 };          //window 위치
+float4 GameEngineWindow::ScreenSize = { 720, 630 };
 GameEngineImage* GameEngineWindow::BackBufferImage = nullptr;
 GameEngineImage* GameEngineWindow::DoubleBufferImage = nullptr;
-
-//윈도우 업데이트 체크 여부
 bool IsWindowUpdate = true;
+
 
 LRESULT CALLBACK MessageFunction(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam)
 {

@@ -44,10 +44,10 @@ void Player::Render()
 
 	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind("Mario.bmp");
 
-	// 프레임 애니메이션이라고 합니다.
-	//GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, 4, PlayerPos, { 100, 200 });
+	// 프레임 애니메이션
+	GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, 4, {0, 0}, { 100, 200 });
 
-	GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, /*PlayerPos - float4{ 50, 50 }*/{0, 0}, { 20, 20 }, float4::Left, Image->GetImageScale());
+	
 
 	// 비율이 어긋날수록 더 느려진다.
 	//GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, PlayerPos, { 30, 50 }, { 41, 56 }, {150, 18});

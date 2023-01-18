@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <GameEngineBase/GameEngineTime.h>
 #include <GameEngineContents/SuperMarioCore.h>
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,

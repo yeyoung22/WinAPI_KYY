@@ -23,7 +23,7 @@ void SuperMarioCore::Start()
 	//실수를 원한다면 실수를 넣어야 함
 
 	//The pixel aspect ratio of both consoles is 8:7
-	GameEngineWindow::SettingWindowSize({ 1280.0f, (1280.0f / 800.0f) * 700.0f });
+	GameEngineWindow::SettingWindowSize({ 720.0f, (720.0f / 800.0f) * 700.0f });
 
 	new int();
 
