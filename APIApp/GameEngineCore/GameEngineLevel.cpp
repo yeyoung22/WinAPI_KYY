@@ -1,6 +1,6 @@
 #include "GameEngineLevel.h"
-#include "GameEngineActor.h"
 #include <GameEngineBase/GameEngineDebug.h>
+#include "GameEngineActor.h"
 
 GameEngineLevel::GameEngineLevel() 
 {
@@ -10,7 +10,7 @@ GameEngineLevel::~GameEngineLevel()
 {
 	for (std::pair<int, std::list<GameEngineActor*>> UpdateGroup : Actors)					//Range For
 	{
-		std::list<GameEngineActor*>& ActorList = UpdateGroup.second;
+		std::list<GameEngineActor*>& ActorList = UpdateGroup.second;						//복사가 안 일어나게 하기 위한 &
 
 		for (GameEngineActor* Actor : ActorList)
 		{
@@ -34,11 +34,12 @@ void GameEngineLevel::ActorStart(GameEngineActor* _Actor, int _Order)
 		return;
 	}
 
+	_Actor->Level = this;
 	_Actor->SetOrder(_Order);
 	_Actor->Start();
 }
 
-void GameEngineLevel::ActorsUpdate()
+void GameEngineLevel::ActorsUpdate(float _DeltaTime)
 {
 	{
 		std::map<int, std::list<GameEngineActor*>>::iterator GroupStartIter = Actors.begin();
@@ -51,12 +52,13 @@ void GameEngineLevel::ActorsUpdate()
 			for (GameEngineActor* Actor : ActorList)
 			{
 				// Actors.erase()
-				if (nullptr == Actor)
+				if (nullptr == Actor || false == Actor->IsUpdate())
 				{
 					continue;
 				}
 
-				Actor->Update();
+				Actor->LiveTime += _DeltaTime;
+				Actor->Update(_DeltaTime);
 			}
 		}
 	}
@@ -72,17 +74,17 @@ void GameEngineLevel::ActorsUpdate()
 			for (GameEngineActor* Actor : ActorList)
 			{
 				// Actors.erase()
-				if (nullptr == Actor)
+				if (nullptr == Actor || false == Actor->IsUpdate())
 				{
 					continue;
 				}
 
-				Actor->LateUpdate();
+				Actor->LateUpdate(_DeltaTime);
 			}
 		}
 	}
 }
-void GameEngineLevel::ActorsRender()
+void GameEngineLevel::ActorsRender(float _DeltaTime)
 {
 
 	{
@@ -101,7 +103,7 @@ void GameEngineLevel::ActorsRender()
 					continue;
 				}
 
-				Actor->Render();
+				Actor->Render(_DeltaTime);
 			}
 		}
 	}

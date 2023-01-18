@@ -1,18 +1,49 @@
 #include "GameEngineCore.h"
 #include <GameEngineBase/GameEngineDebug.h>
+#include <GameEngineBase/GameEngineTime.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include "GameEngineLevel.h"
 #include "GameEngineResources.h"
 
 GameEngineCore* Core;
 
+GameEngineCore* GameEngineCore::GetInst()
+{
+	return Core;
+}
+
 void GameEngineCore::GlobalStart()
 {
 	Core->Start();
+
+	GameEngineTime::GlobalTime.Reset();
 }
 
 void GameEngineCore::GlobalUpdate()
 {
+	if (nullptr != Core->NextLevel)
+	{
+		GameEngineLevel* PrevLevel = Core->MainLevel;
+		GameEngineLevel* NextLevel = Core->NextLevel;
+
+		if (nullptr != PrevLevel)
+		{
+			PrevLevel->LevelChangeEnd(NextLevel);
+		}
+
+		Core->MainLevel = NextLevel;
+		Core->NextLevel = nullptr;
+
+		if (nullptr != NextLevel)
+		{
+			NextLevel->LevelChangeStart(PrevLevel);
+		}
+	}
+
+	// 프레임 시작할때 한번 델타타임을 정하고
+	float TimeDeltaTime = GameEngineTime::GlobalTime.TimeCheck();
+	//GameEngineInput::Update(TimeDeltaTime);
+
 	Core->Update();
 
 	if (nullptr == Core->MainLevel)
@@ -21,9 +52,11 @@ void GameEngineCore::GlobalUpdate()
 		return;
 	}
 
-	Core->MainLevel->ActorsUpdate();
+
+
+	Core->MainLevel->ActorsUpdate(TimeDeltaTime);
 	GameEngineWindow::DoubleBufferClear();
-	Core->MainLevel->ActorsRender();
+	Core->MainLevel->ActorsRender(TimeDeltaTime);
 	GameEngineWindow::DoubleBufferRender();
 }
 

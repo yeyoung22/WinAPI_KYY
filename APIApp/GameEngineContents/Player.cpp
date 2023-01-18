@@ -3,6 +3,7 @@
 #include <GameEngineBase/GameEnginePath.h>
 #include <GameEngineCore/GameEngineResources.h>
 
+ Player* Player::MainPlayer;
 
 Player::Player() 
 {
@@ -14,15 +15,17 @@ Player::~Player()
 
 void Player::Start()
 {
+	MainPlayer = this;
+
 	SetMove(GameEngineWindow::GetScreenSize().half());
 }
 
-void Player::Update()
+void Player::Update(float _DeltaTime)
 {
-	SetMove(float4::Left * 0.0001f);
+	//SetMove(float4::Left * 0.0001f);
 }
 
-void Player::Render()
+void Player::Render(float _DeltaTime)
 {
 	float4 PlayerPos = GetPos();
 

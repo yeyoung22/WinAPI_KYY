@@ -29,6 +29,10 @@ public:
 
 	void CoreStart(HINSTANCE _instance);				//HINSTANCE: exe파일을 메모리에 로드할 때 OS가 사용하는 값
 
+	void ChangeLevel(const std::string_view& _Name);
+
+	static GameEngineCore* GetInst();
+
 protected:
 	template<typename LevelType>
 	void CreateLevel(const std::string_view& _Name)
@@ -48,7 +52,6 @@ protected:
 		Levels.insert(std::make_pair(_Name.data(), Level));
 	}
 
-	void ChangeLevel(const std::string_view& _Name);
 
 	virtual void Start() = 0;							//순수가상함수
 	virtual void Update() = 0;
@@ -59,6 +62,7 @@ private:
 	//이름으로 실행하기 위해 map 사용
 	std::map<std::string, GameEngineLevel*> Levels;
 
+	GameEngineLevel* NextLevel = nullptr;
 	GameEngineLevel* MainLevel = nullptr;
 
 	void LevelLoading(GameEngineLevel* _Level);

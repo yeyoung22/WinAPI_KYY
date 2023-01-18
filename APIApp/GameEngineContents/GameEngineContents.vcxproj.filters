@@ -1,36 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Monster.h" />
-    <ClInclude Include="TitleLevel.h">
-      <Filter>Levels</Filter>
-    </ClInclude>
     <ClInclude Include="SuperMarioCore.h" />
-    <ClInclude Include="PlayLevel.h">
-      <Filter>Levels</Filter>
+    <ClInclude Include="TitleLevel.h">
+      <Filter>Title</Filter>
     </ClInclude>
     <ClInclude Include="OpeningLevel.h">
-      <Filter>Levels</Filter>
+      <Filter>Opening</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayLevel.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleBack.h">
+      <Filter>Title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="TitleLevel.cpp">
-      <Filter>Levels</Filter>
-    </ClCompile>
     <ClCompile Include="SuperMarioCore.cpp" />
+    <ClCompile Include="TitleLevel.cpp">
+      <Filter>Title</Filter>
+    </ClCompile>
     <ClCompile Include="PlayLevel.cpp">
-      <Filter>Levels</Filter>
+      <Filter>Play</Filter>
     </ClCompile>
     <ClCompile Include="OpeningLevel.cpp">
-      <Filter>Levels</Filter>
+      <Filter>Opening</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleBack.cpp">
+      <Filter>Title</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Levels">
-      <UniqueIdentifier>{6b48314c-a30c-4694-aa68-76c1100d8e3f}</UniqueIdentifier>
+    <Filter Include="Title">
+      <UniqueIdentifier>{c07ef8e8-76e2-42c5-a15e-c90e2dce7dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play">
+      <UniqueIdentifier>{da55a0e3-03ce-417d-92d8-296f21203a82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Opening">
+      <UniqueIdentifier>{2eaf0ac6-714e-46cc-b20a-91dfe12bdb52}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

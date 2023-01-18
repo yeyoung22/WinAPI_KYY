@@ -24,7 +24,7 @@ public:
 	/// 액터를 만드는 함수
 	/// </summary>
 	/// <typeparam name="ActorType"> GameEngineActor를 상속받은 클래스 타입 </typeparam>
-	/// <param name="_Order"> Actor의 업데이트 순서 숫자가 작을수록 먼저 업데이트 됩니다. </param>
+	/// <param name="_Order"> Actor의 업데이트 순서 숫자가 작을수록 먼저 업데이트 </param>
 	template<typename ActorType>
 	void CreateActor(int _Order = 0)
 	{
@@ -32,25 +32,26 @@ public:
 
 		ActorStart(Actor, _Order);
 
-		// 맵의 새로운 문법
+		//map은 key로 배열처럼 접근 가능
 		Actors[_Order].push_back(Actor);
 	}
 
 protected:
 	virtual void Loading() = 0;
-	virtual void Update() = 0;
+	virtual void Update(float _DeltaTime) = 0;
+	//다른 레벨로 교체
+	virtual void LevelChangeEnd(GameEngineLevel* _NextLevel) = 0;
+	//새로운 눈에 보이는 레벨
+	virtual void LevelChangeStart(GameEngineLevel* _PrevLevel) = 0;
 
 private:
-	// 하위에 있는 변수나 기능에 대해 알면 안됨
-	//std::list<Player*> Actors;
-	//std::list<Monster*> Actors;
-	//std::list<Background*> Actors;
 
-	// 하나의 자료형으로 모든 화면내에 등장하는 것들을 표현
+	//Order로 Actor의 순서 관리
 	std::map<int, std::list<GameEngineActor*>> Actors;
 
-	void ActorsUpdate();
-	void ActorsRender();
+	void ActorsUpdate(float _DeltaTime);
+	void ActorsRender(float _DeltaTime);
+
 
 
 	void ActorStart(GameEngineActor* _Actor, int _Order);
