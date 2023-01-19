@@ -5,11 +5,17 @@
     <ClInclude Include="GameEngineImage.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineWindow.cpp" />
     <ClCompile Include="GameEngineImage.cpp">
       <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineInput.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
