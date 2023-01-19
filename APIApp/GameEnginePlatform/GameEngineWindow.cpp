@@ -11,7 +11,7 @@ HDC GameEngineWindow::WindowBackBufferHdc = nullptr;
 //GameEngineWindow::SettingWindowSize({ 720.0f, (720.0f / 800.0f) * 700.0f });
 
 float4 GameEngineWindow::WindowSize = { 720, 630 };         //window 크기
-float4 GameEngineWindow::WindowPos = { 80, 80 };          //window 위치
+float4 GameEngineWindow::WindowPos = { 80, 80 };            //window 위치
 float4 GameEngineWindow::ScreenSize = { 720, 630 };
 GameEngineImage* GameEngineWindow::BackBufferImage = nullptr;
 GameEngineImage* GameEngineWindow::DoubleBufferImage = nullptr;
@@ -245,9 +245,9 @@ void GameEngineWindow::SettingWindowSize(float4 _Size)
     DoubleBufferImage = new GameEngineImage();
     DoubleBufferImage->ImageCreate(ScreenSize);
 }
+
 void GameEngineWindow::SettingWindowPos(float4 _Pos)
 {
     WindowPos = _Pos;
     SetWindowPos(HWnd, nullptr, WindowPos.ix(), WindowPos.iy(), WindowSize.ix(), WindowSize.iy(), SWP_NOZORDER);
 }
-

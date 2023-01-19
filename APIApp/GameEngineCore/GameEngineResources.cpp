@@ -40,13 +40,14 @@ GameEngineImage* GameEngineResources::ImageLoad(const std::string_view& _Path, c
 
 	std::string UpperName = GameEngineString::ToUpper(_Name);
 
-	//AllImage에 UpperName과 일치하는 것이 있는지
+	//AllImage에 UpperName을 가진 이미지 존재 여부 확인
 	if (AllImage.end() != AllImage.find(UpperName))
 	{
 		MsgAssert("이미 로드한 이미지를 또 로드하려고 했습니다." + UpperName);
 		return nullptr;
 	}
 
+	//같은 이미지가 없는 경우 수행
 	GameEngineImage* NewImage = new GameEngineImage();
 	NewImage->ImageLoad(_Path);
 	//map에 이미지를 넣음

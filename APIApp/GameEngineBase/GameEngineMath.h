@@ -76,7 +76,7 @@ public:
 	//x, y, z 값의 절반 반환
 	float4 half() const
 	{
-		return { x * 0.5f,y * 0.5f,z * 0.5f,w };
+		return { x * 0.5f, y * 0.5f, z * 0.5f, w };
 	}
 
 	bool IsZero() const

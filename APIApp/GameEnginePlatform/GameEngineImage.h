@@ -99,7 +99,7 @@ public:
 	//자를 이미지 가로, 세로
 	void Cut(int _X, int _Y);
 
-	void BitCopy(const GameEngineImage* _OtherImage, float4 _Pos, float4 _Scale);
+	void BitCopy(const GameEngineImage* _OtherImage, float4 _CenterPos, float4 _Scale);
 
 	// 랜더링을 제외할 컬러.
 	void TransCopy(const GameEngineImage* _OtherImage, float4 _CopyCenterPos, float4 _CopySize, float4 _OtherImagePos, float4 _OtherImageSize, int _Color = RGB(255, 0, 255));

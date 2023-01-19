@@ -10,6 +10,7 @@
 
 // 설명 : 장면에 들어갈 요소
 class GameEngineLevel;
+class GameEngineRender;
 class GameEngineActor : public GameEngineObject
 {
 	friend GameEngineLevel;						//GameEngineLevel는 GameEngineActor의 private 멤버도 접근 가능
@@ -46,6 +47,24 @@ public:
 		return Level;
 	}
 
+#pragma region CreateRenderEnumOverLoadings
+
+	template<typename EnumType>
+	GameEngineRender* CreateRender(const std::string_view& _Image, EnumType _Order)
+	{
+		return CreateRender(_Image, static_cast<int>(_Order));
+	}
+
+	template<typename EnumType>
+	GameEngineRender* CreateRender(EnumType _Order)
+	{
+		return CreateRender(static_cast<int>(_Order));
+	}
+
+#pragma endregion
+
+	GameEngineRender* CreateRender(const std::string_view& _Image, int _Order = 0);
+	GameEngineRender* CreateRender(int _Order = 0);
 
 protected:
 	//구현 안 할 수도 있음
@@ -74,7 +93,7 @@ private:
 	int Order;					//업데이트 순서
 	float LiveTime = 0.0;
 	float4 Pos = { 0.0f, 0.0f };
-	
+	std::list<GameEngineRender*> RenderList;
 	
 	void SetOrder(int _Order)
 	{

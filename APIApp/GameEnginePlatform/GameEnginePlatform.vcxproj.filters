@@ -16,5 +16,8 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{5fabad02-5844-4f40-baf8-1834b5729d22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{4a152102-aa0f-496e-a2bd-8223ec397871}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

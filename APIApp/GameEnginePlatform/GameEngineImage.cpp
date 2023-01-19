@@ -45,6 +45,11 @@ bool GameEngineImage::ImageCreate(HDC _Hdc)
 	return true;
 }
 
+void GameEngineImage::ImageClear()
+{
+	Rectangle(ImageDC, 0, 0, Info.bmWidth, Info.bmHeight);
+}
+
 bool GameEngineImage::ImageCreate(const float4& _Scale)
 {
 	if (true == _Scale.IsZero())
@@ -82,22 +87,6 @@ bool GameEngineImage::ImageCreate(const float4& _Scale)
 
 	return true;
 }
-
-void GameEngineImage::ImageClear()
-{
-	Rectangle(ImageDC, 0, 0, Info.bmWidth, Info.bmHeight);
-}
-
-
-void GameEngineImage::ImageScaleCheck()
-{
-	//HDC 핸들을 이용해 현재 지정된 DC에 선택된 그래픽 개체에 대한 설명 검색
-	//GetCurrentBitMap(, OBJ_BITMAP)은 현재 지정된 DC를 바탕으로 BitMap 반환
-	HBITMAP CurrentBitMap = static_cast<HBITMAP>(GetCurrentObject(ImageDC, OBJ_BITMAP));
-	//GetObject(조사 대상 핸들, 버퍼에 기록할 크기, 오브젝트 정보를 받을 구조체 포인터 )
-	GetObject(CurrentBitMap, sizeof(BITMAP), &Info);
-}
-
 
 bool GameEngineImage::ImageLoad(const GameEnginePath& _Path)
 {
@@ -139,20 +128,29 @@ bool GameEngineImage::ImageLoad(const std::string_view& _Path)
 	return true;
 }
 
+void GameEngineImage::ImageScaleCheck()
+{
+	//HDC 핸들을 이용해 현재 지정된 DC에 선택된 그래픽 개체에 대한 설명 검색
+	//GetCurrentBitMap(, OBJ_BITMAP)은 현재 지정된 DC를 바탕으로 BitMap 반환
+	HBITMAP CurrentBitMap = static_cast<HBITMAP>(GetCurrentObject(ImageDC, OBJ_BITMAP));
+	//GetObject(조사 대상 핸들, 버퍼에 기록할 크기, 오브젝트 정보를 받을 구조체 포인터 )
+	GetObject(CurrentBitMap, sizeof(BITMAP), &Info);
+}
+
 //Copy
-void GameEngineImage::BitCopy(const GameEngineImage* _OtherImage, float4 _Pos, float4 _Scale)
+void GameEngineImage::BitCopy(const GameEngineImage* _OtherImage, float4 _CenterPos, float4 _Scale)
 {
 	//픽셀의 색상 데이터 비트 블록 전송 수행
 	BitBlt(
-		ImageDC,						//복사 당할 이미지 핸들
-		_Pos.ix(),						//위치
-		_Pos.iy(),
-		_Scale.ix(),					//너비
-		_Scale.iy(),					//높이
-		_OtherImage->GetImageDC(),		//복사할 이미지
-		0,								//복사할 이미지의 x위치
-		0,								//복사할 이미지의 y위치
-		SRCCOPY							//SRCCOPY 원본 사각형을 대상 사각형에 직접 복사
+		ImageDC,							//복사 당할 이미지 핸들
+		_CenterPos.ix() - _Scale.hix(),		//위치
+		_CenterPos.iy() - _Scale.hiy(),
+		_Scale.ix(),						//너비
+		_Scale.iy(),						//높이
+		_OtherImage->GetImageDC(),			//복사할 이미지
+		0,									//복사할 이미지의 x위치
+		0,									//복사할 이미지의 y위치
+		SRCCOPY								//SRCCOPY 원본 사각형을 대상 사각형에 직접 복사
 	);
 }
 

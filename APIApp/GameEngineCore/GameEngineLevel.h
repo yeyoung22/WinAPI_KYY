@@ -5,9 +5,11 @@
 // 설명 : 장면
 class GameEngineCore;
 class GameEngineActor;
+class GameEngineRender;
 class GameEngineLevel						//추상클래스
 {
 	friend GameEngineCore;					//GameEngineCore는 GameEngineLevel의 private 멤버도 접근 가능
+	friend GameEngineRender;
 
 public:
 	// constrcuter destructer
@@ -31,9 +33,8 @@ public:
 		GameEngineActor* Actor = new ActorType();
 
 		ActorStart(Actor, _Order);
-
-		//map은 key로 배열처럼 접근 가능
-		Actors[_Order].push_back(Actor);
+		
+		Actors[_Order].push_back(Actor);	//없으면 insert 존재하면 find
 	}
 
 protected:
@@ -53,7 +54,10 @@ private:
 	void ActorsRender(float _DeltaTime);
 
 
-
 	void ActorStart(GameEngineActor* _Actor, int _Order);
+
+	std::map<int, std::list<GameEngineRender*>> Renders;
+
+	void PushRender(GameEngineRender* _Render);
 };
 

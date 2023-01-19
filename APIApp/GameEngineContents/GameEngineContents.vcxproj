@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ContentsEnums.h" />
     <ClInclude Include="Monster.h">
       <SubType>
       </SubType>

@@ -1,6 +1,7 @@
 #include "GameEngineLevel.h"
 #include <GameEngineBase/GameEngineDebug.h>
 #include "GameEngineActor.h"
+#include "GameEngineRender.h"
 
 GameEngineLevel::GameEngineLevel() 
 {
@@ -84,8 +85,30 @@ void GameEngineLevel::ActorsUpdate(float _DeltaTime)
 		}
 	}
 }
+
 void GameEngineLevel::ActorsRender(float _DeltaTime)
 {
+
+	{
+		std::map<int, std::list<GameEngineRender*>>::iterator GroupStartIter = Renders.begin();
+		std::map<int, std::list<GameEngineRender*>>::iterator GroupEndIter = Renders.end();
+
+		for (; GroupStartIter != GroupEndIter; ++GroupStartIter)
+		{
+			std::list<GameEngineRender*>& RenderList = GroupStartIter->second;
+
+			for (GameEngineRender* Renderer : RenderList)
+			{
+				// Actors.erase()
+				if (nullptr == Renderer || false == Renderer->IsUpdate())
+				{
+					continue;
+				}
+
+				Renderer->Render(_DeltaTime);
+			}
+		}
+	}
 
 	{
 		std::map<int, std::list<GameEngineActor*>>::iterator GroupStartIter = Actors.begin();
@@ -98,7 +121,7 @@ void GameEngineLevel::ActorsRender(float _DeltaTime)
 			for (GameEngineActor* Actor : ActorList)
 			{
 				// Actors.erase()
-				if (nullptr == Actor)
+				if (nullptr == Actor || false == Actor->IsUpdate())
 				{
 					continue;
 				}
@@ -107,4 +130,15 @@ void GameEngineLevel::ActorsRender(float _DeltaTime)
 			}
 		}
 	}
+}
+
+void GameEngineLevel::PushRender(GameEngineRender* _Render)
+{
+	if (nullptr == _Render)
+	{
+		MsgAssert("nullptr인 랜더를 랜더링 그룹속에 넣으려고 했습니다.");
+	}
+
+	// 먼저 이미 들어가있을수도 있다.
+	Renders[_Render->GetOrder()].push_back(_Render);
 }

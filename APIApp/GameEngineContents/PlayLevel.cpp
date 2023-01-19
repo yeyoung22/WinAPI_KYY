@@ -27,9 +27,6 @@ void PlayLevel::Loading()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Mario.bmp"));
 		Image->Cut(4, 9);
 	}
-	
-	
-
 
 	CreateActor<Player>();
 
