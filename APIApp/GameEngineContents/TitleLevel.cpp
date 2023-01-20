@@ -40,7 +40,9 @@ void TitleLevel::Update(float _DeltaTime)
 {
 	if (true == GameEngineInput::IsDown("LevelChange"))
 	{
-		//GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
-		GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
+		GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
+		//GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
+
 	}
+
 }

@@ -55,6 +55,6 @@ private:
 	void MoveUpdate(float _Time);
 	void MoveEnd();
 
-	//void Movecalculation(float _DeltaTime);
+	void Movecalculation(float _DeltaTime);
 };
 

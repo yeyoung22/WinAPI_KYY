@@ -27,18 +27,21 @@ void OpeningLevel::Loading()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Opening.bmp"));
 	}
 
-	/*if (false == GameEngineInput::IsKey("LevelChange"))
+	if (false == GameEngineInput::IsKey("LevelChange"))
 	{
 		GameEngineInput::CreateKey("LevelChange", 'P');
-	}*/
+	}
 
 	CreateActor<OpeningBack>();
 }
 
 void OpeningLevel::Update(float _DeltaTime)
 {
-	//if (true == GameEngineInput::IsAnyKey())
-	//{
-	//	GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
-	//}
+	if (true == GameEngineInput::IsDown("LevelChange"))
+	{
+		GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
+	}
+
+	//일정 시간만 보여 주고 다음 장면으로 교체하기
+
 }

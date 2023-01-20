@@ -44,6 +44,17 @@ void PlayLevel::Loading()
 	}
 	{
 		Player* Actor = CreateActor<Player>();
+
+		//캐릭터 시작위치는
+		//레벨마다 맵 이미지가 다르므로
+		//그떄 마다 시작하는 위치가 달라짐
+
+		//맵마다 위치 설정은 레벨에서 이루어져야하고
+		//위치는 레벨이 알고 있음
+		//만약 player에서 할거면
+		//player1, player2처럼 이미지만 바꾼는데 동일한 코드를 많이 복붙해야 하는 불편함이 생김
+
+		//map이나 player는 랜더러로 그리기만 하면 되게 만들어야 함
 	}
 
 	if (false == GameEngineInput::IsKey("PlayerOff"))
@@ -72,7 +83,7 @@ void PlayLevel::Update(float _DeltaTime)
 		//player death 넣기
 	}
 
-	float CameraMoveSpeed = 100.0f;
+	float CameraMoveSpeed = 1000.0f;
 
 
 	if (GameEngineInput::IsPress("CameraLeftMove"))

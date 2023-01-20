@@ -19,7 +19,7 @@ void Map::Start()
 		AnimationRender->SetPosition({ 3376*2, 960});
 	
 		
-		//이미지 확대해야 함
+		//이미지 확대해야 함(setScaletoimage()함수로 이미지의 실제 크기를 가져옴)
 		AnimationRender->SetScale({3376*4, 480*4});
 
 
