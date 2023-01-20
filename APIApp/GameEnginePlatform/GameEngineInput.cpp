@@ -1,20 +1,21 @@
 #include "GameEngineInput.h"
-#include <GameEngineBase/GameEngineString.h>
 #include <GameEngineBase/GameEngineDebug.h>
+#include <GameEngineBase/GameEngineString.h>
 
 std::map<std::string, GameEngineInput::GameEngineKey> GameEngineInput::Keys;
+bool GameEngineInput::IsAnyKeyValue = false;
 
 void GameEngineInput::GameEngineKey::Update(float _DeltaTime)
 {
 	if (true == KeyCheck())
 	{
+		PressTime += _DeltaTime;
 		if (true == Free)
 		{
 			Down = true;
 			Press = true;
 			Up = false;
 			Free = false;
-			PressTime = _DeltaTime;
 		}
 		else if (true == Down)
 		{
@@ -22,7 +23,6 @@ void GameEngineInput::GameEngineKey::Update(float _DeltaTime)
 			Press = true;
 			Up = false;
 			Free = false;
-			PressTime += _DeltaTime;
 		}
 	}
 	else
@@ -33,7 +33,7 @@ void GameEngineInput::GameEngineKey::Update(float _DeltaTime)
 			Down = false;
 			Press = false;
 			Up = true;
-			Free = false;
+			Free = true;
 		}
 		else if (true == Up)
 		{
@@ -57,6 +57,7 @@ bool GameEngineInput::IsDown(const std::string_view& _Name)
 
 	return Keys[UpperName].Down;
 }
+
 bool GameEngineInput::IsUp(const std::string_view& _Name)
 {
 	std::string UpperName = GameEngineString::ToUpper(_Name);
@@ -69,6 +70,7 @@ bool GameEngineInput::IsUp(const std::string_view& _Name)
 
 	return Keys[UpperName].Up;
 }
+
 bool GameEngineInput::IsPress(const std::string_view& _Name)
 {
 	std::string UpperName = GameEngineString::ToUpper(_Name);
@@ -81,6 +83,7 @@ bool GameEngineInput::IsPress(const std::string_view& _Name)
 
 	return Keys[UpperName].Press;
 }
+
 bool GameEngineInput::IsFree(const std::string_view& _Name)
 {
 	std::string UpperName = GameEngineString::ToUpper(_Name);

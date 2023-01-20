@@ -11,12 +11,12 @@ public:
 	{
 		friend GameEngineInput;
 
-		bool Down = false; // 누른 한순간
-		bool Press = false; // 계속 누르고 있다.
-		bool Up = false; // 땐 한순간
-		bool Free = true; // 안눌리고 있다.
+		bool Down = false;		//키를 누른 순간
+		bool Press = false;		//지속적으로 키 누름
+		bool Up = false;		//키를 안 누르기 시작한 순간
+		bool Free = true;		//키를 안 누름
 
-		float PressTime; // 몇초간 눌렀다.
+		float PressTime;		//키를 누른 시간
 		int Key = -1;
 
 		bool KeyCheck()
@@ -46,6 +46,12 @@ public:
 	static bool IsFree(const std::string_view& _Name);
 	static float GetPressTime(const std::string_view& _Name);
 
+	//어떤 키라도 눌러졌는지
+	static bool IsAnyKey()
+	{
+		return IsAnyKeyValue;
+	}
+
 protected:
 
 private:
@@ -55,5 +61,16 @@ private:
 
 	//               동작           사용할 키
 	static std::map<std::string, GameEngineKey> Keys;
+	static bool IsAnyKeyValue;
+
+	static void IsAnyKeyOn()
+	{
+		IsAnyKeyValue = true;
+	}
+
+	static void IsAnyKeyOff()
+	{
+		IsAnyKeyValue = false;
+	}
 };
 

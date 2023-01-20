@@ -2,6 +2,7 @@
 
 #include <GameEngineBase/GameEngineDirectory.h>
 #include <GameEngineCore/GameEngineResources.h>
+#include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineCore.h>
 #include "TitleBack.h"
 
@@ -24,7 +25,7 @@ void TitleLevel::Loading()
 
 	//이미지 로드
 	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("TitleScreen1.bmp"));
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("TitleScreen.bmp"));
 	}
 
 	CreateActor<TitleBack>();

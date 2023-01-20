@@ -7,12 +7,12 @@
 HWND GameEngineWindow::HWnd = nullptr;
 HDC GameEngineWindow::WindowBackBufferHdc = nullptr;
 
-//The pixel aspect ratio of both consoles is 8:7
-//GameEngineWindow::SettingWindowSize({ 720.0f, (720.0f / 800.0f) * 700.0f });
+//The pixel aspect ratio of both consoles is 16:15
+//{ 1024.0f, (1024.0f / 16.0f) * 15.0f }
 
-float4 GameEngineWindow::WindowSize = { 720, 630 };         //window 크기
-float4 GameEngineWindow::WindowPos = { 80, 80 };            //window 위치
-float4 GameEngineWindow::ScreenSize = { 720, 630 };
+float4 GameEngineWindow::WindowSize = { 1024, 960 };         //window 크기
+float4 GameEngineWindow::WindowPos = { 50, 50 };            //window 위치
+float4 GameEngineWindow::ScreenSize = { 1024, 960 };
 GameEngineImage* GameEngineWindow::BackBufferImage = nullptr;
 GameEngineImage* GameEngineWindow::DoubleBufferImage = nullptr;
 bool IsWindowUpdate = true;

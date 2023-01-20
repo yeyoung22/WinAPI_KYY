@@ -97,7 +97,7 @@ GameEngineCore::~GameEngineCore()
 
 void GameEngineCore::CoreStart(HINSTANCE _instance)
 {
-	GameEngineWindow::WindowCreate(_instance, "MainWindow", { 720, 630 }, { 0, 0 });
+	GameEngineWindow::WindowCreate(_instance, "MainWindow", { 1024.0f, (1024.0f / 16.0f) * 15.0f }, { 0, 0 });
 	GameEngineWindow::WindowLoop(GameEngineCore::GlobalStart, GameEngineCore::GlobalUpdate, GameEngineCore::GlobalEnd);
 }
 
