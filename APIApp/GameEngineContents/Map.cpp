@@ -20,7 +20,7 @@ void Map::Start()
 	
 		
 		//이미지 확대해야 함(setScaletoimage()함수로 이미지의 실제 크기를 가져옴)
-		AnimationRender->SetScale({3376*4, 480*4});
+		AnimationRender->SetScale({13504, 1920});
 
 
 		AnimationRender->SetImage("World1_1.bmp");
