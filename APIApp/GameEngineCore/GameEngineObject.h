@@ -1,12 +1,12 @@
 #pragma once
 
-// 설명 :
+// 설명 : 오브젝트 구조의 기본 클래스
 class GameEngineObject
 {
 public:
 	// constrcuter destructer
 	GameEngineObject();
-	~GameEngineObject();
+	virtual ~GameEngineObject();				//가상함수 테이블을 위함
 
 	// delete Function
 	GameEngineObject(const GameEngineObject& _Other) = delete;
@@ -14,15 +14,16 @@ public:
 	GameEngineObject& operator=(const GameEngineObject& _Other) = delete;
 	GameEngineObject& operator=(GameEngineObject&& _Other) noexcept = delete;
 
-	//수정해야 함
+
 	bool IsUpdate()
 	{
-		return nullptr != Parent ? (ObjectUpdate && false == ObjectDeath && Parent->IsUpdate()) : (ObjectUpdate && false == ObjectDeath);
+		//Parent 존재->나는 켜져있어야 함&&죽으면 안됨&&부모도 켜져야 함
+		return nullptr != Parent ? ((true == ObjectUpdate && false == IsDeath()) && true == Parent->IsUpdate()) : (ObjectUpdate && false == IsDeath());
 	}
 
 	bool IsDeath()
 	{
-		return nullptr != Parent ? (true == ObjectDeath && Parent->IsDeath()) : (true == ObjectDeath);
+		return nullptr != Parent ? (true == ObjectDeath || Parent->IsDeath()) : (true == ObjectDeath);
 	}
 
 	void Death()
@@ -44,10 +45,23 @@ public:
 		ObjectUpdate = !ObjectUpdate;
 	}
 
-	void SetParent(GameEngineObject* _Parent)
+
+	void SetOwner(GameEngineObject* _Parent)
 	{
 		Parent = _Parent;
 	}
+
+	template<typename ConvertType>
+	ConvertType* GetOwner()
+	{
+		return dynamic_cast<ConvertType*>(Parent);
+	}
+
+	GameEngineObject* GetOwner()
+	{
+		return Parent;
+	}
+
 
 protected:
 

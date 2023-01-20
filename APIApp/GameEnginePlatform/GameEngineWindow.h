@@ -8,7 +8,7 @@
 class GameEngineImage;
 class GameEngineWindow
 {
-	//static LRESULT CALLBACK MessageFunction(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam);
+	static LRESULT CALLBACK MessageFunction(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam);
 
 public:
 	// 윈도우를 만들어 주는 기능
@@ -73,6 +73,6 @@ private:
 	static HDC WindowBackBufferHdc;								//윈도우에 그림을 그릴수 있는 권한
 	static GameEngineImage* BackBufferImage;					//윈도우 생성시 나오는 배경(흰 화면)
 	static GameEngineImage* DoubleBufferImage;					//DoubleBuffer에 이미지 여러 번 그리고 BackBuffer에서는 DuobleBuffer걸로 한 번 그려지게 함
-	//static bool IsWindowUpdate;
+	static bool IsWindowUpdate;
 };
 

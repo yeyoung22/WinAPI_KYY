@@ -31,7 +31,6 @@ void SuperMarioCore::Start()
 	CreateLevel<OpeningLevel>("OpeningLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
 
-	//우선 눈에 보이는게 좋으므로 Start지만 title이 아닌 play 사용
 	ChangeLevel("TitleLevel");
 }
 

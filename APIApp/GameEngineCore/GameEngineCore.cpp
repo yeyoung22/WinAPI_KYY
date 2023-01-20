@@ -2,6 +2,7 @@
 #include <GameEngineBase/GameEngineDebug.h>
 #include <GameEngineBase/GameEngineTime.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
+#include <GameEnginePlatform/GameEngineInput.h>
 #include "GameEngineLevel.h"
 #include "GameEngineResources.h"
 
@@ -40,9 +41,9 @@ void GameEngineCore::GlobalUpdate()
 		}
 	}
 
-	// 프레임 시작할때 한번 델타타임을 정하고
+	//프레임 시작할때 한번 델타타임 정함
 	float TimeDeltaTime = GameEngineTime::GlobalTime.TimeCheck();
-	//GameEngineInput::Update(TimeDeltaTime);
+	GameEngineInput::Update(TimeDeltaTime);
 
 	Core->Update();
 
@@ -52,8 +53,7 @@ void GameEngineCore::GlobalUpdate()
 		return;
 	}
 
-
-
+	Core->MainLevel->Update(TimeDeltaTime);
 	Core->MainLevel->ActorsUpdate(TimeDeltaTime);
 	GameEngineWindow::DoubleBufferClear();
 	Core->MainLevel->ActorsRender(TimeDeltaTime);
@@ -73,8 +73,7 @@ GameEngineCore::GameEngineCore()
 	GameEngineDebug::LeakCheck();
 
 
-	//자식 중에 하나일 수 밖에 없음
-	//자신은 절대 만들어질 수 없기때문
+	//자식 중에 하나일 수 밖에 없음(자신은 절대 안 만들어짐)
 	Core = this;
 }
 

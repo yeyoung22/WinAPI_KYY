@@ -16,7 +16,6 @@ GameEngineResources::~GameEngineResources()
 
 void GameEngineResources::Release()
 {
-	//원하는 시점에 원하는 순간 정확하게 
 	for (std::pair<std::string, GameEngineImage*> Pair : AllImage)
 	{
 		if (nullptr == Pair.second)
@@ -36,8 +35,6 @@ GameEngineImage* GameEngineResources::ImageLoad(const GameEnginePath& _Path)
 
 GameEngineImage* GameEngineResources::ImageLoad(const std::string_view& _Path, const std::string_view& _Name)
 {
-	// D:\\yeyoung\\0_Academy\\Portfolio\\WinAPI_KYY\\APIApp\\ContentsResources\\Image\\MarioCustoms.bmp
-
 	std::string UpperName = GameEngineString::ToUpper(_Name);
 
 	//AllImage에 UpperName을 가진 이미지 존재 여부 확인

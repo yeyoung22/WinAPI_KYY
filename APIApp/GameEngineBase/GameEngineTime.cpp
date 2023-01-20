@@ -20,14 +20,11 @@ void GameEngineTime::Reset()
 
 float GameEngineTime::TimeCheck()
 {
-	// 그래서 이 함수가 실행될때까지 걸린 시간은....
-
 	QueryPerformanceCounter(&Current);
 
 	Tick = Current.QuadPart - Prev.QuadPart;
 
-	// 현재시간이 나오겠죠?
-	//                          200                               100                                              100
+	//현재시간
 	DoubleDeltaTime = (static_cast<double>(Current.QuadPart) - static_cast<double>(Prev.QuadPart)) / static_cast<double>(Second.QuadPart);
 
 	Prev.QuadPart = Current.QuadPart;

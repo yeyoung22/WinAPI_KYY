@@ -5,7 +5,7 @@ class GameEngineMath final
 {
 public:
 	static const float PIE;
-	static const float PIE2;						// 변수명은 숫자가 앞에 올 수 없음
+	static const float PIE2;						
 
 private:
 	//순수가상함수로 만들어서 객체화하지 못하게 막음
@@ -19,8 +19,8 @@ public:
 	static const float4 Right;
 	static const float4 Up;
 	static const float4 Down;
-	static const float4 Forward;					//앞으로 들어감
-	static const float4 Back;						//뒤로 나옴
+	static const float4 Forward;					
+	static const float4 Back;						
 	static const float4 Zero;						// w != 0
 	static const float4 Null;
 

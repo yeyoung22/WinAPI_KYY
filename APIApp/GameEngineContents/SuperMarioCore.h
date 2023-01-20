@@ -45,3 +45,4 @@ private:
 	static SuperMarioCore Core;	
 };
 
+

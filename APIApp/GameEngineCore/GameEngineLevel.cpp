@@ -35,7 +35,7 @@ void GameEngineLevel::ActorStart(GameEngineActor* _Actor, int _Order)
 		return;
 	}
 
-	_Actor->Level = this;
+	_Actor->SetOwner(this);
 	_Actor->SetOrder(_Order);
 	_Actor->Start();
 }
@@ -52,7 +52,6 @@ void GameEngineLevel::ActorsUpdate(float _DeltaTime)
 
 			for (GameEngineActor* Actor : ActorList)
 			{
-				// Actors.erase()
 				if (nullptr == Actor || false == Actor->IsUpdate())
 				{
 					continue;
@@ -74,7 +73,6 @@ void GameEngineLevel::ActorsUpdate(float _DeltaTime)
 
 			for (GameEngineActor* Actor : ActorList)
 			{
-				// Actors.erase()
 				if (nullptr == Actor || false == Actor->IsUpdate())
 				{
 					continue;
@@ -99,7 +97,6 @@ void GameEngineLevel::ActorsRender(float _DeltaTime)
 
 			for (GameEngineRender* Renderer : RenderList)
 			{
-				// Actors.erase()
 				if (nullptr == Renderer || false == Renderer->IsUpdate())
 				{
 					continue;
@@ -120,7 +117,6 @@ void GameEngineLevel::ActorsRender(float _DeltaTime)
 
 			for (GameEngineActor* Actor : ActorList)
 			{
-				// Actors.erase()
 				if (nullptr == Actor || false == Actor->IsUpdate())
 				{
 					continue;
@@ -139,6 +135,6 @@ void GameEngineLevel::PushRender(GameEngineRender* _Render)
 		MsgAssert("nullptr인 랜더를 랜더링 그룹속에 넣으려고 했습니다.");
 	}
 
-	// 먼저 이미 들어가있을수도 있다.
+	//이미 들어가 있을 수 있음
 	Renders[_Render->GetOrder()].push_back(_Render);
 }

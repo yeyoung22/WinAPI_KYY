@@ -4,8 +4,11 @@
 #include <string>
 
 // 설명 : 키 입력과 관련한 기능
+class GameEngineWindow;
 class GameEngineInput
 {
+	friend GameEngineWindow;
+
 public:
 	class GameEngineKey
 	{
@@ -21,6 +24,7 @@ public:
 
 		bool KeyCheck()
 		{
+			//키 작동 여부
 			return 0 != GetAsyncKeyState(Key);
 		}
 
@@ -59,7 +63,6 @@ private:
 	GameEngineInput();
 	~GameEngineInput();
 
-	//               동작           사용할 키
 	static std::map<std::string, GameEngineKey> Keys;
 	static bool IsAnyKeyValue;
 

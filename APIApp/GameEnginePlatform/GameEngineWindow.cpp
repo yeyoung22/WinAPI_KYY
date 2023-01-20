@@ -1,8 +1,7 @@
 #include "GameEngineWindow.h"
 #include <GameEngineBase/GameEngineDebug.h>
 #include <GameEnginePlatform/GameEngineImage.h>
-
-
+#include "GameEngineInput.h"
 
 HWND GameEngineWindow::HWnd = nullptr;
 HDC GameEngineWindow::WindowBackBufferHdc = nullptr;
@@ -15,10 +14,10 @@ float4 GameEngineWindow::WindowPos = { 50, 50 };            //window 위치
 float4 GameEngineWindow::ScreenSize = { 1024, 960 };
 GameEngineImage* GameEngineWindow::BackBufferImage = nullptr;
 GameEngineImage* GameEngineWindow::DoubleBufferImage = nullptr;
-bool IsWindowUpdate = true;
+bool GameEngineWindow::IsWindowUpdate = true;
 
 
-LRESULT CALLBACK MessageFunction(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam)
+LRESULT CALLBACK GameEngineWindow::MessageFunction(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam)
 {
     switch (_message)
     {
@@ -84,7 +83,7 @@ void GameEngineWindow::WindowCreate(HINSTANCE _hInstance, const std::string_view
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = _hInstance;
-    //넣어주지 않으면 윈도우 기본Icon
+    //윈도우 기본Icon
     wcex.hIcon = nullptr;                               //LoadIcon(_hInstance, MAKEINTRESOURCE(IDI_WINDOWSPROJECT1));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);    // 흰색 
@@ -98,11 +97,6 @@ void GameEngineWindow::WindowCreate(HINSTANCE _hInstance, const std::string_view
         MsgAssert("윈도우 클래스 등록에 실패했습니다.");
         return;
     }
-
-
-    // 만약 1000번 프로그램이 윈도우를 띄워달라고 요청하면
-    // 윈도우는 다시 특정 숫자를 가진 윈도우가 만들어졌다고 알려주는데.
-    // 특정 숫자로 인식되는 우리의 윈도우에게 크기 변경 떠라
 
     //옵션
     // (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX)
@@ -144,14 +138,10 @@ void GameEngineWindow::DoubleBufferRender()
 
 int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
 {
-    // 단축키
-    // HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINDOWSPROJECT1));
-
     if (nullptr != _Start)
     {
         _Start();
     }
-
 
     MSG msg;                                                    //MSG 구조체
 
@@ -160,10 +150,6 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
     // GetMessage:  윈도우의 특별한 일이 생길 때까지 멈추는 함수
     while (IsWindowUpdate)
     {
-        //if (!TranslateAccelerator(msg.hwnd, nullptr, &msg))
-        //{
-        //}
-
         // 윈도우 메세지 처리
         // GetMessage함수: 동기 함수(함수가 종료될 때까지 프로그램이 멈춤)
         // 윈도우에 무슨 일이 발생하면 리턴되는 함수
@@ -193,12 +179,12 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
             continue;
         }
 
-        // 데드타임
-        // 데드타임에 게임을 실행하는것. 
+        // 데드타임에 게임을 실행 
         if (nullptr != _Loop)
         {
             _Loop();
         }
+        GameEngineInput::IsAnyKeyOff();
     }
 
     if (nullptr != _End)

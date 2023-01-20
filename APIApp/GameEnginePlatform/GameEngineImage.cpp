@@ -3,7 +3,7 @@
 #include <GameEngineBase/GameEnginePath.h>
 #include "GameEngineWindow.h"
 
-// 다른 lib 사용
+//다른 lib 사용
 #pragma comment(lib, "msimg32.lib")
 
 GameEngineImage::GameEngineImage() 
@@ -204,7 +204,7 @@ void GameEngineImage::Cut(int _X, int _Y)
 		Data.StartY += Data.SizeY;
 	}
 
-	//다듬어졌음을 표시
+	//다듬어졌음 표시
 	IsCut = true;
 }
 
@@ -232,4 +232,32 @@ void GameEngineImage::Cut(float4 _Start, float4 _End, int _X, int _Y)
 	}
 
 	IsCut = true;
+}
+
+DWORD GameEngineImage::GetPixelColor(float4 _Pos, DWORD _OutColor)
+{
+	return GetPixelColor(_Pos.ix(), _Pos.iy(), _OutColor);
+}
+
+DWORD GameEngineImage::GetPixelColor(int _X, int _Y, DWORD _OutColor)
+{
+	//OutColor: 
+	if (_X < 0)
+	{
+		return _OutColor;
+	}
+	if (_X >= GetImageScale().ix())
+	{
+		return _OutColor;
+	}
+	if (_Y < 0)
+	{
+		return _OutColor;
+	}
+	if (_Y >= GetImageScale().iy())
+	{
+		return _OutColor;
+	}
+
+	return GetPixel(ImageDC, _X, _Y);
 }

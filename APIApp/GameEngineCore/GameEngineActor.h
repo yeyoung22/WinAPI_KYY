@@ -42,10 +42,8 @@ public:
 		Pos += _MovePos;
 	}
 
-	inline GameEngineLevel* GetLevel()
-	{
-		return Level;
-	}
+	GameEngineLevel* GetLevel();
+
 
 #pragma region CreateRenderEnumOverLoadings
 
@@ -58,11 +56,14 @@ public:
 	template<typename EnumType>
 	GameEngineRender* CreateRender(EnumType _Order)
 	{
-		return CreateRender(static_cast<int>(_Order));
+		return CreateRender(static_cast<int>(_Order));			//enumClass는 형변환 필요
 	}
+	
 
-#pragma endregion
 
+#pragma region CreateRenderEnumOverLoadings
+
+	//랜더 생성
 	GameEngineRender* CreateRender(const std::string_view& _Image, int _Order = 0);
 	GameEngineRender* CreateRender(int _Order = 0);
 
@@ -88,7 +89,6 @@ protected:
 	}
 
 private:
-	GameEngineLevel* Level;
 
 	int Order;					//업데이트 순서
 	float LiveTime = 0.0;

@@ -21,6 +21,12 @@
       <Filter>Title</Filter>
     </ClInclude>
     <ClInclude Include="ContentsEnums.h" />
+    <ClInclude Include="OpeningBack.h">
+      <Filter>Opening</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -41,6 +47,15 @@
     </ClCompile>
     <ClCompile Include="TitleBack.cpp">
       <Filter>Title</Filter>
+    </ClCompile>
+    <ClCompile Include="OpeningBack.cpp">
+      <Filter>Opening</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>Play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
