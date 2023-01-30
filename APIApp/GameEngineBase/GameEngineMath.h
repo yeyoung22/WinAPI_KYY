@@ -73,7 +73,6 @@ public:
 		return static_cast<int>(w * 0.5f);
 	}
 
-	//x, y, z 값의 절반 반환
 	float4 half() const
 	{
 		return { x * 0.5f, y * 0.5f, z * 0.5f, w };
@@ -82,6 +81,26 @@ public:
 	bool IsZero() const
 	{
 		return x == 0.0f && y == 0.0f && z == 0.0f;
+	}
+
+	static float4 Lerp(const float4& _Start, const float4& _End, float _Ratio)
+	{
+		return _Start * (1.0f - _Ratio) + (_End * _Ratio);
+	}
+
+	static float4 LerpClamp(const float4& _Start, const float4& _End, float _Ratio)
+	{
+		if (0 >= _Ratio)
+		{
+			_Ratio = 0.0f;
+		}
+
+		if (1.0f <= _Ratio)
+		{
+			_Ratio = 1.0f;
+		}
+
+		return Lerp(_Start, _End, _Ratio);
 	}
 
 	float4 operator *(const float _Value) const
@@ -103,8 +122,6 @@ public:
 		return Return;
 	}
 
-
-
 	float4 operator -(const float4 _Value) const
 	{
 		float4 Return;
@@ -124,6 +141,30 @@ public:
 		x += _Other.x;
 		y += _Other.y;
 		z += _Other.z;
+		return *this;
+	}
+
+	float4& operator *=(const float& _Value)
+	{
+		x *= _Value;
+		y *= _Value;
+		z *= _Value;
+		return *this;
+	}
+
+	float4& operator *=(const float4& _Other)
+	{
+		x *= _Other.x;
+		y *= _Other.y;
+		z *= _Other.z;
+		return *this;
+	}
+
+	float4& operator -=(const float4& _Other)
+	{
+		x -= _Other.x;
+		y -= _Other.y;
+		z -= _Other.z;
 		return *this;
 	}
 };
