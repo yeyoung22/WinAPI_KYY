@@ -52,6 +52,7 @@ protected:
 		Levels.insert(std::make_pair(_Name.data(), Level));
 	}
 
+	
 	void DebugSwitch()
 	{
 		IsDebugValue = !IsDebugValue;

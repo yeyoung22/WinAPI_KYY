@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <map>
+#include <GameEngineBase/GameEngineDebug.h>
 #include <GameEngineBase/GameEngineMath.h>
 #include <GameEngineCore/GameEngineObject.h>
 
@@ -77,6 +78,7 @@ private:
 
 	void ActorStart(GameEngineActor* _Actor, int _Order);
 
+	//map은 오름차순으로 정리되므로 값이 큰 쪽이 나중에 실행됨
 	std::map<int, std::list<GameEngineRender*>> Renders;
 
 	void PushRender(GameEngineRender* _Render);

@@ -23,6 +23,18 @@ void GameEngineRender::SetImage(const std::string_view& _ImageName)
 	Image = GameEngineResources::GetInst().ImageFind(_ImageName);
 }
 
+//세팅한 이미지의 크기로 스케일 설정
+void GameEngineRender::SetScaleToImage()
+{
+	if (nullptr == Image)
+	{
+		MsgAssert("이미지를 세팅하지 않았는데 이미지의 크기로 변경하려고 했습니다.");
+	}
+
+	Scale = Image->GetImageScale();
+}
+
+
 void GameEngineRender::SetOrder(int _Order)
 {
 	Order = _Order;
@@ -51,12 +63,12 @@ void GameEngineRender::SetFrame(int _Frame)
 
 void GameEngineRender::FrameAnimation::Render(float _DeltaTime)
 {
+	//일정 시간 동안 특정 이미지를 보여주다가 시간이 다 되면 다음으로 넘김
 	CurrentTime -= _DeltaTime;
 
-	//일정 시간 동안 한 이미지를 보여주다가 시간이 다되면 다음으로 넘어감
 	if (CurrentTime <= 0.0f)
 	{
-		++CurrentIndex;
+		++CurrentIndex;							//다음 이미지로 넘김
 
 		if (FrameIndex.size() <= CurrentIndex)
 		{
@@ -65,6 +77,7 @@ void GameEngineRender::FrameAnimation::Render(float _DeltaTime)
 				CurrentIndex = 0;
 			}
 			else {
+				//마지막에 고정
 				CurrentIndex = static_cast<int>(FrameIndex.size()) - 1;
 			}
 		}
@@ -114,11 +127,13 @@ void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Paramter)
 {
 	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind(_Paramter.ImageName);
 
+	//사용할 이미지 존재여부 확인
 	if (nullptr == Image)
 	{
 		MsgAssert("존재하지 않는 이미지로 애니메이션을 만들려고 했습니다.");
 	}
 
+	//잘려 있는 이미지 사용
 	if (false == Image->IsImageCutting())
 	{
 		MsgAssert("잘려있는 이미지만 프레임을 지정해줄 수 있습니다.");
@@ -126,35 +141,38 @@ void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Paramter)
 
 	std::string UpperName = GameEngineString::ToUpper(_Paramter.AnimationName);
 
-	if (Animation.end() != Animation.find(UpperName))
+	//애니메이션 이름의 중복 불허
+	if (Animation.end() != Animation.find(UpperName))	//못 찾으면 end()반환
 	{
 		MsgAssert("이미 존재하는 이름의 애니메이션 입니다." + UpperName);
 	}
 
-
-	FrameAnimation& NewAnimation = Animation[UpperName];
+	FrameAnimation& NewAnimation = Animation[UpperName];	//포인터가 아니므로 map이 new, delete함
 
 	NewAnimation.Image = Image;
+
 
 	if (0 != _Paramter.FrameIndex.size())
 	{
 		NewAnimation.FrameIndex = _Paramter.FrameIndex;
 	}
 	else
-	{
+	{	
+		//직접 지정한 범위로 애니메이션 생성
 		for (int i = _Paramter.Start; i <= _Paramter.End; ++i)
 		{
 			NewAnimation.FrameIndex.push_back(i);
 		}
 	}
 
-	//각 프레임별 시간 계산
 	if (0 != _Paramter.FrameTime.size())
 	{
+		//이미지가 노출될 일정한 시간
 		NewAnimation.FrameTime = _Paramter.FrameTime;
 	}
 	else
 	{
+		//직접 장면마다 노출되는 시간을 정함
 		for (int i = 0; i < NewAnimation.FrameIndex.size(); ++i)
 		{
 			NewAnimation.FrameTime.push_back(_Paramter.InterTime);
@@ -174,7 +192,7 @@ void GameEngineRender::ChangeAnimation(const std::string_view& _AnimationName)
 		MsgAssert("존재하지 않는 애니메이션으로 바꾸려고 했습니다." + UpperName);
 	}
 
-	//기존의 애니메이션과 같은 것으로 교환할 경우, 리턴
+	//현재 애니메이션과 같은 것으로 전환할 경우, 일단 리턴
 	if (CurrentAnimation == &Animation[UpperName])
 	{
 		return;

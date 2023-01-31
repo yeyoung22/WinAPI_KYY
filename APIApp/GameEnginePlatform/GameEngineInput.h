@@ -9,8 +9,8 @@ class GameEngineInput
 {
 	friend GameEngineWindow;
 
-public:
-	class GameEngineKey
+private:						//Inner Class면서 내부에서만 사용
+	class GameEngineKey			//밖에서 사용할 일이 없음(인자, 리턴 등등)
 	{
 		friend GameEngineInput;
 
@@ -38,6 +38,9 @@ public:
 	GameEngineInput& operator=(const GameEngineInput& _Other) = delete;
 	GameEngineInput& operator=(GameEngineInput&& _Other) noexcept = delete;
 
+	//static이므로 해당 클래스 이름으로 편하게 사용가능
+	//객체를 따로 생성할 필요가 없음
+
 	static void Update(float _DeltaTime);
 
 	static void CreateKey(const std::string_view& _Name, int _Key);
@@ -50,7 +53,7 @@ public:
 	static bool IsFree(const std::string_view& _Name);
 	static float GetPressTime(const std::string_view& _Name);
 
-	//어떤 키라도 눌러졌는지
+	//어떤 키라도 눌러졌는지 체크
 	static bool IsAnyKey()
 	{
 		return IsAnyKeyValue;
@@ -63,7 +66,7 @@ private:
 	GameEngineInput();
 	~GameEngineInput();
 
-	static std::map<std::string, GameEngineKey> Keys;
+	static std::map<std::string, GameEngineKey> Keys;		//GameEngineKey로 여러 값을 관리하기 쉽게 묶은것
 	static bool IsAnyKeyValue;
 
 	static void IsAnyKeyOn()

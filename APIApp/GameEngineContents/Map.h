@@ -5,6 +5,8 @@
 class Map : public GameEngineActor
 {
 public:
+	static Map* MainMap;
+public:
 	// constrcuter destructer
 	Map();
 	~Map();
@@ -15,10 +17,19 @@ public:
 	Map& operator=(const Map& _Other) = delete;
 	Map& operator=(Map&& _Other) noexcept = delete;
 
+	inline void IsStageClearOn()
+	{
+		IsStageClear = true;
+	}
+
 protected:
 	void Start() override;
+	void Update(float _DeltaTime) override;
 
 private:
+	bool IsStageClear = false;
 
+	GameEngineRender* MapRender0;
+	GameEngineRender* MapRender1;
 };
 

@@ -7,10 +7,11 @@
 
 struct ImageCutData
 {
-	float StartX = 0.0f;
+	float StartX = 0.0f;	//사용할 이미지의 좌측상단 지점(시작점)
 	float StartY = 0.0f;
-	float SizeX = 0.0f;
-	float SizeY = 0.0f;
+	//사용하고 싶은 이미지의 크기
+	float SizeX = 0.0f;		//지정한 시작점에서의 너비(X)
+	float SizeY = 0.0f;		//지정한 시작점에서의 높이(Y)
 
 	float4 GetStartPos()
 	{

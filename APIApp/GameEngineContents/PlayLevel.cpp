@@ -2,6 +2,7 @@
 #include <GameEngineBase/GameEngineDirectory.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineResources.h>
+#include <GameEnginePlatform/GameEngineWindow.h>
 #include "Player.h"
 #include "Map.h"
 
@@ -36,7 +37,6 @@ void PlayLevel::Loading()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
-
 	}
 	//액터 생성
 	{
@@ -44,12 +44,11 @@ void PlayLevel::Loading()
 	}
 	{
 		Player* Actor = CreateActor<Player>();
+		float4 ActorPos = GameEngineWindow::GetScreenSize().half();
+		Actor->SetPos({ActorPos.x-128, ActorPos.y+128});
 
-
-		//맵마다 위치 설정은 레벨에서 이루어져야하고
-		//위치는 레벨이 알고 있음
-		//만약 player에서 한다면
-		//player1, player2처럼 이미지만 변경하는데 동일한 코드를 복붙해야 하는 불편함이 생김
+		
+		//SetCameraMove();
 	}
 
 	if (false == GameEngineInput::IsKey("PlayerOff"))
@@ -78,7 +77,7 @@ void PlayLevel::Update(float _DeltaTime)
 		//player death 넣기
 	}
 
-	float CameraMoveSpeed = 1000.0f;
+	/*float CameraMoveSpeed = 1000.0f;
 
 
 	if (GameEngineInput::IsPress("CameraLeftMove"))
@@ -96,5 +95,5 @@ void PlayLevel::Update(float _DeltaTime)
 	if (GameEngineInput::IsPress("CameraUpMove"))
 	{
 		SetCameraMove(float4::Up * _DeltaTime * CameraMoveSpeed);
-	}
+	}*/
 }

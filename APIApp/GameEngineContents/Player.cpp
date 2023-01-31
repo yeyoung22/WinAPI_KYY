@@ -1,9 +1,11 @@
 #include "Player.h"
+#include "Map.h"
 #include <GameEngineBase/GameEnginePath.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineRender.h>
+#include <GameEngineCore/GameEngineLevel.h>
 #include "ContentsEnums.h"
 
  Player* Player::MainPlayer;
@@ -20,7 +22,6 @@ void Player::Start()
 {
 	MainPlayer = this;
 
-	SetMove(GameEngineWindow::GetScreenSize().half());
 
 	if (false == GameEngineInput::IsKey("LeftMove"))
 	{
@@ -29,6 +30,9 @@ void Player::Start()
 		GameEngineInput::CreateKey("DownMove", 'S');
 		GameEngineInput::CreateKey("UpMove", 'W');
 		GameEngineInput::CreateKey("Jump", VK_SPACE);			//Mario can jump 5 sec
+	
+		GameEngineInput::CreateKey("FreeMoveSwitch", '1');
+		GameEngineInput::CreateKey("StageClear", '2');
 	}
 
 	{
@@ -49,18 +53,18 @@ void Player::Start()
 
 void Player::Movecalculation(float _DeltaTime)
 {
-	if (true)
-	{
-		MoveDir += float4::Down * 200.0f * _DeltaTime;
-	}
+	//거리 = 속력*시간(_DeltaTime을 곱해야 초당 몇 픽셀을 이동)
+	MoveDir += float4::Down * MoveSpeed* _DeltaTime;
 
 	if (100.0f <= abs(MoveDir.x))						//절댓값
 	{
 		if (0 > MoveDir.x)
 		{
+			GetLevel()->SetCameraMove(float4::Left * 100.0f * _DeltaTime);
 			MoveDir.x = -100.0f;
 		}
 		else {
+			GetLevel()->SetCameraMove(float4::Right * 100.0f * _DeltaTime);
 			MoveDir.x = 100.0f;
 		}
 	}
@@ -106,8 +110,59 @@ void Player::Movecalculation(float _DeltaTime)
 	SetMove(MoveDir * _DeltaTime);
 }
 
+bool FreeMove = false;
+
+bool Player::FreeMoveState(float _DeltaTime)
+{
+	if (true == GameEngineInput::IsPress("FreeMoveSwitch"))
+	{
+		FreeMove = true;
+	}
+
+	if (true == FreeMove)
+	{
+		if (GameEngineInput::IsPress("LeftMove"))
+		{
+			SetMove(float4::Left * 1000.0f * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Left * CameraMoveSpeed * _DeltaTime);
+		}
+		else if (GameEngineInput::IsPress("RightMove"))
+		{
+			SetMove(float4::Right * 1000.0f * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Right * CameraMoveSpeed * _DeltaTime);
+		}
+		else if (GameEngineInput::IsPress("UpMove"))
+		{
+			SetMove(float4::Up * 1000.0f * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Up * CameraMoveSpeed * _DeltaTime);
+		}
+		else if (GameEngineInput::IsPress("DownMove"))
+		{
+			SetMove(float4::Down * 1000.0f * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Down * CameraMoveSpeed * _DeltaTime);
+		}
+	}
+	if (true == FreeMove)
+	{
+		return true;
+	}
+	return false;
+}
+
 void Player::Update(float _DeltaTime)
 {
+	if (true == FreeMoveState(_DeltaTime))
+	{
+		return;
+	}
+
+	if (GameEngineInput::IsDown("StageClear"))
+	{
+		
+		return;
+		//
+	}
+
 	UpdateState(_DeltaTime);
 	Movecalculation(_DeltaTime);
 }
@@ -138,7 +193,7 @@ void Player::Render(float _DeltaTime)
 	float4 ActorPos = GetPos();
 
 	
-	//<디버깅용 >
+	//<디버깅용_캐릭터 센터 보기위함>
 	Rectangle(DoubleDC,					
 		ActorPos.ix() - 5,
 		ActorPos.iy() - 5,

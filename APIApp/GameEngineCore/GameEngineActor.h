@@ -58,10 +58,7 @@ public:
 	{
 		return CreateRender(static_cast<int>(_Order));			//enumClass는 형변환 필요
 	}
-	
-
-
-#pragma region CreateRenderEnumOverLoadings
+#pragma endregion
 
 	//랜더 생성
 	GameEngineRender* CreateRender(const std::string_view& _Image, int _Order = 0);
@@ -91,7 +88,7 @@ protected:
 private:
 
 	int Order;					//업데이트 순서
-	float LiveTime = 0.0;
+	float LiveTime = 0.0;		//액터가 살아있는 시간 측정
 	float4 Pos = { 0.0f, 0.0f };
 	std::list<GameEngineRender*> RenderList;
 	

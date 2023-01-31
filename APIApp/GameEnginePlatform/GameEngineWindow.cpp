@@ -229,6 +229,7 @@ void GameEngineWindow::SettingWindowSize(float4 _Size)
     }
 
     DoubleBufferImage = new GameEngineImage();
+    //DoubleBufferImage의 크기는 바뀔때마다 delete하고 새로 그려야 함
     DoubleBufferImage->ImageCreate(ScreenSize);
 }
 

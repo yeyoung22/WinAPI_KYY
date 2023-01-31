@@ -90,6 +90,7 @@ bool GameEngineImage::ImageCreate(const float4& _Scale)
 
 bool GameEngineImage::ImageLoad(const GameEnginePath& _Path)
 {
+	//이미지만 로드
 	return ImageLoad(_Path.GetPathToString().c_str());
 }
 
@@ -97,6 +98,8 @@ bool GameEngineImage::ImageLoad(const std::string_view& _Path)
 {
 
 	//LoadImageA(hInstance, 로드할 이미지, 이미지 형식, 너비 단위, 픽셀 단위, )
+	//색상 정보만 가져오므로 화면에 그리기 위해서는 빈 DC를 만들고 연결해야 함
+	//권한이 없으므로 화면에 그릴 수는 없는 상태
 	//0, 0이면 이미지 중 일부만 로드하는 것이 아닌 전부 로드
 	//LR_LOADFROMFILE 지정된 파일에서부터 로드
 
@@ -111,6 +114,7 @@ bool GameEngineImage::ImageLoad(const std::string_view& _Path)
 		return false;
 	}
 
+	//그리기 권한 생성
 	ImageDC = CreateCompatibleDC(nullptr);
 
 	if (nullptr == ImageDC)
@@ -140,10 +144,11 @@ void GameEngineImage::ImageScaleCheck()
 //Copy
 void GameEngineImage::BitCopy(const GameEngineImage* _OtherImage, float4 _CenterPos, float4 _Scale)
 {
-	//픽셀의 색상 데이터 비트 블록 전송 수행
+	//픽셀의 색상 데이터를 비트 블록 전송 수행
+	//이미지 크기 조절 및 색상 복사
 	BitBlt(
 		ImageDC,							//복사 당할 이미지 핸들
-		_CenterPos.ix() - _Scale.hix(),		//위치
+		_CenterPos.ix() - _Scale.hix(),		//위치(이미지의 기준 위치를 중심부로)
 		_CenterPos.iy() - _Scale.hiy(),
 		_Scale.ix(),						//너비
 		_Scale.iy(),						//높이
@@ -169,7 +174,7 @@ void GameEngineImage::TransCopy(const GameEngineImage* _OtherImage, int _CutInde
 
 void GameEngineImage::TransCopy(const GameEngineImage* _OtherImage, float4 _CopyCenterPos, float4 _CopySize, float4 _OtherImagePos, float4 _OtherImageSize, int _Color)
 {
-
+	//BitBlt보다 기능이 많음
 	TransparentBlt(ImageDC,						//이미지가 그려질 대상
 		_CopyCenterPos.ix() - _CopySize.hix(),	//그려질 위치의 시작
 		_CopyCenterPos.iy() - _CopySize.hiy(),

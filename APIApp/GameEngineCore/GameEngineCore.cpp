@@ -41,7 +41,8 @@ void GameEngineCore::GlobalUpdate()
 		}
 	}
 
-	//프레임 시작할때 한번 델타타임 정함
+	//한 장면이 업데이트되는 시간 체크
+	//프레임 시작시 델타타임을 정하고, 시간 측정
 	float TimeDeltaTime = GameEngineTime::GlobalTime.TimeCheck();
 	GameEngineInput::Update(TimeDeltaTime);
 
