@@ -74,6 +74,13 @@ void Player::Movecalculation(float _DeltaTime)
 		MoveDir.x *= 0.01f;
 	}
 
+	if (true == GameEngineInput::IsDown("Jump"))
+	{
+		//MoveDir += float4::Up * 100.0f * _DeltaTime;
+
+		
+	}
+
 	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
 	if (nullptr == ColImage)
 	{
