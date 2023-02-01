@@ -40,6 +40,10 @@ public:
 		return DoubleBufferImage;
 	}
 
+	static void AppOff()
+	{
+		IsWindowUpdate = false;
+	}
 
 	static void DoubleBufferClear();
 

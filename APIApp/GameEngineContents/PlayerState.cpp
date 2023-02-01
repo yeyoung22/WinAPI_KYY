@@ -23,6 +23,9 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::MOVE:
 		MoveStart();
 		break;
+	case PlayerState::JUMP:
+		JumpStart();
+		break;
 	default:
 		break;
 	}
@@ -34,6 +37,9 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::MOVE:
 		MoveEnd();
+		break;
+	case PlayerState::JUMP:
+		JumpEnd();
 		break;
 	default:
 		break;
@@ -50,6 +56,9 @@ void Player::UpdateState(float _Time)
 		break;
 	case PlayerState::MOVE:
 		MoveUpdate(_Time);
+		break;
+	case PlayerState::JUMP:
+		JumpUpdate(_Time);
 		break;
 	default:
 		break;
@@ -107,5 +116,27 @@ void Player::MoveUpdate(float _Time)
 	DirCheck("Move");
 }
 void Player::MoveEnd() {
+
+}
+
+
+void Player::JumpStart()
+{
+	DirCheck("Jump");
+}
+void Player::JumpUpdate(float _Time)
+{
+	if (true == GameEngineInput::IsDown("Jump"))
+	{
+		float4 PrevMoveDir = MoveDir;
+		MoveDir += float4::Up * MoveSpeed;
+
+		if (3.0f <= (PrevMoveDir.y - MoveDir.y))
+		{
+			MoveDir += float4::Down * MoveSpeed;
+		}
+	}
+}
+void Player::JumpEnd() {
 
 }

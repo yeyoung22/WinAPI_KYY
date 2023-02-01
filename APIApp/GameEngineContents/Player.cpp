@@ -41,11 +41,13 @@ void Player::Start()
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Idle",  .ImageName = "Right_Mario.bmp", .Start = 0, .End = 0});
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Move",  .ImageName = "Right_Mario.bmp", .Start = 1, .End = 2 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Right_Run", .ImageName = "Right_Mario.bmp", .Start = 3, .End = 4 });			//5: jump
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_Run", .ImageName = "Right_Mario.bmp", .Start = 3, .End = 4 });			
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_Jump", .ImageName = "Right_Mario.bmp", .Start = 5, .End = 5});
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Idle",  .ImageName = "Left_Mario.bmp", .Start = 0, .End = 0});
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Move",  .ImageName = "Left_Mario.bmp", .Start = 1, .End = 2 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Run", .ImageName = "Left_Mario.bmp", .Start = 3, .End = 4 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_Jump", .ImageName = "Left_Mario.bmp", .Start = 5, .End = 5});
 	}
 
 	ChangeState(PlayerState::IDLE);
@@ -53,7 +55,7 @@ void Player::Start()
 
 void Player::Movecalculation(float _DeltaTime)
 {
-	//거리 = 속력*시간(_DeltaTime을 곱해야 초당 몇 픽셀을 이동)
+	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
 	MoveDir += float4::Down * MoveSpeed* _DeltaTime;
 
 	if (100.0f <= abs(MoveDir.x))						//절댓값
@@ -61,11 +63,11 @@ void Player::Movecalculation(float _DeltaTime)
 		if (0 > MoveDir.x)
 		{
 			GetLevel()->SetCameraMove(float4::Left * 100.0f * _DeltaTime);
-			MoveDir.x = -100.0f;
+			MoveDir.x = -100.0f + ( - 0.5f * _DeltaTime);
 		}
 		else {
 			GetLevel()->SetCameraMove(float4::Right * 100.0f * _DeltaTime);
-			MoveDir.x = 100.0f;
+			MoveDir.x = 100.0f + (0.5f * _DeltaTime);
 		}
 	}
 
@@ -74,12 +76,14 @@ void Player::Movecalculation(float _DeltaTime)
 		MoveDir.x *= 0.01f;
 	}
 
-	if (true == GameEngineInput::IsDown("Jump"))
-	{
-		//MoveDir += float4::Up * 100.0f * _DeltaTime;
+	
+	////점프 기능 만들기
+	//if (true == GameEngineInput::IsDown("Jump"))
+	//{
+	//	
 
-		
-	}
+	//	//MoveDir = (MoveDir + (float4::Up * 100.0f + (float4::Down * MoveSpeed)*_DeltaTime ) * _DeltaTime);		
+	//}
 
 	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
 	if (nullptr == ColImage)
@@ -89,10 +93,17 @@ void Player::Movecalculation(float _DeltaTime)
 
 
 	bool Check = true;
-	float4 NextPos = GetPos() + MoveDir * _DeltaTime;			//옮겨갈 위치
+	float4 NextPos = GetPos() + MoveDir * _DeltaTime;					//옮겨갈 위치
 
-	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))
+	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))	//벽
 	{
+		Check = false;
+	}
+
+	if (RGB(0, 255, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 255, 0)))	//이동가능 파이프
+	{
+		//지하로 워프하는 기능 넣기
+
 		Check = false;
 	}
 
@@ -165,9 +176,7 @@ void Player::Update(float _DeltaTime)
 
 	if (GameEngineInput::IsDown("StageClear"))
 	{
-		
 		return;
-		//
 	}
 
 	UpdateState(_DeltaTime);

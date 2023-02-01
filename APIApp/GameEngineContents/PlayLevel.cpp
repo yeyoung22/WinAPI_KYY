@@ -5,6 +5,8 @@
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include "Player.h"
 #include "Map.h"
+#include "Monster.h"
+#include "ContentsEnums.h"
 
 
 PlayLevel::PlayLevel() 
@@ -38,17 +40,28 @@ void PlayLevel::Loading()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
 	}
+	{
+	
+		//GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_4.bmp"));
+		//GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
+	}
+	{
+		//GoombaImg 持扁
+	/*	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
+		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));*/
+	}
 	//咀磐 积己
 	{
 		Map* Actor = CreateActor<Map>();
 	}
 	{
-		Player* Actor = CreateActor<Player>();
+		Monster* Actor = CreateActor<Monster>();
 		float4 ActorPos = GameEngineWindow::GetScreenSize().half();
-		Actor->SetPos({ActorPos.x-128, ActorPos.y+128});
-
-		
-		//SetCameraMove();
+		Actor->SetPos(ActorPos);
+	}
+	{
+		Player* Actor = CreateActor<Player>();
+		Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
 	}
 
 	if (false == GameEngineInput::IsKey("PlayerOff"))
@@ -74,26 +87,5 @@ void PlayLevel::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("PlayerOff"))
 	{
 		Player::MainPlayer->OnOffSwtich();
-		//player death 持扁
 	}
-
-	/*float CameraMoveSpeed = 1000.0f;
-
-
-	if (GameEngineInput::IsPress("CameraLeftMove"))
-	{
-		SetCameraMove(float4::Left * _DeltaTime * CameraMoveSpeed);
-	}
-	if (GameEngineInput::IsPress("CameraRightMove"))
-	{
-		SetCameraMove(float4::Right * _DeltaTime * CameraMoveSpeed);
-	}
-	if (GameEngineInput::IsPress("CameraDownMove"))
-	{
-		SetCameraMove(float4::Down * _DeltaTime * CameraMoveSpeed);
-	}
-	if (GameEngineInput::IsPress("CameraUpMove"))
-	{
-		SetCameraMove(float4::Up * _DeltaTime * CameraMoveSpeed);
-	}*/
 }

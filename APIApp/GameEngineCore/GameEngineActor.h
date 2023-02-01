@@ -64,6 +64,9 @@ public:
 	GameEngineRender* CreateRender(const std::string_view& _Image, int _Order = 0);
 	GameEngineRender* CreateRender(int _Order = 0);
 
+
+
+
 protected:
 	//구현 안 할 수도 있음
 	//e.g. 나무: Update를 구현하지 않을 수도 있음
@@ -91,9 +94,5 @@ private:
 	float LiveTime = 0.0;		//액터가 살아있는 시간 측정
 	float4 Pos = { 0.0f, 0.0f };
 	std::list<GameEngineRender*> RenderList;
-	
-	void SetOrder(int _Order)
-	{
-		Order = _Order;
-	}
+
 };

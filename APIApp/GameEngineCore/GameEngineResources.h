@@ -30,7 +30,7 @@ public:
 	//이미지 탐색
 	GameEngineImage* ImageFind(const std::string_view& _Name);
 
-	//
+	//메모리 할당 해제
 	void Release();
 
 

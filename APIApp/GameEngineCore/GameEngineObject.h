@@ -45,6 +45,15 @@ public:
 		ObjectUpdate = !ObjectUpdate;
 	}
 
+	virtual void SetOrder(int _Order)
+	{
+		Order = _Order;
+	}
+
+	int GetOrder()
+	{
+		return Order;
+	}
 
 	void SetOwner(GameEngineObject* _Parent)
 	{
@@ -62,11 +71,12 @@ public:
 		return Parent;
 	}
 
-
 protected:
 
 private:
-	GameEngineObject* Parent = nullptr;
+	int Order;
+
+	GameEngineObject* Parent = nullptr;		//자신을 관리 또는 소유한 오브젝트
 
 	bool ObjectDeath = false;
 	bool ObjectUpdate = true;

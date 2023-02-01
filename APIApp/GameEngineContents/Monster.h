@@ -17,7 +17,8 @@ public:
 	Monster& operator=(Monster&& _Other) noexcept = delete;
 
 protected:
-	// GameEngineImage* Image;
+	void Start() override;
+	void Update(float _DeltaTime) override;
 
 private:
 

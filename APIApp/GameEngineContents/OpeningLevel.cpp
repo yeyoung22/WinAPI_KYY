@@ -37,11 +37,21 @@ void OpeningLevel::Loading()
 
 void OpeningLevel::Update(float _DeltaTime)
 {
-	if (true == GameEngineInput::IsDown("LevelChange"))
+	//if (true == GameEngineInput::IsDown("LevelChange"))
+	//{
+	//	GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
+	//}
+
+	float timer = 0.0f;
+
+	while (true)
 	{
-		GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
+		timer += _DeltaTime*0.1f;
+
+		if (35.0f <= timer)
+		{
+			GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
+			return;
+		}
 	}
-
-	//일정 시간만 보여 주고 다음 장면으로 교체하기
-
 }

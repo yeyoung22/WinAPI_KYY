@@ -37,7 +37,7 @@ void GameEngineRender::SetScaleToImage()
 
 void GameEngineRender::SetOrder(int _Order)
 {
-	Order = _Order;
+	GameEngineObject::SetOrder(_Order);
 	GetActor()->GetLevel()->PushRender(this);
 }
 
@@ -59,6 +59,12 @@ void GameEngineRender::SetFrame(int _Frame)
 	}
 
 	Frame = _Frame;
+}
+
+bool GameEngineRender::FrameAnimation::IsEnd()
+{
+	int Value = (static_cast<int>(FrameIndex.size()) - 1);
+	return CurrentIndex == Value;
 }
 
 void GameEngineRender::FrameAnimation::Render(float _DeltaTime)
@@ -122,6 +128,10 @@ void GameEngineRender::Render(float _DeltaTime)
 	}
 }
 
+bool GameEngineRender::IsAnimationEnd()
+{
+	return CurrentAnimation->IsEnd();
+}
 
 void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Paramter)
 {

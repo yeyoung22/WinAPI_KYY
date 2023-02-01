@@ -46,5 +46,8 @@
     <Filter Include="Object\Rendering">
       <UniqueIdentifier>{53fc6bc4-97c7-4dbe-9f8a-cabff6527a01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{57d690bb-4c9e-4521-af67-f48ddf5ea13c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

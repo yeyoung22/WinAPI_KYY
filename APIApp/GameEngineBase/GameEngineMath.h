@@ -1,4 +1,6 @@
 #pragma once
+#include <math.h>
+#include <cmath>
 
 //상속내릴 수 없음
 class GameEngineMath final
@@ -83,6 +85,24 @@ public:
 		return x == 0.0f && y == 0.0f && z == 0.0f;
 	}
 
+	//벡터의 크기(삼각형의 빗변, 특정 위치에서의 크기)
+	float Size() const
+	{
+		return sqrtf(x * x + y * y);
+	}
+
+	//크기를 1로 정규화
+	void Normalize()
+	{
+		float SizeValue = Size();
+
+		x /= SizeValue;
+		y /= SizeValue;
+		z /= SizeValue;
+
+	}
+
+	//선형보간법
 	static float4 Lerp(const float4& _Start, const float4& _End, float _Ratio)
 	{
 		return _Start * (1.0f - _Ratio) + (_End * _Ratio);
@@ -131,6 +151,15 @@ public:
 		return Return;
 	}
 
+	float4 operator /(const float4 _Value) const
+	{
+		float4 Return;
+		Return.x = x / _Value.x;
+		Return.y = y / _Value.y;
+		Return.z = z / _Value.z;
+		return Return;
+	}
+
 	float4 operator -() const
 	{
 		return { -x, -y, -z, 1.0f };
@@ -165,6 +194,14 @@ public:
 		x -= _Other.x;
 		y -= _Other.y;
 		z -= _Other.z;
+		return *this;
+	}
+
+	float4& operator /=(const float4& _Other)
+	{
+		x /= _Other.x;
+		y /= _Other.y;
+		z /= _Other.z;
 		return *this;
 	}
 };

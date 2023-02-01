@@ -29,7 +29,7 @@ protected:
 private:
 	bool IsStageClear = false;
 
-	GameEngineRender* MapRender0;
-	GameEngineRender* MapRender1;
+	GameEngineRender* MapRender0 = nullptr;
+	GameEngineRender* MapRender1 = nullptr;
 };
 

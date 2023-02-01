@@ -5,6 +5,7 @@ enum class PlayerState
 {
 	IDLE,
 	MOVE,
+	JUMP,
 };
 
 // Ό³Έν : Player(Mario)
@@ -56,6 +57,10 @@ private:
 	void MoveStart();
 	void MoveUpdate(float _Time);
 	void MoveEnd();
+
+	void JumpStart();
+	void JumpUpdate(float _Time);
+	void JumpEnd();
 
 	void Movecalculation(float _DeltaTime);
 };

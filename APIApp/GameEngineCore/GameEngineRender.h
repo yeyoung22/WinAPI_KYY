@@ -102,6 +102,9 @@ public:
 	//애니메이션이 끝났는지 체크
 	bool IsAnimationEnd();
 
+
+	void SetOrder(int _Order) override;
+
 protected:
 
 private:
@@ -116,8 +119,6 @@ private:
 
 	int Frame = 0;
 
-	void SetOrder(int _Order);
-
 	void Render(float _DeltaTime);
 
 	class FrameAnimation
@@ -131,7 +132,7 @@ private:
 		float CurrentTime = 0.0f;
 		bool Loop = true;						//마지막 이미지에서 기본적으로 멈춤
 
-
+		bool IsEnd();
 
 		void Render(float _DeltaTime);
 

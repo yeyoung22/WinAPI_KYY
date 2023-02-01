@@ -35,6 +35,17 @@ void Map::Start()
 		MapRender0->SetScaleToImage();
 	}
 
+	{
+		MapRender1 = CreateRender(MarioRenderOrder::Map);
+		//1_4로 교체해야 함
+		MapRender1->SetImage("World1_1.Bmp");
+
+		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();
+		StartPos.x += GameEngineWindow::GetScreenSize().x;
+		MapRender1->SetPosition(StartPos);
+		MapRender1->SetScaleToImage();
+	}
+
 }
 
 
@@ -45,7 +56,13 @@ void Map::Update(float _DeltaTime)
 		return;
 	}
 
-	MapRender0->SetMove(float4::Left * 200.0f * _DeltaTime);
+	//MapRender1->SetPosition({ 0, 0});
+	
 
-	// IsStageClear = false;
+
+	//if (true == IsStageClear)
+	//{
+	//	MapRender1->SetMove(float4::Left * 200.0f * _DeltaTime);
+
+	//}
 }
