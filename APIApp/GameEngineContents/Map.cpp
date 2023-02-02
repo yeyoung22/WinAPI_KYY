@@ -16,14 +16,6 @@ Map::~Map()
 
 void Map::Start()
 {
-	/*{
-		MapRender0 = CreateRender(MarioRenderOrder::Map);
-		MapRender0->SetImage("World1_1.bmp");
-		MapRender0->SetPosition({ 3376 * 2, 960 });
-		MapRender0->SetScaleToImage();
-	}*/
-
-
 	{
 		MapRender0 = CreateRender(MarioRenderOrder::Map);
 		MapRender0->SetImage("World1_1.bmp");
@@ -41,7 +33,6 @@ void Map::Start()
 		MapRender1->SetPosition({StartPos.x, MapRender1->GetImage()->GetImageScale().half().y});
 		MapRender1->SetScaleToImage();
 	}
-
 }
 
 
@@ -52,6 +43,6 @@ void Map::Update(float _DeltaTime)
 		return;
 	}
 
-	float4 StartPos = MapRender0->GetImage()->GetImageScale().half();
-	MapRender1->SetPosition({ StartPos });
+	float4 StartPos = MapRender1->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
+	MapRender1->SetPosition(StartPos);
 }

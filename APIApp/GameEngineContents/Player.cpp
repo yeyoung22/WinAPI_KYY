@@ -63,11 +63,9 @@ void Player::Movecalculation(float _DeltaTime)
 		if (0 > MoveDir.x)
 		{
 			MoveDir.x = -200.0f;
-			//GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
 		}
 		else {
 			MoveDir.x = 200.0f;
-			//GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
 		}
 	}
 
@@ -76,9 +74,13 @@ void Player::Movecalculation(float _DeltaTime)
 		MoveDir.x *= 0.01f;
 	}
 
+		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+	
+	if (true == GameEngineInput::IsDown("StageClear"))
+	{
+		ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_4.bmp");
+	}
 
-
-	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
 	if (nullptr == ColImage)
 	{
 		MsgAssert("충돌용 맵 이미지가 없습니다.");
@@ -162,6 +164,7 @@ void Player::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("StageClear"))
 	{
 		Map::MainMap->StageClearOn();
+		SetPos({ 160, GameEngineWindow::GetScreenSize().half().y});
 	}
 
 	UpdateState(_DeltaTime);
