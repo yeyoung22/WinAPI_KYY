@@ -62,11 +62,11 @@ void Player::Movecalculation(float _DeltaTime)
 	{
 		if (0 > MoveDir.x)
 		{
-			GetLevel()->SetCameraMove(float4::Left * 100.0f * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
 			MoveDir.x = -200.0f;
 		}
 		else {
-			GetLevel()->SetCameraMove(float4::Right * 100.0f * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
 			MoveDir.x = 200.0f;
 		}
 	}
@@ -194,11 +194,11 @@ void Player::Render(float _DeltaTime)
 	float4 ActorPos = GetPos();
 
 	
-	////<디버깅용_센터 보기위함>
-	//Rectangle(DoubleDC,					
-	//	ActorPos.ix() - 5,
-	//	ActorPos.iy() - 5,
-	//	ActorPos.ix() + 5,
-	//	ActorPos.iy() + 5
-	//);
+	//<디버깅용_센터 보기위함>
+	Rectangle(DoubleDC,					
+		ActorPos.ix() - 5,
+		ActorPos.iy() - 5,
+		ActorPos.ix() + 5,
+		ActorPos.iy() + 5
+	);
 }

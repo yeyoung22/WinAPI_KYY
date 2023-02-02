@@ -70,7 +70,7 @@ public:
 	//{
 	//	std::vector<ConvertType*> Result;
 
-	//	// 어떤 
+	//	//actor로 값을 받는 것이 아닌 해당 액터의 타입으로 받을 수 있음(Monster라던가)
 	//	std::list<GameEngineActor*>& Group = Actors[_GroupIndex];
 	//	Result.reserve(Group.size());
 

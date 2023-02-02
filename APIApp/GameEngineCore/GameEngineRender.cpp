@@ -21,6 +21,7 @@ GameEngineActor* GameEngineRender::GetActor()
 void GameEngineRender::SetImage(const std::string_view& _ImageName)
 {
 	Image = GameEngineResources::GetInst().ImageFind(_ImageName);
+	SetScaleToImage();				//SetImage()하면 바로 SetScaleToImage()도 실행
 }
 
 //세팅한 이미지의 크기로 스케일 설정

@@ -46,9 +46,8 @@ void PlayLevel::Loading()
 		//GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
 	}
 	{
-		//GoombaImg 넣기
-	/*	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
-		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));*/
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Goomba.bmp"));
+		Image->Cut(3, 1);
 	}
 	//액터 생성
 	{
@@ -56,12 +55,13 @@ void PlayLevel::Loading()
 	}
 	{
 		Monster* Actor = CreateActor<Monster>();
-		float4 ActorPos = GameEngineWindow::GetScreenSize().half();
-		Actor->SetPos(ActorPos);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ StartPos.x * 2- StartPos.half().x , StartPos.y - 128});
 	}
 	{
 		Player* Actor = CreateActor<Player>();
 		Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
+	
 	}
 
 	if (false == GameEngineInput::IsKey("PlayerOff"))
