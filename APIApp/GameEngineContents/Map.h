@@ -17,7 +17,7 @@ public:
 	Map& operator=(const Map& _Other) = delete;
 	Map& operator=(Map&& _Other) noexcept = delete;
 
-	inline void IsStageClearOn()
+	inline void StageClearOn()
 	{
 		IsStageClear = true;
 	}

@@ -63,11 +63,11 @@ void Player::Movecalculation(float _DeltaTime)
 		if (0 > MoveDir.x)
 		{
 			GetLevel()->SetCameraMove(float4::Left * 100.0f * _DeltaTime);
-			MoveDir.x = -100.0f + ( - 0.5f * _DeltaTime);
+			MoveDir.x = -200.0f;
 		}
 		else {
 			GetLevel()->SetCameraMove(float4::Right * 100.0f * _DeltaTime);
-			MoveDir.x = 100.0f + (0.5f * _DeltaTime);
+			MoveDir.x = 200.0f;
 		}
 	}
 
@@ -76,14 +76,7 @@ void Player::Movecalculation(float _DeltaTime)
 		MoveDir.x *= 0.01f;
 	}
 
-	
-	////점프 기능 만들기
-	//if (true == GameEngineInput::IsDown("Jump"))
-	//{
-	//	
 
-	//	//MoveDir = (MoveDir + (float4::Up * 100.0f + (float4::Down * MoveSpeed)*_DeltaTime ) * _DeltaTime);		
-	//}
 
 	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
 	if (nullptr == ColImage)
@@ -99,14 +92,6 @@ void Player::Movecalculation(float _DeltaTime)
 	{
 		Check = false;
 	}
-
-	if (RGB(0, 255, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 255, 0)))	//이동가능 파이프
-	{
-		//지하로 워프하는 기능 넣기
-
-		Check = false;
-	}
-
 
 	if (false == Check)
 	{
@@ -176,7 +161,7 @@ void Player::Update(float _DeltaTime)
 
 	if (GameEngineInput::IsDown("StageClear"))
 	{
-		return;
+		Map::MainMap->StageClearOn();
 	}
 
 	UpdateState(_DeltaTime);
@@ -209,11 +194,11 @@ void Player::Render(float _DeltaTime)
 	float4 ActorPos = GetPos();
 
 	
-	//<디버깅용_캐릭터 센터 보기위함>
-	Rectangle(DoubleDC,					
-		ActorPos.ix() - 5,
-		ActorPos.iy() - 5,
-		ActorPos.ix() + 5,
-		ActorPos.iy() + 5
-	);
+	////<디버깅용_센터 보기위함>
+	//Rectangle(DoubleDC,					
+	//	ActorPos.ix() - 5,
+	//	ActorPos.iy() - 5,
+	//	ActorPos.ix() + 5,
+	//	ActorPos.iy() + 5
+	//);
 }

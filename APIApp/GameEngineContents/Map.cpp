@@ -16,33 +16,29 @@ Map::~Map()
 
 void Map::Start()
 {
-	//{
-	//	GameEngineRender* AnimationRender = CreateRender(
-	// RenderOrder::Map);
-	//	AnimationRender->SetPosition({ 3376*2, 960});
-	//	//이미지 확대해야 함(setScaletoimage()함수로 이미지의 실제 크기를 가져옴)
-	//	AnimationRender->SetScale({13504, 1920});
+	/*{
+		MapRender0 = CreateRender(MarioRenderOrder::Map);
+		MapRender0->SetImage("World1_1.bmp");
+		MapRender0->SetPosition({ 3376 * 2, 960 });
+		MapRender0->SetScaleToImage();
+	}*/
 
-
-	//	AnimationRender->SetImage("World1_1.bmp");
-	//
-	//}
 
 	{
 		MapRender0 = CreateRender(MarioRenderOrder::Map);
 		MapRender0->SetImage("World1_1.bmp");
-		MapRender0->SetPosition(MapRender0->GetImage()->GetImageScale().half());
+		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
+		MapRender0->SetPosition(StartPos);
 		MapRender0->SetScaleToImage();
 	}
 
 	{
 		MapRender1 = CreateRender(MarioRenderOrder::Map);
-		//1_4로 교체해야 함
-		MapRender1->SetImage("World1_1.Bmp");
+		MapRender1->SetImage("World1_4.Bmp");
 
-		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();
-		StartPos.x += GameEngineWindow::GetScreenSize().x;
-		MapRender1->SetPosition(StartPos);
+		float4 StartPos = MapRender0->GetImage()->GetImageScale();
+		StartPos.x += MapRender1->GetImage()->GetImageScale().half().x;
+		MapRender1->SetPosition({StartPos.x, MapRender1->GetImage()->GetImageScale().half().y});
 		MapRender1->SetScaleToImage();
 	}
 
@@ -56,13 +52,6 @@ void Map::Update(float _DeltaTime)
 		return;
 	}
 
-	//MapRender1->SetPosition({ 0, 0});
-	
-
-
-	//if (true == IsStageClear)
-	//{
-	//	MapRender1->SetMove(float4::Left * 200.0f * _DeltaTime);
-
-	//}
+	float4 StartPos = MapRender0->GetImage()->GetImageScale().half();
+	MapRender1->SetPosition({ StartPos });
 }
