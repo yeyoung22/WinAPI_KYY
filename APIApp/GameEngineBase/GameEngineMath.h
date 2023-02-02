@@ -1,6 +1,7 @@
 #pragma once
 #include <math.h>
 #include <cmath>
+#include <string>
 
 //상속내릴 수 없음
 class GameEngineMath final
@@ -54,7 +55,6 @@ public:
 		return static_cast<int>(w);
 	}
 
-	//int X의 반
 	int hix() const
 	{
 		return static_cast<int>(x * 0.5f);
@@ -73,6 +73,26 @@ public:
 	int hiw() const
 	{
 		return static_cast<int>(w * 0.5f);
+	}
+
+	float hx() const
+	{
+		return x * 0.5f;
+	}
+
+	float hy() const
+	{
+		return y * 0.5f;
+	}
+
+	float hz() const
+	{
+		return z * 0.5f;
+	}
+
+	float hw() const
+	{
+		return w * 0.5f;
 	}
 
 	float4 half() const
@@ -203,5 +223,14 @@ public:
 		y /= _Other.y;
 		z /= _Other.z;
 		return *this;
+	}
+
+	std::string ToString()
+	{
+		char ArrReturn[256];
+
+		sprintf_s(ArrReturn, "x: %f, y: %f, z: %f, w: %f", x, y, z, w);
+
+		return std::string(ArrReturn);
 	}
 };

@@ -63,5 +63,9 @@ private:
 	void JumpEnd();
 
 	void Movecalculation(float _DeltaTime);
+
+
+	//플레이어에 카메라 붙여야 함
+	void Camera(float _DeltaTime);
 };
 

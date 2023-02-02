@@ -1,5 +1,6 @@
 #pragma once
 
+
 // 설명 : 오브젝트 구조의 기본 클래스
 class GameEngineObject
 {

@@ -137,6 +137,7 @@ void Player::JumpUpdate(float _Time)
 		}
 	}
 }
-void Player::JumpEnd() {
+void Player::JumpEnd() 
+{
 
 }

@@ -1,7 +1,8 @@
 #pragma once
+#include "GameEngineObject.h"
 
 // Ό³Έν :
-class GameEngineCollision
+class GameEngineCollision : public GameEngineObject
 {
 public:
 	// constrcuter destructer

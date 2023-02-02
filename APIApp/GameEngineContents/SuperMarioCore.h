@@ -20,7 +20,7 @@ public:
 		return Core;
 	}
 
-	// 포인터로 만들시에는 중간에 삭제가 용이
+	//포인터로 만들시에는 중간에 삭제가 용이
 	//중간에 지워질 애를 포인터형으로 만들어서 동적할당할 필요 없음
 	//static StudyGameCore& Destroy()
 	//{
@@ -40,8 +40,6 @@ private:
 	~SuperMarioCore();
 
 
-
-	//static StudyGameCore* Core;
 	static SuperMarioCore Core;	
 };
 

@@ -62,12 +62,12 @@ void Player::Movecalculation(float _DeltaTime)
 	{
 		if (0 > MoveDir.x)
 		{
-			GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
 			MoveDir.x = -200.0f;
+			//GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
 		}
 		else {
-			GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
 			MoveDir.x = 200.0f;
+			//GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
 		}
 	}
 
@@ -166,6 +166,7 @@ void Player::Update(float _DeltaTime)
 
 	UpdateState(_DeltaTime);
 	Movecalculation(_DeltaTime);
+	Camera(_DeltaTime);
 }
 
 void Player::DirCheck(const std::string_view& _AnimationName)
@@ -188,11 +189,24 @@ void Player::DirCheck(const std::string_view& _AnimationName)
 	}
 }
 
+void Player::Camera(float _DeltaTime)
+{
+	if (GameEngineInput::IsPress("LeftMove"))
+	{
+		GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
+	}
+	else if (GameEngineInput::IsPress("RightMove"))
+	{
+		GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
+	}
+}
+
+
 void Player::Render(float _DeltaTime)
 {
 	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
 	float4 ActorPos = GetPos();
-
+	ActorPos -= GetLevel()->GetCameraPos();
 	
 	//<디버깅용_센터 보기위함>
 	Rectangle(DoubleDC,					
@@ -201,4 +215,5 @@ void Player::Render(float _DeltaTime)
 		ActorPos.ix() + 5,
 		ActorPos.iy() + 5
 	);
+
 }

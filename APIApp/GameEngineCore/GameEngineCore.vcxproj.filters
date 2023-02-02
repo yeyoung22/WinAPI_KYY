@@ -18,7 +18,10 @@
       <Filter>Object\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineCollision.h">
-      <Filter>Collision</Filter>
+      <Filter>Object\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineComponent.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -39,7 +42,10 @@
       <Filter>Object\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineCollision.cpp">
-      <Filter>Collision</Filter>
+      <Filter>Object\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineComponent.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,7 +58,7 @@
     <Filter Include="Object\Rendering">
       <UniqueIdentifier>{53fc6bc4-97c7-4dbe-9f8a-cabff6527a01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Collision">
+    <Filter Include="Object\Collision">
       <UniqueIdentifier>{57d690bb-4c9e-4521-af67-f48ddf5ea13c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

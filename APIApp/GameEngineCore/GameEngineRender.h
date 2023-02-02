@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 #include <GameEnginePlatform/GameEngineImage.h>
-#include "GameEngineObject.h"
+#include "GameEngineComponent.h"
 
 class FrameAnimationParameter
 {
@@ -20,7 +20,7 @@ public:
 // 설명 : 랜더링에 관련된 기능
 class GameEngineActor;
 class GameEngineLevel;
-class GameEngineRender : public GameEngineObject
+class GameEngineRender : public GameEngineComponent
 {
 	friend GameEngineActor;
 	friend GameEngineLevel;
@@ -38,21 +38,6 @@ public:
 
 	void SetImage(const std::string_view& _ImageName);
 
-	inline void SetPosition(float4 _Position)
-	{
-		Position = _Position;
-	}
-
-	inline void SetMove(float4 _Position)
-	{
-		Position += _Position;
-	}
-
-	inline void SetScale(float4 _Scale)
-	{
-		Scale = _Scale;
-	}
-	
 	void SetScaleToImage();
 
 	void SetFrame(int _Frame);
@@ -62,31 +47,14 @@ public:
 		return Image;
 	}
 
-	inline int GetOrder()
-	{
-		return Order;
-	}
-
 	inline int GetFrame()
 	{
 		return Frame;
 	}
 
-	GameEngineActor* GetActor();
-
 	void SetTransColor(int _Color)
 	{
 		TransColor = _Color;
-	}
-
-	inline float4 GetPosition()
-	{
-		return Position;
-	}
-
-	inline float4 GetScale()
-	{
-		return Scale;
 	}
 
 	//UI같이 카메라 효과가 필요없는 것들은 false
@@ -102,15 +70,11 @@ public:
 	//애니메이션이 끝났는지 체크
 	bool IsAnimationEnd();
 
-
 	void SetOrder(int _Order) override;
 
 protected:
 
 private:
-	int Order = 0;
-	float4 Position = float4::Zero;
-	float4 Scale = float4::Zero;
 	GameEngineImage* Image = nullptr;
 
 	bool IsEffectCamera = true;					//카메라와 함께 움직이는 것들(true)
