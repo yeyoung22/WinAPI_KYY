@@ -88,7 +88,7 @@ void Player::Movecalculation(float _DeltaTime)
 	
 	if (true == GameEngineInput::IsDown("StageClear"))
 	{
-		ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_4.bmp");
+		//ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_4.bmp");
 	}
 
 	if (nullptr == ColImage)
