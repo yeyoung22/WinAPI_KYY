@@ -9,6 +9,7 @@
 #include "ContentsEnums.h"
 
 
+
 PlayLevel::PlayLevel() 
 {
 }
@@ -43,7 +44,7 @@ void PlayLevel::Loading()
 	{
 	
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_4.bmp"));
-		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
+		//GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Goomba.bmp"));
@@ -77,8 +78,6 @@ void PlayLevel::Loading()
 		GameEngineInput::CreateKey("CameraDownMove", VK_DOWN);
 		GameEngineInput::CreateKey("CameraUpMove", VK_UP);
 	}
-
-
 }
 
 void PlayLevel::Update(float _DeltaTime)

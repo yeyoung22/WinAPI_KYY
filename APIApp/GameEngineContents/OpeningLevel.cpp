@@ -42,13 +42,13 @@ void OpeningLevel::Update(float _DeltaTime)
 		GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
 	}
 
-	/*float timer = 0.0f;
+	float timer = 0.0f;
 
-	while (true)
+	/*while (true)
 	{
-		timer += _DeltaTime*0.1f;
+		timer += _DeltaTime*0.001f;
 
-		if (35.0f <= timer)
+		if (130.0f <= timer)
 		{
 			GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
 			return;

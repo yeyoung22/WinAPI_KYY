@@ -39,17 +39,20 @@ void Player::Start()
 		AnimationRender = CreateRender(MarioRenderOrder::Player);
 		AnimationRender->SetScale({ 256, 256 });
 
+		//Original Mario
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Idle",  .ImageName = "Right_Mario.bmp", .Start = 0, .End = 0});
-		AnimationRender->CreateAnimation({ .AnimationName = "Right_Move",  .ImageName = "Right_Mario.bmp", .Start = 1, .End = 2 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Right_Run", .ImageName = "Right_Mario.bmp", .Start = 3, .End = 4 });			
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_Move",  .ImageName = "Right_Mario.bmp", .Start = 1, .End = 3 });
+		//Turn되는 시점에서 애니메이션 3, 4 모두인지 4인지 결정해야 함
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_Turn", .ImageName = "Right_Mario.bmp", .Start = 4, .End = 4 });			
+		
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Jump", .ImageName = "Right_Mario.bmp", .Start = 5, .End = 5});
-		AnimationRender->CreateAnimation({ .AnimationName = "Right_Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6, .InterTime = 5.0f });
+		AnimationRender->CreateAnimation({ .AnimationName = "Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6});
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Idle",  .ImageName = "Left_Mario.bmp", .Start = 0, .End = 0});
-		AnimationRender->CreateAnimation({ .AnimationName = "Left_Move",  .ImageName = "Left_Mario.bmp", .Start = 1, .End = 2 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Left_Run", .ImageName = "Left_Mario.bmp", .Start = 3, .End = 4 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Left_Jump", .ImageName = "Left_Mario.bmp", .Start = 5, .End = 5});
-		AnimationRender->CreateAnimation({ .AnimationName = "Left_Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_Move",  .ImageName = "Left_Mario.bmp", .Start = 1, .End = 3 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_Turn", .ImageName = "Left_Mario.bmp", .Start = 4, .End = 4 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_Jump", .ImageName = "Left_Mario.bmp", .Start = 5, .End = 5 });
+
 	}
 
 	{
@@ -65,21 +68,30 @@ void Player::Movecalculation(float _DeltaTime)
 	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
 	MoveDir += float4::Down * MoveSpeed* _DeltaTime;	//중력가속도
 
-	if (200.0f <= abs(MoveDir.x))						//한계 속도 지정
+	if (250.0f <= abs(MoveDir.x))						//한계 속도 지정
 	{
 		if (0 > MoveDir.x)
 		{
-			MoveDir.x = -200.0f;
+			if (true == GameEngineInput::IsDown("LeftMove"))
+			{
+				AnimationRender->ChangeAnimation("Left_Turn");
+			}
+				MoveDir.x = -250.0f;
 		}
 		else {
-			MoveDir.x = 200.0f;
+			if (true == GameEngineInput::IsDown("RightMove"))
+			{
+				AnimationRender->ChangeAnimation("Right_Turn");
+			}
+				MoveDir.x = 250.0f;
 		}
 	}
+
+
 
 	//좌우키가 안 눌렀으면 멈추게 해야 함
 	if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
 	{
-		//시간 고려해야 함
 		MoveDir.x *= 0.005f;
 	}
 
@@ -145,22 +157,22 @@ bool Player::FreeMoveState(float _DeltaTime)
 		if (GameEngineInput::IsPress("LeftMove"))
 		{
 			SetMove(float4::Left * 1000.0f * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Left * CameraMoveSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Left * MoveSpeed * _DeltaTime);
 		}
 		else if (GameEngineInput::IsPress("RightMove"))
 		{
 			SetMove(float4::Right * 1000.0f * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Right * CameraMoveSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Right * MoveSpeed * _DeltaTime);
 		}
 		else if (GameEngineInput::IsPress("UpMove"))
 		{
 			SetMove(float4::Up * 1000.0f * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Up * CameraMoveSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Up * MoveSpeed * _DeltaTime);
 		}
 		else if (GameEngineInput::IsPress("DownMove"))
 		{
 			SetMove(float4::Down * 1000.0f * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Down * CameraMoveSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Down * MoveSpeed * _DeltaTime);
 		}
 	}
 	if (true == FreeMove)
@@ -177,9 +189,12 @@ void Player::Update(float _DeltaTime)
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_CirCle, .ThisColType = CT_CirCle }, Collision))
 		{
-			AnimationRender->ChangeAnimation("Right_Death");
-			MainPlayer->Death();
-			
+			AnimationRender->ChangeAnimation("Death");
+
+
+			SetMove(float4::Up * _DeltaTime * MoveSpeed);
+
+			//MainPlayer->Death();
 		}
 	}
 
@@ -213,6 +228,7 @@ void Player::DirCheck(const std::string_view& _AnimationName)
 		DirString = "Right_";
 	}
 
+
 	if (PrevDirString != DirString)
 	{
 		AnimationRender->ChangeAnimation(DirString + _AnimationName.data());
@@ -223,11 +239,11 @@ void Player::DirCheck(const std::string_view& _AnimationName)
 //{
 //	if (GameEngineInput::IsPress("LeftMove"))
 //	{
-//		GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
+//		GetLevel()->SetCameraMove(float4::Left * CameraMoveSpeed * _DeltaTime);
 //	}
 //	else if (GameEngineInput::IsPress("RightMove"))
 //	{
-//		GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
+//		GetLevel()->SetCameraMove(float4::Right * CameraMoveSpeed * _DeltaTime);
 //	}
 //}
 
@@ -246,13 +262,15 @@ void Player::Render(float _DeltaTime)
 		ActorPos.iy() + 5
 	);
 
-	if (GameEngineInput::IsPress("LeftMove"))
+
+	float4 ActPos = GetPos();
+
+	if (ActPos.x >= GameEngineWindow::GetScreenSize().half().x)		
 	{
-		GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
-	}
-	if (GameEngineInput::IsPress("RightMove"))
-	{
-		GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
+		if (GameEngineInput::IsPress("RightMove"))
+		{
+			GetLevel()->SetCameraMove(float4::Right * MoveSpeed * _DeltaTime);
+		}
 	}
 
 }

@@ -33,7 +33,6 @@ private:
 	float AccTime = 0.0f;
 	int StartFrame = 0;
 	float MoveSpeed = 200.0f;
-	float CameraMoveSpeed = 1000.0f;
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
@@ -66,7 +65,6 @@ private:
 	void Movecalculation(float _DeltaTime);
 
 
-	////플레이어에 카메라 붙여야 함
 	//void Camera(float _DeltaTime);
 };
 
