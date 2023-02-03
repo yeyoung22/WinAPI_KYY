@@ -191,7 +191,7 @@ void Player::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("StageClear"))
 	{
 		Map::MainMap->StageClearOn();
-		SetPos({ 160, GameEngineWindow::GetScreenSize().y});
+		MainPlayer->SetPos({ 160, GameEngineWindow::GetScreenSize().half().y});
 	}
 
 	UpdateState(_DeltaTime);

@@ -126,7 +126,7 @@ void Player::JumpStart()
 }
 void Player::JumpUpdate(float _Time)
 {
-	if (true == GameEngineInput::IsDown("Jump"))
+	/*if (true == GameEngineInput::IsDown("Jump"))
 	{
 		float4 PrevMoveDir = MoveDir;
 		MoveDir += float4::Up * (MoveSpeed+100.0f)*_Time;
@@ -136,7 +136,7 @@ void Player::JumpUpdate(float _Time)
 			MoveDir.y = 200.f;
 			MoveDir += float4::Down * MoveSpeed * _Time;
 		}
-	}
+	}*/
 
 	DirCheck("Jump");
 }
