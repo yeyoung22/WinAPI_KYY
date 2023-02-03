@@ -131,6 +131,10 @@ bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter)
 
 bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter, std::vector<GameEngineCollision*>& _Collision)
 {
+	if (false == IsUpdate())
+	{
+		return false;
+	}
 	_Collision.clear();
 
 	std::list<GameEngineCollision*>& _TargetGroup = GetActor()->GetLevel()->Collisions[_Parameter.TargetGroup];
@@ -171,7 +175,7 @@ CollisionData GameEngineCollision::GetCollisionData()
 void GameEngineCollision::DebugRender()
 {
 	HDC BackBufferDc = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	float4 DebugRenderPos = GetActorPlusPos() + GetActor()->GetLevel()->GetCameraPos();
+	float4 DebugRenderPos = GetActorPlusPos() - GetActor()->GetLevel()->GetCameraPos();
 	switch (DebugRenderType)
 	{
 	case CT_Point:
