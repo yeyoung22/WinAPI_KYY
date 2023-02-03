@@ -43,17 +43,19 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Move",  .ImageName = "Right_Mario.bmp", .Start = 1, .End = 2 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Run", .ImageName = "Right_Mario.bmp", .Start = 3, .End = 4 });			
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Jump", .ImageName = "Right_Mario.bmp", .Start = 5, .End = 5});
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6, .InterTime = 5.0f });
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Idle",  .ImageName = "Left_Mario.bmp", .Start = 0, .End = 0});
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Move",  .ImageName = "Left_Mario.bmp", .Start = 1, .End = 2 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Run", .ImageName = "Left_Mario.bmp", .Start = 3, .End = 4 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Jump", .ImageName = "Left_Mario.bmp", .Start = 5, .End = 5});
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6 });
 	}
 
-	//{
-	//	BodyCollision = CreateCollision(MarioCollisionOrder::Player);
-	//	BodyCollision->SetScale({ 60, 60 });
-	//}
+	{
+		BodyCollision = CreateCollision(MarioCollisionOrder::Player);
+		BodyCollision->SetScale({ 60, 60 });
+	}
 
 	ChangeState(PlayerState::IDLE);
 }
@@ -61,9 +63,9 @@ void Player::Start()
 void Player::Movecalculation(float _DeltaTime)
 {
 	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
-	MoveDir += float4::Down * MoveSpeed* _DeltaTime;
+	MoveDir += float4::Down * MoveSpeed* _DeltaTime;	//중력가속도
 
-	if (100.0f <= abs(MoveDir.x))						//절댓값
+	if (200.0f <= abs(MoveDir.x))						//한계 속도 지정
 	{
 		if (0 > MoveDir.x)
 		{
@@ -74,12 +76,14 @@ void Player::Movecalculation(float _DeltaTime)
 		}
 	}
 
+	//좌우키가 안 눌렀으면 멈추게 해야 함
 	if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
 	{
-		MoveDir.x *= 0.01f;
+		//시간 고려해야 함
+		MoveDir.x *= 0.005f;
 	}
 
-	//ImageFind에 들어갈 스트링을 문자열 변수로 만들기
+	//ImageFind에 들어갈 스트링을 문자열 변수로 만들어둬야 함
 	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
 	
 	if (true == GameEngineInput::IsDown("StageClear"))
@@ -125,16 +129,16 @@ bool FreeMove = false;
 
 bool Player::FreeMoveState(float _DeltaTime)
 {
-	//if (true == GameEngineInput::IsPress("FreeMoveSwitch"))
-	//{
-	//	if (nullptr != BodyCollision)
-	//	{
-	//		BodyCollision->Death();
-	//		BodyCollision = nullptr;
-	//	}
+	if (true == GameEngineInput::IsPress("FreeMoveSwitch"))
+	{
+		if (nullptr != BodyCollision)
+		{
+			BodyCollision->Death();
+			BodyCollision = nullptr;
+		}
 
-	//	FreeMove = true;
-	//}
+		FreeMove = true;
+	}
 
 	if (true == FreeMove)
 	{
@@ -168,18 +172,16 @@ bool Player::FreeMoveState(float _DeltaTime)
 
 void Player::Update(float _DeltaTime)
 {
-	//if (nullptr != BodyCollision)
-	//{
-	//	std::vector<GameEngineCollision*> Collision;
-	//	if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_CirCle, .ThisColType = CT_CirCle }, Collision))
-	//	{
-	//		for (size_t i = 0; i < Collision.size(); i++)
-	//		{
-	//			GameEngineActor* ColActor = Collision[i]->GetActor();
-	//			ColActor->Death();
-	//		}
-	//	}
-	//}
+	if (nullptr != BodyCollision)
+	{
+		std::vector<GameEngineCollision*> Collision;
+		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_CirCle, .ThisColType = CT_CirCle }, Collision))
+		{
+			AnimationRender->ChangeAnimation("Right_Death");
+			MainPlayer->Death();
+			
+		}
+	}
 
 	if (true == FreeMoveState(_DeltaTime))
 	{
@@ -189,12 +191,12 @@ void Player::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("StageClear"))
 	{
 		Map::MainMap->StageClearOn();
-		SetPos({ 160, GameEngineWindow::GetScreenSize().half().y});
+		SetPos({ 160, GameEngineWindow::GetScreenSize().y});
 	}
 
 	UpdateState(_DeltaTime);
 	Movecalculation(_DeltaTime);
-	Camera(_DeltaTime);
+	//Camera(_DeltaTime);
 }
 
 void Player::DirCheck(const std::string_view& _AnimationName)
@@ -217,17 +219,17 @@ void Player::DirCheck(const std::string_view& _AnimationName)
 	}
 }
 
-void Player::Camera(float _DeltaTime)
-{
-	if (GameEngineInput::IsPress("LeftMove"))
-	{
-		GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
-	}
-	else if (GameEngineInput::IsPress("RightMove"))
-	{
-		GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
-	}
-}
+//void Player::Camera(float _DeltaTime)
+//{
+//	if (GameEngineInput::IsPress("LeftMove"))
+//	{
+//		GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
+//	}
+//	else if (GameEngineInput::IsPress("RightMove"))
+//	{
+//		GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
+//	}
+//}
 
 
 void Player::Render(float _DeltaTime)
@@ -243,5 +245,14 @@ void Player::Render(float _DeltaTime)
 		ActorPos.ix() + 5,
 		ActorPos.iy() + 5
 	);
+
+	if (GameEngineInput::IsPress("LeftMove"))
+	{
+		GetLevel()->SetCameraMove(float4::Left * 180.0f * _DeltaTime);
+	}
+	if (GameEngineInput::IsPress("RightMove"))
+	{
+		GetLevel()->SetCameraMove(float4::Right * 180.0f * _DeltaTime);
+	}
 
 }

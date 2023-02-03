@@ -7,6 +7,7 @@
 
 static bool(*ColFunctionPtr[CT_Max][CT_Max])(const CollisionData& _Left, const CollisionData& _Right);	//±‚¡ÿ: Left
 
+
 class CollisionFunctionInit
 {
 public:
@@ -22,6 +23,8 @@ public:
 
 	}
 };
+
+CollisionFunctionInit Init = CollisionFunctionInit();
 
 GameEngineCollision::GameEngineCollision() 
 {

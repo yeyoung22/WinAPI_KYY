@@ -61,13 +61,6 @@ void PlayLevel::Loading()
 		Monster* Actor = CreateActor<Monster>(MarioRenderOrder::Monster);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ StartPos.x * 2- StartPos.half().x , StartPos.y - 128});
-
-		/*srand(time(nullptr));
-		for (size_t i = 0; i < 1; i++)
-		{
-			Monster* Actor = CreateActor<Monster>(MarioRenderOrder::Monster);
-			Actor->SetMove(float4(rand() % GameEngineWindow::GetScreenSize().ix(), rand() % GameEngineWindow::GetScreenSize().iy()));
-		}*/
 	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))

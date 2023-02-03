@@ -23,10 +23,10 @@ void Monster::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Goomba_Idle",  .ImageName = "Goomba.bmp", .Start = 0, .End = 1 });
 		AnimationRender->ChangeAnimation("Goomba_Idle");
 	}
-	//{
-	//	BodyCollision = CreateCollision(MarioCollisionOrder::Monster);
-	//	BodyCollision->SetScale({ 50, 50 });
-	//}
+	{
+		BodyCollision = CreateCollision(MarioCollisionOrder::Monster);
+		BodyCollision->SetScale({ 50, 50 });
+	}
 }
 
 
@@ -35,17 +35,4 @@ void Monster::Update(float _DeltaTime)
 	float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
 
 	SetMove(Dir);
-
-	//std::vector<GameEngineCollision*> Collision;
-	//if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player) }, Collision))
-	//{
-	//	for (size_t i = 0; i < Collision.size(); i++)
-	//	{
-	//		Monster* FindMonster = Collision[i]->GetOwner<Monster>();
-
-	//		GameEngineActor* ColActor = Collision[i]->GetActor();
-
-	//	}
-	//}
-
 }
