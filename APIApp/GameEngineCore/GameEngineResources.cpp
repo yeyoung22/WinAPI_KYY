@@ -27,7 +27,7 @@ void GameEngineResources::Release()
 	AllImage.clear();
 }
 
-//이미지
+//이미지 로드
 GameEngineImage* GameEngineResources::ImageLoad(const GameEnginePath& _Path)
 {
 	return ImageLoad(_Path.GetPathToString().c_str(), _Path.GetFileName().c_str());

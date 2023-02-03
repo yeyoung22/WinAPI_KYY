@@ -5,10 +5,11 @@
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineRender.h>
+#include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineLevel.h>
 #include "ContentsEnums.h"
 
- Player* Player::MainPlayer;
+Player* Player::MainPlayer;
 
 Player::Player() 
 {
@@ -21,7 +22,6 @@ Player::~Player()
 void Player::Start()
 {
 	MainPlayer = this;
-
 
 	if (false == GameEngineInput::IsKey("LeftMove"))
 	{
@@ -50,6 +50,11 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Jump", .ImageName = "Left_Mario.bmp", .Start = 5, .End = 5});
 	}
 
+	//{
+	//	BodyCollision = CreateCollision(MarioCollisionOrder::Player);
+	//	BodyCollision->SetScale({ 60, 60 });
+	//}
+
 	ChangeState(PlayerState::IDLE);
 }
 
@@ -74,7 +79,8 @@ void Player::Movecalculation(float _DeltaTime)
 		MoveDir.x *= 0.01f;
 	}
 
-		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+	//ImageFind에 들어갈 스트링을 문자열 변수로 만들기
+	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
 	
 	if (true == GameEngineInput::IsDown("StageClear"))
 	{
@@ -119,10 +125,16 @@ bool FreeMove = false;
 
 bool Player::FreeMoveState(float _DeltaTime)
 {
-	if (true == GameEngineInput::IsPress("FreeMoveSwitch"))
-	{
-		FreeMove = true;
-	}
+	//if (true == GameEngineInput::IsPress("FreeMoveSwitch"))
+	//{
+	//	if (nullptr != BodyCollision)
+	//	{
+	//		BodyCollision->Death();
+	//		BodyCollision = nullptr;
+	//	}
+
+	//	FreeMove = true;
+	//}
 
 	if (true == FreeMove)
 	{
@@ -156,6 +168,19 @@ bool Player::FreeMoveState(float _DeltaTime)
 
 void Player::Update(float _DeltaTime)
 {
+	//if (nullptr != BodyCollision)
+	//{
+	//	std::vector<GameEngineCollision*> Collision;
+	//	if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_CirCle, .ThisColType = CT_CirCle }, Collision))
+	//	{
+	//		for (size_t i = 0; i < Collision.size(); i++)
+	//		{
+	//			GameEngineActor* ColActor = Collision[i]->GetActor();
+	//			ColActor->Death();
+	//		}
+	//	}
+	//}
+
 	if (true == FreeMoveState(_DeltaTime))
 	{
 		return;

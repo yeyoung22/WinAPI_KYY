@@ -10,10 +10,12 @@
 class GameEngineCore;
 class GameEngineActor;
 class GameEngineRender;
+class GameEngineCollision;
 class GameEngineLevel : public GameEngineObject		//추상클래스
 {
 	friend GameEngineCore;							//GameEngineCore는 GameEngineLevel의 private 멤버도 접근 가능
 	friend GameEngineRender;
+	friend GameEngineCollision;
 
 public:
 	// constrcuter destructer
@@ -25,6 +27,13 @@ public:
 	GameEngineLevel(GameEngineLevel&& _Other) noexcept = delete;
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
+	
+	//누를때마다 디버깅 모드가 바뀜(On/Off 스위치)
+	static void DebugRenderSwitch()
+	{
+		IsDebugRender = !IsDebugRender;
+	}
+
 
 	/// <summary>
 	/// 액터를 만드는 함수
@@ -49,6 +58,7 @@ public:
 		return dynamic_cast<ActorType*>(Actor);
 	}
 
+
 	//카메라 움직임
 	void SetCameraMove(const float4& _MoveValue)
 	{
@@ -65,29 +75,30 @@ public:
 		return CameraPos;
 	}
 
-	//template<typename ConvertType>
-	//std::vector<ConvertType*> GetConvertActors(int _GroupIndex)
-	//{
-	//	std::vector<ConvertType*> Result;
 
-	//	//actor로 값을 받는 것이 아닌 해당 액터의 타입으로 받을 수 있음(Monster라던가)
-	//	std::list<GameEngineActor*>& Group = Actors[_GroupIndex];
-	//	Result.reserve(Group.size());
+	template<typename ConvertType>
+	std::vector<ConvertType*> GetConvertActors(int _GroupIndex)
+	{
+		std::vector<ConvertType*> Result;
 
-	//	for (GameEngineActor* ActorPtr : Group)
-	//	{
-	//		ConvertType* ConvertPtr = dynamic_cast<ConvertType*>(ActorPtr);
+		//actor로 값을 받는 것이 아닌 해당 액터의 타입으로 받을 수 있음(Monster라던가)
+		std::list<GameEngineActor*>& Group = Actors[_GroupIndex];
+		Result.reserve(Group.size());
 
-	//		if (nullptr == ConvertType)
-	//		{
-	//			MsgAssert("컨버트 할수 없는 변환입니다.");
-	//		}
+		for (GameEngineActor* ActorPtr : Group)
+		{
+			ConvertType* ConvertPtr = dynamic_cast<ConvertType*>(ActorPtr);
 
-	//		Result.push_back(ConvertPtr);
-	//	}
+			if (nullptr == ConvertType)
+			{
+				MsgAssert("컨버트 할수 없는 변환입니다.");
+			}
 
-	//	return Result;
-	//}
+			Result.push_back(ConvertPtr);
+		}
+
+		return Result;
+	}
 
 	template<typename EnumType>
 	std::vector<GameEngineActor*> GetActors(EnumType _GroupIndex)
@@ -99,7 +110,6 @@ public:
 	{
 		std::vector<GameEngineActor*> Result;
 
-		// 어떤 
 		std::list<GameEngineActor*>& Group = Actors[_GroupIndex];
 		Result.reserve(Group.size());
 
@@ -111,6 +121,10 @@ public:
 		return Result;
 	}
 
+	static void DebugTextPush(const std::string& _DebugText)
+	{
+		DebugTexts.push_back(_DebugText);
+	}
 
 protected:
 	virtual void Loading() = 0;
@@ -121,7 +135,12 @@ protected:
 	virtual void LevelChangeStart(GameEngineLevel* _PrevLevel) = 0;
 
 private:
+	static bool IsDebugRender;
+
 	float4 CameraPos = float4::Zero;
+
+	static float4 TextOutStart;
+	static std::vector<std::string> DebugTexts;
 
 	//Order로 Actor의 순서 관리
 	std::map<int, std::list<GameEngineActor*>> Actors;
@@ -134,7 +153,11 @@ private:
 
 	//map은 오름차순으로 정리되므로 값이 큰 쪽이 나중에 실행됨
 	std::map<int, std::list<GameEngineRender*>> Renders;
-
 	void PushRender(GameEngineRender* _Render);
+
+	std::map<int, std::list<GameEngineCollision*>> Collisions;
+	void PushCollision(GameEngineCollision* _Collision);
+
+	void Release();												//엔진 수준(다른 곳에서 사용X)
 };
 

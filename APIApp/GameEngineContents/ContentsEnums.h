@@ -7,3 +7,11 @@ enum class MarioRenderOrder
 	Monster,
 	Player,
 };
+
+enum class MarioCollisionOrder
+{
+	Player,
+	Monster,
+	PlayerAttack,
+	MonsterAttack,
+};

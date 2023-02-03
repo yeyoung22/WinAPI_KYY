@@ -54,19 +54,25 @@ void PlayLevel::Loading()
 		Map* Actor = CreateActor<Map>();
 	}
 	{
-		Monster* Actor = CreateActor<Monster>();
-		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ StartPos.x * 2- StartPos.half().x , StartPos.y - 128});
-	}
-	{
 		Player* Actor = CreateActor<Player>();
 		Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
-	
+	}
+	{
+		Monster* Actor = CreateActor<Monster>(MarioRenderOrder::Monster);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ StartPos.x * 2- StartPos.half().x , StartPos.y - 128});
+
+		/*srand(time(nullptr));
+		for (size_t i = 0; i < 1; i++)
+		{
+			Monster* Actor = CreateActor<Monster>(MarioRenderOrder::Monster);
+			Actor->SetMove(float4(rand() % GameEngineWindow::GetScreenSize().ix(), rand() % GameEngineWindow::GetScreenSize().iy()));
+		}*/
 	}
 
-	if (false == GameEngineInput::IsKey("PlayerOff"))
+	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
 	{
-		GameEngineInput::CreateKey("PlayerOff", 'R');
+		GameEngineInput::CreateKey("DebugRenderSwitch", 'R');
 	}
 
 
@@ -84,8 +90,8 @@ void PlayLevel::Loading()
 
 void PlayLevel::Update(float _DeltaTime)
 {
-	if (GameEngineInput::IsDown("PlayerOff"))
+	if (GameEngineInput::IsDown("DebugRenderSwitch"))
 	{
-		Player::MainPlayer->OnOffSwtich();
+		DebugRenderSwitch();
 	}
 }

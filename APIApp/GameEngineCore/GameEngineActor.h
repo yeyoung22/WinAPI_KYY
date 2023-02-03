@@ -11,6 +11,7 @@
 // 설명 : 장면에 들어갈 요소
 class GameEngineLevel;
 class GameEngineRender;
+class GameEngineCollision;
 class GameEngineActor : public GameEngineObject
 {
 	friend GameEngineLevel;						//GameEngineLevel는 GameEngineActor의 private 멤버도 접근 가능
@@ -64,7 +65,14 @@ public:
 	GameEngineRender* CreateRender(const std::string_view& _Image, int _Order = 0);
 	GameEngineRender* CreateRender(int _Order = 0);
 
+	//충돌체 생성
+	template<typename EnumType>
+	GameEngineCollision* CreateCollision(EnumType _GroupIndex)
+	{
+		return CreateCollision(static_cast<int>(_GroupIndex));
+	}
 
+	GameEngineCollision* CreateCollision(int _GroupIndex = 0);
 
 
 protected:
@@ -94,5 +102,7 @@ private:
 	float LiveTime = 0.0;		//액터가 살아있는 시간 측정
 	float4 Pos = { 0.0f, 0.0f };
 	std::list<GameEngineRender*> RenderList;
+	std::list<GameEngineCollision*> CollisionList;
 
+	void Release();
 };

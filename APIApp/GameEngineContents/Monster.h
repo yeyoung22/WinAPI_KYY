@@ -26,7 +26,7 @@ private:
 	float MoveSpeed = 100.0f;
 
 	GameEngineRender* AnimationRender = nullptr;
-
+	GameEngineCollision* BodyCollision = nullptr;
 	
 };
 

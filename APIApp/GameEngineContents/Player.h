@@ -40,12 +40,13 @@ private:
 	float4 MoveDir = float4::Zero;
 
 	GameEngineRender* AnimationRender = nullptr;
-
+	GameEngineCollision* BodyCollision = nullptr;
 
 	void DirCheck(const std::string_view& _AnimationName);
 
 	// State
 	bool FreeMoveState(float _DeltaTime);
+
 	void ChangeState(PlayerState _State);
 	void UpdateState(float _Time);
 
