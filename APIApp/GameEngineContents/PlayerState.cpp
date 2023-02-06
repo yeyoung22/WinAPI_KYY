@@ -134,33 +134,35 @@ void Player::MoveEnd() {
 void Player::JumpStart()
 {
 	DirCheck("Jump");
+
+
 }
+
 void Player::JumpUpdate(float _Time)
 {
-	if (
-		false == GameEngineInput::IsPress("LeftMove") &&
-		false == GameEngineInput::IsPress("RightMove")
-		)
-	{
-		ChangeState(PlayerState::IDLE);
-		return;
-	}
-	if (
-		true == GameEngineInput::IsPress("LeftMove") || 
-		true == GameEngineInput::IsPress("RightMove")
-		)
-	{
-		ChangeState(PlayerState::MOVE);
-		return;
-	}
+	float timer = 10.0f;
 
 	if (true == GameEngineInput::IsDown("Jump"))
 	{
-		MoveDir += float4::Up * (MoveSpeed*100.0f);
+		MoveDir += float4::Up * MoveSpeed;
 	}
 
-}
-void Player::JumpEnd() 
-{
+	if (true == GameEngineInput::IsPress("LeftMove"))
+	{
+		MoveDir += float4::Left * MoveSpeed;
+	}
+	else if (true == GameEngineInput::IsPress("RightMove"))
+	{
+		MoveDir += float4::Right * MoveSpeed;
+	}
 
+	DirCheck("Jump");
+
+	if (true == GameEngineInput::IsUp("Jump"))
+	{
+		DirCheck("Move");
+	}
+}
+void Player::JumpEnd()
+{
 }

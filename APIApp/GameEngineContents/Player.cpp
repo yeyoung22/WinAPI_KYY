@@ -65,6 +65,8 @@ void Player::Start()
 
 void Player::Movecalculation(float _DeltaTime)
 {
+	float4 PrevPos = GetPos();
+
 	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
 	MoveDir += float4::Down * MoveSpeed* _DeltaTime;	//중력가속도
 
@@ -95,13 +97,21 @@ void Player::Movecalculation(float _DeltaTime)
 		MoveDir.x *= 0.005f;
 	}
 
+	if (MoveDir.y <= (PrevPos.y + JumpHeight))
+	{
+		MoveDir += float4::Down * MoveSpeed * _DeltaTime;
+	}
+
+
 	//ImageFind에 들어갈 스트링을 문자열 변수로 만들어둬야 함
 	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+
 	
-	if (true == GameEngineInput::IsDown("StageClear"))
-	{
-		//ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_4.bmp");
-	}
+	
+	//if (true == GameEngineInput::IsDown("StageClear"))
+	//{
+	//	ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_4.bmp");
+	//}
 
 	if (nullptr == ColImage)
 	{

@@ -33,6 +33,7 @@ private:
 	float AccTime = 0.0f;
 	int StartFrame = 0;
 	float MoveSpeed = 200.0f;
+	float JumpHeight = 300.0f;
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
