@@ -2,11 +2,14 @@
 #include <math.h>
 #include <cmath>
 #include <string>
+#include <vector>
 
 //상속내릴 수 없음
 class GameEngineMath final
 {
 public:
+	static std::vector<unsigned int> GetDigits(int _Value);
+	static unsigned int GetLenth(int _Value);
 	static const float PIE;
 	static const float PIE2;						
 
@@ -225,6 +228,7 @@ public:
 		return *this;
 	}
 
+	//문자로 출력
 	std::string ToString()
 	{
 		char ArrReturn[256];

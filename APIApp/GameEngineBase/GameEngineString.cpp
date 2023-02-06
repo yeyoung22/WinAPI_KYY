@@ -20,3 +20,9 @@ std::string GameEngineString::ToUpper(const std::string_view& _Str)
 
 	return Text;
 }
+
+//정수를 문자로 반환
+std::string GameEngineString::ToString(int Value)
+{
+	return std::to_string(Value);
+}

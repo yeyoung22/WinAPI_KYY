@@ -33,7 +33,8 @@ private:
 	float AccTime = 0.0f;
 	int StartFrame = 0;
 	float MoveSpeed = 200.0f;
-	float JumpHeight = 300.0f;
+	//float JumpHeight = 512.0f;
+	float JumpPower = 0.0f;
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
@@ -68,4 +69,3 @@ private:
 
 	//void Camera(float _DeltaTime);
 };
-

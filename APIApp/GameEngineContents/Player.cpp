@@ -68,26 +68,21 @@ void Player::Movecalculation(float _DeltaTime)
 	float4 PrevPos = GetPos();
 
 	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
-	MoveDir += float4::Down * MoveSpeed* _DeltaTime;	//중력가속도
+	MoveDir += float4::Down * MoveSpeed;	//중력가속도
 
-	if (250.0f <= abs(MoveDir.x))						//한계 속도 지정
+	if (256.0f <= abs(MoveDir.x))						//한계 속도 지정
 	{
-		if (0 > MoveDir.x)
+		if (0 >= MoveDir.x)
 		{
-			if (true == GameEngineInput::IsDown("LeftMove"))
-			{
-				AnimationRender->ChangeAnimation("Left_Turn");
-			}
-				MoveDir.x = -250.0f;
+				MoveDir.x = -256.0f;
 		}
-		else {
-			if (true == GameEngineInput::IsDown("RightMove"))
-			{
-				AnimationRender->ChangeAnimation("Right_Turn");
-			}
-				MoveDir.x = 250.0f;
+		else 
+		{
+				MoveDir.x = 256.0f;
 		}
 	}
+
+
 
 
 
@@ -97,21 +92,15 @@ void Player::Movecalculation(float _DeltaTime)
 		MoveDir.x *= 0.005f;
 	}
 
-	if (MoveDir.y <= (PrevPos.y + JumpHeight))
-	{
-		MoveDir += float4::Down * MoveSpeed * _DeltaTime;
-	}
+	//if (MoveDir.y <= (PrevPos.y + JumpHeight))
+	//{
+	//	MoveDir += float4::Down * (MoveSpeed)* _DeltaTime;
+	//}
 
 
-	//ImageFind에 들어갈 스트링을 문자열 변수로 만들어둬야 함
+	//ImageFind에 들어갈 파일명을 변수로 만들어둬야 함
 	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
 
-	
-	
-	//if (true == GameEngineInput::IsDown("StageClear"))
-	//{
-	//	ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_4.bmp");
-	//}
 
 	if (nullptr == ColImage)
 	{
@@ -275,12 +264,23 @@ void Player::Render(float _DeltaTime)
 
 	float4 ActPos = GetPos();
 
+
+	//처음 시작해서 Player가 화면 중반에 오면 카메라가 움직임 시작
 	if (ActPos.x >= GameEngineWindow::GetScreenSize().half().x)		
 	{
 		if (GameEngineInput::IsPress("RightMove"))
 		{
 			GetLevel()->SetCameraMove(float4::Right * MoveSpeed * _DeltaTime);
 		}
+
+		float4 CameraEndPoint = GetLevel()->GetCameraPos() + GameEngineWindow::GetScreenSize();
+
+		//if(CameraEndPoint >= GameEngineRender::)
 	}
+
+	std::string MarioPosText = "MarioPosition : ";
+	MarioPosText += MainPlayer->GetPos().ToString();
+
+	GameEngineLevel::DebugTextPush(MarioPosText);
 
 }

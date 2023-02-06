@@ -37,21 +37,17 @@ void OpeningLevel::Loading()
 
 void OpeningLevel::Update(float _DeltaTime)
 {
-	if (true == GameEngineInput::IsDown("LevelChange"))
+	//if (true == GameEngineInput::IsDown("LevelChange"))
+	//{
+	//	GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
+	//}
+
+	WaitTime -= _DeltaTime;
+
+	if (WaitTime <= 0)
 	{
 		GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
 	}
 
-	float timer = 0.0f;
-
-	/*while (true)
-	{
-		timer += _DeltaTime*0.001f;
-
-		if (130.0f <= timer)
-		{
-			GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
-			return;
-		}
-	}*/
+	
 }

@@ -8,6 +8,7 @@ class GameEngineString
 public:
 	//대문자 치환
 	static std::string ToUpper(const std::string_view& _Str);
+	static std::string ToString(int Value);
 
 protected:
 

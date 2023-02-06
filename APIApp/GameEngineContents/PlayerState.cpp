@@ -133,19 +133,16 @@ void Player::MoveEnd() {
 
 void Player::JumpStart()
 {
+	JumpPower = 220.0f;
 	DirCheck("Jump");
-
-
 }
 
 void Player::JumpUpdate(float _Time)
 {
-	float timer = 10.0f;
 
-	if (true == GameEngineInput::IsDown("Jump"))
-	{
-		MoveDir += float4::Up * MoveSpeed;
-	}
+	MoveDir += float4::Up * JumpPower;
+
+	JumpPower -= 100.0f * _Time;
 
 	if (true == GameEngineInput::IsPress("LeftMove"))
 	{
@@ -158,9 +155,11 @@ void Player::JumpUpdate(float _Time)
 
 	DirCheck("Jump");
 
-	if (true == GameEngineInput::IsUp("Jump"))
+	if (JumpPower <= 0)
 	{
-		DirCheck("Move");
+		JumpPower = 0.0f;
+
+		DirCheck("Idle");
 	}
 }
 void Player::JumpEnd()
