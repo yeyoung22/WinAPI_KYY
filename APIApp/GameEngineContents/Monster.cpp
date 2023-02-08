@@ -26,6 +26,7 @@ void Monster::Start()
 	{
 		BodyCollision = CreateCollision(MarioCollisionOrder::Monster);
 		BodyCollision->SetScale({ 50, 50 });
+		BodyCollision->Off();
 	}
 }
 

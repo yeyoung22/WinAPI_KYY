@@ -168,12 +168,6 @@ bool Player::FreeMoveState(float _DeltaTime)
 {
 	if (true == GameEngineInput::IsPress("FreeMoveSwitch"))
 	{
-		if (nullptr != BodyCollision)
-		{
-			BodyCollision->Death();
-			BodyCollision = nullptr;
-		}
-
 		FreeMove = true;
 	}
 
@@ -298,8 +292,7 @@ void Player::DirCheck(const std::string_view& _AnimationName)
 void Player::Render(float _DeltaTime)
 {
 	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	float4 ActorPos = GetPos();
-	ActorPos -= GetLevel()->GetCameraPos();
+	float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
 	
 	//<디버깅용_센터 보기위함>
 	Rectangle(DoubleDC,					

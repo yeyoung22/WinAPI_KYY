@@ -108,10 +108,20 @@ void GameEngineCollision::SetOrder(int _Order)
 
 bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter)
 {
+	if (false == IsUpdate())
+	{
+		return false;
+	}
+
 	std::list<GameEngineCollision*>& _TargetGroup = GetActor()->GetLevel()->Collisions[_Parameter.TargetGroup];
 
 	for (GameEngineCollision* OtherCollision : _TargetGroup)
 	{
+		if (false == OtherCollision->IsUpdate())
+		{
+			continue;
+		}
+
 		CollisionType Type = _Parameter.ThisColType;
 		CollisionType OtherType = _Parameter.TargetColType;
 

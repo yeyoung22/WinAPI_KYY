@@ -271,6 +271,7 @@ void Player::JumpEnd()
 }
 
 
+//Fall(떨어지면 Jump모션을 취하며 Y값은 계속 증가)
 void Player::FallStart()
 {
 	if (ModeValue == PlayerMode::SUPERMARIO)
@@ -304,7 +305,7 @@ void Player::FallEnd()
 }
 
 
-
+//Death
 void Player::DeathStart()
 {
 	JumpPower = 210.0f;
