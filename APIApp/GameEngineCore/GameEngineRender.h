@@ -72,6 +72,8 @@ public:
 
 	void SetOrder(int _Order) override;
 
+	void SetText(const std::string_view& _Text);
+
 protected:
 
 private:
@@ -84,6 +86,8 @@ private:
 	int Frame = 0;
 
 	void Render(float _DeltaTime);
+	void TextRender(float _DeltaTime);
+	void ImageRender(float _DeltaTime);
 
 	class FrameAnimation
 	{
@@ -109,6 +113,11 @@ private:
 
 	std::map<std::string, FrameAnimation> Animation;
 	FrameAnimation* CurrentAnimation = nullptr;
+
+	/// <summary>
+	/// TextRender에서 Render하고 싶은 텍스트
+	/// </summary>
+	std::string RenderText;
 };
 
 

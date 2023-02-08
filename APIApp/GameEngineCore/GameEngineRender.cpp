@@ -89,9 +89,44 @@ void GameEngineRender::FrameAnimation::Render(float _DeltaTime)
 }
 
 
+void GameEngineRender::SetText(const std::string_view& _Text)
+{
+	RenderText = _Text;
+}
+
 void GameEngineRender::Render(float _DeltaTime)
 {
+	if (RenderText != "")
+	{
+		TextRender(_DeltaTime);	
+	}
+	else
+	{
+		ImageRender(_DeltaTime);
+	}
+}
 
+//텍스트용 랜더러
+void GameEngineRender::TextRender(float _DeltaTime)
+{
+
+	float4 CameraPos = float4::Zero;
+
+	if (true == IsEffectCamera)
+	{
+		CameraPos = GetActor()->GetLevel()->GetCameraPos();
+	}
+
+	float4 RenderPos = GetActorPlusPos() - CameraPos;
+
+	TextOutA(GameEngineWindow::GetDoubleBufferImage()->GetImageDC(), RenderPos.ix(), RenderPos.iy(), RenderText.c_str(), RenderText.size());
+
+	return;
+}
+
+//이미지용 랜더러
+void GameEngineRender::ImageRender(float _DeltaTime)
+{
 	if (nullptr != CurrentAnimation)
 	{
 		CurrentAnimation->Render(_DeltaTime);
@@ -111,9 +146,7 @@ void GameEngineRender::Render(float _DeltaTime)
 		CameraPos = GetActor()->GetLevel()->GetCameraPos();
 	}
 
-	//카메라의 우측이동은 캐릭터 입장에서는 좌측 이동
 	float4 RenderPos = GetActorPlusPos() - CameraPos;
-	
 
 	if (true == Image->IsImageCutting())
 	{

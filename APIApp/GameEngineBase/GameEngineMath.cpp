@@ -18,7 +18,7 @@ const float4 float4::Zero = { 0.0f, 0.0f, 0.0f, 1.0f };
 const float4 float4::Null = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 
-//정수를 문자열 배열에 집어 넣음
+//정수 입력시 각 자리숫자를 반환
 std::vector<unsigned int> GameEngineMath::GetDigits(int _Value)
 {
 	std::vector<unsigned int> ResultValue = std::vector<unsigned int>();
