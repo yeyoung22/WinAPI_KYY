@@ -48,7 +48,7 @@ void Player::Start()
 		//Original Mario
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Idle",  .ImageName = "Right_Mario.bmp", .Start = 0, .End = 0});
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Move",  .ImageName = "Right_Mario.bmp", .Start = 1, .End = 3 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Left_Turn", .ImageName = "Right_Mario.bmp", .Start = 4, .End = 4 });			
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_Brake", .ImageName = "Right_Mario.bmp", .Start = 4, .End = 4 });			
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Jump", .ImageName = "Right_Mario.bmp", .Start = 5, .End = 5});
 	//	AnimationRender->CreateAnimation({ .AnimationName = "Right_Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6});
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Bigger", .ImageName = "Right_Mario.bmp", .Start = 29, .End = 31 });
@@ -58,7 +58,7 @@ void Player::Start()
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Idle",  .ImageName = "Left_Mario.bmp", .Start = 0, .End = 0});
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Move",  .ImageName = "Left_Mario.bmp", .Start = 1, .End = 3 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Right_Turn", .ImageName = "Left_Mario.bmp", .Start = 4, .End = 4 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_Brake", .ImageName = "Left_Mario.bmp", .Start = 4, .End = 4 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Jump", .ImageName = "Left_Mario.bmp", .Start = 5, .End = 5 });
 	//	AnimationRender->CreateAnimation({ .AnimationName = "Left_Death", .ImageName = "Left_Mario.bmp", .Start = 6, .End = 6 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Bigger", .ImageName = "Left_Mario.bmp", .Start = 29, .End = 31 });
@@ -67,7 +67,7 @@ void Player::Start()
 		//Growth Mario
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthIdle",  .ImageName = "Right_Mario.bmp", .Start = 14, .End = 14 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthMove",  .ImageName = "Right_Mario.bmp", .Start = 15, .End = 17 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthTurn", .ImageName = "Right_Mario.bmp", .Start = 18, .End = 18 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthBrake", .ImageName = "Right_Mario.bmp", .Start = 18, .End = 18 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthJump", .ImageName = "Right_Mario.bmp", .Start = 19, .End = 19 });
 		
 		//역순으로....이미지 재생
@@ -75,7 +75,7 @@ void Player::Start()
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthIdle",  .ImageName = "Left_Mario.bmp", .Start = 14, .End = 14 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthMove",  .ImageName = "Left_Mario.bmp", .Start = 15, .End = 17 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthTurn", .ImageName = "Left_Mario.bmp", .Start = 18, .End = 18 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthBrake", .ImageName = "Left_Mario.bmp", .Start = 18, .End = 18 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthJump", .ImageName = "Left_Mario.bmp", .Start = 19, .End = 19 });
 		//AnimationRender->CreateAnimation({ .AnimationName = "Left_Smaller", .ImageName = "Left_Mario.bmp", .Start = 6, .End = 6 });
 
@@ -92,43 +92,32 @@ void Player::Start()
 		BodyCollision->SetScale({ 60, 60 });
 	}
 
+	//GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+	{
+		ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+		
+		if (nullptr == ColImage)
+		{
+			MsgAssert("충돌용 맵 이미지가 없습니다.");
+		}
+
+	}
+
 	ChangeState(PlayerState::IDLE);
 }
 
-void Player::Movecalculation(float _DeltaTime)
+void Player::GravitionalAcc(float _DeltaTime)
 {
-	NumberSets.SetValue(static_cast<int>(PlayTimer));
-	PlayTimer -= _DeltaTime;
-
-	float4 PrevPos = GetPos();
-
-	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
-	//시간은 맨 마지막에 SetMove에서 곱해줌
-	MoveDir += float4::Down * MoveSpeed;				//중력가속도
-
-	if (256.0f <= abs(MoveDir.x))						//한계 속도 지정
+	if (true == IsGravityOff)
 	{
-		if (0 >= MoveDir.x)
-		{
-			MoveDir.x = -256.0f;
-		}
-		else
-		{
-			MoveDir.x = 256.0f;
-		}
+		return;
 	}
 
+	float4 Gravity = float4::Down * MoveSpeed * _DeltaTime;
+}
 
-	//ImageFind에 들어갈 파일명을 변수로 만들어둬야 함
-	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
-
-
-	if (nullptr == ColImage)
-	{
-		MsgAssert("충돌용 맵 이미지가 없습니다.");
-	}
-
-
+bool  Player::MoveCheck(float _DeltaTime)
+{
 	bool Check = true;
 	float4 NextPos = GetPos() + MoveDir * _DeltaTime;					//옮겨갈 위치
 
@@ -142,7 +131,8 @@ void Player::Movecalculation(float _DeltaTime)
 
 	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))	//벽
 	{
-		Check = false;													//허공에 있는 상태
+		Check = false;
+		return false;													//허공에 있는 상태
 	}
 
 	if (false == Check)
@@ -162,8 +152,77 @@ void Player::Movecalculation(float _DeltaTime)
 		}
 	}
 
-	SetMove(MoveDir * _DeltaTime);
+	return true;
 }
+
+//void Player::Movecalculation(float _DeltaTime)
+//{
+//
+//
+//	float4 PrevPos = GetPos();
+//
+//	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
+//	//시간은 맨 마지막에 SetMove에서 곱해줌
+//	MoveDir += float4::Down * MoveSpeed;				//중력가속도
+//
+//	if (256.0f <= abs(MoveDir.x))						//한계 속도 지정
+//	{
+//		if (0 >= MoveDir.x)
+//		{
+//			MoveDir.x = -256.0f;
+//		}
+//		else
+//		{
+//			MoveDir.x = 256.0f;
+//		}
+//	}
+//
+//
+//	//ImageFind에 들어갈 파일명을 변수로 만들어둬야 함
+//	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+//
+//
+//	if (nullptr == ColImage)
+//	{
+//		MsgAssert("충돌용 맵 이미지가 없습니다.");
+//	}
+//
+//
+//	bool Check = true;
+//	float4 NextPos = GetPos() + MoveDir * _DeltaTime;					//옮겨갈 위치
+//
+//	//-----------------다시 만들어야 함---------------------------
+//
+//	//float4 NextCenterPos = GetPos() + (MoveDir * _Time);						//옮겨 갈 위치(캐릭터의 중간 점)
+//	////float4 NextLeftPos = NextCenterPos;										//캐릭터의 왼쪽 하단
+//	//float a = MainPlayer->AnimationRender->GetScale().hx();
+//	//float4 NextLeftPos = NextCenterPos;
+//	//NextCenterPos.x - a;
+//
+//	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))	//벽
+//	{
+//		Check = false;													//허공에 있는 상태
+//	}
+//
+//	if (false == Check)
+//	{
+//		while (true)													//한 칸씩 위로 올려서 허공이 나오게 함
+//		{
+//			MoveDir.y -= 1;												//윈도우 좌표계상에서 위로 올라간 것
+//
+//			float4 NextPos = GetPos() + MoveDir * _DeltaTime;
+//
+//			if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))
+//			{
+//				continue;
+//			}
+//
+//			break;
+//		}
+//	}
+//
+//	SetMove(MoveDir * _DeltaTime);
+//}
 
 void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
@@ -213,6 +272,9 @@ bool Player::FreeMoveState(float _DeltaTime)
 
 void Player::Update(float _DeltaTime)
 {
+	NumberSets.SetValue(static_cast<int>(PlayTimer));
+	PlayTimer -= _DeltaTime;
+
 	if (nullptr != BodyCollision)
 	{
 		std::vector<GameEngineCollision*> Collision;
@@ -261,7 +323,7 @@ void Player::Update(float _DeltaTime)
 	}
 
 	UpdateState(_DeltaTime);
-	Movecalculation(_DeltaTime);
+	//Movecalculation(_DeltaTime);
 	//Camera(_DeltaTime);
 }
 

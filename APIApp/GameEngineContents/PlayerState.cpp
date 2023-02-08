@@ -105,6 +105,8 @@ void Player::IdleStart()
 }
 void Player::IdleUpdate(float _Time)
 {
+	GravitionalAcc(_Time);
+
 	if (GameEngineInput::IsPress("LeftMove") || GameEngineInput::IsPress("RightMove"))
 	{
 		ChangeState(PlayerState::MOVE);
@@ -115,6 +117,12 @@ void Player::IdleUpdate(float _Time)
 	{
 		ChangeState(PlayerState::JUMP);
 		return;
+	}
+
+	if (true == MoveCheck(_Time))
+	{
+		MoveDir *= _Time;
+		SetMove(MoveDir + Gravity);
 	}
 }
 void Player::IdleEnd() {
@@ -136,6 +144,8 @@ void Player::MoveStart()
 }
 void Player::MoveUpdate(float _Time)
 {
+	GravitionalAcc(_Time);
+
 	//좌우키가 안 눌렀을때 멈추게 할 저항
 	//가속도가 있어야 함
 	if (
@@ -161,9 +171,9 @@ void Player::MoveUpdate(float _Time)
 		{
 			if (ModeValue == PlayerMode::SUPERMARIO)
 			{
-				DirCheck("GrowthTurn");
+				DirCheck("GrowthBrake");
 			}
-			DirCheck("Turn");
+			DirCheck("Brake");
 			DirCheck("Move");
 		}
 	}
@@ -175,9 +185,9 @@ void Player::MoveUpdate(float _Time)
 		{
 			if (ModeValue == PlayerMode::SUPERMARIO)
 			{
-				DirCheck("GrowthTurn");
+				DirCheck("GrowthBrake");
 			}
-			DirCheck("Turn");
+			DirCheck("Brake");
 			DirCheck("Move");
 		}
 	}
@@ -200,6 +210,26 @@ void Player::MoveUpdate(float _Time)
 		MoveDir += float4::Right * MoveSpeed;
 	}
 
+	if (256.0f <= abs(MoveDir.x))						//한계 속도 지정
+	{
+		if (0 >= MoveDir.x)
+		{
+			MoveDir.x = -256.0f;
+		}
+		else
+		{
+			MoveDir.x = 256.0f;
+		}
+	}
+
+
+
+
+	if (true == MoveCheck(_Time))
+	{
+		MoveDir *= _Time;
+		SetMove(MoveDir + Gravity);
+	}
 }
 void Player::MoveEnd() 
 {
@@ -222,6 +252,8 @@ void Player::JumpStart()
 void Player::JumpUpdate(float _Time)
 {
 
+	GravitionalAcc(_Time);
+
 	MoveDir += float4::Up * JumpPower;
 
 	JumpPower -= 100.0f * _Time;										//서서히 아래로 떨어지게 함
@@ -239,6 +271,19 @@ void Player::JumpUpdate(float _Time)
 	{
 		MoveDir += float4::Right * MoveSpeed;
 	}
+
+	if (256.0f <= abs(MoveDir.x))						//한계 속도 지정
+	{
+		if (0 >= MoveDir.x)
+		{
+			MoveDir.x = -256.0f;
+		}
+		else
+		{
+			MoveDir.x = 256.0f;
+		}
+	}
+
 	
 	//<바닥에 닿으면 IDLE로 상태 변경>
 	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
@@ -265,6 +310,12 @@ void Player::JumpUpdate(float _Time)
 		return;															//다른 것에 영향을 안 받기 위해 상태를 바꾸면 return
 	}
 
+	if (true == MoveCheck(_Time))
+	{
+		MoveDir *= _Time;
+		SetMove(MoveDir + Gravity);
+	}
+
 }
 void Player::JumpEnd()
 {
@@ -285,6 +336,8 @@ void Player::FallStart()
 }
 void Player::FallUpdate(float _Time)
 {
+	GravitionalAcc(_Time);
+
 	if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
 	{
 		MoveDir.x *= (0.005f * _Time);
@@ -297,6 +350,12 @@ void Player::FallUpdate(float _Time)
 	else if (true == GameEngineInput::IsPress("RightMove"))
 	{
 		MoveDir += float4::Right * MoveSpeed;
+	}
+
+	if (true == MoveCheck(_Time))
+	{
+		MoveDir *= _Time;
+		SetMove(MoveDir + Gravity);
 	}
 }
 void Player::FallEnd()
@@ -313,6 +372,8 @@ void Player::DeathStart()
 }
 void Player::DeathUpdate(float _Time)
 {
+	GravitionalAcc(_Time);
+
 	MoveDir += float4::Up * JumpPower;
 
 	JumpPower -= 50.0f * _Time;
@@ -323,6 +384,12 @@ void Player::DeathUpdate(float _Time)
 	}
 
 	AnimationRender->ChangeAnimation("Death");
+
+	if (true == MoveCheck(_Time))
+	{
+		MoveDir *= _Time;
+		SetMove(MoveDir + Gravity);
+	}
 
 }
 void Player::DeathEnd()

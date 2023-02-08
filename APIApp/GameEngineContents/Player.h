@@ -42,7 +42,6 @@ protected:
 	void Render(float _DeltaTime) override;
 
 private:
-
 	int StartFrame = 0;
 	int Life = 3;
 	
@@ -94,8 +93,21 @@ private:
 	void DeathUpdate(float _Time);
 	void DeathEnd();
 
-	void Movecalculation(float _DeltaTime);
+	//void Movecalculation(float _DeltaTime);
 
+	//중력가속도
+	bool IsGravityOff = false;
+	float4 Gravity = float4::Zero;
+	void GravitionalAcc(float _DeltaTime);
+	inline void GravitionalAccOff()
+	{
+		IsGravityOff = true;
+	}
+
+	GameEngineImage* ColImage = nullptr;
+
+	//움직일 수 있는지...
+	bool MoveCheck(float _DeltaTime);
 
 	//void Camera(float _DeltaTime);
 };
