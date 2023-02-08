@@ -104,3 +104,7 @@ void PlayLevel::Update(float _DeltaTime)
 	}
 
 }
+
+void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+}

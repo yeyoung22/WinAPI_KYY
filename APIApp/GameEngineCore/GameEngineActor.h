@@ -96,6 +96,8 @@ protected:
 		return LiveTime;
 	}
 
+	virtual void LevelChangeEnd(GameEngineLevel* _PrevLevel);
+	virtual void LevelChangeStart(GameEngineLevel* _PrevLevel);
 private:
 
 	int Order;					//업데이트 순서

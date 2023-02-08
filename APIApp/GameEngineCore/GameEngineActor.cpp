@@ -118,3 +118,13 @@ void GameEngineActor::Release()
 		}
 	}
 }
+
+void GameEngineActor::LevelChangeEnd(GameEngineLevel* _PrevLevel)
+{
+
+}
+
+void GameEngineActor::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+
+}

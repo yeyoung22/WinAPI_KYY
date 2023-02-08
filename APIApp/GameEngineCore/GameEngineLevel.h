@@ -147,6 +147,9 @@ private:
 
 	void ActorsUpdate(float _DeltaTime);
 	void ActorsRender(float _DeltaTime);
+	//Level 변경되면 액터들도 함께 이동
+	void ActorLevelChangeEnd(GameEngineLevel* _NextLevel);
+	void ActorLevelChangeStart(GameEngineLevel* _PrevLevel);
 
 
 	void ActorStart(GameEngineActor* _Actor, int _Order);

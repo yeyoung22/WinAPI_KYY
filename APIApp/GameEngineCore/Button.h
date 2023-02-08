@@ -21,14 +21,16 @@ public:
 	void SetImage();
 	void SetScale();
 
-	//마우스로 
+	//마우스로 클릭하면 그에 해당하는 행동을 하는 함수를 CallBack
 	void SetClickCallBack(void(*_ClickPtr)())
 	{
 		ClickPtr = _ClickPtr;
 	}
 
+	//충돌체크 할 그룹 설정
 	void SetTargetCollisionGroup(int _PointTargetGroup);
 
+	//버튼의 충돌체 타입 설정
 	void SetButtonCollisionType(CollisionType _ButtonCollisionType)
 	{
 		ButtonCollisionType = _ButtonCollisionType;

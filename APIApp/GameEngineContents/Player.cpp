@@ -159,6 +159,10 @@ void Player::Movecalculation(float _DeltaTime)
 	SetMove(MoveDir * _DeltaTime);
 }
 
+void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+	MainPlayer = this;										//Level이 바뀌면 MainPlayer는 해당 Level의 Player
+}
 
 
 //디버깅용_벽에 영향을 받지 않고 맵의 끝까지 움직일 수 있음
