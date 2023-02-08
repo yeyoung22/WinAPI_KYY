@@ -244,6 +244,7 @@ DWORD GameEngineImage::GetPixelColor(float4 _Pos, DWORD _OutColor)
 	return GetPixelColor(_Pos.ix(), _Pos.iy(), _OutColor);
 }
 
+//( x, y ) 위치에서의 색상 정보를 가져오는 함수
 DWORD GameEngineImage::GetPixelColor(int _X, int _Y, DWORD _OutColor)
 {
 	//OutColor: 
@@ -264,5 +265,6 @@ DWORD GameEngineImage::GetPixelColor(int _X, int _Y, DWORD _OutColor)
 		return _OutColor;
 	}
 
-	return GetPixel(ImageDC, _X, _Y);
+
+	return GetPixel(ImageDC, _X, _Y);								//지정된 좌표에서의 RGB 값 검색
 }

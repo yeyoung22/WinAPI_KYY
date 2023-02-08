@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Map.h"
 #include "Monster.h"
+#include "Item.h"
 #include "ContentsEnums.h"
 
 
@@ -50,6 +51,14 @@ void PlayLevel::Loading()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Goomba.bmp"));
 		Image->Cut(3, 1);
 	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Item\\Left_SuperMushroom.bmp"));
+		Image->Cut(4, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Item\\Right_SuperMushroom.bmp"));
+		Image->Cut(4, 1);
+	}
 	//액터 생성
 	{
 		Map* Actor = CreateActor<Map>();
@@ -63,6 +72,13 @@ void PlayLevel::Loading()
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ StartPos.x * 2- StartPos.half().x , StartPos.y - 128});
 	}
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		//아이템 위치 수정해야 함
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ StartPos.hx(), StartPos.y - 128});
+	}
+
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
 	{
@@ -86,6 +102,5 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		DebugRenderSwitch();
 	}
-
 
 }

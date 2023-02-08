@@ -4,6 +4,7 @@
 #include "TitleLevel.h"
 #include "OpeningLevel.h"
 #include "PlayLevel.h"
+#include "EndingLevel.h"
 
 //SuperMarioCore SuperMarioCore::Core = new SuperMarioCore();
 
@@ -30,6 +31,7 @@ void SuperMarioCore::Start()
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<OpeningLevel>("OpeningLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
+	CreateLevel<EndingLevel>("EndingLevel");
 
 	ChangeLevel("TitleLevel");
 }

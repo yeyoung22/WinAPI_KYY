@@ -114,7 +114,7 @@ public:
 		return sqrtf(x * x + y * y);
 	}
 
-	//크기를 1로 정규화
+	//r = 1인 원 둘레 중 한 점의 위치값을 가지도록 조절(크기를 '1'인 vector로 만듦)
 	void Normalize()
 	{
 		float SizeValue = Size();

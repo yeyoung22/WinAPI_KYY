@@ -23,6 +23,6 @@ protected:
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override {}
 
 private:
-	float WaitTime = 3.0f;
+	float WaitTime = 2.0f;
 };
 

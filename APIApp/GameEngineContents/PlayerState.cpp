@@ -2,6 +2,7 @@
 #include <GameEngineBase/GameEnginePath.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineInput.h>
+#include <GameEnginePlatform/GameEngineImage.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineRender.h>
 #include "ContentsEnums.h"
@@ -26,6 +27,9 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::JUMP:
 		JumpStart();
 		break;
+	case PlayerState::DEATH:
+		DeathStart();
+		break;
 	default:
 		break;
 	}
@@ -40,6 +44,9 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::JUMP:
 		JumpEnd();
+		break;
+	case PlayerState::DEATH:
+		DeathEnd();
 		break;
 	default:
 		break;
@@ -60,6 +67,9 @@ void Player::UpdateState(float _Time)
 	case PlayerState::JUMP:
 		JumpUpdate(_Time);
 		break;
+	case PlayerState::DEATH:
+		DeathUpdate(_Time);
+		break;
 	default:
 		break;
 	}
@@ -67,10 +77,17 @@ void Player::UpdateState(float _Time)
 }
 
 
-
+//<Idle>
 void Player::IdleStart()
 {
-	DirCheck("Idle");
+	if (1 == MarioState)											//Growth ver.Mario
+	{
+		DirCheck("GrowthIdle");
+	}
+	else
+	{
+		DirCheck("Idle");
+	}
 }
 void Player::IdleUpdate(float _Time)
 {
@@ -91,10 +108,17 @@ void Player::IdleEnd() {
 }
 
 
-
+//<Move>
 void Player::MoveStart()
 {
-	DirCheck("Move");
+	if (1 == MarioState)											//Growth ver.Mario
+	{
+		DirCheck("GrowthMove");
+	}
+	else
+	{
+		DirCheck("Move");
+	}
 }
 void Player::MoveUpdate(float _Time)
 {
@@ -124,17 +148,24 @@ void Player::MoveUpdate(float _Time)
 		MoveDir += float4::Right * MoveSpeed;
 	}
 
-	DirCheck("Move");
 }
-void Player::MoveEnd() {
+void Player::MoveEnd() 
+{
 
 }
 
-
+//Jump
 void Player::JumpStart()
 {
-	JumpPower = 220.0f;
-	DirCheck("Jump");
+	JumpPower = 220.0f;													//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
+	if (1 == MarioState)
+	{
+		DirCheck("GrowthJump");
+	}
+	else
+	{
+		DirCheck("Jump");
+	}
 }
 
 void Player::JumpUpdate(float _Time)
@@ -142,7 +173,7 @@ void Player::JumpUpdate(float _Time)
 
 	MoveDir += float4::Up * JumpPower;
 
-	JumpPower -= 100.0f * _Time;
+	JumpPower -= 100.0f * _Time;										//서서히 아래로 떨어지게 함
 
 	if (true == GameEngineInput::IsPress("LeftMove"))
 	{
@@ -153,15 +184,54 @@ void Player::JumpUpdate(float _Time)
 		MoveDir += float4::Right * MoveSpeed;
 	}
 
-	DirCheck("Jump");
+	//DirCheck("Jump");
+	
 
-	if (JumpPower <= 0)
+	//<바닥에 닿으면 IDLE로 상태 변경>
+	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+
+	if (nullptr == ColImage)
 	{
-		JumpPower = 0.0f;
+		MsgAssert("충돌용 맵 이미지가 없습니다.");
+	}
 
-		DirCheck("Idle");
+
+	float4 NextPos = GetPos() + (MoveDir * _Time);						//옮겨 갈 위치
+
+	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))
+	{
+		if (1 == MarioState)
+		{
+  			DirCheck("GrowthIdle");
+		}
+		else
+		{
+			DirCheck("Idle");
+		}
+		ChangeState(PlayerState::IDLE);									
+		return;															//다른 것에 영향을 안 받기 위해 상태를 바꾸면 return
 	}
 }
 void Player::JumpEnd()
 {
+}
+
+
+void Player::DeathStart()
+{
+	JumpPower = 210.0f;
+	AnimationRender->ChangeAnimation("Death");
+}
+void Player::DeathUpdate(float _Time)
+{
+	MoveDir += float4::Up * JumpPower;
+
+	JumpPower -= 50.0f * _Time;
+
+	AnimationRender->ChangeAnimation("Death");
+
+}
+void Player::DeathEnd()
+{
+
 }

@@ -55,6 +55,7 @@ public:
 		return ImageDC;
 	}
 
+	//Imagedml 너비, 높이 정보를 반환
 	float4 GetImageScale() const
 	{
 		return float4{ static_cast<float>(Info.bmWidth), static_cast<float>(Info.bmHeight) };

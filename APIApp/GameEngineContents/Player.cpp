@@ -7,9 +7,12 @@
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineLevel.h>
+#include <GameEngineCore/GameEngineCore.h>
+#include "Item.h"
 #include "ContentsEnums.h"
 
 Player* Player::MainPlayer;
+
 
 Player::Player() 
 {
@@ -42,16 +45,42 @@ void Player::Start()
 		//Original Mario
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Idle",  .ImageName = "Right_Mario.bmp", .Start = 0, .End = 0});
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Move",  .ImageName = "Right_Mario.bmp", .Start = 1, .End = 3 });
-		//Turn되는 시점에서 애니메이션 3, 4 모두인지 4인지 결정해야 함
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Turn", .ImageName = "Right_Mario.bmp", .Start = 4, .End = 4 });			
-		
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Jump", .ImageName = "Right_Mario.bmp", .Start = 5, .End = 5});
-		AnimationRender->CreateAnimation({ .AnimationName = "Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6});
+	//	AnimationRender->CreateAnimation({ .AnimationName = "Right_Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6});
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_Bigger", .ImageName = "Right_Mario.bmp", .Start = 29, .End = 31 });
+		
+
+		AnimationRender->CreateAnimation({ .AnimationName = "Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6 });
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Idle",  .ImageName = "Left_Mario.bmp", .Start = 0, .End = 0});
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Move",  .ImageName = "Left_Mario.bmp", .Start = 1, .End = 3 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Turn", .ImageName = "Left_Mario.bmp", .Start = 4, .End = 4 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Jump", .ImageName = "Left_Mario.bmp", .Start = 5, .End = 5 });
+	//	AnimationRender->CreateAnimation({ .AnimationName = "Left_Death", .ImageName = "Left_Mario.bmp", .Start = 6, .End = 6 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_Bigger", .ImageName = "Left_Mario.bmp", .Start = 29, .End = 31 });
+
+
+		//Growth Mario
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthIdle",  .ImageName = "Right_Mario.bmp", .Start = 14, .End = 14 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthMove",  .ImageName = "Right_Mario.bmp", .Start = 15, .End = 17 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthTurn", .ImageName = "Right_Mario.bmp", .Start = 18, .End = 18 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthJump", .ImageName = "Right_Mario.bmp", .Start = 19, .End = 19 });
+		
+		//역순으로....이미지 재생
+		//AnimationRender->CreateAnimation({ .AnimationName = "Right_Smaller", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6 });
+
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthIdle",  .ImageName = "Left_Mario.bmp", .Start = 14, .End = 14 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthMove",  .ImageName = "Left_Mario.bmp", .Start = 15, .End = 17 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthTurn", .ImageName = "Left_Mario.bmp", .Start = 18, .End = 18 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthJump", .ImageName = "Left_Mario.bmp", .Start = 19, .End = 19 });
+		//AnimationRender->CreateAnimation({ .AnimationName = "Left_Smaller", .ImageName = "Left_Mario.bmp", .Start = 6, .End = 6 });
+
+
+
+		//Fire Mario
+
+		//Star Mario
 
 	}
 
@@ -68,34 +97,29 @@ void Player::Movecalculation(float _DeltaTime)
 	float4 PrevPos = GetPos();
 
 	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
-	MoveDir += float4::Down * MoveSpeed;	//중력가속도
+	//시간은 맨 마지막에 SetMove에서 곱해줌
+	MoveDir += float4::Down * MoveSpeed;				//중력가속도
 
 	if (256.0f <= abs(MoveDir.x))						//한계 속도 지정
 	{
 		if (0 >= MoveDir.x)
 		{
-				MoveDir.x = -256.0f;
+			MoveDir.x = -256.0f;
 		}
-		else 
+		else
 		{
-				MoveDir.x = 256.0f;
+			MoveDir.x = 256.0f;
 		}
 	}
 
 
 
-
-
-	//좌우키가 안 눌렀으면 멈추게 해야 함
+	//좌우키가 안 눌렀을때 멈추게 할 저항
+	//가속도가 있어야 함
 	if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
 	{
-		MoveDir.x *= 0.005f;
+		MoveDir.x *= (0.005f * _DeltaTime);
 	}
-
-	//if (MoveDir.y <= (PrevPos.y + JumpHeight))
-	//{
-	//	MoveDir += float4::Down * (MoveSpeed)* _DeltaTime;
-	//}
 
 
 	//ImageFind에 들어갈 파일명을 변수로 만들어둬야 함
@@ -113,14 +137,14 @@ void Player::Movecalculation(float _DeltaTime)
 
 	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))	//벽
 	{
-		Check = false;
+		Check = false;													//허공에 있는 상태
 	}
 
 	if (false == Check)
 	{
-		while (true)
+		while (true)													//한 칸씩 위로 올려서 허공이 나오게 함
 		{
-			MoveDir.y -= 1;
+			MoveDir.y -= 1;												//윈도우 좌표계상에서 위로 올라간 것
 
 			float4 NextPos = GetPos() + MoveDir * _DeltaTime;
 
@@ -136,6 +160,9 @@ void Player::Movecalculation(float _DeltaTime)
 	SetMove(MoveDir * _DeltaTime);
 }
 
+
+
+//디버깅용_벽에 영향을 받지 않고 맵의 끝까지 움직일 수 있음
 bool FreeMove = false;
 
 bool Player::FreeMoveState(float _DeltaTime)
@@ -186,16 +213,38 @@ void Player::Update(float _DeltaTime)
 	if (nullptr != BodyCollision)
 	{
 		std::vector<GameEngineCollision*> Collision;
-		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_CirCle, .ThisColType = CT_CirCle }, Collision))
+		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Item), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
-			AnimationRender->ChangeAnimation("Death");
-
-
-			SetMove(float4::Up * _DeltaTime * MoveSpeed);
-
-			//MainPlayer->Death();
+			MarioState = 1;									//become a Growth Mario
+			DirCheck("Bigger");
+			DirCheck("GrowthIdle");
 		}
 	}
+
+
+
+	if (nullptr != BodyCollision)
+	{
+		std::vector<GameEngineCollision*> Collision;
+		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_CirCle, .ThisColType = CT_CirCle }, Collision))
+		{
+			if (1 == MarioState)
+			{
+				--MarioState;
+			}
+			else
+			{
+				--Life;
+				ChangeState(PlayerState::DEATH);
+				//MainPlayer->Death();
+
+
+				//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+			}
+		}
+	}
+
+
 
 	if (true == FreeMoveState(_DeltaTime))
 	{
@@ -262,9 +311,8 @@ void Player::Render(float _DeltaTime)
 	);
 
 
+
 	float4 ActPos = GetPos();
-
-
 	//처음 시작해서 Player가 화면 중반에 오면 카메라가 움직임 시작
 	if (ActPos.x >= GameEngineWindow::GetScreenSize().half().x)		
 	{

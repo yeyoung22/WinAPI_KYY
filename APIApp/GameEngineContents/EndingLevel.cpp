@@ -1,20 +1,19 @@
-#include "OpeningLevel.h"
-
+#include "EndingLevel.h"
 #include <GameEngineBase/GameEngineDirectory.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineCore.h>
 #include <GameEnginePlatform/GameEngineInput.h>
-#include "OpeningBack.h"
+#include "EndingBack.h"
 
-OpeningLevel::OpeningLevel() 
+EndingLevel::EndingLevel() 
 {
 }
 
-OpeningLevel::~OpeningLevel() 
+EndingLevel::~EndingLevel() 
 {
 }
 
-void OpeningLevel::Loading()
+void EndingLevel::Loading()
 {
 	GameEngineDirectory Dir;
 	Dir.MoveParentToDirectory("ContentsResources");
@@ -23,32 +22,25 @@ void OpeningLevel::Loading()
 	Dir.Move("Screen");
 
 	//이미지 로드
-	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Opening.bmp"));
-	}
+	
+	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Ending1.bmp"));
+	
+	/*{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Ending2.bmp"));
+	}*/
 
 	if (false == GameEngineInput::IsKey("LevelChange"))
 	{
 		GameEngineInput::CreateKey("LevelChange", 'P');
 	}
 
-	CreateActor<OpeningBack>();
+	CreateActor<EndingBack>();
 }
 
-void OpeningLevel::Update(float _DeltaTime)
+void EndingLevel::Update(float _DeltaTime)
 {
-	WaitTime -= _DeltaTime;
-	
 	if (true == GameEngineInput::IsDown("LevelChange"))
 	{
-		GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
+		GameEngineCore::GetInst()->ChangeLevel("TitleLevel");
 	}
-
-
-	if (WaitTime <= 0)
-	{
-		GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
-	}
-
-	
 }

@@ -27,6 +27,18 @@
     <ClInclude Include="Map.h">
       <Filter>Play</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingLevel.h">
+      <Filter>Ending</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingBack.h">
+      <Filter>Ending</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -57,6 +69,18 @@
     <ClCompile Include="PlayerState.cpp">
       <Filter>Play</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingLevel.cpp">
+      <Filter>Ending</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingBack.cpp">
+      <Filter>Ending</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Title">
@@ -67,6 +91,9 @@
     </Filter>
     <Filter Include="Opening">
       <UniqueIdentifier>{2eaf0ac6-714e-46cc-b20a-91dfe12bdb52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ending">
+      <UniqueIdentifier>{c06a6b90-df63-496a-a777-ac969dbbaa59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
