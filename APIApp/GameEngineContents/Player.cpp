@@ -85,12 +85,6 @@ void Player::Start()
 	}
 
 	{
-		GameEngineRender* Render = CreateRender(MarioRenderOrder::Player);
-		Render->SetText("------Test-------");
-	}
-
-
-	{
 		BodyCollision = CreateCollision(MarioCollisionOrder::Player);
 		BodyCollision->SetScale({ 60, 60 });
 	}
