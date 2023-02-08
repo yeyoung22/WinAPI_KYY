@@ -7,6 +7,8 @@ enum class PlayerState
 	MOVE,
 	JUMP,
 	DEATH,
+	FALL,
+
 };
 
 // 설명 : Player(Mario)
@@ -39,7 +41,6 @@ private:
 	float MarioHeight = 256.0f;									//Mario 상태가 변하면 값을 바꿔줘야 함
 	float MoveSpeed = 200.0f;
 	float JumpPower = 0.0f;
-	float PressTime = 2.0f;
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
@@ -69,6 +70,9 @@ private:
 	void JumpUpdate(float _Time);
 	void JumpEnd();
 
+	void FallStart();
+	void FallUpdate(float _Time);
+	void FallEnd();
 
 	void DeathStart();
 	void DeathUpdate(float _Time);
