@@ -8,6 +8,11 @@
 #include "ContentsEnums.h"
 
 
+void Player::ChangeMode(PlayerMode _Mode)
+{
+	ModeValue = _Mode;
+}
+
 //State 변경
 void Player::ChangeState(PlayerState _State)
 {
@@ -89,7 +94,7 @@ void Player::UpdateState(float _Time)
 //<Idle>
 void Player::IdleStart()
 {
-	if (1 == MarioState)											//Growth ver.Mario
+	if (ModeValue == PlayerMode::SUPERMARIO)											//Growth ver.Mario
 	{
 		DirCheck("GrowthIdle");
 	}
@@ -120,7 +125,7 @@ void Player::IdleEnd() {
 //<Move>
 void Player::MoveStart()
 {
-	if (1 == MarioState)											//Growth ver.Mario
+	if (ModeValue == PlayerMode::SUPERMARIO)											//Growth ver.Mario
 	{
 		DirCheck("GrowthMove");
 	}
@@ -154,7 +159,7 @@ void Player::MoveUpdate(float _Time)
 		MoveDir.x *= (0.005f * _Time);
 		if (0 >= MoveDir.x)
 		{
-			if (1 == MarioState)
+			if (ModeValue == PlayerMode::SUPERMARIO)
 			{
 				DirCheck("GrowthTurn");
 			}
@@ -168,7 +173,7 @@ void Player::MoveUpdate(float _Time)
 
 		if (0 >= MoveDir.x)
 		{
-			if (1 == MarioState)
+			if (ModeValue == PlayerMode::SUPERMARIO)
 			{
 				DirCheck("GrowthTurn");
 			}
@@ -204,7 +209,7 @@ void Player::MoveEnd()
 void Player::JumpStart()
 {
 	JumpPower = 225.0f;													//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
-	if (1 == MarioState)
+	if (ModeValue == PlayerMode::SUPERMARIO)
 	{
 		DirCheck("GrowthJump");
 	}
@@ -248,7 +253,7 @@ void Player::JumpUpdate(float _Time)
 
 	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))
 	{
-		if (1 == MarioState)
+		if (ModeValue == PlayerMode::SUPERMARIO)
 		{
   			DirCheck("GrowthIdle");
 		}
@@ -268,7 +273,7 @@ void Player::JumpEnd()
 
 void Player::FallStart()
 {
-	if (1 == MarioState)
+	if (ModeValue == PlayerMode::SUPERMARIO)
 	{
 		DirCheck("GrowthJump");
 	}

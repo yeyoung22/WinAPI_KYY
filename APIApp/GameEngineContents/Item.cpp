@@ -4,8 +4,6 @@
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineLevel.h>
-//#include "Player.h"
-//#include "Map.h"
 #include "ContentsEnums.h"
 
 Item::Item() 

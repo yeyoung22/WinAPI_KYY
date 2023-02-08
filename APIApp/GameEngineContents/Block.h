@@ -1,6 +1,6 @@
 #pragma once
 
-// 설명 :
+// 설명 : Block과 관련한 기능들
 class Block
 {
 public:

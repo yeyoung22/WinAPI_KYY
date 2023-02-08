@@ -214,7 +214,7 @@ void Player::Update(float _DeltaTime)
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Item), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
-			MarioState = 1;									//become a Growth Mario
+			ChangeMode(PlayerMode::SUPERMARIO);
 			DirCheck("Bigger");
 			DirCheck("GrowthIdle");
 		}
@@ -226,9 +226,10 @@ void Player::Update(float _DeltaTime)
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_CirCle, .ThisColType = CT_CirCle }, Collision))
 		{
-			if (1 == MarioState)
+			if (ModeValue == PlayerMode::SUPERMARIO)
 			{
-				--MarioState;
+				ChangeMode(PlayerMode::MARIO);
+				//작아지는 애니메이션 필요함_리버스??------------------------------------
 			}
 			else
 			{

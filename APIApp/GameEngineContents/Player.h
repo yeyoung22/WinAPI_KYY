@@ -8,8 +8,16 @@ enum class PlayerState
 	JUMP,
 	DEATH,
 	FALL,
-
 };
+
+enum class PlayerMode
+{
+	MARIO,
+	SUPERMARIO,
+	FIREMARIO,
+	STARMARIO
+};
+
 
 // 설명 : Player(Mario)
 class Player : public GameEngineActor
@@ -35,7 +43,6 @@ protected:
 private:
 	int StartFrame = 0;
 	int Life = 3;
-	int MarioState = 0;											//0:Original 1:Growth 2:Fire 3:Star 
 
 	float AccTime = 0.0f;
 	float MarioHeight = 256.0f;									//Mario 상태가 변하면 값을 바꿔줘야 함
@@ -44,6 +51,7 @@ private:
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
+	PlayerMode ModeValue = PlayerMode::MARIO;
 	float4 MoveDir = float4::Zero;
 
 	GameEngineRender* AnimationRender = nullptr;
@@ -54,6 +62,7 @@ private:
 	// State
 	bool FreeMoveState(float _DeltaTime);
 
+	void ChangeMode(PlayerMode _Mode);
 	void ChangeState(PlayerState _State);
 	void UpdateState(float _Time);
 
