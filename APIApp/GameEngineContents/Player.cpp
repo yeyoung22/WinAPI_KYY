@@ -30,8 +30,8 @@ void Player::Start()
 	{
 		GameEngineInput::CreateKey("LeftMove", 'A');
 		GameEngineInput::CreateKey("RightMove", 'D');
-		GameEngineInput::CreateKey("DownMove", 'S');
-		GameEngineInput::CreateKey("UpMove", 'W');
+		//GameEngineInput::CreateKey("DownMove", 'S');
+		//GameEngineInput::CreateKey("UpMove", 'W');
 		GameEngineInput::CreateKey("Jump", VK_SPACE);			//Mario can jump 5 sec
 	
 		GameEngineInput::CreateKey("FreeMoveSwitch", '1');

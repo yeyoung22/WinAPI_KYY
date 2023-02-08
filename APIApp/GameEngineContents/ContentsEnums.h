@@ -4,6 +4,7 @@ enum class MarioRenderOrder
 {
 	BackGround,
 	Map,
+	UI,
 	Monster,
 	Item,
 	Player,

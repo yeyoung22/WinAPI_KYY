@@ -3,6 +3,7 @@
 #include <GameEngineBase/GameEngineDirectory.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineResources.h>
+#include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCore.h>
 #include "TitleBack.h"
 
@@ -27,20 +28,29 @@ void TitleLevel::Loading()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("TitleScreen.bmp"));
 	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("CursurIcon.bmp"));
+	}
 
 	if (false == GameEngineInput::IsKey("LevelChange"))
 	{
 		GameEngineInput::CreateKey("LevelChange", 'P');
 	}
 
-	CreateActor<TitleBack>();
+
+	TitleBack* Actor =  CreateActor<TitleBack>();
 }
 
 void TitleLevel::Update(float _DeltaTime)
 {
+
 	if (true == GameEngineInput::IsDown("LevelChange"))
 	{
 		GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
 	}
 
+	if (true == GameEngineInput::IsDown("Select") && true == TitleBack::IsMultiMode)
+	{
+		GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
+	}
 }

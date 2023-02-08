@@ -43,6 +43,7 @@ protected:
 private:
 	int StartFrame = 0;
 	int Life = 3;
+	int PlayTimer = 400;
 
 	float AccTime = 0.0f;
 	float MarioHeight = 256.0f;									//Mario 상태가 변하면 값을 바꿔줘야 함
