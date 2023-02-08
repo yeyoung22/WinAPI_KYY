@@ -3,6 +3,14 @@
 #include "GameEngineObject.h"
 #include "GameEngineRender.h"
 
+enum class Align				//정렬 상태
+{
+	Left,
+	Right,
+	Center
+};
+
+
 // 설명 : 숫자 이미지 랜더하는 기능
 class GameEngineActor;
 class NumberRenderObject : public GameEngineObject

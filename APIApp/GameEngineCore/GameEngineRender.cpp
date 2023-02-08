@@ -33,8 +33,7 @@ void GameEngineRender::SetScaleToImage()
 
 void GameEngineRender::SetOrder(int _Order)
 {
-	GameEngineObject::SetOrder(_Order);
-	GetActor()->GetLevel()->PushRender(this);
+	GetActor()->GetLevel()->PushRender(this, _Order);
 }
 
 void GameEngineRender::SetFrame(int _Frame)

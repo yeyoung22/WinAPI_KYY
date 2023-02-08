@@ -156,7 +156,7 @@ private:
 
 	//map은 오름차순으로 정리되므로 값이 큰 쪽이 나중에 실행됨
 	std::map<int, std::list<GameEngineRender*>> Renders;
-	void PushRender(GameEngineRender* _Render);
+	void PushRender(GameEngineRender* _Render, int _ChangeOrder);
 
 	std::map<int, std::list<GameEngineCollision*>> Collisions;
 	void PushCollision(GameEngineCollision* _Collision);
