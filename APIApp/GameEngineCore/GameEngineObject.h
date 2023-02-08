@@ -56,7 +56,7 @@ public:
 		return Order;
 	}
 
-	void SetOwner(GameEngineObject* _Parent)
+	virtual void SetOwner(GameEngineObject* _Parent)
 	{
 		Parent = _Parent;
 	}

@@ -33,6 +33,21 @@ public:
 
 	static GameEngineCore* GetInst();
 
+	void DebugSwitch()
+	{
+		IsDebugValue = !IsDebugValue;
+	}
+
+	void SetDebugMode(bool _IsDebug)
+	{
+		IsDebugValue = _IsDebug;
+	}
+
+	bool IsDebug()
+	{
+		return IsDebugValue;
+	}
+
 protected:
 	template<typename LevelType>
 	void CreateLevel(const std::string_view& _Name)
@@ -50,17 +65,6 @@ protected:
 		//insert()할 때마다 새로운 string이 생기면서
 		//자신만의 메모리를 가지게 됨
 		Levels.insert(std::make_pair(_Name.data(), Level));
-	}
-
-	
-	void DebugSwitch()
-	{
-		IsDebugValue = !IsDebugValue;
-	}
-
-	bool IsDebug()
-	{
-		return IsDebugValue;
 	}
 
 	virtual void Start() = 0;							//순수가상함수

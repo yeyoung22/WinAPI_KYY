@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
+#include <GameEngineCore/NumberRenderObject.h>
 
 enum class PlayerState
 {
@@ -41,14 +42,17 @@ protected:
 	void Render(float _DeltaTime) override;
 
 private:
+
 	int StartFrame = 0;
 	int Life = 3;
-	int PlayTimer = 400;
-
+	
+	float PlayTimer = 400.0f;
 	float AccTime = 0.0f;
 	float MarioHeight = 256.0f;									//Mario 상태가 변하면 값을 바꿔줘야 함
 	float MoveSpeed = 200.0f;
 	float JumpPower = 0.0f;
+
+	NumberRenderObject NumberSets;
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;

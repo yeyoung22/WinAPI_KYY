@@ -25,6 +25,9 @@ Player::~Player()
 void Player::Start()
 {
 	MainPlayer = this;
+	NumberSets.SetOwner(this);
+	NumberSets.SetImage("Number.bmp", { 64, 64 }, 10, RGB(255, 0, 255));
+	NumberSets.SetValue(static_cast<int>(PlayTimer));
 
 	if (false == GameEngineInput::IsKey("LeftMove"))
 	{
@@ -94,6 +97,9 @@ void Player::Start()
 
 void Player::Movecalculation(float _DeltaTime)
 {
+	NumberSets.SetValue(static_cast<int>(PlayTimer));
+	PlayTimer -= _DeltaTime;
+
 	float4 PrevPos = GetPos();
 
 	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)

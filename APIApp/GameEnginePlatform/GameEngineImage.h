@@ -67,7 +67,12 @@ public:
 		return IsCut;
 	}
 
-	//
+	//잘린 이미지 개수 반환
+	size_t GetImageCuttingCount()
+	{
+		return ImageCutDatas.size();
+	}
+
 	bool IsCutIndexValid(int _Index) const
 	{
 		if (0 > _Index)

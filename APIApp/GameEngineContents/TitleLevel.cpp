@@ -32,6 +32,7 @@ void TitleLevel::Loading()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("CursurIcon.bmp"));
 	}
 
+
 	if (false == GameEngineInput::IsKey("LevelChange"))
 	{
 		GameEngineInput::CreateKey("LevelChange", 'P');

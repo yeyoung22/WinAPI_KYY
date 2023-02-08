@@ -59,6 +59,10 @@ void PlayLevel::Loading()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Item\\Right_SuperMushroom.bmp"));
 		Image->Cut(4, 1);
 	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Number.bmp"));
+		Image->Cut(10, 1);
+	}
 	//액터 생성
 	{
 		Map* Actor = CreateActor<Map>();
