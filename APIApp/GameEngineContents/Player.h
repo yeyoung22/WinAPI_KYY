@@ -50,7 +50,9 @@ private:
 	float MarioHeight = 256.0f;									//Mario 상태가 변하면 값을 바꿔줘야 함
 	float MoveSpeed = 200.0f;
 	float JumpPower = 0.0f;
+	float SpeedLimit = 300.0f;
 
+	GameEngineImage* ColImage = nullptr;
 	NumberRenderObject NumberSets;
 
 	std::string DirString = "Right_";
@@ -93,21 +95,7 @@ private:
 	void DeathUpdate(float _Time);
 	void DeathEnd();
 
-	//void Movecalculation(float _DeltaTime);
-
-	//중력가속도
-	bool IsGravityOff = false;
-	float4 Gravity = float4::Zero;
-	void GravitionalAcc(float _DeltaTime);
-	inline void GravitionalAccOff()
-	{
-		IsGravityOff = true;
-	}
-
-	GameEngineImage* ColImage = nullptr;
-
-	//움직일 수 있는지...
-	bool MoveCheck(float _DeltaTime);
+	void Movecalculation(float _DeltaTime);
 
 	//void Camera(float _DeltaTime);
 };

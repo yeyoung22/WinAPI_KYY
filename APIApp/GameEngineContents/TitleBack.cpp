@@ -23,31 +23,42 @@ void TitleBack::Start()
 		GameEngineInput::CreateKey("UpMove", 'W');
 	}
 
-	float4 Size = GameEngineWindow::GetScreenSize();
-	{
+	{	float4 Size = GameEngineWindow::GetScreenSize();
 		GameEngineRender* Render = CreateRender("TitleScreen.bmp", MarioRenderOrder::BackGround);
 		Render->SetPosition(Size.half());
 		Render->SetScale(GameEngineWindow::GetScreenSize());
 	}
 	
 	IconRender = CreateRender("CursurIcon.bmp", MarioRenderOrder::UI);
-	IconRender->SetPosition({302, 590});
+	IconRender->SetPosition({ 302, 590 });
 	IconRender->SetScale(IconRender->GetImage()->GetImageScale());
 	
+
+	{
+		GameEngineRender* Render = CreateRender("ScoreCoin.bmp", MarioRenderOrder::UI);
+		Render->SetPosition({362, 108});
+		Render->SetScale(Render->GetImage()->GetImageScale());
+	}
+
 }
 
 void TitleBack::Update(float _DeltaTime)
 {
+	if (true == GameEngineInput::IsDown("Select") && false == TitleBack::IsMultiMode)
+	{
+		return;
+	}
+
 	if (true == GameEngineInput::IsDown("DownMove"))
 	{
 		IconRender->SetPosition({ 302, 655 });
 
-		IsMultiMode = false;
+		IsMultiMode = true;
 	}
 	else if(true == GameEngineInput::IsDown("UpMove"))
 	{
 		IconRender->SetPosition({ 302, 590 });
 
-		IsMultiMode = true;
+		IsMultiMode = false;
 	}
 }

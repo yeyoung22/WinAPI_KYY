@@ -13,9 +13,12 @@ OpeningBack::~OpeningBack()
 
 void OpeningBack::Start()
 {
-	float4 Size = GameEngineWindow::GetScreenSize();
 
-	GameEngineRender* Render = CreateRender("Opening.bmp", MarioRenderOrder::BackGround);
-	Render->SetPosition(GameEngineWindow::GetScreenSize().half());
-	Render->SetScale(GameEngineWindow::GetScreenSize());
+	{
+		float4 Size = GameEngineWindow::GetScreenSize();
+		GameEngineRender* Render = CreateRender("Opening.bmp", MarioRenderOrder::BackGround);
+		Render->SetPosition(GameEngineWindow::GetScreenSize().half());
+		Render->SetScale(GameEngineWindow::GetScreenSize());
+	}
+
 }

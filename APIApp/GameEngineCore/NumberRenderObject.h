@@ -31,6 +31,10 @@ public:
 	//값 세팅
 	void SetValue(int _Value);
 
+	void SetMove(float4 _RenderPos);
+	void SetAlign(int _Align);
+	void SetAlign(Align _Align);
+
 	inline int GetValue()
 	{
 		return Value;
@@ -39,13 +43,14 @@ public:
 protected:
 
 private:
-	int Order;
-	float4 NumberScale;
-	float4 Pos;
+	int Order = 0;
+	float4 NumberScale = {};
+	float4 Pos = {};
 	int Value = 0;
-	int TransColor = RGB(255, 0, 255);				//랜더할 때 제외할 색상
+	int TransColor = RGB(255, 0, 255);					//랜더할 때 제외할 색상
+	Align AlignState = Align::Left;
 
-	std::string_view ImageName;
+	std::string_view ImageName = std::string_view();
 
-	std::vector<GameEngineRender*> NumberRenders;
+	std::vector<GameEngineRender*> NumberRenders = std::vector<GameEngineRender*>();
 };

@@ -75,4 +75,36 @@ void NumberRenderObject::SetValue(int _Value)
 
 		RenderPos.x += NumberScale.x;
 	}
+
+	switch (AlignState)
+	{
+	case Align::Left:
+		break;
+	case Align::Right:
+		SetMove(float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x);
+		break;
+	case Align::Center:
+		SetMove((float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x).half());
+		break;
+	default:
+		break;
+	}
+}
+
+void NumberRenderObject::SetMove(float4 _RenderPos)
+{
+	for (size_t i = 0; i < NumberRenders.size(); i++)
+	{
+		NumberRenders[i]->SetMove(_RenderPos);
+	}
+}
+
+void NumberRenderObject::SetAlign(int _Align)
+{
+	AlignState = static_cast<Align>(_Align);
+}
+
+void NumberRenderObject::SetAlign(Align _Align)
+{
+	SetAlign(static_cast<int>(_Align));
 }

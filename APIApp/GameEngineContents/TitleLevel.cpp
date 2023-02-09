@@ -31,6 +31,9 @@ void TitleLevel::Loading()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("CursurIcon.bmp"));
 	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ScoreCoin.bmp"));
+	}
 
 
 	if (false == GameEngineInput::IsKey("LevelChange"))
@@ -40,17 +43,18 @@ void TitleLevel::Loading()
 
 
 	TitleBack* Actor =  CreateActor<TitleBack>();
+
+
 }
 
 void TitleLevel::Update(float _DeltaTime)
 {
-
 	if (true == GameEngineInput::IsDown("LevelChange"))
 	{
 		GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
 	}
 
-	if (true == GameEngineInput::IsDown("Select") && true == TitleBack::IsMultiMode)
+	if (true == GameEngineInput::IsDown("Select") && false == TitleBack::IsMultiMode)
 	{
 		GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
 	}
