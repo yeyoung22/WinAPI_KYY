@@ -120,7 +120,7 @@ void GameEngineCore::ChangeLevel(const std::string_view& _Name)
 	MainLevel = FindIter->second;
 }
 
-void GameEngineCore::LevelLoading(GameEngineLevel* _Level)
+void GameEngineCore::LevelLoading(GameEngineLevel* _Level, const std::string_view& _Name)
 {
 	if (nullptr == _Level)
 	{
@@ -128,5 +128,6 @@ void GameEngineCore::LevelLoading(GameEngineLevel* _Level)
 		return;
 	}
 
+	_Level->SetName(_Name);
 	_Level->Loading();
 }

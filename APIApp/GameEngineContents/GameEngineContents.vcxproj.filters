@@ -39,6 +39,12 @@
     <ClInclude Include="EndingBack.h">
       <Filter>Ending</Filter>
     </ClInclude>
+    <ClInclude Include="STLevel.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsValue.h">
+      <Filter>Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -81,6 +87,12 @@
     <ClCompile Include="EndingBack.cpp">
       <Filter>Ending</Filter>
     </ClCompile>
+    <ClCompile Include="STLevel.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsValue.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Title">
@@ -94,6 +106,9 @@
     </Filter>
     <Filter Include="Ending">
       <UniqueIdentifier>{c06a6b90-df63-496a-a777-ac969dbbaa59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{1385f8ae-81e3-4602-ba1e-7533674825d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

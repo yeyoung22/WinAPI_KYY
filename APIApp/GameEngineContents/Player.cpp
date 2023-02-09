@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Map.h"
 #include <GameEngineBase/GameEnginePath.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineInput.h>
@@ -9,7 +8,10 @@
 #include <GameEngineCore/GameEngineLevel.h>
 #include <GameEngineCore/GameEngineCore.h>
 #include "Item.h"
+#include "Map.h"
 #include "ContentsEnums.h"
+#include "ContentsValue.h"
+#include "STLevel.h"
 
 Player* Player::MainPlayer;
 
@@ -24,10 +26,19 @@ Player::~Player()
 
 void Player::Start()
 {
+	ContentsValue::CameraScale;
+
+	ContentsValue::CameraScale = { 1000, 2000 };
+	
 	MainPlayer = this;
-	/*NumberSets.SetOwner(this);
-	NumberSets.SetImage("Number.bmp", { 64, 64 }, 10, RGB(255, 0, 255));
-	NumberSets.SetValue(static_cast<int>(PlayTimer));*/
+	//STLevel* Level = GetOwner<STLevel>();
+//Level->GetCameraScale();
+
+	//NumberSets.SetOwner(this);
+	//NumberSets.SetImage("Number.bmp", { 60, 64 }, 10, RGB(255, 0, 255));
+	//NumberSets.SetValue(static_cast<int>(PlayTimer));
+	//NumberSets.SetAlign(Align::Right);
+	//NumberSets.SetRenderPos({ 300, 0});
 
 	if (false == GameEngineInput::IsKey("LeftMove"))
 	{
@@ -221,8 +232,8 @@ bool Player::FreeMoveState(float _DeltaTime)
 
 void Player::Update(float _DeltaTime)
 {
-	/*NumberSets.SetValue(static_cast<int>(PlayTimer));
-	PlayTimer -= _DeltaTime;*/
+	//NumberSets.SetValue(static_cast<int>(PlayTimer));
+	//PlayTimer -= _DeltaTime;
 
 	if (nullptr != BodyCollision)
 	{

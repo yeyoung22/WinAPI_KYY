@@ -57,10 +57,20 @@ public:
 		TransColor = _Color;
 	}
 
+	inline void SetEffectCamera(bool _Effect)
+	{
+		IsEffectCamera = _Effect;
+	}
+
 	//UI같이 카메라 효과가 필요없는 것들은 false
 	inline void EffectCameraOff()
 	{
-		IsEffectCamera = false;
+		SetEffectCamera(false);
+	}
+
+	inline void EffectCameraOn()
+	{
+		SetEffectCamera(true);
 	}
 
 	//애니메이션 효과 생성

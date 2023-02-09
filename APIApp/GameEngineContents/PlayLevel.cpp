@@ -8,7 +8,7 @@
 #include "Monster.h"
 #include "Item.h"
 #include "ContentsEnums.h"
-
+#include "ContentsValue.h"
 
 
 PlayLevel::PlayLevel() 
@@ -22,6 +22,12 @@ PlayLevel::~PlayLevel()
 //Loading 시점: 만들어야할 것들을 만드는 시점
 void PlayLevel::Loading()
 {
+	// STLevel* Ptr = GetOwner<STLevel>();
+// Ptr->GetCameraScale();
+
+	SetCameraScale({ 1000, 100 });
+
+
 	//상대 경로
 	GameEngineDirectory Dir;
 	Dir.MoveParentToDirectory("ContentsResources");
@@ -111,4 +117,5 @@ void PlayLevel::Update(float _DeltaTime)
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+	ContentsValue::CameraScale = { 2000, 3000 };
 }

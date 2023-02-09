@@ -1,5 +1,6 @@
 #pragma once
-
+#include <string>
+#include <string_view>
 
 // 설명 : 오브젝트 구조의 기본 클래스
 class GameEngineObject
@@ -72,6 +73,23 @@ public:
 		return Parent;
 	}
 
+	//이름 설정
+	void SetName(const std::string_view& _View)
+	{
+		Name = _View;	
+	}
+	//이름 반환
+	const std::string& GetName()
+	{
+		return Name;
+	}
+
+	//이름 복사
+	std::string GetNameCopy()
+	{
+		return Name;
+	}
+
 protected:
 
 private:
@@ -81,5 +99,7 @@ private:
 
 	bool ObjectDeath = false;
 	bool ObjectUpdate = true;
+
+	std::string Name;
 };
 
