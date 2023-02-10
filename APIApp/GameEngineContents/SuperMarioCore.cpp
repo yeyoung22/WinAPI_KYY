@@ -24,7 +24,7 @@ void SuperMarioCore::Start()
 	//실수를 원한다면 실수를 넣어야 함
 
 	//The pixel aspect ratio of both consoles is 16:15
-	GameEngineWindow::SettingWindowSize({1024.0f, (1024.0f / 16.0f) * 15.0f });
+	GameEngineWindow::SettingWindowSize({960.0f, (960.0f / 16.0f) * 15.0f });
 
 	new int();
 
@@ -33,7 +33,7 @@ void SuperMarioCore::Start()
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");
 
-	ChangeLevel("TitleLevel");
+	ChangeLevel("PlayLevel");
 }
 
 void SuperMarioCore::Update()

@@ -125,6 +125,8 @@ void Player::IdleUpdate(float _Time)
 		return;
 	}
 
+	float4 pos = GetPos();
+
 	AccGravity(_Time);
 	ActorMove(_Time);
 
@@ -194,20 +196,21 @@ void Player::MoveUpdate(float _Time)
 
 	if (true == GameEngineInput::IsPress("LeftMove"))
 	{
-		MoveDir += float4::Left * MoveSpeed;
+		MoveDir += float4::Left * MoveSpeed * _Time;
 	}
 	else if (true == GameEngineInput::IsPress("RightMove"))
 	{
-		MoveDir += float4::Right * MoveSpeed;
+		MoveDir += float4::Right * MoveSpeed * _Time;
 	}
 	
-//	LimitSpeed(MoveDir);
+	LimitSpeed(MoveDir);
+	SetMove(MoveDir * _Time);
+
 //	Friction(MoveDir, _Time);
 ///*
 	if (true == CheckMove(MoveDir, _Time))
 	{
 		//AccGravity(_Time);
-		SetMove(MoveDir * _Time);
 	}
 //	else
 //	{

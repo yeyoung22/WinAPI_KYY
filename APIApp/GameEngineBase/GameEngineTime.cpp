@@ -26,6 +26,11 @@ float GameEngineTime::TimeCheck()
 
 	Tick = Current.QuadPart - Prev.QuadPart;		//QuadPart는 구조체 내 정수
 
+	if (Tick == 0)
+	{
+		Tick = 1;
+	}
+
 	//현재시간
 	DoubleDeltaTime = (static_cast<double>(Current.QuadPart) - static_cast<double>(Prev.QuadPart)) / static_cast<double>(Second.QuadPart);
 

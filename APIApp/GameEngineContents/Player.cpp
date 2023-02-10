@@ -134,7 +134,7 @@ void  Player::Friction(float4 _Pos, float _DeltaTime)
 
 
 
-void Player::LimitSpeed(float4 _Pos)
+void Player::LimitSpeed(float4& _Pos)
 {
 	if (MaxSpeedLimit <= abs(_Pos.x))
 	{
@@ -171,17 +171,19 @@ bool  Player::LiftUp(float4 _Pos)
 	{
 		float4 NextPos = GetPos() + _Pos;
 
-		if (Black == ColImage->GetPixelColor(NextPos, Black))
+		int color = ColImage->GetPixelColor(NextPos, Black);
+
+		if (Black == color)
 		{
-			SetMove(GetPos() + float4::Up);
+			SetMove(float4::Up);
 			continue;
 		}
 		break;
 	}
 
-	float4 NextPos = GetPos() + _Pos;
+	float4 Down = GetPos() + _Pos;
 
-	if (Black == ColImage->GetPixelColor(NextPos + float4::Down, Black))
+	if (Black == ColImage->GetPixelColor(Down + float4::Down, Black))
 	{
 		return true;
 	}
@@ -196,11 +198,11 @@ bool  Player::CheckMove(float4 _Pos, float _DeltaTime)
 
 	if (Black == ColImage->GetPixelColor(CheckPos, Black))								//ground, wall
 	{
-		return true;
+		return false;
 	}
 	else
 	{
-		return false;
+		return true;
 	}
 }
 

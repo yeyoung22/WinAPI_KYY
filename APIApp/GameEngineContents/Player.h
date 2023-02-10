@@ -75,7 +75,7 @@ private:
 	float MoveSpeed = 200.0f;									//Player Speed
 	float JumpPower = 0.0f;
 	float DecrPower = 0.0f;										//For Decresing JumpPower
-	float MaxSpeedLimit = 250.0f;									
+	float MaxSpeedLimit = 100.0f;									
 
 	float Inertia = 0.0f;										//°ü¼º(Using at Brake State)
 
@@ -136,7 +136,7 @@ private:
 	void Friction(float4 _Pos, float _DeltaTime);
 
 	//Limit Speed Left and Right(_X)
-	void LimitSpeed(float4 _Pos);
+	void LimitSpeed(float4& _Pos);
 	
 	//Check, Can Player move next pixel?
 	bool IsGround(float4 _Pos = float4::Zero);
