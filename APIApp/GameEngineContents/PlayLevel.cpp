@@ -22,10 +22,8 @@ PlayLevel::~PlayLevel()
 //Loading 시점: 만들어야할 것들을 만드는 시점
 void PlayLevel::Loading()
 {
-	// STLevel* Ptr = GetOwner<STLevel>();
-// Ptr->GetCameraScale();
-
-	SetCameraScale({ 300, 300 });
+	/*STLevel* Ptr = GetOwner<STLevel>();
+	Ptr->GetCameraScale();*/
 
 
 	//상대 경로
@@ -117,5 +115,5 @@ void PlayLevel::Update(float _DeltaTime)
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
-	ContentsValue::CameraScale = { 2000, 3000 };
+	ContentsValue::CameraScale = { 1020, 960 };
 }

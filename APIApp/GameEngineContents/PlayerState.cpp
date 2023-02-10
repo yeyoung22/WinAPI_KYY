@@ -131,10 +131,7 @@ void Player::IdleUpdate(float _Time)
 	ActorMove(_Time);
 
 	bool IsGround = LiftUp();
-	if (true == IsGround)
-	{
-		MoveDir.y = 0.0f;
-	}
+    InitGravity(IsGround);
 	
 }
 void Player::IdleEnd() {
@@ -203,8 +200,15 @@ void Player::MoveUpdate(float _Time)
 		MoveDir += float4::Right * MoveSpeed * _Time;
 	}
 	
+
+
 	LimitSpeed(MoveDir);
+	AccGravity(_Time);
 	SetMove(MoveDir * _Time);
+	Camera(MoveDir * _Time);
+
+	bool IsGround = LiftUp();
+	InitGravity(IsGround);
 
 //	Friction(MoveDir, _Time);
 ///*
@@ -221,6 +225,8 @@ void Player::MoveEnd()
 {
 
 }
+
+
 
 
 //Brake State--------------------------------------------------------------------------------------------

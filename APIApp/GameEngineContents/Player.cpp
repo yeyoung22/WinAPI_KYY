@@ -26,7 +26,7 @@ Player::~Player()
 
 void Player::Start()
 {
-	ContentsValue::CameraScale = { 1000, 2000 };
+	ContentsValue::CameraScale = { 1024, 960 };
 	
 	MainPlayer = this;
 	//STLevel* Level = GetOwner<STLevel>();
@@ -136,51 +136,43 @@ void  Player::Friction(float4 _Pos, float _DeltaTime)
 
 void Player::LimitSpeed(float4& _Pos)
 {
-	if (MaxSpeedLimit <= abs(_Pos.x))
+	if (MaxSpeed <= abs(_Pos.x))
 	{
 		if (0 >= _Pos.x)
 		{
-			_Pos.x = -MaxSpeedLimit;
+			_Pos.x = -MaxSpeed;
 		}
 		else
 		{
-			_Pos.x = MaxSpeedLimit;
+			_Pos.x = MaxSpeed;
 		}
 	}
 }
 
-bool Player::IsGround(float4 _Pos)
-{
-	return	Magenta != CheckColor(_Pos);												//Magenta: Empty Space
-}
 
-int Player::CheckColor(float4 _Pos)
-{
-	float4 CheckPos = GetPos() + _Pos;													//Check Point
 
-	ColorCheck CC;
-	CC.Color = ColImage->GetPixelColor(CheckPos, White);								//outside the specified range(ColMap) = Window
 
-	return CC.Color;
-}
 
 bool  Player::LiftUp(float4 _Pos)
 {
-	MoveDir;
 	while (true)
 	{
 		float4 NextPos = GetPos() + _Pos;
 
-		int color = ColImage->GetPixelColor(NextPos, Black);
+		int Color = ColImage->GetPixelColor(NextPos, Black);
 
-		if (Black == color)
+		if (Black == Color)
 		{
-			SetMove(float4::Up);
+			SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
 			continue;
 		}
-		break;
+		break;												//Empty Space(Magenta)->break;
 	}
 
+
+	//함수로 분리할 건지 말건지 정해야 함 -----------------------------------------------------------------
+	//땅인지 아닌지 체크하는 부분
+	//내가 서있을 곳(Down)보다 한 칸 아래쪽이 검은 색이면 땅으로 판단
 	float4 Down = GetPos() + _Pos;
 
 	if (Black == ColImage->GetPixelColor(Down + float4::Down, Black))
@@ -194,7 +186,6 @@ bool  Player::CheckMove(float4 _Pos, float _DeltaTime)
 {
 	float4 CheckPos = GetPos() + _Pos*_DeltaTime;
 
-	
 
 	if (Black == ColImage->GetPixelColor(CheckPos, Black))								//ground, wall
 	{
@@ -206,70 +197,6 @@ bool  Player::CheckMove(float4 _Pos, float _DeltaTime)
 	}
 }
 
-
-//void Player::Movecalculation(float _DeltaTime)
-//{
-//	float4 PrevPos = GetPos();
-//
-//	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
-//	//시간은 맨 마지막에 SetMove에서 곱해줌
-//	MoveDir += float4::Down * MoveSpeed;				//중력가속도
-//
-//	if (SpeedLimit <= abs(MoveDir.x))						//한계 속도 지정
-//	{
-//		if (0 >= MoveDir.x)
-//		{
-//			MoveDir.x = -SpeedLimit;
-//		}
-//		else
-//		{
-//			MoveDir.x = SpeedLimit;
-//		}
-//	}
-//
-//	//좌우키가 안 눌렀을때 멈추게 할 저항
-//	if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
-//	{
-//		MoveDir.x *= (0.00025f * _DeltaTime);
-//	}
-//
-//	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind(ColMapName);
-//
-//
-//	if (nullptr == ColImage)
-//	{
-//		MsgAssert("충돌용 맵 이미지가 없습니다.");
-//	}
-//
-//
-//	bool Check = true;
-//	float4 NextPos = GetPos() + MoveDir * _DeltaTime;					//옮겨갈 위치
-//
-//
-//	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))	//벽
-//	{
-//		Check = false;													//허공에 있는 상태
-//	}
-//
-//	if (false == Check)
-//	{
-//		while (true)													//한 칸씩 위로 올려서 허공이 나오게 함
-//		{
-//			MoveDir.y -= 1;												//윈도우 좌표계상에서 위로 올라간 것
-//
-//			float4 NextPos = GetPos() + MoveDir * _DeltaTime;
-//
-//			if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))
-//			{
-//				continue;
-//			}
-//
-//			break;
-//		}
-//	}
-//
-//	SetMove(MoveDir * _DeltaTime);
-//}
 
 void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
@@ -356,8 +283,6 @@ void Player::Update(float _DeltaTime)
 		}
 	}
 
-
-
 	if (true == FreeMoveState(_DeltaTime))
 	{
 		return;
@@ -370,9 +295,6 @@ void Player::Update(float _DeltaTime)
 	}
 
 	UpdateState(_DeltaTime);
-
-	//Movecalculation(_DeltaTime);
-	//Camera(_DeltaTime);
 }
 
 void Player::DirCheck(const std::string_view& _AnimationName)
@@ -396,17 +318,27 @@ void Player::DirCheck(const std::string_view& _AnimationName)
 	}
 }
 
-//void Player::Camera(float _DeltaTime)
-//{
-//	if (GameEngineInput::IsPress("LeftMove"))
-//	{
-//		GetLevel()->SetCameraMove(float4::Left * CameraMoveSpeed * _DeltaTime);
-//	}
-//	else if (GameEngineInput::IsPress("RightMove"))
-//	{
-//		GetLevel()->SetCameraMove(float4::Right * CameraMoveSpeed * _DeltaTime);
-//	}
-//}
+void Player::Camera(float4 _Pos)
+{
+
+	float4 ActPos = GetPos();
+	//처음 시작해서 Player가 화면 중에간 오면 카메라가 움직임 시작
+	if (ActPos.x >= GameEngineWindow::GetScreenSize().half().x)
+	{
+		if (GameEngineInput::IsPress("RightMove"))
+		{
+			GetLevel()->SetCameraMove(_Pos);
+		}
+
+		float4 CameraEndPoint = GetLevel()->GetCameraPos() + GameEngineWindow::GetScreenSize();
+
+		//if(CameraEndPoint >= GameEngineRender::)
+	}
+	else
+	{
+		GetLevel()->SetCameraPos(_Pos);
+	}
+}
 
 
 void Player::Render(float _DeltaTime)
@@ -424,19 +356,19 @@ void Player::Render(float _DeltaTime)
 
 
 
-	float4 ActPos = GetPos();
-	//처음 시작해서 Player가 화면 중에간 오면 카메라가 움직임 시작
-	if (ActPos.x >= GameEngineWindow::GetScreenSize().half().x)		
-	{
-		if (GameEngineInput::IsPress("RightMove"))
-		{
-			GetLevel()->SetCameraMove(float4::Right * MoveSpeed * _DeltaTime);
-		}
+	//float4 ActPos = GetPos();
+	////처음 시작해서 Player가 화면 중에간 오면 카메라가 움직임 시작
+	//if (ActPos.x >= GameEngineWindow::GetScreenSize().half().x)		
+	//{
+	//	if (GameEngineInput::IsPress("RightMove"))
+	//	{
+	//		GetLevel()->SetCameraMove(float4::Right * MoveSpeed * _DeltaTime);
+	//	}
 
-		float4 CameraEndPoint = GetLevel()->GetCameraPos() + GameEngineWindow::GetScreenSize();
+	//	float4 CameraEndPoint = GetLevel()->GetCameraPos() + GameEngineWindow::GetScreenSize();
 
-		//if(CameraEndPoint >= GameEngineRender::)
-	}
+	//	//if(CameraEndPoint >= GameEngineRender::)
+	//}
 
 
 	//Mario Positio 출력

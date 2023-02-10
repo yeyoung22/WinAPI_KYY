@@ -57,9 +57,6 @@ protected:
 private:
 	bool IsLeftBrake = false;
 
-
-	
-
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);
 	int Red = RGB(255, 0, 0);
@@ -75,7 +72,7 @@ private:
 	float MoveSpeed = 200.0f;									//Player Speed
 	float JumpPower = 0.0f;
 	float DecrPower = 0.0f;										//For Decresing JumpPower
-	float MaxSpeedLimit = 100.0f;									
+	float MaxSpeed = 120.0f;									
 
 	float Inertia = 0.0f;										//°ü¼º(Using at Brake State)
 
@@ -131,6 +128,13 @@ private:
 	
 	//Garavitional Acceleration
 	void AccGravity(float _DeltaTime);
+	void InitGravity(bool _IsGround)
+	{
+		if (true == _IsGround)
+		{
+			MoveDir.y = 0.0f;
+		}
+	}
 
 	//Resistant Force
 	void Friction(float4 _Pos, float _DeltaTime);
@@ -138,20 +142,17 @@ private:
 	//Limit Speed Left and Right(_X)
 	void LimitSpeed(float4& _Pos);
 	
-	//Check, Can Player move next pixel?
-	bool IsGround(float4 _Pos = float4::Zero);
-	int CheckColor(float4 _Pos);
-
+	
+	//Lift Player's Position upward
 	bool LiftUp(float4 _Pos = float4::Zero);
 
 	bool CheckMove(float4 _Pos, float _DeltaTime);
 
-	void Movecalculation(float _DeltaTime);
-
+	
 	void ActorMove(float _Time)
 	{
 		SetMove(MoveDir * _Time);
 	}
 
-	//void Camera(float _DeltaTime);
+	void Camera(float4 _Pos);
 };
