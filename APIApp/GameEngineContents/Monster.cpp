@@ -35,5 +35,10 @@ void Monster::Update(float _DeltaTime)
 {
 	float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
 
+	if (0.0f >= Dir.x)
+	{
+		Death();
+	}
+
 	SetMove(Dir);
 }

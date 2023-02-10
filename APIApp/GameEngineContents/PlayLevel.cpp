@@ -25,7 +25,7 @@ void PlayLevel::Loading()
 	// STLevel* Ptr = GetOwner<STLevel>();
 // Ptr->GetCameraScale();
 
-	SetCameraScale({ 1000, 100 });
+	SetCameraScale({ 300, 300 });
 
 
 	//상대 경로

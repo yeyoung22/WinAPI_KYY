@@ -6,6 +6,7 @@ enum class PlayerState
 {
 	IDLE,
 	MOVE,
+	BRAKE,
 	JUMP,
 	DEATH,
 	FALL,
@@ -19,6 +20,18 @@ enum class PlayerMode
 	STARMARIO
 };
 
+union ColorCheck
+{
+	int Color;
+
+	struct
+	{
+		char R;
+		char G;
+		char B;
+		char A;
+	};
+};
 
 // 설명 : Player(Mario)
 class Player : public GameEngineActor
@@ -42,15 +55,31 @@ protected:
 	void Render(float _DeltaTime) override;
 
 private:
-	int StartFrame = 0;
-	int Life = 3;
+	bool IsLeftBrake = false;
+
+
 	
-	float PlayTimer = 400.0f;
-	float AccTime = 0.0f;
-	float MarioHeight = 256.0f;									//Mario 상태가 변하면 값을 바꿔줘야 함
-	float MoveSpeed = 200.0f;
+
+	int White = RGB(255, 255, 255);
+	int Black = RGB(0, 0, 0);
+	int Red = RGB(255, 0, 0);
+	int Magenta = RGB(255, 0, 255);
+
+
+	int StartFrame = 0;
+	int Life = 3;												//Base Player Life
+	
+	float PlayTimer = 400.0f;									//Play Timer
+	float AccTime = 0.0f;										//Accelerate Time
+	float MarioHeight = 256.0f;									//When MarioMode is changed, the Value should be changed
+	float MoveSpeed = 200.0f;									//Player Speed
 	float JumpPower = 0.0f;
-	float SpeedLimit = 300.0f;
+	float DecrPower = 0.0f;										//For Decresing JumpPower
+	float MaxSpeedLimit = 250.0f;									
+
+	float Inertia = 0.0f;										//관성(Using at Brake State)
+
+	std::string ColMapName;
 
 	GameEngineImage* ColImage = nullptr;
 	NumberRenderObject NumberSets;
@@ -83,6 +112,10 @@ private:
 	void MoveUpdate(float _Time);
 	void MoveEnd();
 
+	void BrakeStart();
+	void BrakeUpdate(float _Time);
+	void BrakeEnd();
+
 	void JumpStart();
 	void JumpUpdate(float _Time);
 	void JumpEnd();
@@ -95,7 +128,30 @@ private:
 	void DeathUpdate(float _Time);
 	void DeathEnd();
 
+	
+	//Garavitional Acceleration
+	void AccGravity(float _DeltaTime);
+
+	//Resistant Force
+	void Friction(float4 _Pos, float _DeltaTime);
+
+	//Limit Speed Left and Right(_X)
+	void LimitSpeed(float4 _Pos);
+	
+	//Check, Can Player move next pixel?
+	bool IsGround(float4 _Pos = float4::Zero);
+	int CheckColor(float4 _Pos);
+
+	bool LiftUp(float4 _Pos = float4::Zero);
+
+	bool CheckMove(float4 _Pos, float _DeltaTime);
+
 	void Movecalculation(float _DeltaTime);
+
+	void ActorMove(float _Time)
+	{
+		SetMove(MoveDir * _Time);
+	}
 
 	//void Camera(float _DeltaTime);
 };

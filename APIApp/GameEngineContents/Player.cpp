@@ -26,8 +26,6 @@ Player::~Player()
 
 void Player::Start()
 {
-	ContentsValue::CameraScale;
-
 	ContentsValue::CameraScale = { 1000, 2000 };
 	
 	MainPlayer = this;
@@ -104,9 +102,10 @@ void Player::Start()
 		BodyCollision->SetPosition({ GetPos().x, GetPos().y - 32 });
 	}
 
-	//GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+	ColMapName = "ColWorld1_1.bmp";
 	{
-		ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+
+		ColImage = GameEngineResources::GetInst().ImageFind(ColMapName);
 		
 		if (nullptr == ColImage)
 		{
@@ -119,78 +118,164 @@ void Player::Start()
 }
 
 
-void Player::Movecalculation(float _DeltaTime)
+void Player::AccGravity(float _DeltaTime)
 {
-	float4 PrevPos = GetPos();
+	MoveDir += float4::Down * MoveSpeed * _DeltaTime;
+}
 
-	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
-	//시간은 맨 마지막에 SetMove에서 곱해줌
-	MoveDir += float4::Down * MoveSpeed;				//중력가속도
-
-	if (SpeedLimit <= abs(MoveDir.x))						//한계 속도 지정
-	{
-		if (0 >= MoveDir.x)
-		{
-			MoveDir.x = -SpeedLimit;
-		}
-		else
-		{
-			MoveDir.x = SpeedLimit;
-		}
-	}
-
+void  Player::Friction(float4 _Pos, float _DeltaTime)
+{
 	//좌우키가 안 눌렀을때 멈추게 할 저항
 	if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
 	{
-		MoveDir.x *= (0.00025f * _DeltaTime);
+		_Pos.x *= (0.00025f * _DeltaTime);
 	}
-
-	//ImageFind에 들어갈 파일명을 변수로 만들어둬야 함
-	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind("ColWorld1_1.bmp");
+}
 
 
-	if (nullptr == ColImage)
+
+void Player::LimitSpeed(float4 _Pos)
+{
+	if (MaxSpeedLimit <= abs(_Pos.x))
 	{
-		MsgAssert("충돌용 맵 이미지가 없습니다.");
-	}
-
-
-	bool Check = true;
-	float4 NextPos = GetPos() + MoveDir * _DeltaTime;					//옮겨갈 위치
-
-
-	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))	//벽
-	{
-		Check = false;													//허공에 있는 상태
-	}
-
-	if (false == Check)
-	{
-		while (true)													//한 칸씩 위로 올려서 허공이 나오게 함
+		if (0 >= _Pos.x)
 		{
-			MoveDir.y -= 1;												//윈도우 좌표계상에서 위로 올라간 것
-
-			float4 NextPos = GetPos() + MoveDir * _DeltaTime;
-
-			if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))
-			{
-				continue;
-			}
-
-			break;
+			_Pos.x = -MaxSpeedLimit;
+		}
+		else
+		{
+			_Pos.x = MaxSpeedLimit;
 		}
 	}
-
-	SetMove(MoveDir * _DeltaTime);
 }
+
+bool Player::IsGround(float4 _Pos)
+{
+	return	Magenta != CheckColor(_Pos);												//Magenta: Empty Space
+}
+
+int Player::CheckColor(float4 _Pos)
+{
+	float4 CheckPos = GetPos() + _Pos;													//Check Point
+
+	ColorCheck CC;
+	CC.Color = ColImage->GetPixelColor(CheckPos, White);								//outside the specified range(ColMap) = Window
+
+	return CC.Color;
+}
+
+bool  Player::LiftUp(float4 _Pos)
+{
+	MoveDir;
+	while (true)
+	{
+		float4 NextPos = GetPos() + _Pos;
+
+		if (Black == ColImage->GetPixelColor(NextPos, Black))
+		{
+			SetMove(GetPos() + float4::Up);
+			continue;
+		}
+		break;
+	}
+
+	float4 NextPos = GetPos() + _Pos;
+
+	if (Black == ColImage->GetPixelColor(NextPos + float4::Down, Black))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool  Player::CheckMove(float4 _Pos, float _DeltaTime)
+{
+	float4 CheckPos = GetPos() + _Pos*_DeltaTime;
+
+	
+
+	if (Black == ColImage->GetPixelColor(CheckPos, Black))								//ground, wall
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+//void Player::Movecalculation(float _DeltaTime)
+//{
+//	float4 PrevPos = GetPos();
+//
+//	//거리 = 속력*시간(초당 MoveSpeed만큼 픽셀 이동)
+//	//시간은 맨 마지막에 SetMove에서 곱해줌
+//	MoveDir += float4::Down * MoveSpeed;				//중력가속도
+//
+//	if (SpeedLimit <= abs(MoveDir.x))						//한계 속도 지정
+//	{
+//		if (0 >= MoveDir.x)
+//		{
+//			MoveDir.x = -SpeedLimit;
+//		}
+//		else
+//		{
+//			MoveDir.x = SpeedLimit;
+//		}
+//	}
+//
+//	//좌우키가 안 눌렀을때 멈추게 할 저항
+//	if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
+//	{
+//		MoveDir.x *= (0.00025f * _DeltaTime);
+//	}
+//
+//	GameEngineImage* ColImage = GameEngineResources::GetInst().ImageFind(ColMapName);
+//
+//
+//	if (nullptr == ColImage)
+//	{
+//		MsgAssert("충돌용 맵 이미지가 없습니다.");
+//	}
+//
+//
+//	bool Check = true;
+//	float4 NextPos = GetPos() + MoveDir * _DeltaTime;					//옮겨갈 위치
+//
+//
+//	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))	//벽
+//	{
+//		Check = false;													//허공에 있는 상태
+//	}
+//
+//	if (false == Check)
+//	{
+//		while (true)													//한 칸씩 위로 올려서 허공이 나오게 함
+//		{
+//			MoveDir.y -= 1;												//윈도우 좌표계상에서 위로 올라간 것
+//
+//			float4 NextPos = GetPos() + MoveDir * _DeltaTime;
+//
+//			if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))
+//			{
+//				continue;
+//			}
+//
+//			break;
+//		}
+//	}
+//
+//	SetMove(MoveDir * _DeltaTime);
+//}
 
 void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
-	MainPlayer = this;										//Level이 바뀌면 MainPlayer는 해당 Level의 Player
+	MainPlayer = this;										//When Level is changed,  MainPlayer should be changed this Level's Player
 }
 
 
-//디버깅용_벽에 영향을 받지 않고 맵의 끝까지 움직일 수 있음
+//For Debuging_벽에 영향을 받지 않고 맵의 끝까지 움직일 수 있음
 bool FreeMove = false;
 
 bool Player::FreeMoveState(float _DeltaTime)
@@ -283,7 +368,8 @@ void Player::Update(float _DeltaTime)
 	}
 
 	UpdateState(_DeltaTime);
-	Movecalculation(_DeltaTime);
+
+	//Movecalculation(_DeltaTime);
 	//Camera(_DeltaTime);
 }
 
