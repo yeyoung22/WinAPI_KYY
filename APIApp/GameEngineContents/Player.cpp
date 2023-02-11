@@ -123,13 +123,10 @@ void Player::AccGravity(float _DeltaTime)
 	MoveDir += float4::Down * MoveSpeed * _DeltaTime;
 }
 
-void  Player::Friction(float4 _Pos, float _DeltaTime)
+//좌우키가 안 눌렀을때 멈추게 할 저항
+void  Player::Friction(float4& _Pos, float _DeltaTime)
 {
-	//좌우키가 안 눌렀을때 멈추게 할 저항
-	if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
-	{
-		_Pos.x *= (0.00025f * _DeltaTime);
-	}
+	_Pos.x *= (FrictionPower * _DeltaTime);
 }
 
 
@@ -327,16 +324,8 @@ void Player::Camera(float4 _Pos)
 	{
 		if (GameEngineInput::IsPress("RightMove"))
 		{
-			GetLevel()->SetCameraMove(_Pos);
+			GetLevel()->SetCameraMove({ _Pos.x, 0 });
 		}
-
-		float4 CameraEndPoint = GetLevel()->GetCameraPos() + GameEngineWindow::GetScreenSize();
-
-		//if(CameraEndPoint >= GameEngineRender::)
-	}
-	else
-	{
-		GetLevel()->SetCameraPos(_Pos);
 	}
 }
 
@@ -353,22 +342,6 @@ void Player::Render(float _DeltaTime)
 		ActorPos.ix() + 5,
 		ActorPos.iy() + 5
 	);
-
-
-
-	//float4 ActPos = GetPos();
-	////처음 시작해서 Player가 화면 중에간 오면 카메라가 움직임 시작
-	//if (ActPos.x >= GameEngineWindow::GetScreenSize().half().x)		
-	//{
-	//	if (GameEngineInput::IsPress("RightMove"))
-	//	{
-	//		GetLevel()->SetCameraMove(float4::Right * MoveSpeed * _DeltaTime);
-	//	}
-
-	//	float4 CameraEndPoint = GetLevel()->GetCameraPos() + GameEngineWindow::GetScreenSize();
-
-	//	//if(CameraEndPoint >= GameEngineRender::)
-	//}
 
 
 	//Mario Positio 출력

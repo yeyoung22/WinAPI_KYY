@@ -158,6 +158,7 @@ void Player::MoveUpdate(float _Time)
 		false == GameEngineInput::IsPress("RightMove")
 		)
 	{
+		Friction(MoveDir, _Time);
 		ChangeState(PlayerState::IDLE);
 		return;
 	}
@@ -201,16 +202,19 @@ void Player::MoveUpdate(float _Time)
 	}
 	
 
-
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
+
+
+
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
 	bool IsGround = LiftUp();
 	InitGravity(IsGround);
 
-//	Friction(MoveDir, _Time);
+
+
 ///*
 	if (true == CheckMove(MoveDir, _Time))
 	{

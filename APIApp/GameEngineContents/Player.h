@@ -72,9 +72,12 @@ private:
 	float MoveSpeed = 200.0f;									//Player Speed
 	float JumpPower = 0.0f;
 	float DecrPower = 0.0f;										//For Decresing JumpPower
+	float FrictionPower = 0.0025f;
 	float MaxSpeed = 120.0f;									
 
 	float Inertia = 0.0f;										//°ü¼º(Using at Brake State)
+
+
 
 	std::string ColMapName;
 
@@ -85,6 +88,8 @@ private:
 	PlayerState StateValue = PlayerState::IDLE;
 	PlayerMode ModeValue = PlayerMode::MARIO;
 	float4 MoveDir = float4::Zero;
+	float4 OriginPos = { 160, 960 - 128 };
+
 
 	GameEngineRender* AnimationRender = nullptr;
 	GameEngineCollision* BodyCollision = nullptr;
@@ -137,7 +142,7 @@ private:
 	}
 
 	//Resistant Force
-	void Friction(float4 _Pos, float _DeltaTime);
+	void Friction(float4& _Pos, float _DeltaTime);
 
 	//Limit Speed Left and Right(_X)
 	void LimitSpeed(float4& _Pos);
