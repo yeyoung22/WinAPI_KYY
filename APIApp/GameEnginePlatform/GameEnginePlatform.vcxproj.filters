@@ -11,6 +11,30 @@
     <ClInclude Include="GameEngineSound.h">
       <Filter>Resources\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdParty\FMOD\inc\fmod.h">
+      <Filter>ThirdParty\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FMOD\inc\fmod.hpp">
+      <Filter>ThirdParty\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FMOD\inc\fmod_codec.h">
+      <Filter>ThirdParty\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FMOD\inc\fmod_common.h">
+      <Filter>ThirdParty\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FMOD\inc\fmod_dsp.h">
+      <Filter>ThirdParty\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FMOD\inc\fmod_dsp_effects.h">
+      <Filter>ThirdParty\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FMOD\inc\fmod_errors.h">
+      <Filter>ThirdParty\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FMOD\inc\fmod_output.h">
+      <Filter>ThirdParty\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineWindow.cpp" />
@@ -40,5 +64,38 @@
     <Filter Include="ThirdParty">
       <UniqueIdentifier>{5ae7b951-2d64-4d32-8779-9513bd261d5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThirdParty\bin">
+      <UniqueIdentifier>{323a4f8b-3370-4e71-9e31-7fbd88722c13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Header">
+      <UniqueIdentifier>{77266feb-e475-4548-a85c-c9f71f96979f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ThirdParty\FMOD\inc\fmod.cs">
+      <Filter>ThirdParty\Header</Filter>
+    </None>
+    <None Include="ThirdParty\FMOD\inc\fmod_dsp.cs">
+      <Filter>ThirdParty\Header</Filter>
+    </None>
+    <None Include="ThirdParty\FMOD\inc\fmod_errors.cs">
+      <Filter>ThirdParty\Header</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="ThirdParty\FMOD\lib\x64\fmod_vc.lib">
+      <Filter>ThirdParty\bin</Filter>
+    </Library>
+    <Library Include="ThirdParty\FMOD\lib\x64\fmodL_vc.lib">
+      <Filter>ThirdParty\bin</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="ThirdParty\FMOD\lib\x64\fmod.dll">
+      <Filter>ThirdParty\bin</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\FMOD\lib\x64\fmodL.dll">
+      <Filter>ThirdParty\bin</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

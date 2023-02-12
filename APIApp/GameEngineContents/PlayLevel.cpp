@@ -19,13 +19,23 @@ PlayLevel::~PlayLevel()
 {
 }
 
-//Loading 시점: 만들어야할 것들을 만드는 시점
-void PlayLevel::Loading()
+void PlayLevel::SoundLoad()
 {
-	/*STLevel* Ptr = GetOwner<STLevel>();
-	Ptr->GetCameraScale();*/
+	GameEngineDirectory Dir;
+	Dir.MoveParentToDirectory("ContentsResources");
+	Dir.Move("ContentsResources");
+	Dir.Move("Sound");
+	Dir.Move("BGM");
+
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("RunningAbout.mp3"));
+	}
 
 
+}
+
+void PlayLevel::ImageLoad()
+{
 	//상대 경로
 	GameEngineDirectory Dir;
 	Dir.MoveParentToDirectory("ContentsResources");
@@ -47,7 +57,7 @@ void PlayLevel::Loading()
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
 	}
 	{
-	
+
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_4.bmp"));
 		//GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
 	}
@@ -67,6 +77,14 @@ void PlayLevel::Loading()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Number.bmp"));
 		Image->Cut(10, 1);
 	}
+}
+
+//Loading 시점: 만들어야할 것들을 만드는 시점
+void PlayLevel::Loading()
+{
+	SoundLoad();
+	ImageLoad();
+
 	//액터 생성
 	{
 		Map* Actor = CreateActor<Map>();
@@ -108,6 +126,15 @@ void PlayLevel::Update(float _DeltaTime)
 {
 	if (GameEngineInput::IsDown("DebugRenderSwitch"))
 	{
+		if (false == BGMPlayer.GetPause())
+		{
+			BGMPlayer.PauseOn();
+		}
+		else
+		{
+			BGMPlayer.PauseOff();
+		}
+
 		DebugRenderSwitch();
 	}
 
@@ -115,5 +142,7 @@ void PlayLevel::Update(float _DeltaTime)
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
+
 	ContentsValue::CameraScale = { 1020, 960 };
 }
