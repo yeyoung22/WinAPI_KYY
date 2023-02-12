@@ -8,6 +8,9 @@
     <ClInclude Include="GameEngineImage.h">
       <Filter>Resources\Image</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineSound.h">
+      <Filter>Resources\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineWindow.cpp" />
@@ -16,6 +19,9 @@
     </ClCompile>
     <ClCompile Include="GameEngineImage.cpp">
       <Filter>Resources\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineSound.cpp">
+      <Filter>Resources\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

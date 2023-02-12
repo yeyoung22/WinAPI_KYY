@@ -33,7 +33,7 @@ void SuperMarioCore::Start()
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");
 
-	ChangeLevel("PlayLevel");
+	ChangeLevel("PlayLevel");					//Title Level∑Œ πŸ≤„¡‡æﬂ «‘-------------------------------
 }
 
 void SuperMarioCore::Update()
