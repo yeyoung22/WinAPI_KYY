@@ -83,7 +83,7 @@ void GameEngineRender::FrameAnimation::Render(float _DeltaTime)
 			}
 		}
 
-		CurrentTime = FrameTime[CurrentIndex];
+		CurrentTime += FrameTime[CurrentIndex];
 	}
 }
 

@@ -29,7 +29,7 @@ std::vector<unsigned int> GameEngineMath::GetDigits(int _Value)
 
 	if (0 != StringValue.size() && StringValue[0] == '-')				//음수: '-'부호를 제외한 그 다음 인덱스를 시작으로 봄
 	{
-		StartIndex = 1;
+		StartIndex = 1;													//음수 부호는 vector에 들어가지 않음
 	}
 
 	ResultValue.reserve(StringValue.size());							//들어오는 인자의 길이만큼 reserve

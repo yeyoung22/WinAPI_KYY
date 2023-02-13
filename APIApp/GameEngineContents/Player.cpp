@@ -29,8 +29,6 @@ void Player::Start()
 	ContentsValue::CameraScale = { 1024, 960 };
 	
 	MainPlayer = this;
-	//STLevel* Level = GetOwner<STLevel>();
-//Level->GetCameraScale();
 
 	//NumberSets.SetOwner(this);
 	//NumberSets.SetImage("Number.bmp", { 60, 64 }, 10, RGB(255, 0, 255));

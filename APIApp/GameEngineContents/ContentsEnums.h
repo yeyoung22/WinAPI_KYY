@@ -7,7 +7,7 @@ enum class MarioRenderOrder
 	UI,
 	Monster,
 	Item,
-	Player,
+	Player = 100,
 };
 
 enum class MarioCollisionOrder

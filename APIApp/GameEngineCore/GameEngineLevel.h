@@ -159,7 +159,7 @@ private:
 	void PushRender(GameEngineRender* _Render, int _ChangeOrder);
 
 	std::map<int, std::list<GameEngineCollision*>> Collisions;
-	void PushCollision(GameEngineCollision* _Collision);
+	void PushCollision(GameEngineCollision* _Collision, int _ChangeOrder);	//Collisio의 Order 변경 가능
 
 	void Release();															//엔진 수준(다른 곳에서 사용X)
 };

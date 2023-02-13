@@ -175,6 +175,7 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
             {
                 _Loop();
             }
+            GameEngineInput::IsAnyKeyOff();
             continue;
         }
 
@@ -183,6 +184,7 @@ int GameEngineWindow::WindowLoop(void(*_Start)(), void(*_Loop)(), void(*_End)())
         {
             _Loop();
         }
+
         GameEngineInput::IsAnyKeyOff();
     }
 

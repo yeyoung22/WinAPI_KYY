@@ -130,7 +130,7 @@ void Player::IdleUpdate(float _Time)
 	AccGravity(_Time);
 	ActorMove(_Time);
 
-	bool IsGround = LiftUp();
+	IsGround = LiftUp();
     InitGravity(IsGround);
 	
 }
@@ -185,11 +185,11 @@ void Player::MoveUpdate(float _Time)
 	//}
 
 
-	//if (GameEngineInput::IsDown("Jump"))
-	//{
-	//	ChangeState(PlayerState::JUMP);
-	//	return;
-	//}
+	if (GameEngineInput::IsDown("Jump"))
+	{
+		ChangeState(PlayerState::JUMP);
+		return;
+	}
 
 
 	if (true == GameEngineInput::IsPress("LeftMove"))
@@ -205,25 +205,11 @@ void Player::MoveUpdate(float _Time)
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
 
-
-
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
-	bool IsGround = LiftUp();
+	IsGround = LiftUp();
 	InitGravity(IsGround);
-
-
-
-///*
-	if (true == CheckMove(MoveDir, _Time))
-	{
-		//AccGravity(_Time);
-	}
-//	else
-//	{
-//		LiftUp(Move*/Dir, _Time);
-//	}
 }
 void Player::MoveEnd() 
 {
@@ -354,24 +340,30 @@ void Player::JumpStart()
 }
 void Player::JumpUpdate(float _Time)
 {
-	MoveDir += float4::Up * JumpPower;
+	MoveDir += float4::Up * JumpPower;									//큰 힘으로 뛰어오름
 
 	JumpPower -= DecrPower * _Time;										//서서히 아래로 떨어지게 함
 
-	if (true == GameEngineInput::IsDown("LeftMove"))
+	//좌우 방향키가 눌러져 있다면 점프를 해당 방향에 맞게 뜀
+	if (true == GameEngineInput::IsPress("LeftMove"))
 	{
-		MoveDir += float4::Left * MoveSpeed;
+		MoveDir += float4::Left * MoveSpeed * _Time;
 	}
-	else if (true == GameEngineInput::IsDown("RightMove"))
+	else if (true == GameEngineInput::IsPress("RightMove"))
 	{
-		MoveDir += float4::Right * MoveSpeed;
+		MoveDir += float4::Right * MoveSpeed * _Time;
 	}
 
+	LimitSpeed(MoveDir);
+	AccGravity(_Time);
+
+	SetMove(MoveDir * _Time);
+	Camera(MoveDir * _Time);
+
+	IsGround = LiftUp();
 
 	//땅에 닿으면 Idle
-	float4 NextPos = GetPos() + (MoveDir * _Time);						//옮겨 갈 위치
-	
-	if (RGB(0, 0, 0) == ColImage->GetPixelColor(NextPos, RGB(0, 0, 0)))
+	if (true == IsGround)
 	{
 		if (ModeValue == PlayerMode::SUPERMARIO)
 		{
@@ -382,8 +374,10 @@ void Player::JumpUpdate(float _Time)
 			DirCheck("Idle");
 		}
 		ChangeState(PlayerState::IDLE);
-		return;														
+		return;
 	}
+
+	InitGravity(IsGround);
 }
 void Player::JumpEnd()
 {

@@ -320,8 +320,13 @@ void GameEngineLevel::PushRender(GameEngineRender* _Render, int _ChangeOrder)
 	Renders[_Render->GetOrder()].push_back(_Render);
 }
 
-void GameEngineLevel::PushCollision(GameEngineCollision* _Collision)
+void GameEngineLevel::PushCollision(GameEngineCollision* _Collision, int _ChangeOrder)
 {
+	//그룹에서 제거한 뒤, 새로운 오더(변경하고 싶은)로 그룹에 다시 넣음
+	Collisions[_Collision->GetOrder()].remove(_Collision);
+
+	_Collision->GameEngineObject::SetOrder(_ChangeOrder);
+
 	if (nullptr == _Collision)
 	{
 		MsgAssert("nullptr인 충돌체를 충돌 그룹속에 넣으려고 했습니다.");

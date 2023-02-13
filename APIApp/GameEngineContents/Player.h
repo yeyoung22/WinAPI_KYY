@@ -59,6 +59,7 @@ protected:
 
 private:
 	bool IsLeftBrake = false;
+	bool IsGround = false;
 
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);
