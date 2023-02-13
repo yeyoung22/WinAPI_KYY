@@ -161,6 +161,6 @@ private:
 	std::map<int, std::list<GameEngineCollision*>> Collisions;
 	void PushCollision(GameEngineCollision* _Collision);
 
-	void Release();												//엔진 수준(다른 곳에서 사용X)
+	void Release();															//엔진 수준(다른 곳에서 사용X)
 };
 

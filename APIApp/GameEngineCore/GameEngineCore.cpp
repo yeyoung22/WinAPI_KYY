@@ -3,6 +3,7 @@
 #include <GameEngineBase/GameEngineTime.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineInput.h>
+#include <GameEnginePlatform/GameEngineSound.h>
 #include "GameEngineLevel.h"
 #include "GameEngineResources.h"
 
@@ -22,6 +23,13 @@ void GameEngineCore::GlobalStart()
 
 void GameEngineCore::GlobalUpdate()
 {
+	GameEngineSound::SoundUpdate();
+	//한 장면이 업데이트되는 시간 체크
+	//프레임 시작시 델타타임을 정하고, 시간 측정
+	float TimeDeltaTime = GameEngineTime::GlobalTime.TimeCheck();
+	GameEngineInput::Update(TimeDeltaTime);
+
+
 	if (nullptr != Core->NextLevel)
 	{
 		GameEngineLevel* PrevLevel = Core->MainLevel;
@@ -43,11 +51,10 @@ void GameEngineCore::GlobalUpdate()
 		}
 	}
 
-	GameEngineSound::SoundUpdate();
-	//한 장면이 업데이트되는 시간 체크
-	//프레임 시작시 델타타임을 정하고, 시간 측정
-	float TimeDeltaTime = GameEngineTime::GlobalTime.TimeCheck();
-	GameEngineInput::Update(TimeDeltaTime);
+	if (1.0f / 60.0f <= TimeDeltaTime)
+	{
+		TimeDeltaTime = 1.0f / 60.0f;									//DeltaTime은 하드웨어에서 따로 측정되므로 값이 계속 증가하기에 60프레임으로 나눠서 한계치를 정해둠
+	}
 
 	Core->Update();
 

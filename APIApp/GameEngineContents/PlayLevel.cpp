@@ -84,6 +84,7 @@ void PlayLevel::Loading()
 {
 	SoundLoad();
 	ImageLoad();
+	SetCameraScale({ 1020, 960 });
 
 	//액터 생성
 	{
@@ -135,6 +136,7 @@ void PlayLevel::Update(float _DeltaTime)
 			BGMPlayer.PauseOff();
 		}
 
+
 		DebugRenderSwitch();
 	}
 
@@ -143,6 +145,8 @@ void PlayLevel::Update(float _DeltaTime)
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
+	BGMPlayer.LoopCount(1);
+	BGMPlayer.Volume(0.3f);
 
 	ContentsValue::CameraScale = { 1020, 960 };
 }

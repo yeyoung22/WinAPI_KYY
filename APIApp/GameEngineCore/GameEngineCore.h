@@ -5,7 +5,7 @@
 #include <GameEngineBase/GameEngineDebug.h>
 
 // 설명 : 게임을 구성하기 위한 기본 구조들
-// 엔진에서 응당 로드해야 할 필수적 리소스
+//엔진에서 응당 로드해야 할 필수적 리소스
 //Core는 여러개 생성되지 않음
 
 class GameEngineLevel;

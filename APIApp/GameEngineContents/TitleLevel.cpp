@@ -6,6 +6,7 @@
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCore.h>
 #include "TitleBack.h"
+#include "ContentsValue.h"
 
 
 TitleLevel::TitleLevel() 
@@ -58,4 +59,9 @@ void TitleLevel::Update(float _DeltaTime)
 	{
 		GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
 	}
+}
+
+void TitleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+	ContentsValue::CameraScale = { 1020, 960 };
 }

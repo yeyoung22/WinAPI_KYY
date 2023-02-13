@@ -147,7 +147,7 @@ void GameEngineSoundPlayer::LoopCount(int _Count)
 		MsgAssert("재생하지도 않은 사운드를 컨트롤하겠다고 했습니다.");
 	}
 
-	ControlChannel->setLoopCount(_Count - 1);
+	ControlChannel->setLoopCount(_Count - 1);							//setLoopCount(_Count)는 기본적으로 한 번 재생을 하고 받은 인자만큼 반복해서 재생하므로 -1을 해서 총 재생이 _Count번 이루어짐
 }
 
 void GameEngineSoundPlayer::Stop()

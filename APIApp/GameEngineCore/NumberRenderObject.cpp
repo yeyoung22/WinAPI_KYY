@@ -59,7 +59,7 @@ void NumberRenderObject::SetValue(int _Value)
 
 	float4 RenderPos;
 
-	Negative = _Value > 0 ? false : true;
+	Negative = _Value >= 0 ? false : true;
 
 	if (true == Negative && nullptr == NegativeRender)
 	{
@@ -101,11 +101,16 @@ void NumberRenderObject::SetValue(int _Value)
 		break;
 	case Align::Right:
 		SetMove(float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x);
-		NegativeRender->SetPosition(float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x);
-		break;
+		if (nullptr != NegativeRender)
+		{
+			NegativeRender->SetPosition(Pos + float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x);
+		}
 	case Align::Center:
 		SetMove((float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x).half());
-		NegativeRender->SetPosition((float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x).half());
+		if (nullptr != NegativeRender)
+		{
+			NegativeRender->SetPosition(Pos + (float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x).half());
+		}
 		break;
 	default:
 		break;
@@ -131,4 +136,49 @@ void NumberRenderObject::SetMove(float4 _RenderPos)
 void NumberRenderObject::SetAlign(Align _Align)
 {
 	AlignState = _Align;
+}
+
+
+void NumberRenderObject::SetRenderPos(float4 _Pos)
+{
+	Pos = _Pos;
+
+	switch (AlignState)
+	{
+	case Align::Left:
+		for (size_t i = 0; i < NumberRenders.size(); i++)
+		{
+			NumberRenders[i]->SetPosition(_Pos + float4::Right * NumberRenders[i]->GetScale() * static_cast<const float>(i));
+		}
+
+		if (nullptr != NegativeRender)
+		{
+			NegativeRender->SetPosition(_Pos + float4::Left * NumberScale.x);
+		}
+		break;
+	case Align::Right:
+		for (size_t i = 0; i < NumberRenders.size(); i++)
+		{
+			NumberRenders[i]->SetPosition(_Pos + float4::Left * NumberRenders[i]->GetScale() * (static_cast<const float>(NumberRenders.size()) - (static_cast<const float>(i) + 1)));
+		}
+
+		if (nullptr != NegativeRender)
+		{
+			NegativeRender->SetPosition(_Pos + float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x);
+		}
+		break;
+	case Align::Center:
+		for (size_t i = 0; i < NumberRenders.size(); i++)
+		{
+			NumberRenders[i]->SetPosition(_Pos + (float4::Left * NumberRenders[i]->GetScale().half() * (static_cast<const float>(NumberRenders.size()) - 1)) + (float4::Right * NumberRenders[i]->GetScale() * static_cast<const float>(i)));
+		}
+
+		if (nullptr != NegativeRender)
+		{
+			NegativeRender->SetPosition(_Pos + (float4::Left * static_cast<const float>(GameEngineMath::GetLenth(Value) - 1) * NumberScale.x).half());
+		}
+		break;
+	default:
+		break;
+	}
 }
