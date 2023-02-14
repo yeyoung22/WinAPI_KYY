@@ -125,18 +125,10 @@ void Player::IdleUpdate(float _Time)
 		return;
 	}
 
-	if (false == GameEngineInput::IsAnyKey())
+	if (false == GameEngineInput::IsAnyKey())		//move하면서 jump를 연속으로 하다가 idle상태로 오면
 	{
-		Friction(MoveDir, _Time);
+		Friction(MoveDir, _Time);					//x값이 남아 계속 움직이는 문제 해결
 	}
-	/*if (0 < MoveDir.x)
-	{
-		MoveDir += float4::Left * BrakePower * _Time;
-	}
-	else if (0 > MoveDir.x)
-	{
-		MoveDir += float4::Right * BrakePower * _Time;
-	}*/
 
 	AccGravity(_Time);
 	ActorMove(_Time);
@@ -313,6 +305,8 @@ void Player::BrakeUpdate(float _Time)
 		return;
 	}
 
+	//가다가 땅이 아니라면 Fall로 changestate
+
 
 	Camera(MoveDir * _Time);
 
@@ -389,25 +383,45 @@ void Player::JumpEnd()
 //(떨어지면 Jump모션을 취하며 Y값은 계속 증가)
 void Player::FallStart()
 {
-	/*if (ModeValue == PlayerMode::SUPERMARIO)
+	if (ModeValue == PlayerMode::SUPERMARIO)
 	{
 		DirCheck("GrowthJump");
 	}
 	else
 	{
 		DirCheck("Jump");
-	}*/
+	}
 }
 void Player::FallUpdate(float _Time)
 {
-	//if (true == GameEngineInput::IsPress("LeftMove"))
-	//{
-	//	MoveDir += float4::Left * MoveSpeed;
-	//}
-	//else if (true == GameEngineInput::IsPress("RightMove"))
-	//{
-	//	MoveDir += float4::Right * MoveSpeed;
-	//}
+	//땅에 닿으면 Idle
+	if (true == IsGround)
+	{
+		if (ModeValue == PlayerMode::SUPERMARIO)
+		{
+			DirCheck("GrowthIdle");
+		}
+		else
+		{
+
+			DirCheck("Idle");
+		}
+
+		ChangeState(PlayerState::IDLE);
+		IsGround = LiftUp();
+		InitGravity(IsGround);
+
+		return;
+	}
+
+
+
+	LimitSpeed(MoveDir);
+	AccGravity(_Time);
+	SetMove(MoveDir * _Time);
+
+	Camera(MoveDir * _Time);
+
 }
 void Player::FallEnd()
 {
@@ -417,18 +431,15 @@ void Player::FallEnd()
 
 void Player::DeathStart()
 {
-	//JumpPower = 210.0f;
-	//DecrPower = 50.0f;
-	//AnimationRender->ChangeAnimation("Death");
+	MoveDir.y = -300.0f;
+	Gravity = 1000.0f;
+
+	DirCheck("Death");
+	
 }
 void Player::DeathUpdate(float _Time)
 {
-	/*MoveDir += float4::Up * JumpPower;
-
-	JumpPower -= DecrPower * _Time;
-
-	AnimationRender->ChangeAnimation("Death");*/
-
+	
 }
 void Player::DeathEnd()
 {
