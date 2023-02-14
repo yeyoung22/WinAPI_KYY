@@ -12,6 +12,7 @@
 #include "ContentsEnums.h"
 #include "ContentsValue.h"
 #include "STLevel.h"
+#include "PlayLevel.h"
 
 Player* Player::MainPlayer;
 float Player::PlayTimer = 400.0f;
@@ -36,8 +37,8 @@ void Player::Start()
 	{
 		GameEngineInput::CreateKey("LeftMove", 'A');
 		GameEngineInput::CreateKey("RightMove", 'D');
-		//GameEngineInput::CreateKey("DownMove", 'S');
-		//GameEngineInput::CreateKey("UpMove", 'W');
+		GameEngineInput::CreateKey("Crouch", 'S');
+		//GameEngineInput::CreateKey("Jump", 'W');
 		GameEngineInput::CreateKey("Jump", VK_SPACE);			//Mario can jump 5 sec
 	
 		GameEngineInput::CreateKey("FreeMoveSwitch", '1');
@@ -72,6 +73,7 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthMove",  .ImageName = "Right_Mario.bmp", .Start = 15, .End = 17 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthBrake", .ImageName = "Right_Mario.bmp", .Start = 18, .End = 18 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthJump", .ImageName = "Right_Mario.bmp", .Start = 19, .End = 19 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Right_Crouch", .ImageName = "Right_Mario.bmp", .Start = 20, .End = 20 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthHang", .ImageName = "Right_Mario.bmp", .Start = 21, .End = 22 });
 		
 		//역순으로....이미지 재생
@@ -81,6 +83,7 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthMove",  .ImageName = "Left_Mario.bmp", .Start = 15, .End = 17 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthBrake", .ImageName = "Left_Mario.bmp", .Start = 18, .End = 18 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthJump", .ImageName = "Left_Mario.bmp", .Start = 19, .End = 19 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_Crouch", .ImageName = "Left_Mario.bmp", .Start = 20, .End = 20 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthHang", .ImageName = "Left_Mario.bmp", .Start = 21, .End = 22 });
 	
 
@@ -242,7 +245,14 @@ void Player::Update(float _DeltaTime)
 
 	PlayTimer -= _DeltaTime;
 
-	/*if (nullptr != BodyCollision)
+
+	if (GetPos().x <= GetLevel()->GetCameraPos().x)							//Mario Can't be to the left of the camera position
+	{
+		SetPos({ GetLevel()->GetCameraPos().x, GetPos().y });
+	}
+
+
+	if (nullptr != BodyCollision)
 	{
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Item), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
@@ -251,11 +261,12 @@ void Player::Update(float _DeltaTime)
 			DirCheck("Bigger");
 			DirCheck("GrowthIdle");
 		}
-	}*/
+	}
 
 
 	if (nullptr != BodyCollision)
 	{
+
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
@@ -315,13 +326,20 @@ void Player::Camera(float4 _Pos)
 {
 
 	float4 ActPos = GetPos();
-	//처음 시작해서 Player가 화면 중에간 오면 카메라가 움직임 시작
-	if (ActPos.x >= GameEngineWindow::GetScreenSize().half().x)
+	float4 CameraPos = GetLevel()->GetCameraPos();
+	float EndPos = PlayLevel::MapScale.x - GameEngineWindow::GetScreenSize().x;
+
+	if (ActPos.x >= CameraPos.x + GameEngineWindow::GetScreenSize().hx())						//Move the camera if Mario is to the right of the center of the screen
 	{
 		if (GameEngineInput::IsPress("RightMove"))
 		{
 			GetLevel()->SetCameraMove({ _Pos.x, 0 });
 		}
+
+	}
+	if (ActPos.x >= EndPos)
+	{
+		GetLevel()->SetCameraPos({ EndPos , 0 });
 	}
 }
 

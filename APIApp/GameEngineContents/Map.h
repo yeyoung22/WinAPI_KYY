@@ -22,6 +22,7 @@ public:
 		IsStageClear = true;
 	}
 
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;

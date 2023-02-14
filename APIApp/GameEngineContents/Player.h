@@ -8,8 +8,10 @@ enum class PlayerState
 	MOVE,
 	BRAKE,
 	JUMP,
-	DEATH,
+	CROUCH,
+	ATTACK,
 	FALL,
+	DEATH,
 };
 
 enum class PlayerMode
@@ -122,6 +124,14 @@ private:
 	void JumpStart();
 	void JumpUpdate(float _Time);
 	void JumpEnd();
+
+	void CrouchStart();
+	void CrouchUpdate(float _Time);
+	void CrouchEnd();
+
+	void AttackStart();
+	void AttackUpdate(float _Time);
+	void AttackEnd();
 
 	void FallStart();
 	void FallUpdate(float _Time);

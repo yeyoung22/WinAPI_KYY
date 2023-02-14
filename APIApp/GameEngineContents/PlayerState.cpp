@@ -35,6 +35,12 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::JUMP:
 		JumpStart();
 		break;
+	case PlayerState::CROUCH:
+		CrouchStart();
+		break;
+	case PlayerState::ATTACK:
+		AttackStart();
+		break;
 	case PlayerState::FALL:
 		FallStart();
 		break;
@@ -58,6 +64,12 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::JUMP:
 		JumpEnd();
+		break;
+	case PlayerState::CROUCH:
+		CrouchEnd();
+		break;
+	case PlayerState::ATTACK:
+		AttackEnd();
 		break;
 	case PlayerState::FALL:
 		FallEnd();
@@ -86,6 +98,12 @@ void Player::UpdateState(float _Time)
 		break;
 	case PlayerState::JUMP:
 		JumpUpdate(_Time);
+		break;
+	case PlayerState::CROUCH:
+		CrouchUpdate(_Time);
+		break;
+	case PlayerState::ATTACK:
+		AttackUpdate(_Time);
 		break;
 	case PlayerState::FALL:
 		FallUpdate(_Time);
@@ -122,6 +140,12 @@ void Player::IdleUpdate(float _Time)
 	if (GameEngineInput::IsDown("Jump"))
 	{
 		ChangeState(PlayerState::JUMP);
+		return;
+	}
+
+	if (ModeValue != PlayerMode::MARIO && GameEngineInput::IsPress("Crouch"))
+	{
+		ChangeState(PlayerState::CROUCH);
 		return;
 	}
 
@@ -163,6 +187,12 @@ void Player::MoveUpdate(float _Time)
 	{
 		Friction(MoveDir, _Time);
 		ChangeState(PlayerState::IDLE);
+		return;
+	}
+
+	if (ModeValue != PlayerMode::MARIO && GameEngineInput::IsDown("Crouch"))
+	{
+		ChangeState(PlayerState::CROUCH);
 		return;
 	}
 
@@ -249,6 +279,13 @@ void Player::BrakeUpdate(float _Time)
 {
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
+
+	if (true == GameEngineInput::IsDown("Crouch"))
+	{
+		Friction(MoveDir, _Time);
+		ChangeState(PlayerState::CROUCH);
+		return;
+	}
 
 	//Brake
 	if (true == IsLeftBrake)									//왼쪽으로 가던 중에 오른쪽으로 이동하는 경우
@@ -378,6 +415,55 @@ void Player::JumpUpdate(float _Time)
 void Player::JumpEnd()
 {
 }
+
+
+void Player::CrouchStart()
+{
+	DirCheck("Crouch");
+}
+void Player::CrouchUpdate(float _Time)
+{
+	if (
+		false == GameEngineInput::IsPress("LeftMove") &&
+		false == GameEngineInput::IsPress("RightMove") &&
+		false == GameEngineInput::IsPress("Crouch")
+		)
+	{
+		//Friction(MoveDir, _Time);
+		ChangeState(PlayerState::IDLE);
+		return;
+	}
+	
+	LimitSpeed(MoveDir);
+
+	SetMove(MoveDir * _Time);
+	AccGravity(_Time);
+
+	Camera(MoveDir * _Time);
+
+	IsGround = LiftUp();
+
+	InitGravity(IsGround);
+}
+void Player::CrouchEnd()
+{
+
+}
+
+
+void Player::AttackStart()
+{
+
+}
+void Player::AttackUpdate(float _Time)
+{
+
+}
+void Player::AttackEnd()
+{
+
+}
+
 
 
 //(떨어지면 Jump모션을 취하며 Y값은 계속 증가)

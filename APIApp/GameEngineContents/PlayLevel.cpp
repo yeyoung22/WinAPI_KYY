@@ -12,6 +12,8 @@
 #include "ContentsValue.h"
 
 
+float4 PlayLevel::MapScale = float4::Zero;
+
 PlayLevel::PlayLevel() 
 {
 }
@@ -56,6 +58,7 @@ void PlayLevel::ImageLoad()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
+		MapScale = ColImage->GetImageScale();
 	}
 	{
 
