@@ -47,6 +47,8 @@ public:
 		return Image;
 	}
 
+	//현재 애니메이션에서 몇 번째 프레임이 실행되는지 확인
+	//연속된 공격 모션 등에 활용
 	inline int GetFrame()
 	{
 		return Frame;
@@ -67,7 +69,7 @@ public:
 	{
 		SetEffectCamera(false);
 	}
-
+	//카메라 이펙트 켬
 	inline void EffectCameraOn()
 	{
 		SetEffectCamera(true);

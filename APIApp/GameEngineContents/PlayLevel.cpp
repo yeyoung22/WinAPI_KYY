@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "Monster.h"
 #include "Item.h"
+#include "ContentsUI.h"
 #include "ContentsEnums.h"
 #include "ContentsValue.h"
 
@@ -105,7 +106,11 @@ void PlayLevel::Loading()
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ StartPos.hx(), StartPos.y - 128});
 	}
-
+	{
+		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ StartPos.x - 256, StartPos.y - 64 });
+	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
 	{
@@ -146,7 +151,6 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
 	BGMPlayer.LoopCount(1);
-	BGMPlayer.Volume(0.3f);
 
 	ContentsValue::CameraScale = { 1020, 960 };
 }

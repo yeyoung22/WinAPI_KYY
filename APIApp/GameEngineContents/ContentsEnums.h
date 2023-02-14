@@ -2,12 +2,12 @@
 
 enum class MarioRenderOrder
 {
-	BackGround,
+	BackGround,					//가장 먼저 랜더되어야 함
 	Map,
-	UI,
 	Monster,
 	Item,
-	Player = 100,
+	UI,
+	Player = 100,				//가장 나중에 랜더되어야 함
 };
 
 enum class MarioCollisionOrder

@@ -82,6 +82,9 @@ public:
 		std::vector<ConvertType*> Result;
 
 		//actor로 값을 받는 것이 아닌 해당 액터의 타입으로 받을 수 있음(Monster라던가)
+		//Actors 그룹에서 필요한 액터만 따로 뽑은뒤, 담아서 리턴
+		//원본은 유지되어야 하며, 보통 수정을 위해 사용하므로 consst 아님
+		//포인터는 외부로 넘겨주면 delete할 수 있는 위험성이 존재
 		std::list<GameEngineActor*>& Group = Actors[_GroupIndex];
 		Result.reserve(Group.size());
 
@@ -97,7 +100,7 @@ public:
 			Result.push_back(ConvertPtr);
 		}
 
-		return Result;
+		return Result;																//반환: Vector
 	}
 
 	template<typename EnumType>

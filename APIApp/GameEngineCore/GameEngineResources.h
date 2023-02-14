@@ -5,7 +5,7 @@
 #include <GameEnginePlatform/GameEngineSound.h>
 
 // 설명 : 사운드, 이미지 전부 관리
-
+//사운드 재생도 GameEngineResource가 해줌
 
 class GameEngineSoundPlayer
 {

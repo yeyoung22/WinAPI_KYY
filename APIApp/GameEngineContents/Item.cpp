@@ -40,10 +40,10 @@ void Item::Update(float _DeltaTime)
 {
 
 
-	
-	float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
+	//
+	//float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
 
-	SetMove(Dir);
+	//SetMove(Dir);
 
 
 }

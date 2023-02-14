@@ -2,7 +2,6 @@
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/NumberRenderObject.h>
 
-
 enum class PlayerState
 {
 	IDLE,
@@ -39,6 +38,7 @@ class Player : public GameEngineActor
 {
 public:
 	static Player* MainPlayer;
+	static float PlayTimer;									//Play Timer
 
 	// constrcuter destructer
 	Player();
@@ -70,28 +70,25 @@ private:
 	int StartFrame = 0;
 	int Life = 3;												//Base Player Life
 	
-	float PlayTimer = 400.0f;									//Play Timer
 	float AccTime = 0.0f;										//Accelerate Time
-	float MarioHeight = 256.0f;									//When MarioMode is changed, the Value should be changed
+	float MarioHeight = 150.0f;									//When MarioMode is changed, the Value should be changed
 	float MoveSpeed = 200.0f;									//Player Speed
 	float JumpPower = 0.0f;
-	float DecrPower = 0.0f;										//For Decresing JumpPower
+	float Gravity = 200.0f;										//For Decresing JumpPower
 	float FrictionPower = 0.0025f;
-	float MaxSpeed = 120.0f;									
-
-	float Inertia = 0.0f;										//관성(Using at Brake State)
+	float BrakePower = 0.0f;
+	float MaxSpeed = 240.0f;									
 
 
 
 	std::string ColMapName;
 
 	GameEngineImage* ColImage = nullptr;
-	NumberRenderObject NumberSets;
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
 	PlayerMode ModeValue = PlayerMode::MARIO;
-	float4 MoveDir = float4::Zero;
+	float4 MoveDir = float4::Zero;								//옮겨갈 벡터
 	float4 OriginPos = { 160, 960 - 128 };
 
 
@@ -160,7 +157,7 @@ private:
 	
 	void ActorMove(float _Time)
 	{
-		SetMove(MoveDir * _Time);
+		SetMove(MoveDir * _Time);							//움직임을 나타냄
 	}
 
 	void Camera(float4 _Pos);

@@ -45,6 +45,9 @@
     <ClInclude Include="ContentsValue.h">
       <Filter>Global</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -93,6 +96,9 @@
     <ClCompile Include="ContentsValue.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="ContentsUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Title">
@@ -109,6 +115,9 @@
     </Filter>
     <Filter Include="Global">
       <UniqueIdentifier>{1385f8ae-81e3-4602-ba1e-7533674825d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{576d969e-d441-4733-9dc8-f57882a24d3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

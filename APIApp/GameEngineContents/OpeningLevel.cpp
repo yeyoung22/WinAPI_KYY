@@ -5,6 +5,7 @@
 #include <GameEngineCore/GameEngineCore.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 #include "OpeningBack.h"
+#include "PlayLevel.h"
 
 OpeningLevel::OpeningLevel() 
 {

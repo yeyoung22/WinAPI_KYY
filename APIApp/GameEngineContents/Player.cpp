@@ -14,7 +14,7 @@
 #include "STLevel.h"
 
 Player* Player::MainPlayer;
-
+float Player::PlayTimer = 400.0f;
 
 Player::Player() 
 {
@@ -30,11 +30,7 @@ void Player::Start()
 	
 	MainPlayer = this;
 
-	//NumberSets.SetOwner(this);
-	//NumberSets.SetImage("Number.bmp", { 60, 64 }, 10, RGB(255, 0, 255));
-	//NumberSets.SetValue(static_cast<int>(PlayTimer));
-	//NumberSets.SetAlign(Align::Right);
-	//NumberSets.SetRenderPos({ 300, 0});
+
 
 	if (false == GameEngineInput::IsKey("LeftMove"))
 	{
@@ -118,7 +114,7 @@ void Player::Start()
 
 void Player::AccGravity(float _DeltaTime)
 {
-	MoveDir += float4::Down * MoveSpeed * _DeltaTime;
+	MoveDir += float4::Down * Gravity * _DeltaTime;
 }
 
 //ÁÂ¿ìÅ°°¡ ¾È ´­·¶À»¶§ ¸ØÃß°Ô ÇÒ ÀúÇ×
@@ -241,10 +237,10 @@ bool Player::FreeMoveState(float _DeltaTime)
 
 void Player::Update(float _DeltaTime)
 {
-	//NumberSets.SetValue(static_cast<int>(PlayTimer));
-	//PlayTimer -= _DeltaTime;
 
-	if (nullptr != BodyCollision)
+	PlayTimer -= _DeltaTime;
+
+	/*if (nullptr != BodyCollision)
 	{
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Item), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
@@ -253,7 +249,7 @@ void Player::Update(float _DeltaTime)
 			DirCheck("Bigger");
 			DirCheck("GrowthIdle");
 		}
-	}
+	}*/
 
 
 	if (nullptr != BodyCollision)

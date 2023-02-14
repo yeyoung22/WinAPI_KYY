@@ -127,19 +127,21 @@ void GameEngineResources::SoundPlay(const std::string_view& _Name)
 	Ch->setLoopCount(0);
 }
 
-
+//받아서 옵션 조절
 GameEngineSoundPlayer GameEngineResources::SoundPlayToControl(const std::string_view& _Name)
 {
 	GameEngineSound* Sound = SoundFind(_Name);
 	return Sound->Play();
 }
 
+//레벨이 넘어가도 계속 재생됨
 GameEngineSoundPlayer::GameEngineSoundPlayer(FMOD::Channel* _Channel)
 	: ControlChannel(_Channel)
 {
 
 }
 
+//기본적으로 한 번 재생을 하고 받은 인자만큼 반복해서 재생하므로 -1을 해서 총 재생이 _Count번되게 함
 void GameEngineSoundPlayer::LoopCount(int _Count)
 {
 	if (nullptr == ControlChannel)
@@ -147,7 +149,7 @@ void GameEngineSoundPlayer::LoopCount(int _Count)
 		MsgAssert("재생하지도 않은 사운드를 컨트롤하겠다고 했습니다.");
 	}
 
-	ControlChannel->setLoopCount(_Count - 1);							//setLoopCount(_Count)는 기본적으로 한 번 재생을 하고 받은 인자만큼 반복해서 재생하므로 -1을 해서 총 재생이 _Count번 이루어짐
+	ControlChannel->setLoopCount(_Count - 1);
 }
 
 void GameEngineSoundPlayer::Stop()

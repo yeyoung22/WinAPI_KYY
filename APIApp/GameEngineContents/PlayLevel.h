@@ -23,7 +23,7 @@ protected:
 	void LevelChangeEnd(GameEngineLevel* _NextLevel) override {}
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 
-	GameEngineSoundPlayer BGMPlayer;
+	GameEngineSoundPlayer BGMPlayer;	//SoundPlayer를 받아서 사용(제어)
 
 private:
 	void SoundLoad();
