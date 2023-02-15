@@ -190,8 +190,9 @@ void Player::MoveUpdate(float _Time)
 		return;
 	}
 
-	if (ModeValue != PlayerMode::MARIO && GameEngineInput::IsDown("Crouch"))
+	if (ModeValue != PlayerMode::MARIO && true == GameEngineInput::IsDown("Crouch"))
 	{
+		Friction(MoveDir, _Time);
 		ChangeState(PlayerState::CROUCH);
 		return;
 	}
@@ -280,7 +281,7 @@ void Player::BrakeUpdate(float _Time)
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
 
-	if (true == GameEngineInput::IsDown("Crouch"))
+	if (ModeValue != PlayerMode::MARIO && true == GameEngineInput::IsDown("Crouch"))
 	{
 		Friction(MoveDir, _Time);
 		ChangeState(PlayerState::CROUCH);
@@ -305,6 +306,16 @@ void Player::BrakeUpdate(float _Time)
 			ChangeState(PlayerState::MOVE);
 			return;
 		}
+
+		if (0 >= MoveDir.x && false == GameEngineInput::IsPress("RightMove") && true == GameEngineInput::IsPress("LeftMove"))
+		{
+			if (0 <= MoveDir.x)
+			{
+				ChangeState(PlayerState::MOVE);
+				return;
+			}
+			
+		}
 			
 		MoveDir += float4::Left * _Time;
 		MoveDir += float4::Right * BrakePower *_Time;
@@ -328,6 +339,17 @@ void Player::BrakeUpdate(float _Time)
 			ChangeState(PlayerState::MOVE);
 			return;
 		}
+
+		if (0 <= MoveDir.x && true == GameEngineInput::IsPress("RightMove") ) //&& false == GameEngineInput::IsPress("LeftMove")
+		{
+			
+			if (0 >= MoveDir.x)
+			{
+				ChangeState(PlayerState::MOVE);
+				return;
+			}
+		}
+
 	
 		MoveDir += float4::Right * _Time;
 		MoveDir += float4::Left * BrakePower * _Time;
@@ -342,10 +364,13 @@ void Player::BrakeUpdate(float _Time)
 		return;
 	}
 
-	//가다가 땅이 아니라면 Fall로 changestate
-
+	
 
 	Camera(MoveDir * _Time);
+
+	//가다가 땅이 아니라면 Fall로 changestate
+	
+
 
 	IsGround = LiftUp();
 	InitGravity(IsGround);
@@ -357,7 +382,7 @@ void Player::BrakeEnd()
 
 void Player::JumpStart()
 {
-	MoveDir.y = -600.0f;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
+	MoveDir.y = -700.0f;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
 	Gravity = 1000.0f;												//아래로 떨어뜨리는 힘
 
 	if (ModeValue == PlayerMode::SUPERMARIO)

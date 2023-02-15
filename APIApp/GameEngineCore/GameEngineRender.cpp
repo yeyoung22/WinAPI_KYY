@@ -149,11 +149,26 @@ void GameEngineRender::ImageRender(float _DeltaTime)
 
 	if (true == Image->IsImageCutting())
 	{
-		GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, Frame, RenderPos, GetScale(), TransColor);
+		if (255 == Alpha)
+		{
+			GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, Frame, RenderPos, GetScale(), TransColor);
+		}
+		else if (255 > Alpha)
+		{
+			GameEngineWindow::GetDoubleBufferImage()->AlphaCopy(Image, Frame, RenderPos, GetScale(), Alpha);
+		}
 	}
 	else
 	{
-		GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, RenderPos, GetScale(), { 0, 0 }, Image->GetImageScale(), TransColor);
+		if (255 == Alpha)
+		{
+			GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, RenderPos, GetScale(), { 0, 0 }, Image->GetImageScale(), TransColor);
+		}
+		else if (255 > Alpha)
+		{
+			GameEngineWindow::GetDoubleBufferImage()->AlphaCopy(Image, RenderPos, GetScale(), { 0, 0 }, Image->GetImageScale(), Alpha);
+		}
+		
 	}
 }
 
@@ -162,9 +177,9 @@ bool GameEngineRender::IsAnimationEnd()
 	return CurrentAnimation->IsEnd();
 }
 
-void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Paramter)
+void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Parameter)
 {
-	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind(_Paramter.ImageName);
+	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind(_Parameter.ImageName);
 
 	//사용할 이미지 존재여부 확인
 	if (nullptr == Image)
@@ -178,7 +193,7 @@ void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Paramter)
 		MsgAssert("잘려있는 이미지만 프레임을 지정해줄 수 있습니다.");
 	}
 
-	std::string UpperName = GameEngineString::ToUpper(_Paramter.AnimationName);
+	std::string UpperName = GameEngineString::ToUpper(_Parameter.AnimationName);
 
 	//애니메이션 이름의 중복 불허
 	if (Animation.end() != Animation.find(UpperName))	//못 찾으면 end()반환
@@ -191,34 +206,34 @@ void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Paramter)
 	NewAnimation.Image = Image;
 
 
-	if (0 != _Paramter.FrameIndex.size())
+	if (0 != _Parameter.FrameIndex.size())
 	{
-		NewAnimation.FrameIndex = _Paramter.FrameIndex;
+		NewAnimation.FrameIndex = _Parameter.FrameIndex;
 	}
 	else
 	{	
 		//직접 지정한 범위로 애니메이션 생성
-		for (int i = _Paramter.Start; i <= _Paramter.End; ++i)
+		for (int i = _Parameter.Start; i <= _Parameter.End; ++i)
 		{
 			NewAnimation.FrameIndex.push_back(i);
 		}
 	}
 
-	if (0 != _Paramter.FrameTime.size())
+	if (0 != _Parameter.FrameTime.size())
 	{
 		//이미지가 노출될 일정한 시간
-		NewAnimation.FrameTime = _Paramter.FrameTime;
+		NewAnimation.FrameTime = _Parameter.FrameTime;
 	}
 	else
 	{
 		//직접 장면마다 노출되는 시간을 정함
 		for (int i = 0; i < NewAnimation.FrameIndex.size(); ++i)
 		{
-			NewAnimation.FrameTime.push_back(_Paramter.InterTime);
+			NewAnimation.FrameTime.push_back(_Parameter.InterTime);
 		}
 	}
 
-	NewAnimation.Loop = _Paramter.Loop;
+	NewAnimation.Loop = _Parameter.Loop;
 	NewAnimation.Parent = this;
 }
 
@@ -242,4 +257,66 @@ void GameEngineRender::ChangeAnimation(const std::string_view& _AnimationName)
 	CurrentAnimation->CurrentIndex = 0;
 	
 	CurrentAnimation->CurrentTime = CurrentAnimation->FrameTime[CurrentAnimation->CurrentIndex];
+}
+
+
+
+void GameEngineRender::CreateReverseAnimation(const FrameAnimationParameter& _Parameter)
+{
+	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind(_Parameter.ImageName);
+
+	//사용할 이미지 존재여부 확인
+	if (nullptr == Image)
+	{
+		MsgAssert("존재하지 않는 이미지로 애니메이션을 만들려고 했습니다.");
+	}
+
+	//잘려 있는 이미지 사용
+	if (false == Image->IsImageCutting())
+	{
+		MsgAssert("잘려있는 이미지만 프레임을 지정해줄 수 있습니다.");
+	}
+
+	std::string UpperName = GameEngineString::ToUpper(_Parameter.AnimationName);
+
+	//애니메이션 이름의 중복 불허
+	if (Animation.end() != Animation.find(UpperName))	//못 찾으면 end()반환
+	{
+		MsgAssert("이미 존재하는 이름의 애니메이션 입니다." + UpperName);
+	}
+
+	FrameAnimation& NewAnimation = Animation[UpperName];	//포인터가 아니므로 map이 new, delete함
+
+	NewAnimation.Image = Image;
+
+
+	if (0 != _Parameter.FrameIndex.size())
+	{
+		NewAnimation.FrameIndex = _Parameter.FrameIndex;
+	}
+	else
+	{
+		//직접 지정한 범위로 애니메이션 생성
+		for (int i = _Parameter.Start; i >= _Parameter.End; --i)
+		{
+			NewAnimation.FrameIndex.push_back(i);
+		}
+	}
+
+	if (0 != _Parameter.FrameTime.size())
+	{
+		//이미지가 노출될 일정한 시간
+		NewAnimation.FrameTime = _Parameter.FrameTime;
+	}
+	else
+	{
+		//직접 장면마다 노출되는 시간을 정함
+		for (int i = 0; i < NewAnimation.FrameIndex.size(); ++i)
+		{
+			NewAnimation.FrameTime.push_back(_Parameter.InterTime);
+		}
+	}
+
+	NewAnimation.Loop = _Parameter.Loop;
+	NewAnimation.Parent = this;
 }

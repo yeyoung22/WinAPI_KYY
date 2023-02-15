@@ -72,14 +72,13 @@ private:
 	int StartFrame = 0;
 	int Life = 3;												//Base Player Life
 	
-	float AccTime = 0.0f;										//Accelerate Time
 	float MarioHeight = 150.0f;									//When MarioMode is changed, the Value should be changed
-	float MoveSpeed = 200.0f;									//Player Speed
+	float MoveSpeed = 230.0f;									//Player Speed
 	float JumpPower = 0.0f;
 	float Gravity = 200.0f;										//For Decresing JumpPower
 	float FrictionPower = 0.0025f;
 	float BrakePower = 0.0f;
-	float MaxSpeed = 240.0f;									
+	float MaxSpeed = 250.0f;									
 
 
 

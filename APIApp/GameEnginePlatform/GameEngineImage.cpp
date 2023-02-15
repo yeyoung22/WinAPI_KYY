@@ -188,6 +188,41 @@ void GameEngineImage::TransCopy(const GameEngineImage* _OtherImage, float4 _Copy
 		_Color);								//투명으로 처리할 복사할 이미지의 RGB 색상
 }
 
+void GameEngineImage::AlphaCopy(const GameEngineImage* _OtherImage, int _CutIndex, float4 _CopyCenterPos, float4 _CopySize, int _Color)
+{
+	if (false == _OtherImage->IsCut)
+	{
+		MsgAssert(" 잘리지 않은 이미지로 cut출력 함수를 사용하려고 했습니다.");
+		return;
+	}
+
+	ImageCutData Data = _OtherImage->GetCutData(_CutIndex);
+
+	AlphaCopy(_OtherImage, _CopyCenterPos, _CopySize, Data.GetStartPos(), Data.GetScale(), _Color);
+}
+
+void GameEngineImage::AlphaCopy(const GameEngineImage* _OtherImage, float4 _CopyCenterPos, float4 _CopySize, float4 _OtherImagePos, float4 _OtherImageSize, int _Alpha)
+{
+	BLENDFUNCTION BF;								//구조체
+
+	BF.BlendOp = AC_SRC_OVER;						//소스 혼합 작업
+	BF.BlendFlags = 0;								//0이어야 동작
+	BF.SourceConstantAlpha = _Alpha;				//원본 비트맵에 사용할 알파 투명도 값 지정 (Alpha = 255: 불투명)
+	BF.AlphaFormat = AC_SRC_ALPHA;					//원본 비트맵이 해석되는 방식
+
+	AlphaBlend(ImageDC,								//그리기 권한
+		_CopyCenterPos.ix() - _CopySize.hix(),		//시작 위치
+		_CopyCenterPos.iy() - _CopySize.hiy(),
+		_CopySize.ix(),								//크기
+		_CopySize.iy(),
+		_OtherImage->GetImageDC(),
+		_OtherImagePos.ix(),						//복사할 이미지 x y에서부터
+		_OtherImagePos.iy(),
+		_OtherImageSize.ix(),						//복사할 이미지 크기
+		_OtherImageSize.iy(),
+		BF);										//원본 비트맵에 대한 알파 혼합 함수
+}
+
 void GameEngineImage::Cut(int _X, int _Y)
 {
 	ImageCutData Data;

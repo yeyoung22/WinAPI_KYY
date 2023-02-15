@@ -76,7 +76,7 @@ public:
 	}
 
 	//애니메이션 효과 생성
-	void CreateAnimation(const FrameAnimationParameter& _Paramter);
+	void CreateAnimation(const FrameAnimationParameter& _Parameter);
 	//사용할 애니메이션 변경
 	void ChangeAnimation(const std::string_view& _AnimationName);
 	//애니메이션이 끝났는지 체크
@@ -84,7 +84,16 @@ public:
 
 	void SetOrder(int _Order) override;
 
+	void SetAlpha(int _Alpha)
+	{
+		Alpha = _Alpha;
+	}
+
 	void SetText(const std::string_view& _Text);
+
+	//------test code
+	void CreateReverseAnimation(const FrameAnimationParameter& _Parameter);
+
 
 protected:
 
@@ -96,6 +105,8 @@ private:
 	int TransColor = RGB(255, 0, 255);			//Magenta
 
 	int Frame = 0;
+
+	int Alpha = 255;
 
 	void Render(float _DeltaTime);
 	void TextRender(float _DeltaTime);

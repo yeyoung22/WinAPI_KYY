@@ -47,7 +47,14 @@ void PlayLevel::ImageLoad()
 	Dir.Move("Play");
 
 	//이미지 로드
+	//Player
 	{
+		//test image(transparent)------------------------------------------------------------------------------
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Transparent.bmp"));
+		Image->Cut(1, 1);
+	}
+	{
+		Dir.Move("Player");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_Mario.bmp"));
 		Image->Cut(4, 9);
 	}
@@ -56,30 +63,113 @@ void PlayLevel::ImageLoad()
 		Image->Cut(4, 9);
 	}
 	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_FireMario.bmp"));
+		Image->Cut(7, 3);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_FireMario.bmp"));
+		Image->Cut(7, 3);
+
+		//Dir.MoveParent();
+	} 
+
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_Bigger.bmp"));
+		Image->Cut(7, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_Bigger.bmp"));
+		Image->Cut(7, 1);
+
+		Dir.MoveParent();
+	}
+	//{
+	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_InvincibleMario.bmp"));
+	//	Image->Cut(4, 1);
+	//}
+	//{
+	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_InvincibleMario.bmp"));
+	//	Image->Cut(4, 1);
+	//}
+	//{
+	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_InvincibleGrowth.bmp"));
+	//	Image->Cut(4, 1);
+	//}
+	//{
+	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_InvincibleGrowth.bmp"));
+	//	Image->Cut(4, 1);
+	//}
+	//{
+	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_InvincibleFireMario.bmp"));
+	//	Image->Cut(4, 1);
+	//}
+	//{
+	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_InvincibleFireMario.bmp"));
+	//	Image->Cut(4, 1);
+
+	//	Dir.MoveParent();
+	//}
+
+	//Map
+	{
+		Dir.Move("Map");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
 		MapScale = ColImage->GetImageScale();
 	}
 	{
-
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_4.bmp"));
 		//GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
+
+		Dir.MoveParent();
 	}
+
+	//Monster
 	{
+		Dir.Move("Monster");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Goomba.bmp"));
 		Image->Cut(3, 1);
 	}
 	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Item\\Left_SuperMushroom.bmp"));
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ReverseGoomba.bmp"));
+		Image->Cut(2, 1);
+
+		Dir.MoveParent();
+	}
+
+	//Effect
+	{
+		Dir.Move("Effect");
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_Fire.bmp"));
 		Image->Cut(4, 1);
 	}
 	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Item\\Right_SuperMushroom.bmp"));
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_Fire.bmp"));
+		Image->Cut(4, 1);
+
+		Dir.MoveParent();
+	}
+
+	//Item
+	{
+		Dir.Move("Item");
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_SuperMushroom.bmp"));
 		Image->Cut(4, 1);
 	}
 	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_SuperMushroom.bmp"));
+		Image->Cut(4, 1);
+
+		Dir.MoveParent();
+	}
+
+	//Text
+	{
+		Dir.Move("Text");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Number.bmp"));
 		Image->Cut(10, 1);
+
+		Dir.MoveParent();
 	}
 }
 
@@ -152,8 +242,8 @@ void PlayLevel::Update(float _DeltaTime)
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
-	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
-	BGMPlayer.LoopCount(1);
+	//BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
+	//BGMPlayer.LoopCount(1);
 
 	ContentsValue::CameraScale = { 1020, 960 };
 }
