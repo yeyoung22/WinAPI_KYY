@@ -208,6 +208,34 @@ bool  Player::CheckMove(float4 _Pos, float _DeltaTime)
 }
 
 
+//bool Player::IsWall(float4 _Pos)
+//{
+//	float4 CheckRPos = GetPos() + _Pos + float4::Right;
+//	CheckRPos.x += AnimationRender->GetScale().hx();
+//
+//	float4 CheckLPos = GetPos() + _Pos + float4::Left;
+//	CheckLPos.x -= AnimationRender->GetScale().hx();
+//
+//	if (0 <= _Pos.x)
+//	{
+//		if (Black == ColImage->GetPixelColor(CheckRPos, Black))
+//		{
+//			return true;
+//		}
+//	}
+//
+//	if (0 > _Pos.x)
+//	{
+//		if (Black == ColImage->GetPixelColor(CheckLPos, Black))
+//		{
+//			return true;
+//		}
+//	}
+//
+//	return false;
+//}
+
+
 void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	MainPlayer = this;										//When Level is changed,  MainPlayer should be changed this Level's Player
@@ -272,13 +300,33 @@ void Player::Update(float _DeltaTime)
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Item), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
 			ChangeMode(PlayerMode::SUPERMARIO);
-			
-
 			DirCheck("Bigger");
-			if (true == AnimationRender->IsAnimationEnd())
+
+			if (AnimationRender->IsAnimationEnd())
 			{
-				ChangeState(PlayerState::IDLE);
+				if (false == GameEngineInput::IsAnyKey())
+				{
+					ChangeState(PlayerState::IDLE);
+				}
+
+				if (GameEngineInput::IsPress("LeftMove") || GameEngineInput::IsPress("RightMove"))
+				{
+					ChangeState(PlayerState::MOVE);
+				}
+
+				if (GameEngineInput::IsDown("Jump"))
+				{
+					ChangeState(PlayerState::JUMP);
+				}
+
+				if (GameEngineInput::IsPress("Crouch"))
+				{
+					ChangeState(PlayerState::CROUCH);
+				}
+			
 			}
+
+
 		}
 	}
 

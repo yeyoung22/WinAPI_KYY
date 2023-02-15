@@ -136,6 +136,7 @@ private:
 	void FallUpdate(float _Time);
 	void FallEnd();
 
+
 	void DeathStart();
 	void DeathUpdate(float _Time);
 	void DeathEnd();
@@ -162,6 +163,8 @@ private:
 	bool LiftUp(float4 _Pos = float4::Zero);
 
 	bool CheckMove(float4 _Pos, float _DeltaTime);
+
+	/*bool IsWall(float4 _Pos);*/
 
 	
 	void ActorMove(float _Time)

@@ -124,6 +124,10 @@ void Player::IdleStart()
 	{
 		DirCheck("GrowthIdle");
 	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		DirCheck("FireIdle");
+	}
 	else
 	{
 		DirCheck("Idle");
@@ -172,6 +176,10 @@ void Player::MoveStart()
 	if (ModeValue == PlayerMode::SUPERMARIO)											//Growth ver.Mario
 	{
 		DirCheck("GrowthMove");
+	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		DirCheck("FireMove");
 	}
 	else
 	{
@@ -238,11 +246,26 @@ void Player::MoveUpdate(float _Time)
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
 
+
+	//if (true == IsGround && true == IsWall(MoveDir))
+	//{
+
+	//	
+	//	SetMove(MoveDir * _Time);
+	//	Camera(MoveDir * _Time);
+	//	
+	//}
+	//else
+	//{
+	//	return;
+	//}
+
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
 	IsGround = LiftUp();
 	InitGravity(IsGround);
+
 }
 void Player::MoveEnd() 
 {
@@ -262,6 +285,17 @@ void Player::BrakeStart()
 		else
 		{
 			AnimationRender->ChangeAnimation("Left_GrowthBrake");
+		}
+	}
+	else if (ModeValue == PlayerMode::FIREMARIO)											//Growth ver.Mario
+	{
+		if (true == IsLeftBrake)
+		{
+			AnimationRender->ChangeAnimation("Right_FireBrake");
+		}
+		else
+		{
+			AnimationRender->ChangeAnimation("Left_FireBrake");
 		}
 	}
 	else
@@ -307,20 +341,22 @@ void Player::BrakeUpdate(float _Time)
 			return;
 		}
 
+			
+
 		if (0 >= MoveDir.x && false == GameEngineInput::IsPress("RightMove") && true == GameEngineInput::IsPress("LeftMove"))
 		{
-			if (0 <= MoveDir.x)
-			{
-				ChangeState(PlayerState::MOVE);
-				return;
-			}
-			
+			int a = 0;
+
 		}
-			
+
+
 		MoveDir += float4::Left * _Time;
-		MoveDir += float4::Right * BrakePower *_Time;
+		MoveDir += float4::Right * BrakePower * _Time;
 
 		SetMove(MoveDir * _Time);
+		Camera(MoveDir * _Time);
+
+
 	}
 	else if (false == IsLeftBrake)								//오른쪽으로 가던 중에 왼쪽으로 이동하는 경우
 	{
@@ -340,14 +376,16 @@ void Player::BrakeUpdate(float _Time)
 			return;
 		}
 
+
+
+		//오른쪽으로 가다가 왼쪽 이동키를 누르면 오른쪽으로 미끄러짐(관성)
+		//오른쪽으로 미끄러지고 있는데, 왼쪽 키에서 손을 떼고 오른쪽키를 누름
+		//미끄러지는 모션을 유지한채로 왼쪽으로 이동
 		if (0 <= MoveDir.x && true == GameEngineInput::IsPress("RightMove") ) //&& false == GameEngineInput::IsPress("LeftMove")
 		{
-			
-			if (0 >= MoveDir.x)
-			{
-				ChangeState(PlayerState::MOVE);
-				return;
-			}
+			int a = 0;
+
+
 		}
 
 	
@@ -355,6 +393,7 @@ void Player::BrakeUpdate(float _Time)
 		MoveDir += float4::Left * BrakePower * _Time;
 
 		SetMove(MoveDir * _Time);
+		Camera(MoveDir * _Time);
 	}
 
 
@@ -364,9 +403,7 @@ void Player::BrakeUpdate(float _Time)
 		return;
 	}
 
-	
 
-	Camera(MoveDir * _Time);
 
 	//가다가 땅이 아니라면 Fall로 changestate
 	
@@ -389,6 +426,10 @@ void Player::JumpStart()
 	{
 		DirCheck("GrowthJump");
 	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		DirCheck("FireJump");
+	}
 	else
 	{
 		DirCheck("Jump");
@@ -410,17 +451,6 @@ void Player::JumpUpdate(float _Time)
 	//땅에 닿으면 Idle
 	if (true == IsGround && 0 <= MoveDir.y)
 	{
-		
-		if (ModeValue == PlayerMode::SUPERMARIO)
-		{
-			DirCheck("GrowthIdle");
-		}
-		else
-		{
-
-			DirCheck("Idle");
-		}
-
 		ChangeState(PlayerState::IDLE);
 		return;
 	}
@@ -444,7 +474,15 @@ void Player::JumpEnd()
 
 void Player::CrouchStart()
 {
-	DirCheck("Crouch");
+	if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		DirCheck("FireCrouch");
+	}
+	else
+	{
+		DirCheck("Crouch");
+	}
+	
 }
 void Player::CrouchUpdate(float _Time)
 {
@@ -498,6 +536,10 @@ void Player::FallStart()
 	{
 		DirCheck("GrowthJump");
 	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		DirCheck("FireJump");
+	}
 	else
 	{
 		DirCheck("Jump");
@@ -508,16 +550,6 @@ void Player::FallUpdate(float _Time)
 	//땅에 닿으면 Idle
 	if (true == IsGround)
 	{
-		if (ModeValue == PlayerMode::SUPERMARIO)
-		{
-			DirCheck("GrowthIdle");
-		}
-		else
-		{
-
-			DirCheck("Idle");
-		}
-
 		ChangeState(PlayerState::IDLE);
 		IsGround = LiftUp();
 		InitGravity(IsGround);
@@ -538,6 +570,7 @@ void Player::FallEnd()
 {
 
 }
+
 
 
 void Player::DeathStart()
