@@ -12,7 +12,7 @@
 #include "ContentsValue.h"
 
 
-float4 PlayLevel::MapScale = float4::Zero;
+
 
 PlayLevel::PlayLevel() 
 {
@@ -112,11 +112,10 @@ void PlayLevel::ImageLoad()
 		Dir.Move("Map");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
-		MapScale = ColImage->GetImageScale();
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_4.bmp"));
-		//GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
+		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
 
 		Dir.MoveParent();
 	}
@@ -175,7 +174,6 @@ void PlayLevel::Loading()
 {
 	SoundLoad();
 	ImageLoad();
-	SetCameraScale({ 1020, 960 });
 
 	//액터 생성
 	{
@@ -207,6 +205,10 @@ void PlayLevel::Loading()
 		GameEngineInput::CreateKey("DebugRenderSwitch", 'R');
 	}
 
+	if (false == GameEngineInput::IsKey("BGMPause"))
+	{
+		GameEngineInput::CreateKey("BGMPause", 'P');
+	}
 
 	if (false == GameEngineInput::IsKey("CameraLeftMove"))
 	{
@@ -216,11 +218,12 @@ void PlayLevel::Loading()
 		GameEngineInput::CreateKey("CameraDownMove", VK_DOWN);
 		GameEngineInput::CreateKey("CameraUpMove", VK_UP);
 	}
+
 }
 
 void PlayLevel::Update(float _DeltaTime)
 {
-	if (GameEngineInput::IsDown("DebugRenderSwitch"))
+	if (GameEngineInput::IsDown("BGMPause"))
 	{
 		if (false == BGMPlayer.GetPause())
 		{
@@ -230,11 +233,14 @@ void PlayLevel::Update(float _DeltaTime)
 		{
 			BGMPlayer.PauseOff();
 		}
+	}
 
-
+	if (GameEngineInput::IsDown("DebugRenderSwitch"))
+	{
 		DebugRenderSwitch();
 	}
 
+	
 }
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)

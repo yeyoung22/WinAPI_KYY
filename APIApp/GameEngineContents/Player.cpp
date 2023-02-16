@@ -14,6 +14,8 @@
 #include "STLevel.h"
 #include "PlayLevel.h"
 
+
+//screenSize = {1024, 960}
 Player* Player::MainPlayer;
 float Player::PlayTimer = 400.0f;
 PlayerMode Player::ModeValue = PlayerMode::MARIO;
@@ -28,7 +30,6 @@ Player::~Player()
 
 void Player::Start()
 {
-	ContentsValue::CameraScale = { 1024, 960 };
 	
 	MainPlayer = this;
 
@@ -41,9 +42,12 @@ void Player::Start()
 		GameEngineInput::CreateKey("Crouch", 'S');
 		//GameEngineInput::CreateKey("Jump", 'W');
 		GameEngineInput::CreateKey("Jump", VK_SPACE);			//Mario can jump 5 sec
+
 	
 		GameEngineInput::CreateKey("FreeMoveSwitch", '1');
 		GameEngineInput::CreateKey("StageClear", '2');
+		GameEngineInput::CreateKey("GoToCastle", '3');
+
 	}
 
 	{
@@ -116,25 +120,39 @@ void Player::Start()
 		BodyCollision->SetPosition({ GetPos().x, GetPos().y - 32 });
 	}
 
-	ColMapName = "ColWorld1_1.bmp";
-	{
+	ChangeColImage("ColWorld1_1.bmp");
 
+	ChangeState(PlayerState::IDLE);
+}
+
+
+void Player::ChangeColImage(const std::string& _ColMapName)
+{
+	ColMapName = _ColMapName;
+	{
 		ColImage = GameEngineResources::GetInst().ImageFind(ColMapName);
-		
+
 		if (nullptr == ColImage)
 		{
 			MsgAssert("충돌용 맵 이미지가 없습니다.");
 		}
 
 	}
-
-	ChangeState(PlayerState::IDLE);
 }
+
 
 
 void Player::AccGravity(float _DeltaTime)
 {
 	MoveDir += float4::Down * Gravity * _DeltaTime;
+}
+
+void Player::InitGravity(bool _IsGround)
+{
+	if (true == _IsGround)
+	{
+		MoveDir.y = 0.0f;
+	}
 }
 
 //좌우키가 안 눌렀을때 멈추게 할 저항
@@ -299,6 +317,7 @@ void Player::Update(float _DeltaTime)
 			ChangeMode(PlayerMode::SUPERMARIO);
 			DirCheck("Bigger");
 
+
 			if (AnimationRender->IsAnimationEnd())
 			{
 				if (false == GameEngineInput::IsAnyKey())
@@ -351,6 +370,22 @@ void Player::Update(float _DeltaTime)
 		}
 	}
 
+
+	if (BodyCollision != 0)
+	{
+		std::vector<GameEngineCollision*> Collision;
+		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Door), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+			Map::MainMap->StageClearOn();
+			MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
+			GetLevel()->SetCameraPos({ GetPos().x, 0 });
+
+
+			ChangeColImage("ColWorld1_4.bmp");
+		}
+	}
+
+
 	if (true == FreeMoveState(_DeltaTime))
 	{
 		return;
@@ -359,7 +394,17 @@ void Player::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("StageClear"))
 	{
 		Map::MainMap->StageClearOn();
-		MainPlayer->SetPos({ 160, GameEngineWindow::GetScreenSize().half().y});
+		MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
+		ChangeColImage("ColWorld1_4.bmp");
+
+
+	}
+
+	if (GameEngineInput::IsDown("GoToCastle"))
+	{
+		MainPlayer->SetPos({ Map::SumMapWidth - GameEngineWindow::GetScreenSize().x, GameEngineWindow::GetScreenSize().y - 256 });
+		GetLevel()->SetCameraPos({GetPos().x, 0});
+
 	}
 
 	UpdateState(_DeltaTime);
@@ -391,9 +436,9 @@ void Player::Camera(float4 _Pos)
 
 	float4 ActPos = GetPos();
 	float4 CameraPos = GetLevel()->GetCameraPos();
-	float EndPos = PlayLevel::MapScale.x - GameEngineWindow::GetScreenSize().hx();
+	CameraEndPos = Map::SumMapWidth - GameEngineWindow::GetScreenSize().hx();
 
-	if (ActPos.x < EndPos)
+	if (ActPos.x < CameraEndPos)
 	{
 		if (ActPos.x >= CameraPos.x + GameEngineWindow::GetScreenSize().hx())						//Move the camera if Mario is to the right of the center of the screen
 		{

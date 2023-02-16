@@ -1,5 +1,6 @@
 #include "GameEngineDirectory.h"
 #include <GameEngineBase/GameEngineDebug.h>
+#include "GameEngineFile.h"
 
 GameEngineDirectory::GameEngineDirectory() 
 {
@@ -50,3 +51,25 @@ GameEnginePath GameEngineDirectory::GetPlusFileName(const std::string_view& _Str
 	return NewPath;
 }
 
+
+std::vector<GameEngineFile> GameEngineDirectory::GetAllFile(const std::string_view& _Ext)
+{
+	std::filesystem::directory_iterator DirIter(Path.Path);
+
+	std::string Ext = _Ext.data();							//확장자는 일단 고려하지 않음
+
+	std::vector<GameEngineFile> Files;
+
+	for (const std::filesystem::directory_entry& Entry : DirIter)
+	{
+		if (true == Entry.is_directory())
+		{
+			//재귀를 사용해도 다 순회
+			continue;
+		}
+
+		Files.push_back(GameEngineFile(Entry.path()));
+	}
+
+	return Files;
+}

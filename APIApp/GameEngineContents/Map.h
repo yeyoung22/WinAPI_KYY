@@ -5,6 +5,7 @@
 class Map : public GameEngineActor
 {
 public:
+	static float SumMapWidth;
 	static Map* MainMap;
 public:
 	// constrcuter destructer

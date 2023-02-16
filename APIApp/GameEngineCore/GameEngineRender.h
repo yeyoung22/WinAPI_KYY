@@ -44,12 +44,6 @@ public:
 	GameEngineRender& operator=(const GameEngineRender& _Other) = delete;
 	GameEngineRender& operator=(GameEngineRender&& _Other) noexcept = delete;
 
-	void SetImage(const std::string_view& _ImageName);
-
-	void SetScaleToImage();
-
-	void SetFrame(int _Frame);
-
 	inline GameEngineImage* GetImage()
 	{
 		return Image;
@@ -83,16 +77,6 @@ public:
 		SetEffectCamera(true);
 	}
 
-	//애니메이션 효과 생성
-	void CreateAnimation(const FrameAnimationParameter& _Parameter);
-	//사용할 애니메이션 변경
-	void ChangeAnimation(const std::string_view& _AnimationName);
-	//애니메이션이 끝났는지 체크
-	bool IsAnimationEnd();
-
-	void SetOrder(int _Order) override;
-
-
 	inline int GetTextHeight()
 	{
 		return TextHeight;
@@ -111,7 +95,14 @@ public:
 
 	void SetFrame(int _Frame);
 
-	void SetText(const std::string_view& _Text);
+	//애니메이션 효과 생성
+	void CreateAnimation(const FrameAnimationParameter& _Parameter);
+	//사용할 애니메이션 변경
+	void ChangeAnimation(const std::string_view& _AnimationName);
+	//애니메이션이 끝났는지 체크
+	bool IsAnimationEnd();
+
+	void SetOrder(int _Order) override;
 
 	void SetText(const std::string_view& _Text, const int _TextHeight = 20, const std::string_view& _TextType = "굴림", const TextAlign _TextAlign = TextAlign::Center, const COLORREF _TextColor = RGB(0, 0, 0));
 

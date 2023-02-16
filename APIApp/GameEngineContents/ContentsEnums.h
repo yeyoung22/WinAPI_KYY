@@ -18,6 +18,6 @@ enum class MarioCollisionOrder
 	PlayerAttack,				//Fire Attack of Mario
 	MonsterAttack,				//Fire Breath of Kupa
 	Door,
-	Goal,
+	Flag,
 
 };

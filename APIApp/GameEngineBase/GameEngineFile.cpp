@@ -8,3 +8,8 @@ GameEngineFile::~GameEngineFile()
 {
 }
 
+GameEngineFile::GameEngineFile(std::filesystem::path _Path)
+	: Path(_Path)
+{
+
+}

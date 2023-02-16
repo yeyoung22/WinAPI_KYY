@@ -59,6 +59,7 @@ public:
 	}
 
 
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -85,11 +86,12 @@ private:
 	float BrakePower = 0.0f;
 	float MaxSpeed = 250.0f;									
 
+	float CameraEndPos = 0.0f;
 
-
+	//ColImage 관련 변수 및 함수
 	std::string ColMapName;
-
 	GameEngineImage* ColImage = nullptr;
+	void ChangeColImage(const std::string& _ColMapName);
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
@@ -148,13 +150,7 @@ private:
 	
 	//Garavitional Acceleration
 	void AccGravity(float _DeltaTime);
-	void InitGravity(bool _IsGround)
-	{
-		if (true == _IsGround)
-		{
-			MoveDir.y = 0.0f;
-		}
-	}
+	void InitGravity(bool _IsGround);
 
 	//Resistant Force
 	void Friction(float4& _Pos, float _DeltaTime);

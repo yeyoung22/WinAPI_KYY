@@ -35,8 +35,8 @@ public:
 	GameEnginePath GetPlusFileName(const std::string_view& _String);
 
 
-
-	// std::vector<GameEngineFile> GetAllFile();
+	//해당 경로 내의 모든 파일을 리턴(하위에 있는 것은 취급하지 않음)
+	std::vector<GameEngineFile> GetAllFile(const std::string_view& _Ext = "");
 
 
 protected:

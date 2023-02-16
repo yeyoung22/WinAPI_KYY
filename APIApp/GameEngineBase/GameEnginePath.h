@@ -3,8 +3,12 @@
 #include <filesystem>
 
 // 설명 : 경로 관련 기능
+class GameEngineFile;
+class GameEngineDirectory;
 class GameEnginePath
 {
+	friend GameEngineFile;
+	friend GameEngineDirectory;
 public:
 	// constrcuter destructer
 	GameEnginePath();

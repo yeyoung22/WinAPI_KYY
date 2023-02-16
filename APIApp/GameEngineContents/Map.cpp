@@ -3,8 +3,12 @@
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineRender.h>
+#include <GameEnginePlatform/GameEngineInput.h>
 #include "ContentsEnums.h"
 
+
+
+float Map::SumMapWidth = 0.0f;
 Map* Map::MainMap = nullptr;
 
 Map::Map() 
@@ -25,6 +29,7 @@ void Map::Start()
 		MapRender0->SetPosition(StartPos);
 		MapRender0->SetScaleToImage();
 
+		SumMapWidth = MapRender0->GetImage()->GetImageScale().x;
 	}
 
 	{
@@ -41,7 +46,7 @@ void Map::Start()
 		BodyCollision = CreateCollision(MarioCollisionOrder::Door);
 		BodyCollision->SetScale({ 40, 40 });
 		float4 MapSize = MapRender0->GetImage()->GetImageScale();
-		BodyCollision->SetPosition({ MapSize.x-128, MapSize.y });
+		BodyCollision->SetPosition({ MapSize.x-420, MapSize.hy()-192});
 
 	}
 }
@@ -49,21 +54,18 @@ void Map::Start()
 
 void Map::Update(float _DeltaTime)
 {
+	//if (true == IsStageClear)
+	//{
+	//	SumMapWidth += MapRender1->GetImage()->GetImageScale().x;
 
+	//	IsStageClear = false;
+	//}
 
-	if (false == IsStageClear)
+	if (true == IsStageClear)
 	{
-		return;
+		float4 RenPos = MapRender1->GetImage()->GetImageScale().half();
+		MapRender1->SetPosition({ RenPos.x, RenPos.y });
+
+		IsStageClear = false;
 	}
-
-	if (BodyCollision != 0)
-	{
-	
-	}
-
-
-
-
-	float4 StartPos = MapRender1->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
-	MapRender1->SetPosition(StartPos);
 }

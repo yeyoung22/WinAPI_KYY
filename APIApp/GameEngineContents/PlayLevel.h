@@ -6,9 +6,6 @@
 class PlayLevel : public STLevel
 {
 public:
-	static float4 MapScale;
-
-public:
 	// constrcuter destructer
 	PlayLevel();
 	~PlayLevel();
