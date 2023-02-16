@@ -5,6 +5,7 @@
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineLevel.h>
 #include "ContentsEnums.h"
+#include "Player.h"
 
 Item::Item() 
 {
@@ -38,7 +39,15 @@ void Item::Start()
 
 void Item::Update(float _DeltaTime)
 {
+	/*if (nullptr != BodyCollision)
+	{
+		std::vector<GameEngineCollision*> Collision;
+		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+			Player::ChangeMode(PlayerMode::SUPERMARIO);
 
+		}
+	}*/
 
 	//
 	//float4 Dir = float4::Left * MoveSpeed * _DeltaTime;

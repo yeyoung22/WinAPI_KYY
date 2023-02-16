@@ -8,10 +8,7 @@
 #include "ContentsEnums.h"
 
 
-void Player::ChangeMode(PlayerMode _Mode)
-{
-	ModeValue = _Mode;
-}
+
 
 //State 변경
 void Player::ChangeState(PlayerState _State)
@@ -247,25 +244,15 @@ void Player::MoveUpdate(float _Time)
 	AccGravity(_Time);
 
 
-	//if (true == IsGround && true == IsWall(MoveDir))
-	//{
-
-	//	
-	//	SetMove(MoveDir * _Time);
-	//	Camera(MoveDir * _Time);
-	//	
-	//}
-	//else
-	//{
-	//	return;
-	//}
-
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
+
+
 
 	IsGround = LiftUp();
 	InitGravity(IsGround);
 
+	
 }
 void Player::MoveEnd() 
 {
@@ -379,7 +366,7 @@ void Player::BrakeUpdate(float _Time)
 
 
 		//오른쪽으로 가다가 왼쪽 이동키를 누르면 오른쪽으로 미끄러짐(관성)
-		//오른쪽으로 미끄러지고 있는데, 왼쪽 키에서 손을 떼고 오른쪽키를 누름
+		//오른쪽으로 미끄러지고 있는데, 왼쪽 키에서 손을 떼고  다시 오른쪽키를 누름
 		//미끄러지는 모션을 유지한채로 왼쪽으로 이동
 		if (0 <= MoveDir.x && true == GameEngineInput::IsPress("RightMove") ) //&& false == GameEngineInput::IsPress("LeftMove")
 		{

@@ -69,10 +69,7 @@ void PlayLevel::ImageLoad()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_FireMario.bmp"));
 		Image->Cut(7, 3);
-
-		//Dir.MoveParent();
 	} 
-
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_Bigger.bmp"));
 		Image->Cut(7, 1);

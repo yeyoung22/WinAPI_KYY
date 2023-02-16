@@ -32,5 +32,7 @@ private:
 
 	GameEngineRender* MapRender0 = nullptr;
 	GameEngineRender* MapRender1 = nullptr;
-};
 
+	GameEngineCollision* BodyCollision = nullptr;
+
+};

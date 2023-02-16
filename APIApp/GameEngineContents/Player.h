@@ -41,6 +41,7 @@ class Player : public GameEngineActor
 public:
 	static Player* MainPlayer;
 	static float PlayTimer;									//Play Timer
+	static PlayerMode ModeValue;
 
 	// constrcuter destructer
 	Player();
@@ -52,6 +53,10 @@ public:
 	Player& operator=(const Player& _Other) = delete;
 	Player& operator=(Player&& _Other) noexcept = delete;
 	
+	void ChangeMode(PlayerMode _Mode)
+	{
+		ModeValue = _Mode;
+	}
 
 
 protected:
@@ -88,7 +93,7 @@ private:
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
-	PlayerMode ModeValue = PlayerMode::MARIO;
+	
 	float4 MoveDir = float4::Zero;								//ø≈∞‹∞• ∫§≈Õ
 	float4 OriginPos = { 160, 960 - 128 };
 
@@ -103,7 +108,6 @@ private:
 	// State
 	bool FreeMoveState(float _DeltaTime);
 
-	void ChangeMode(PlayerMode _Mode);
 	void ChangeState(PlayerState _State);
 	void UpdateState(float _Time);
 
@@ -162,9 +166,9 @@ private:
 	//Lift Player's Position upward
 	bool LiftUp(float4 _Pos = float4::Zero);
 
-	bool CheckMove(float4 _Pos, float _DeltaTime);
+	bool CheckGround(float4 _Pos);
 
-	/*bool IsWall(float4 _Pos);*/
+	bool CheckWall(float4 _Pos);
 
 	
 	void ActorMove(float _Time)

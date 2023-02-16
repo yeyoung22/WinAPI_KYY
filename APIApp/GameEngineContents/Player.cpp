@@ -16,6 +16,7 @@
 
 Player* Player::MainPlayer;
 float Player::PlayTimer = 400.0f;
+PlayerMode Player::ModeValue = PlayerMode::MARIO;
 
 Player::Player() 
 {
@@ -180,9 +181,8 @@ bool  Player::LiftUp(float4 _Pos)
 	}
 
 
-	//함수로 분리할 건지 말건지 정해야 함 -----------------------------------------------------------------
 	//땅인지 아닌지 체크하는 부분
-	//내가 서있을 곳(Down)보다 한 칸 아래쪽이 검은 색이면 땅으로 판단
+	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
 	float4 Down = GetPos() + _Pos;
 
 	if (Black == ColImage->GetPixelColor(Down + float4::Down, Black))
@@ -192,48 +192,45 @@ bool  Player::LiftUp(float4 _Pos)
 	return false;
 }
 
-bool  Player::CheckMove(float4 _Pos, float _DeltaTime)
+
+bool  Player::CheckGround(float4 _Pos)
 {
-	float4 CheckPos = GetPos() + _Pos*_DeltaTime;
+	//땅인지 아닌지 체크하는 부분
+	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
+	float4 NextPos = GetPos() + _Pos;
 
-
-	if (Black == ColImage->GetPixelColor(CheckPos, Black))								//ground, wall
-	{
-		return false;
-	}
-	else
+	if (
+		Black == ColImage->GetPixelColor(NextPos + float4::Down, Black) &&
+		Magenta == ColImage->GetPixelColor(NextPos, Magenta)
+		)
 	{
 		return true;
 	}
+
+	return false;
 }
 
 
-//bool Player::IsWall(float4 _Pos)
-//{
-//	float4 CheckRPos = GetPos() + _Pos + float4::Right;
-//	CheckRPos.x += AnimationRender->GetScale().hx();
-//
-//	float4 CheckLPos = GetPos() + _Pos + float4::Left;
-//	CheckLPos.x -= AnimationRender->GetScale().hx();
-//
-//	if (0 <= _Pos.x)
-//	{
-//		if (Black == ColImage->GetPixelColor(CheckRPos, Black))
-//		{
-//			return true;
-//		}
-//	}
-//
-//	if (0 > _Pos.x)
-//	{
-//		if (Black == ColImage->GetPixelColor(CheckLPos, Black))
-//		{
-//			return true;
-//		}
-//	}
-//
-//	return false;
-//}
+bool Player::CheckWall(float4 _Pos)
+{
+	float4 CheckRPos = GetPos() + _Pos + float4::Right;		//한 칸 오른쪽
+	CheckRPos.x += AnimationRender->GetScale().hx();		//이미지 우측
+
+	float4 CheckLPos = GetPos() + _Pos + float4::Left;		//한 칸 왼쪽
+	CheckLPos.x -= AnimationRender->GetScale().hx();		//이미지 좌측
+
+	if (Black == ColImage->GetPixelColor(CheckRPos, Black))
+	{
+		return true;
+	}
+
+	if (Black == ColImage->GetPixelColor(CheckLPos, Black))
+	{
+		return true;
+	}
+
+	return false;
+}
 
 
 void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)

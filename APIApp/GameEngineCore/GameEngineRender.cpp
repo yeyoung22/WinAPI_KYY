@@ -19,6 +19,12 @@ void GameEngineRender::SetImage(const std::string_view& _ImageName)
 	SetScaleToImage();				//SetImage()하면 바로 SetScaleToImage()도 실행
 }
 
+void GameEngineRender::SetImageToScaleToImage(const std::string_view& _ImageName)
+{
+	Image = GameEngineResources::GetInst().ImageFind(_ImageName);
+	SetScaleToImage();
+}
+
 //세팅한 이미지의 크기로 스케일 설정
 void GameEngineRender::SetScaleToImage()
 {
@@ -88,9 +94,13 @@ void GameEngineRender::FrameAnimation::Render(float _DeltaTime)
 }
 
 
-void GameEngineRender::SetText(const std::string_view& _Text)
+void GameEngineRender::SetText(const std::string_view& _Text, const int _TextHeight, const std::string_view& _TextType, const TextAlign _TextAlign, const COLORREF _TextColor)
 {
 	RenderText = _Text;
+	TextHeight = _TextHeight;
+	TextType = _TextType;
+	Align = _TextAlign;
+	TextColor = _TextColor;
 }
 
 void GameEngineRender::Render(float _DeltaTime)
@@ -118,7 +128,34 @@ void GameEngineRender::TextRender(float _DeltaTime)
 
 	float4 RenderPos = GetActorPlusPos() - CameraPos;
 
+	HDC hdc = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+	HFONT hFont, OldFont;
+	LOGFONTA lf;
+	lf.lfHeight = TextHeight;
+	lf.lfWidth = 0;
+	lf.lfEscapement = 0;
+	lf.lfOrientation = 0;
+	lf.lfWeight = 0;
+	lf.lfItalic = 0;
+	lf.lfUnderline = 0;
+	lf.lfStrikeOut = 0;
+	lf.lfCharSet = HANGEUL_CHARSET;
+	lf.lfOutPrecision = 0;
+	lf.lfClipPrecision = 0;
+	lf.lfQuality = 0;
+	lf.lfPitchAndFamily = VARIABLE_PITCH | FF_ROMAN;
+	lstrcpy(lf.lfFaceName, TEXT(TextType.c_str()));
+	hFont = CreateFontIndirect(&lf);
+	OldFont = static_cast<HFONT>(SelectObject(hdc, hFont));
+
+	SetTextAlign(hdc, static_cast<UINT>(Align));
+	SetTextColor(hdc, TextColor);
+	SetBkMode(hdc, TRANSPARENT);
+
 	TextOutA(GameEngineWindow::GetDoubleBufferImage()->GetImageDC(), RenderPos.ix(), RenderPos.iy(), RenderText.c_str(), static_cast<int>(RenderText.size()));
+
+	SelectObject(hdc, OldFont);
+	DeleteObject(hFont);
 
 	return;
 }
@@ -179,6 +216,7 @@ bool GameEngineRender::IsAnimationEnd()
 
 void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Parameter)
 {
+	//애니메이션을 만들기 위한 이미지 검증
 	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind(_Parameter.ImageName);
 
 	//사용할 이미지 존재여부 확인

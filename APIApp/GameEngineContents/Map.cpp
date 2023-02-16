@@ -1,5 +1,7 @@
 #include "Map.h"
+#include <GameEngineBase/GameEngineMath.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
+#include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineRender.h>
 #include "ContentsEnums.h"
 
@@ -22,6 +24,7 @@ void Map::Start()
 		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
 		MapRender0->SetPosition(StartPos);
 		MapRender0->SetScaleToImage();
+
 	}
 
 	{
@@ -33,15 +36,33 @@ void Map::Start()
 		MapRender1->SetPosition({StartPos.x, MapRender1->GetImage()->GetImageScale().half().y});
 		MapRender1->SetScaleToImage();
 	}
+
+	{
+		BodyCollision = CreateCollision(MarioCollisionOrder::Door);
+		BodyCollision->SetScale({ 40, 40 });
+		float4 MapSize = MapRender0->GetImage()->GetImageScale();
+		BodyCollision->SetPosition({ MapSize.x-128, MapSize.y });
+
+	}
 }
 
 
 void Map::Update(float _DeltaTime)
 {
+
+
 	if (false == IsStageClear)
 	{
 		return;
 	}
+
+	if (BodyCollision != 0)
+	{
+	
+	}
+
+
+
 
 	float4 StartPos = MapRender1->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
 	MapRender1->SetPosition(StartPos);

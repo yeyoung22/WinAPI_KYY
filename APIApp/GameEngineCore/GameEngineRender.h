@@ -3,6 +3,14 @@
 #include <GameEnginePlatform/GameEngineImage.h>
 #include "GameEngineComponent.h"
 
+enum class TextAlign
+{
+	Left = TA_LEFT,
+	Right = TA_RIGHT,
+	Center = TA_CENTER
+};
+
+
 class FrameAnimationParameter
 {
 public:
@@ -84,12 +92,28 @@ public:
 
 	void SetOrder(int _Order) override;
 
-	void SetAlpha(int _Alpha)
+
+	inline int GetTextHeight()
+	{
+		return TextHeight;
+	}
+
+	inline void SetAlpha(int _Alpha)
 	{
 		Alpha = _Alpha;
 	}
 
+	void SetImage(const std::string_view& _ImageName);
+
+	void SetImageToScaleToImage(const std::string_view& _ImageName);
+
+	void SetScaleToImage();
+
+	void SetFrame(int _Frame);
+
 	void SetText(const std::string_view& _Text);
+
+	void SetText(const std::string_view& _Text, const int _TextHeight = 20, const std::string_view& _TextType = "굴림", const TextAlign _TextAlign = TextAlign::Center, const COLORREF _TextColor = RGB(0, 0, 0));
 
 	//------test code
 	void CreateReverseAnimation(const FrameAnimationParameter& _Parameter);
@@ -138,9 +162,15 @@ private:
 	FrameAnimation* CurrentAnimation = nullptr;
 
 	/// <summary>
-	/// TextRender에서 Render하고 싶은 텍스트
-	/// </summary>
-	std::string RenderText;
+/// TextRender
+/// </summary>
+	std::string RenderText = std::string();
+	int TextHeight = 0;
+	std::string TextType = std::string();
+	TextAlign Align = TextAlign::Left;
+	COLORREF TextColor = RGB(0, 0, 0);
+	// 그런걸 하면 HBRUSH 만드는데 사용하고 나면 Release
+	// GameEngineImage를 참조
 };
 
 

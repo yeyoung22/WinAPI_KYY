@@ -17,4 +17,7 @@ enum class MarioCollisionOrder
 	Item,
 	PlayerAttack,				//Fire Attack of Mario
 	MonsterAttack,				//Fire Breath of Kupa
+	Door,
+	Goal,
+
 };
