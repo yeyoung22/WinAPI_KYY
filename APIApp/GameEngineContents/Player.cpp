@@ -309,7 +309,7 @@ void Player::Update(float _DeltaTime)
 	}
 
 
-	if (nullptr != BodyCollision)
+	/*if (nullptr != BodyCollision)
 	{
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Item), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
@@ -344,7 +344,7 @@ void Player::Update(float _DeltaTime)
 
 
 		}
-	}
+	}*/
 
 
 	if (nullptr != BodyCollision)
