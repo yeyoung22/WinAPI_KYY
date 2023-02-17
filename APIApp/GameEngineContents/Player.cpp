@@ -13,9 +13,11 @@
 #include "ContentsValue.h"
 #include "STLevel.h"
 #include "PlayLevel.h"
+#include "ContentsUI.h"
 
 
 //screenSize = {1024, 960}
+bool  Player::IsDebugMode = false;
 Player* Player::MainPlayer;
 float Player::PlayTimer = 400.0f;
 PlayerMode Player::ModeValue = PlayerMode::MARIO;
@@ -32,7 +34,7 @@ void Player::Start()
 {
 	
 	MainPlayer = this;
-
+	
 
 
 	if (false == GameEngineInput::IsKey("LeftMove"))
@@ -184,12 +186,13 @@ bool  Player::LiftUp(float4 _Pos)
 
 		int Color = ColImage->GetPixelColor(NextPos, Black);
 
-		if (Black == Color )
+		if (Black == Color)
 		{
 			SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
 			continue;
 		}
-		break;												//Empty Space(Magenta)->break;
+		
+		break;
 	}
 
 
@@ -204,14 +207,13 @@ bool  Player::LiftUp(float4 _Pos)
 	return false;
 }
 
-//위쪽 픽셀 체크
-bool  Player::CheckCeiling(float4 _Pos)
-{
-	//땅인지 아닌지 체크하는 부분
-	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
-	float4 NextPos = GetPos() + _Pos;
 
-	if (Black == ColImage->GetPixelColor(NextPos + float4::Down, Black))
+bool Player::CheckRightWall(float4 _Pos)
+{
+	float4 CheckRPos = GetPos() + _Pos;						//센터에서 한 칸 오른쪽
+	CheckRPos.x += GetImgHalfWidth() - 8;					//이미지의 우측
+
+	if (Black == ColImage->GetPixelColor(CheckRPos + float4::Right, Black))
 	{
 		return true;
 	}
@@ -219,27 +221,63 @@ bool  Player::CheckCeiling(float4 _Pos)
 	return false;
 }
 
-//좌우측 픽셀 체크
+bool Player::CheckLeftWall(float4 _Pos)
+{
+	float4 CheckLPos = GetPos() + _Pos;						//센터에서 한 칸 왼쪽
+	CheckLPos.x -= GetImgHalfWidth() - 8;					//이미지의 좌측
+
+	if (Black == ColImage->GetPixelColor(CheckLPos + float4::Left, Black))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 bool Player::CheckWall(float4 _Pos)
 {
-	float4 CheckRPos = GetPos() + _Pos + float4::Right;		//한 칸 오른쪽
-	CheckRPos.x += AnimationRender->GetScale().hx();		//이미지 우측
-
-	float4 CheckLPos = GetPos() + _Pos + float4::Left;		//한 칸 왼쪽
-	CheckLPos.x -= AnimationRender->GetScale().hx();		//이미지 좌측
-
-	if (Black == ColImage->GetPixelColor(CheckRPos, Black))
-	{
-		return true;
-	}
-
-	if (Black == ColImage->GetPixelColor(CheckLPos, Black))
+	if (CheckLeftWall(_Pos) || CheckRightWall(_Pos))
 	{
 		return true;
 	}
 
 	return false;
 }
+
+
+
+
+//위쪽 픽셀 체크
+//bool  Player::CheckCeiling(float4 _Pos)
+//{
+//	//땅인지 아닌지 체크하는 부분
+//	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
+//	float MarioImgHeight = AnimationRender->GetImage()->GetImageScale().hy;
+//	
+//	float4 NextPos = GetPos() + _Pos;
+//	NextPos.y -= MarioImgHeight/4;			//이미지 정중앙에서 위
+//
+//	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+//
+//
+//	//<디버깅용_NextPos 보기위함>
+//	Rectangle(DoubleDC,
+//		NextPos.ix() - 5,
+//		NextPos.iy() - 5,
+//		NextPos.ix() + 5,
+//		NextPos.iy() + 5
+//	);
+//
+//
+//	if (Black == ColImage->GetPixelColor(NextPos + float4::Up, Black))
+//	{
+//		return true;
+//	}
+//
+//	return false;
+//}
+
+
 
 
 void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
@@ -262,23 +300,23 @@ bool Player::FreeMoveState(float _DeltaTime)
 	{
 		if (GameEngineInput::IsPress("LeftMove"))
 		{
-			SetMove(float4::Left * 1000.0f * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Left * MoveSpeed * _DeltaTime);
+			SetMove(float4::Left * FreeSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Left * FreeSpeed * _DeltaTime);
 		}
 		else if (GameEngineInput::IsPress("RightMove"))
 		{
-			SetMove(float4::Right * 1000.0f * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Right * MoveSpeed * _DeltaTime);
+			SetMove(float4::Right * FreeSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Right * FreeSpeed * _DeltaTime);
 		}
 		else if (GameEngineInput::IsPress("UpMove"))
 		{
-			SetMove(float4::Up * 1000.0f * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Up * MoveSpeed * _DeltaTime);
+			SetMove(float4::Up * FreeSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Up * FreeSpeed * _DeltaTime);
 		}
 		else if (GameEngineInput::IsPress("DownMove"))
 		{
-			SetMove(float4::Down * 1000.0f * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Down * MoveSpeed * _DeltaTime);
+			SetMove(float4::Down * FreeSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Down * FreeSpeed * _DeltaTime);
 		}
 	}
 	if (true == FreeMove)
@@ -384,7 +422,7 @@ void Player::Update(float _DeltaTime)
 
 	if (true == GameEngineInput::IsDown("DebuggingMode"))
 	{
-		DebugTextSwitch();
+		DebugModeSwitch();
 	}
 
 	if (GameEngineInput::IsDown("StageClear"))
@@ -436,13 +474,14 @@ void Player::Camera(float4 _Pos)
 
 	if (ActPos.x < CameraEndPos)
 	{
-		if (ActPos.x >= CameraPos.x + GameEngineWindow::GetScreenSize().hx())						//Move the camera if Mario is to the right of the center of the screen
+		if (ActPos.x >= CameraPos.x + GameEngineWindow::GetScreenSize().hx())		//Move the camera if Mario is to the right of the center of the screen
 		{
 			if (GameEngineInput::IsPress("RightMove"))
 			{
 				GetLevel()->SetCameraMove({ _Pos.x, 0 });
-			}
-
+				std::vector<GameEngineActor*> UIActors = GetLevel()->GetActors(static_cast<int>(MarioRenderOrder::UI));
+				UIActors[0]->SetPos(_Pos);
+			}			
 		}
 	}
 }
@@ -461,8 +500,30 @@ void Player::Render(float _DeltaTime)
 		ActorPos.iy() + 5
 	);
 
-	
-		if (true == IsDebugText)
+	//float4 right = GetPos() - GetLevel()->GetCameraPos();
+	//right.x += GetImgHalfWidth() - 8;
+
+	////<디버깅용_NextPos 보기위함>
+	//Rectangle(DoubleDC,
+	//	right.ix() - 5,
+	//	right.iy() - 5,
+	//	right.ix() + 5,
+	//	right.iy() + 5
+	//);
+
+	//float4 left = GetPos() - GetLevel()->GetCameraPos();
+	//left.x -= GetImgHalfWidth() - 8;
+
+
+	////<디버깅용_NextPos 보기위함>
+	//Rectangle(DoubleDC,
+	//	left.ix() - 5,
+	//	left.iy() - 5,
+	//	left.ix() + 5,
+	//	left.iy() + 5
+	//);
+	//
+		if (true == IsDebugMode)
 		{
 			//Mario Positio 출력
 			std::string MarioPosText = "MarioPosition : ";
@@ -477,7 +538,6 @@ void Player::Render(float _DeltaTime)
 		}
 
 
-		
 
 
 }

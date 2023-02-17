@@ -39,6 +39,7 @@ union ColorCheck
 class Player : public GameEngineActor
 {
 public:
+	static bool IsDebugMode;
 	static Player* MainPlayer;
 	static float PlayTimer;									//Play Timer
 	static PlayerMode ModeValue;
@@ -58,10 +59,33 @@ public:
 		ModeValue = _Mode;
 	}
 
-	void DebugTextSwitch()
+	static void DebugModeSwitch()
 	{
-		IsDebugText = !IsDebugText;
+		IsDebugMode = !IsDebugMode;
 	}
+
+	void SetImgHalfWidth(float _Value)
+	{
+		ImgHalfWidth = _Value;
+	}
+
+	void SetImgHalfHeight(float _Value)
+	{
+		ImgHalfHeight = _Value;
+	}
+	
+	float GetImgHalfWidth()
+	{
+		return ImgHalfWidth;		
+	}
+
+	float GetImgHalfHeight()
+	{
+		return ImgHalfHeight;
+	}
+
+	void Camera(float4 _Pos);
+
 
 protected:
 	void Start() override;
@@ -69,7 +93,6 @@ protected:
 	void Render(float _DeltaTime) override;
 
 private:
-	bool IsDebugText = false;
 	bool IsLeftBrake = false;
 	bool IsGround = false;
 
@@ -89,6 +112,10 @@ private:
 	float FrictionPower = 0.0025f;
 	float BrakePower = 0.0f;
 	float MaxSpeed = 250.0f;									
+	float ImgHalfWidth = 32.0f;									//To be cut PlayerImg's half size Width and Height
+	float ImgHalfHeight = 32.0f;
+	float FreeSpeed = 1200.0f;
+	float LeftSpeed = 7.0f;										//남은 속도
 
 	float CameraEndPos = 0.0f;
 
@@ -170,16 +197,16 @@ private:
 	bool LiftUp(float4 _Pos = float4::Zero);
 
 	//위쪽이 천장인지 확인하는 함수
-	bool CheckCeiling(float4 _Pos);
+	//bool CheckCeiling(float4 _Pos);
 
 	//오른쪽 왼쪽이 벽인지 확인하는 함수
 	bool CheckWall(float4 _Pos);
+	bool CheckRightWall(float4 _Pos);
+	bool CheckLeftWall(float4 _Pos);
 
-	
 	void ActorMove(float _Time)
 	{
 		SetMove(MoveDir * _Time);							//움직임을 나타냄
 	}
 
-	void Camera(float4 _Pos);
 };

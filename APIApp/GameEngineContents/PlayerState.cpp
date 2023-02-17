@@ -266,11 +266,10 @@ void Player::MoveUpdate(float _Time)
 
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
-
+	
 
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
-
 
 
 	IsGround = LiftUp();
@@ -286,7 +285,7 @@ void Player::MoveEnd()
 
 void Player::BrakeStart()
 {
-	BrakePower = 200.0f;
+	BrakePower = 400.0f;
 	if (ModeValue == PlayerMode::SUPERMARIO)											//Growth ver.Mario
 	{
 		if (true == IsLeftBrake)
@@ -333,11 +332,10 @@ void Player::BrakeUpdate(float _Time)
 		return;
 	}
 
-	BrakePower;	//이동할 때 속도를 감속하는 역할
 
 	if (0 < MoveDir.x)
 	{
-		MoveDir.x -= BrakePower * _Time;			//좌측 이동
+		MoveDir.x -= BrakePower * _Time;			//좌측 이동(BrakePower 이동할 때 속도를 감속)
 	}
 	else {
 		MoveDir.x += BrakePower * _Time;			//우측 이동
@@ -348,29 +346,25 @@ void Player::BrakeUpdate(float _Time)
 
 	IsGround = LiftUp();
 	InitGravity(IsGround);
-
-	if (5.0f >= abs(MoveDir.x))						//남은 속도가 5.0f이하이면 상태를 바꿈
+	
+	if (LeftSpeed >= abs(MoveDir.x))						//남은 속도가 5.0f이하이면 상태를 바꿈
 	{
 		if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
 		{
 			ChangeState(PlayerState::IDLE);			//아무것도 안 눌리면 IDLE
 			return;
 		}
+		else if (true == GameEngineInput::IsDown("Jump"))
+		{
+			ChangeState(PlayerState::JUMP);
+			return;
+		}
 		else
 		{
-			ChangeState(PlayerState::MOVE);			//계속 누르고 있는 상황 등에서는 Move-----------상태확인 해봐야 함
+			ChangeState(PlayerState::MOVE);			//계속 누르고 있는 상황 등에서는 Move
 			return;
 		}
 	}
-
-
-
-	if (GameEngineInput::IsDown("Jump"))
-	{
-		ChangeState(PlayerState::JUMP);
-		return;
-	}
-
 
 
 	//가다가 땅이 아니라면 Fall로 changestate
@@ -555,7 +549,6 @@ void Player::DeathUpdate(float _Time)
 }
 void Player::DeathEnd()
 {
-
 }
 
 

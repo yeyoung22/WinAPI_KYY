@@ -196,8 +196,8 @@ void PlayLevel::Loading()
 	}
 	{
 		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ StartPos.x - 256, StartPos.y - 64 });
+		float4 StartPos = GameEngineWindow::GetScreenSize().half();
+		Actor->SetPos(StartPos);
 	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
@@ -240,8 +240,8 @@ void PlayLevel::Update(float _DeltaTime)
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
-	//BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
-	//BGMPlayer.LoopCount(1);
+	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
+	BGMPlayer.LoopCount(1);
 
 	ContentsValue::CameraScale = { 1020, 960 };
 }

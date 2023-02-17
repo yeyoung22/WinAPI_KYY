@@ -5,6 +5,7 @@
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 #include "ContentsEnums.h"
+#include "Player.h"
 
 
 
@@ -60,6 +61,21 @@ void Map::Update(float _DeltaTime)
 
 	//	IsStageClear = false;
 	//}
+
+	if (true == Player::IsDebugMode)
+	{
+		MapRender0->SetImage("ColWorld1_1.bmp");
+		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
+		MapRender0->SetPosition(StartPos);
+		MapRender0->SetScaleToImage();
+	}
+	else
+	{
+		MapRender0->SetImage("World1_1.bmp");
+		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
+		MapRender0->SetPosition(StartPos);
+		MapRender0->SetScaleToImage();
+	}
 
 	if (true == IsStageClear)
 	{

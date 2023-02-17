@@ -21,5 +21,6 @@ protected:
 	void Update(float _DeltaTime) override;
 private:
 	NumberRenderObject NumberSets;
+	GameEngineRender* NumberRender = nullptr;
 };
 
