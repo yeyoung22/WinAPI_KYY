@@ -42,12 +42,6 @@ void Player::Start()
 		GameEngineInput::CreateKey("Crouch", 'S');
 		//GameEngineInput::CreateKey("Jump", 'W');
 		GameEngineInput::CreateKey("Jump", VK_SPACE);			//Mario can jump 5 sec
-
-	
-		GameEngineInput::CreateKey("FreeMoveSwitch", '1');
-		GameEngineInput::CreateKey("StageClear", '2');
-		GameEngineInput::CreateKey("GoToCastle", '3');
-
 	}
 
 	{
@@ -190,7 +184,7 @@ bool  Player::LiftUp(float4 _Pos)
 
 		int Color = ColImage->GetPixelColor(NextPos, Black);
 
-		if (Black == Color)
+		if (Black == Color )
 		{
 			SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
 			continue;
@@ -210,17 +204,14 @@ bool  Player::LiftUp(float4 _Pos)
 	return false;
 }
 
-
-bool  Player::CheckGround(float4 _Pos)
+//위쪽 픽셀 체크
+bool  Player::CheckCeiling(float4 _Pos)
 {
 	//땅인지 아닌지 체크하는 부분
 	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
 	float4 NextPos = GetPos() + _Pos;
 
-	if (
-		Black == ColImage->GetPixelColor(NextPos + float4::Down, Black) &&
-		Magenta == ColImage->GetPixelColor(NextPos, Magenta)
-		)
+	if (Black == ColImage->GetPixelColor(NextPos + float4::Down, Black))
 	{
 		return true;
 	}
@@ -228,7 +219,7 @@ bool  Player::CheckGround(float4 _Pos)
 	return false;
 }
 
-
+//좌우측 픽셀 체크
 bool Player::CheckWall(float4 _Pos)
 {
 	float4 CheckRPos = GetPos() + _Pos + float4::Right;		//한 칸 오른쪽
@@ -391,6 +382,11 @@ void Player::Update(float _DeltaTime)
 		return;
 	}
 
+	if (true == GameEngineInput::IsDown("DebuggingMode"))
+	{
+		DebugTextSwitch();
+	}
+
 	if (GameEngineInput::IsDown("StageClear"))
 	{
 		Map::MainMap->StageClearOn();
@@ -465,11 +461,23 @@ void Player::Render(float _DeltaTime)
 		ActorPos.iy() + 5
 	);
 
+	
+		if (true == IsDebugText)
+		{
+			//Mario Positio 출력
+			std::string MarioPosText = "MarioPosition : ";
+			MarioPosText += MainPlayer->GetPos().ToString();
+			GameEngineLevel::DebugTextPush(MarioPosText);
 
-	//Mario Positio 출력
-	std::string MarioPosText = "MarioPosition : ";
-	MarioPosText += MainPlayer->GetPos().ToString();
+			//Mario StateValue 출력
+			std::string MarioStateText = "MarioState : ";
+			MarioStateText += MainPlayer->GetStateName();
+			GameEngineLevel::DebugTextPush(MarioStateText);
 
-	GameEngineLevel::DebugTextPush(MarioPosText);
+		}
+
+
+		
+
 
 }

@@ -202,21 +202,18 @@ void PlayLevel::Loading()
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
 	{
-		GameEngineInput::CreateKey("DebugRenderSwitch", 'R');
-	}
-
-	if (false == GameEngineInput::IsKey("BGMPause"))
-	{
-		GameEngineInput::CreateKey("BGMPause", 'P');
-	}
-
-	if (false == GameEngineInput::IsKey("CameraLeftMove"))
-	{
 		//VK: 알파뱃과 숫자를 제외한 키
 		GameEngineInput::CreateKey("CameraLeftMove", VK_LEFT);			//방향키
 		GameEngineInput::CreateKey("CameraRightMove", VK_RIGHT);
 		GameEngineInput::CreateKey("CameraDownMove", VK_DOWN);
 		GameEngineInput::CreateKey("CameraUpMove", VK_UP);
+
+		GameEngineInput::CreateKey("DebugRenderSwitch", 'R');
+		GameEngineInput::CreateKey("BGMPause", 'P');
+		GameEngineInput::CreateKey("FreeMoveSwitch", '1');
+		GameEngineInput::CreateKey("StageClear", '2');
+		GameEngineInput::CreateKey("GoToCastle", '3');
+		GameEngineInput::CreateKey("DebuggingMode", '8');		//For Debug
 	}
 
 }
@@ -235,12 +232,10 @@ void PlayLevel::Update(float _DeltaTime)
 		}
 	}
 
-	if (GameEngineInput::IsDown("DebugRenderSwitch"))
+	if (GameEngineInput::IsDown("DebugRenderSwitch") || GameEngineInput::IsDown("DebuggingMode"))
 	{
 		DebugRenderSwitch();
 	}
-
-	
 }
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)

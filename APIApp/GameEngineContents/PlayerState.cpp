@@ -8,6 +8,30 @@
 #include "ContentsEnums.h"
 
 
+std::string Player::GetStateName()
+{
+	switch (StateValue)
+	{
+	case PlayerState::IDLE:
+		return "PlayerState::IDLE";
+	case PlayerState::MOVE:
+		return "PlayerState::MOVE";
+	case PlayerState::BRAKE:
+		return "PlayerState::BRAKE";
+	case PlayerState::JUMP:
+		return "PlayerState::JUMP";
+	case PlayerState::CROUCH:
+		return "PlayerState::CROUCH";
+	case PlayerState::ATTACK:
+		return "PlayerState::ATTACK";
+	case PlayerState::FALL:
+		return "PlayerState::FALL";
+	case PlayerState::DEATH:
+		return "PlayerState::DEATH";
+	default:
+		break;
+	}
+}
 
 
 //State 변경
@@ -309,81 +333,36 @@ void Player::BrakeUpdate(float _Time)
 		return;
 	}
 
-	//Brake
-	if (true == IsLeftBrake)									//왼쪽으로 가던 중에 오른쪽으로 이동하는 경우
+	BrakePower;	//이동할 때 속도를 감속하는 역할
+
+	if (0 < MoveDir.x)
 	{
-		if (
-			0 <= MoveDir.x 
-			&& false == GameEngineInput::IsPress("LeftMove")
-			&& false == GameEngineInput::IsPress("RightMove")
-			)
-		{
-			ChangeState(PlayerState::IDLE);
-			return;
-		}
-
-		if (0 <= MoveDir.x && true == GameEngineInput::IsPress("RightMove"))
-		{
-			ChangeState(PlayerState::MOVE);
-			return;
-		}
-
-			
-		//왼쪽으로 가다가 오른쪽 이동키를 누르면 왼쪽으로 미끄러짐
-		//왼쪽으로 미끄러지고 있는데, 오른쪽 키에서 손을 떼고  다시 왼쪽키를 누름
-		//미끄러지는 모션을 유지한채로 오른쪽으로 이동
-		if (0 >= MoveDir.x && false == GameEngineInput::IsPress("RightMove") && true == GameEngineInput::IsPress("LeftMove"))
-		{
-			int a = 0;
-
-		}
-
-
-		MoveDir += float4::Left * _Time;
-		MoveDir += float4::Right * BrakePower * _Time;
-
-		SetMove(MoveDir * _Time);
-		Camera(MoveDir * _Time);
-
-
+		MoveDir.x -= BrakePower * _Time;			//좌측 이동
 	}
-	else if (false == IsLeftBrake)								//오른쪽으로 가던 중에 왼쪽으로 이동하는 경우
+	else {
+		MoveDir.x += BrakePower * _Time;			//우측 이동
+	}
+
+	SetMove(MoveDir * _Time);
+	Camera(MoveDir * _Time);
+
+	IsGround = LiftUp();
+	InitGravity(IsGround);
+
+	if (5.0f >= abs(MoveDir.x))						//남은 속도가 5.0f이하이면 상태를 바꿈
 	{
-		if (
-			0 >= MoveDir.x
-			&& false == GameEngineInput::IsPress("LeftMove")
-			&& false == GameEngineInput::IsPress("RightMove")
-			)
+		if (false == GameEngineInput::IsPress("LeftMove") && false == GameEngineInput::IsPress("RightMove"))
 		{
-			ChangeState(PlayerState::IDLE);
+			ChangeState(PlayerState::IDLE);			//아무것도 안 눌리면 IDLE
 			return;
 		}
-
-		if (0 >= MoveDir.x && true == GameEngineInput::IsPress("LeftMove"))
+		else
 		{
-			ChangeState(PlayerState::MOVE);
+			ChangeState(PlayerState::MOVE);			//계속 누르고 있는 상황 등에서는 Move-----------상태확인 해봐야 함
 			return;
 		}
-
-
-
-		//오른쪽으로 가다가 왼쪽 이동키를 누르면 오른쪽으로 미끄러짐(관성)
-		//오른쪽으로 미끄러지고 있는데, 왼쪽 키에서 손을 떼고  다시 오른쪽키를 누름
-		//미끄러지는 모션을 유지한채로 왼쪽으로 이동
-		if (0 <= MoveDir.x && true == GameEngineInput::IsPress("RightMove") ) //&& false == GameEngineInput::IsPress("LeftMove")
-		{
-			int a = 0;
-
-
-		}
-
-	
-		MoveDir += float4::Right * _Time;
-		MoveDir += float4::Left * BrakePower * _Time;
-
-		SetMove(MoveDir * _Time);
-		Camera(MoveDir * _Time);
 	}
+
 
 
 	if (GameEngineInput::IsDown("Jump"))

@@ -58,7 +58,10 @@ public:
 		ModeValue = _Mode;
 	}
 
-
+	void DebugTextSwitch()
+	{
+		IsDebugText = !IsDebugText;
+	}
 
 protected:
 	void Start() override;
@@ -66,6 +69,7 @@ protected:
 	void Render(float _DeltaTime) override;
 
 private:
+	bool IsDebugText = false;
 	bool IsLeftBrake = false;
 	bool IsGround = false;
 
@@ -112,6 +116,9 @@ private:
 
 	void ChangeState(PlayerState _State);
 	void UpdateState(float _Time);
+
+	//Debug_현재 StateValue를 반환하는 함수
+	std::string GetStateName();
 
 	//FSM
 	void IdleStart();
@@ -162,8 +169,10 @@ private:
 	//Lift Player's Position upward
 	bool LiftUp(float4 _Pos = float4::Zero);
 
-	bool CheckGround(float4 _Pos);
+	//위쪽이 천장인지 확인하는 함수
+	bool CheckCeiling(float4 _Pos);
 
+	//오른쪽 왼쪽이 벽인지 확인하는 함수
 	bool CheckWall(float4 _Pos);
 
 	
