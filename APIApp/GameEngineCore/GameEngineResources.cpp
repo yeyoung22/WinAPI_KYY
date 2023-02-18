@@ -94,7 +94,7 @@ GameEngineSound* GameEngineResources::SoundLoad(const std::string_view& _Path, c
 
 	if (AllSound.end() != AllSound.find(UpperName))
 	{
-		MsgAssert("이미 로드한 이미지를 또 로드하려고 했습니다." + UpperName);
+		MsgAssert("이미 로드한 사운드를 또 로드하려고 했습니다." + UpperName);
 		return nullptr;
 	}
 
@@ -113,7 +113,7 @@ GameEngineSound* GameEngineResources::SoundFind(const std::string_view& _Name)
 
 	if (AllSound.end() == FindIter)
 	{
-		MsgAssert("로드하지 않은 이미지를 사용하려고 했습니다" + UpperName);
+		MsgAssert("로드하지 않은 사운드를 사용하려고 했습니다" + UpperName);
 		return nullptr;
 	}
 

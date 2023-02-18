@@ -34,7 +34,7 @@ void SuperMarioCore::Start()
 	CreateLevel<EndingLevel>("EndingLevel");
 
 	//ChangeLevel("TitleLevel");
-	ChangeLevel("PlayLevel");					//나중에 지워야 함-------------------------------
+	ChangeLevel("PlayLevel");					//나중에 지워야 함------------------------------
 }
 
 void SuperMarioCore::Update()

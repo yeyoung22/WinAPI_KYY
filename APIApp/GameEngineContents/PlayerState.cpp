@@ -382,7 +382,7 @@ void Player::BrakeEnd()
 void Player::JumpStart()
 {
 	MoveDir.y = -700.0f;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
-	Gravity = 1000.0f;												//아래로 떨어뜨리는 힘
+	Gravity = 1100.0f;												//아래로 떨어뜨리는 힘
 
 	if (ModeValue == PlayerMode::SUPERMARIO)
 	{
@@ -395,7 +395,11 @@ void Player::JumpStart()
 	else
 	{
 		DirCheck("Jump");
-	}
+	}	
+
+	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
+	EffectPlayer.LoopCount(1);
+	EffectPlayer.Volume(0.5f);
 }
 void Player::JumpUpdate(float _Time)
 {

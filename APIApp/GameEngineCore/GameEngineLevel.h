@@ -34,6 +34,8 @@ public:
 		IsDebugRender = !IsDebugRender;
 	}
 
+	float4 GetMousePos();
+	float4 GetMousePosToCamera();
 
 	/// <summary>
 	/// 액터를 만드는 함수

@@ -28,10 +28,19 @@ void PlayLevel::SoundLoad()
 	Dir.MoveParentToDirectory("ContentsResources");
 	Dir.Move("ContentsResources");
 	Dir.Move("Sound");
-	Dir.Move("BGM");
-
+	//BGM Load
 	{
+		Dir.Move("BGM");
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("RunningAbout.mp3"));
+
+		Dir.MoveParent();
+	}
+	//Sound Effect Load
+	{
+		Dir.Move("SoundEffect");
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("jump.wav"));
+
+		Dir.MoveParent();
 	}
 
 
@@ -220,6 +229,10 @@ void PlayLevel::Loading()
 
 void PlayLevel::Update(float _DeltaTime)
 {
+	/*BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
+	BGMPlayer.LoopCount(1);
+	BGMPlayer.Volume(0.1f);*/
+
 	if (GameEngineInput::IsDown("BGMPause"))
 	{
 		if (false == BGMPlayer.GetPause())

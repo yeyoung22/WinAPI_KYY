@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/NumberRenderObject.h>
+#include <GameEngineCore/GameEngineResources.h>
 
 enum class PlayerState
 {
@@ -92,7 +93,11 @@ protected:
 	void Update(float _DeltaTime) override;
 	void Render(float _DeltaTime) override;
 
+
+	GameEngineSoundPlayer EffectPlayer;
+
 private:
+
 	bool IsLeftBrake = false;
 	bool IsGround = false;
 

@@ -34,6 +34,16 @@ GameEngineLevel::~GameEngineLevel()
 	Actors.clear();
 }
 
+
+float4 GameEngineLevel::GetMousePos()
+{
+	return GameEngineWindow::GetMousePosition();
+}
+float4 GameEngineLevel::GetMousePosToCamera()
+{
+	return GameEngineWindow::GetMousePosition() + CameraPos;
+}
+
 void GameEngineLevel::ActorStart(GameEngineActor* _Actor, int _Order)
 {
 	if (nullptr == _Actor)

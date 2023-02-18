@@ -56,6 +56,7 @@ public:
 	//=> 컨텐츠와 기능을 분리하기 위해서
 	static int WindowLoop(void(*Start)(), void(*Loop)(), void(*End)());
 
+	static float4 GetMousePosition();
 
 	// constrcuter destructer
 	GameEngineWindow();

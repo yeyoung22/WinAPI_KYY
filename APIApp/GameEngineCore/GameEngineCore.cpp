@@ -1,11 +1,11 @@
 #include "GameEngineCore.h"
 #include <GameEngineBase/GameEngineDebug.h>
-#include <GameEngineBase/GameEngineTime.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineInput.h>
-#include <GameEnginePlatform/GameEngineSound.h>
 #include "GameEngineLevel.h"
 #include "GameEngineResources.h"
+#include <GameEnginePlatform/GameEngineSound.h>
+#include <GameEngineBase/GameEngineTime.h>
 
 GameEngineCore* Core;
 
@@ -57,7 +57,6 @@ void GameEngineCore::GlobalUpdate()
 	}
 
 	Core->Update();
-
 	if (nullptr == Core->MainLevel)
 	{
 		MsgAssert("레벨을 지정해주지 않은 상태로 코어를 실행했습니다");
@@ -108,6 +107,12 @@ GameEngineCore::~GameEngineCore()
 
 void GameEngineCore::CoreStart(HINSTANCE _instance)
 {
+	if (false == GameEngineInput::IsKey("EngineMouseLeft"))
+	{
+		GameEngineInput::CreateKey("EngineMouseLeft", VK_LBUTTON);
+		GameEngineInput::CreateKey("EngineMouseRight", VK_RBUTTON);
+	}
+
 	GameEngineWindow::WindowCreate(_instance, "MainWindow", { 1024.0f, (1024.0f / 16.0f) * 15.0f }, { 0, 0 });
 	GameEngineWindow::WindowLoop(GameEngineCore::GlobalStart, GameEngineCore::GlobalUpdate, GameEngineCore::GlobalEnd);
 }

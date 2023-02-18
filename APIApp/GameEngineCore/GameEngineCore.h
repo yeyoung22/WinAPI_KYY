@@ -11,7 +11,7 @@
 class GameEngineLevel;
 class GameEngineCore									//추상클래스
 {
-public:
+private:
 	static void GlobalStart();
 	static void GlobalUpdate();
 	static void GlobalEnd();
@@ -52,7 +52,7 @@ protected:
 	template<typename LevelType>
 	void CreateLevel(const std::string_view& _Name)
 	{
-		//어떤 장면을 만들었는데, 중복된 이름으로 만들려는 상황
+		//어떤 장면을 만들었는데, 또 중복된 이름으로 만들려는 상황
 		if (Levels.end() != Levels.find(_Name.data()))
 		{
 			std::string Name = _Name.data();
@@ -77,10 +77,12 @@ private:
 	std::map<std::string, GameEngineLevel*> Levels;
 
 	GameEngineLevel* NextLevel = nullptr;
+
 	GameEngineLevel* MainLevel = nullptr;
 
 	void LevelLoading(GameEngineLevel* _Level, const std::string_view& _Name);
 
 	bool IsDebugValue = false;
+
 };
 

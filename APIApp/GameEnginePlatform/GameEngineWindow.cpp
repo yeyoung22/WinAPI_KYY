@@ -45,6 +45,11 @@ LRESULT CALLBACK GameEngineWindow::MessageFunction(HWND _hWnd, UINT _message, WP
         int a = 0;
         break;
     }
+    case WM_KEYDOWN:
+    {
+        GameEngineInput::IsAnyKeyOn();
+        break;
+    }
     //윈도우 종료
     case WM_DESTROY:
     {
@@ -238,4 +243,14 @@ void GameEngineWindow::SettingWindowPos(float4 _Pos)
 {
     WindowPos = _Pos;
     SetWindowPos(HWnd, nullptr, WindowPos.ix(), WindowPos.iy(), WindowSize.ix(), WindowSize.iy(), SWP_NOZORDER);
+}
+
+float4 GameEngineWindow::GetMousePosition()
+{
+    POINT MoniterPoint;
+    LPPOINT PointPtr = &MoniterPoint;
+    GetCursorPos(PointPtr);
+    ScreenToClient(HWnd, PointPtr);
+
+    return { static_cast<float>(MoniterPoint.x),static_cast<float>(MoniterPoint.y)};
 }

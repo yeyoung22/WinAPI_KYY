@@ -26,7 +26,7 @@ public:
 		}
 
 		//                                     option
-		if (FMOD_OK != SoundSystem->init(32, FMOD_DEFAULT, nullptr))
+		if (FMOD_OK != SoundSystem->init(32, FMOD_DEFAULT, nullptr))				//시스템 초기화: Channel을 32개 까지 사용
 		{
 			MsgAssert("사운드 시스템 이니셜라이즈에 실패했습니다.");
 		}
@@ -38,7 +38,7 @@ public:
 	}
 };
 
-SoundSystemCreator SoundInitObject = SoundSystemCreator();
+SoundSystemCreator SoundInitObject = SoundSystemCreator();							//사운드 시스템 객체 생성
 
 void GameEngineSound::SoundUpdate()
 {
@@ -62,8 +62,9 @@ GameEngineSound::~GameEngineSound()
 
 void GameEngineSound::SoundLoad(const std::string_view& _Path)
 { 
+	// _Path.data() 파일로 사운드 생성
 	//															option				   const 아니므로 값을 넣어주면 그 값이 바뀔 수 있음
-	if (FMOD_OK != SoundSystem->createSound(_Path.data(), FMOD_LOOP_NORMAL, nullptr, &FMODSound))
+	if (FMOD_OK != SoundSystem->createSound(_Path.data(), FMOD_LOOP_NORMAL, nullptr, &FMODSound))		
 	{
 		MsgAssert(std::string("사운드 로드에 실패했습니다.\n 경로 : ") + _Path.data());
 	}

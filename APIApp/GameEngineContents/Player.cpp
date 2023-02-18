@@ -11,9 +11,9 @@
 #include "Map.h"
 #include "ContentsEnums.h"
 #include "ContentsValue.h"
-#include "STLevel.h"
 #include "PlayLevel.h"
 #include "ContentsUI.h"
+//#include "STLevel.h"
 
 
 //screenSize = {1024, 960}
@@ -34,8 +34,8 @@ void Player::Start()
 {
 	
 	MainPlayer = this;
-	
 
+	
 
 	if (false == GameEngineInput::IsKey("LeftMove"))
 	{
@@ -479,8 +479,6 @@ void Player::Camera(float4 _Pos)
 			if (GameEngineInput::IsPress("RightMove"))
 			{
 				GetLevel()->SetCameraMove({ _Pos.x, 0 });
-				std::vector<GameEngineActor*> UIActors = GetLevel()->GetActors(static_cast<int>(MarioRenderOrder::UI));
-				UIActors[0]->SetPos(_Pos);
 			}			
 		}
 	}
@@ -536,8 +534,5 @@ void Player::Render(float _DeltaTime)
 			GameEngineLevel::DebugTextPush(MarioStateText);
 
 		}
-
-
-
 
 }
