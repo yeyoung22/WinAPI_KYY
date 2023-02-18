@@ -118,7 +118,7 @@ private:
 	float BrakePower = 0.0f;
 	float MaxSpeed = 250.0f;									
 	float ImgHalfWidth = 32.0f;									//To be cut PlayerImg's half size Width and Height
-	float ImgHalfHeight = 32.0f;
+	float ImgHalfHeight = 64.0f;
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 
@@ -202,12 +202,13 @@ private:
 	bool LiftUp(float4 _Pos = float4::Zero);
 
 	//위쪽이 천장인지 확인하는 함수
-	//bool CheckCeiling(float4 _Pos);
+	bool CheckCeiling(float4 _Pos);
 
 	//오른쪽 왼쪽이 벽인지 확인하는 함수
-	bool CheckWall(float4 _Pos);
 	bool CheckRightWall(float4 _Pos);
 	bool CheckLeftWall(float4 _Pos);
+
+	bool CheckAir(float4 _Pos);
 
 	void ActorMove(float _Time)
 	{

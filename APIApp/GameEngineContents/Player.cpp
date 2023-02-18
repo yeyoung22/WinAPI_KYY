@@ -188,13 +188,27 @@ bool  Player::LiftUp(float4 _Pos)
 
 		if (Black == Color)
 		{
+		
 			SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
 			continue;
 		}
-		
+
 		break;
 	}
 
+
+
+	if (true == GameEngineInput::IsPress("RightMove") && true == CheckRightWall(_Pos))
+	{
+		SetMove(float4::Left);
+	}
+
+	if (true == GameEngineInput::IsPress("LeftMove") && true == CheckLeftWall(_Pos))
+	{
+		SetMove(float4::Right);
+	}
+
+	
 
 	//땅인지 아닌지 체크하는 부분
 	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
@@ -234,48 +248,31 @@ bool Player::CheckLeftWall(float4 _Pos)
 	return false;
 }
 
-bool Player::CheckWall(float4 _Pos)
+bool Player::CheckAir(float4 _Pos)
 {
-	if (CheckLeftWall(_Pos) || CheckRightWall(_Pos))
+	float4 CheckPos = GetPos() + _Pos;
+
+	if (Magenta == ColImage->GetPixelColor(CheckPos + float4::Down, Black))
+	{
+		return true;
+	}
+	return false;
+}
+
+
+bool  Player::CheckCeiling(float4 _Pos)
+{	
+	float4 CheckPos = GetPos() + _Pos;
+	CheckPos.y -= ImgHalfHeight;			//이미지 정중앙에서 위
+
+
+	if (Black == ColImage->GetPixelColor(CheckPos + float4::Up, Black))
 	{
 		return true;
 	}
 
 	return false;
 }
-
-
-
-
-//위쪽 픽셀 체크
-//bool  Player::CheckCeiling(float4 _Pos)
-//{
-//	//땅인지 아닌지 체크하는 부분
-//	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
-//	float MarioImgHeight = AnimationRender->GetImage()->GetImageScale().hy;
-//	
-//	float4 NextPos = GetPos() + _Pos;
-//	NextPos.y -= MarioImgHeight/4;			//이미지 정중앙에서 위
-//
-//	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-//
-//
-//	//<디버깅용_NextPos 보기위함>
-//	Rectangle(DoubleDC,
-//		NextPos.ix() - 5,
-//		NextPos.iy() - 5,
-//		NextPos.ix() + 5,
-//		NextPos.iy() + 5
-//	);
-//
-//
-//	if (Black == ColImage->GetPixelColor(NextPos + float4::Up, Black))
-//	{
-//		return true;
-//	}
-//
-//	return false;
-//}
 
 
 
@@ -509,18 +506,18 @@ void Player::Render(float _DeltaTime)
 	//	right.iy() + 5
 	//);
 
-	//float4 left = GetPos() - GetLevel()->GetCameraPos();
-	//left.x -= GetImgHalfWidth() - 8;
+	float4 left = GetPos() - GetLevel()->GetCameraPos();
+	left.y -= GetImgHalfHeight();
 
 
-	////<디버깅용_NextPos 보기위함>
-	//Rectangle(DoubleDC,
-	//	left.ix() - 5,
-	//	left.iy() - 5,
-	//	left.ix() + 5,
-	//	left.iy() + 5
-	//);
-	//
+	//<디버깅용_NextPos 보기위함>
+	Rectangle(DoubleDC,
+		left.ix() - 5,
+		left.iy() - 5,
+		left.ix() + 5,
+		left.iy() + 5
+	);
+	
 		if (true == IsDebugMode)
 		{
 			//Mario Positio 출력

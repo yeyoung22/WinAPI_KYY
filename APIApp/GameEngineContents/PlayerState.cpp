@@ -263,10 +263,17 @@ void Player::MoveUpdate(float _Time)
 		MoveDir += float4::Right * MoveSpeed * _Time;
 	}
 	
+	if (true == CheckAir(MoveDir * _Time))
+	{
+		ChangeState(PlayerState::FALL);
+		return;
+	}
+
 
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
 	
+
 
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
@@ -366,8 +373,11 @@ void Player::BrakeUpdate(float _Time)
 		}
 	}
 
-
-	//가다가 땅이 아니라면 Fall로 changestate
+	if (true == CheckAir(MoveDir * _Time))
+	{
+		ChangeState(PlayerState::FALL);
+		return;
+	}
 	
 
 
@@ -381,7 +391,7 @@ void Player::BrakeEnd()
 
 void Player::JumpStart()
 {
-	MoveDir.y = -700.0f;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
+	MoveDir.y = -750.0f;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
 	Gravity = 1100.0f;												//아래로 떨어뜨리는 힘
 
 	if (ModeValue == PlayerMode::SUPERMARIO)
@@ -424,7 +434,8 @@ void Player::JumpUpdate(float _Time)
 
 	LimitSpeed(MoveDir);
 
-	SetMove(MoveDir*_Time);
+
+	SetMove(MoveDir * _Time);
 	AccGravity(_Time);
 
 	Camera(MoveDir * _Time);
@@ -513,30 +524,25 @@ void Player::FallStart()
 }
 void Player::FallUpdate(float _Time)
 {
+	LimitSpeed(MoveDir);
+	AccGravity(_Time);
+	SetMove(MoveDir * _Time);
+	Camera(MoveDir * _Time);
+
+	IsGround = LiftUp();
+	InitGravity(IsGround);
+	
 	//땅에 닿으면 Idle
 	if (true == IsGround)
 	{
 		ChangeState(PlayerState::IDLE);
-		IsGround = LiftUp();
-		InitGravity(IsGround);
-
 		return;
 	}
-
-
-
-	LimitSpeed(MoveDir);
-	AccGravity(_Time);
-	SetMove(MoveDir * _Time);
-
-	Camera(MoveDir * _Time);
-
 }
 void Player::FallEnd()
 {
 
 }
-
 
 
 void Player::DeathStart()
