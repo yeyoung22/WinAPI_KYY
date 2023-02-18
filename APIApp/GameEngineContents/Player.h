@@ -42,8 +42,11 @@ class Player : public GameEngineActor
 public:
 	static bool IsDebugMode;
 	static Player* MainPlayer;
-	static float PlayTimer;									//Play Timer
 	static PlayerMode ModeValue;
+	static float PlayTimer;									//Play Timer
+	static int TotalScore;
+	static int NumOfCoin;
+	static int WorldLevel;
 
 	// constrcuter destructer
 	Player();

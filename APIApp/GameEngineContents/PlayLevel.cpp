@@ -206,7 +206,7 @@ void PlayLevel::Loading()
 	{
 		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
 		float4 StartPos = GameEngineWindow::GetScreenSize().half();
-		Actor->SetPos(StartPos);
+		Actor->SetPos({ StartPos.x + 420, StartPos.y-400 });
 	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))

@@ -20,7 +20,9 @@ protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
 private:
-	NumberRenderObject NumberSets;
-	GameEngineRender* NumberRender = nullptr;
+	NumberRenderObject TimerSets;
+	NumberRenderObject ScoreSets;
+	NumberRenderObject NumCoinSets;
+	NumberRenderObject WorldLevelSets;
 };
 

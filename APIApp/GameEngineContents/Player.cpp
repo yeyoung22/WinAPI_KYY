@@ -19,8 +19,12 @@
 //screenSize = {1024, 960}
 bool  Player::IsDebugMode = false;
 Player* Player::MainPlayer;
-float Player::PlayTimer = 400.0f;
 PlayerMode Player::ModeValue = PlayerMode::MARIO;
+float Player::PlayTimer = 400.0f;
+int Player::TotalScore = 100;
+int Player::NumOfCoin = 10;
+int Player::WorldLevel = 1;
+
 
 Player::Player() 
 {
