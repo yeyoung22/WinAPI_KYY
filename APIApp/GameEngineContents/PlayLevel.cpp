@@ -168,14 +168,19 @@ void PlayLevel::ImageLoad()
 		Dir.MoveParent();
 	}
 
-	//Text
+	//TextUI
 	{
 		Dir.Move("Text");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Number.bmp"));
 		Image->Cut(10, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Alphabet.bmp"));
+		Image->Cut(13, 2);
 
 		Dir.MoveParent();
 	}
+
 }
 
 //Loading 시점: 만들어야할 것들을 만드는 시점

@@ -282,8 +282,8 @@ DWORD GameEngineImage::GetPixelColor(float4 _Pos, DWORD _OutColor)
 //( x, y ) 위치에서의 색상 정보를 가져오는 함수
 DWORD GameEngineImage::GetPixelColor(int _X, int _Y, DWORD _OutColor)
 {
-	//OutColor: 
-	if (_X < 0)
+	//OutColor: 바깥으로 나간 경우에 반환할 컬러_Black
+	if (_X < 0)								//x가 바깥에 나간 경우
 	{
 		return _OutColor;
 	}
@@ -291,7 +291,7 @@ DWORD GameEngineImage::GetPixelColor(int _X, int _Y, DWORD _OutColor)
 	{
 		return _OutColor;
 	}
-	if (_Y < 0)
+	if (_Y < 0)								//y가 바깥에 나간 경우
 	{
 		return _OutColor;
 	}

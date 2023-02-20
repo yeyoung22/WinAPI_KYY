@@ -48,6 +48,9 @@
     <ClInclude Include="ContentsUI.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="TextRenderObject.h">
+      <Filter>Text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -99,6 +102,9 @@
     <ClCompile Include="PlayLevel.cpp">
       <Filter>Play</Filter>
     </ClCompile>
+    <ClCompile Include="TextRenderObject.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Title">
@@ -118,6 +124,9 @@
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{576d969e-d441-4733-9dc8-f57882a24d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{e89a4761-0e2b-412c-b0a4-27a9cb5e3709}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
