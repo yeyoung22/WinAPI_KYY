@@ -1,17 +1,17 @@
-#include "TextRenderObject.h"
+#include "WordRenderObject.h"
 #include <GameEngineBase/GameEngineString.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineActor.h>
 
-TextRenderObject::TextRenderObject() 
+WordRenderObject::WordRenderObject() 
 {
 }
 
-TextRenderObject::~TextRenderObject() 
+WordRenderObject::~WordRenderObject() 
 {
 }
 
-void TextRenderObject::SetImage(const std::string_view& _ImageName, float4 _Scale, int _Order, int _TransColor)
+void WordRenderObject::SetImage(const std::string_view& _ImageName, float4 _Scale, int _Order, int _TransColor)
 {
 	GameEngineImage* FindNumberImage = GameEngineResources::GetInst().ImageFind(_ImageName);
 
@@ -26,7 +26,7 @@ void TextRenderObject::SetImage(const std::string_view& _ImageName, float4 _Scal
 	TransColor = _TransColor;
 }
 
-void TextRenderObject::SetCameraEffectOff()
+void WordRenderObject::SetCameraEffectOff()
 {
 	for (size_t i = 0; i < WordRenders.size(); i++)
 	{
@@ -35,7 +35,7 @@ void TextRenderObject::SetCameraEffectOff()
 }
 
 
-void TextRenderObject::On()
+void WordRenderObject::On()
 {
 	GameEngineObject::On();
 	for (size_t i = 0; i < WordRenders.size(); i++)
@@ -44,7 +44,7 @@ void TextRenderObject::On()
 	}
 }
 
-void TextRenderObject::Off()
+void WordRenderObject::Off()
 {
 	GameEngineObject::Off();
 	for (size_t i = 0; i < WordRenders.size(); i++)
@@ -53,7 +53,7 @@ void TextRenderObject::Off()
 	}
 }
 
-void TextRenderObject::SetValue(std::string_view& _Word)
+void WordRenderObject::SetValue(std::string_view& _Word)
 {
 	GameEngineActor* Actor = GetOwner<GameEngineActor>();
 	std::string UpperNameWord = GameEngineString::ToUpper(_Word);		//값은 무조건 대문자로 치환
@@ -61,7 +61,7 @@ void TextRenderObject::SetValue(std::string_view& _Word)
 
 	if (nullptr == Actor)
 	{
-		MsgAssert("액터만이 TextRenderObject의 부모가 될 수 있습니다.");
+		MsgAssert("액터만이 WordRenderObject의 부모가 될 수 있습니다.");
 	}
 
 	//문자는 한 번 정해지면 길이는 변경 불가
@@ -93,123 +93,14 @@ void TextRenderObject::SetValue(std::string_view& _Word)
 		Render->SetScale(WordScale);
 
 		int FrameNumber = 0;
-
 		FrameNumber = UpperNameWord[i] - 'A';
-		
 		Render->SetFrame(FrameNumber);
-
-		//여기서 이미지랑 문자열이랑 일치하도록 해야 함
-		//if (Word[i] == 'A')
-		//{
-		//	Render->SetFrame(0);
-		//}
-		//else if (Word[i] == 'B')
-		//{
-		//	Render->SetFrame(1);
-		//}
-		//else if (Word[i] == 'C')
-		//{
-		//	Render->SetFrame(2)
-		//}
-		//else if (Word[i] == 'D')
-		//{
-
-		//}
-		//else if (Word[i] == 'E')
-		//{
-
-		//}
-		//else if (Word[i] == 'F')
-		//{
-
-		//}
-		//else if (Word[i] == 'G')
-		//{
-
-		//}
-		//else if (Word[i] == 'H')
-		//{
-
-		//}
-		//else if (Word[i] == 'I')
-		//{
-
-		//}
-		//else if (Word[i] == 'J')
-		//{
-
-		//}
-		//else if (Word[i] == 'K')
-		//{
-
-		//}
-		//else if (Word[i] == 'L')
-		//{
-
-		//}
-		//else if (Word[i] == 'M')
-		//{
-
-		//}
-		//else if (Word[i] == 'N')
-		//{
-
-		//}
-		//else if (Word[i] == 'O')
-		//{
-
-		//}
-		//else if (Word[i] == 'P')
-		//{
-
-		//}
-		//else if (Word[i] == 'Q')
-		//{
-
-		//}
-		//else if (Word[i] == 'R')
-		//{
-
-		//}
-		//else if (Word[i] == 'S')
-		//{
-
-		//}
-		//else if (Word[i] == 'T')
-		//{
-
-		//}
-		//else if (Word[i] == 'U')
-		//{
-
-		//}
-		//else if (Word[i] == 'V')
-		//{
-
-		//}
-		//else if (Word[i] == 'W')
-		//{
-
-		//}
-		//else if (Word[i] == 'X')
-		//{
-
-		//}
-		//else if (Word[i] == 'Y')
-		//{
-
-		//}
-		//else if (Word[i] == 'Z')
-		//{
-
-		//}
-
 
 		RenderPos.x += WordScale.x;
 	}
 }
 
-void TextRenderObject::SetMove(float4 _RenderPos)
+void WordRenderObject::SetMove(float4 _RenderPos)
 {
 	for (size_t i = 0; i < WordRenders.size(); i++)
 	{
@@ -217,7 +108,7 @@ void TextRenderObject::SetMove(float4 _RenderPos)
 	}
 }
 
-void TextRenderObject::SetRenderPos(float4 _Pos)
+void WordRenderObject::SetRenderPos(float4 _Pos)
 {
 	Pos = _Pos;
 	//첫 번째 문자 랜더하고 그 다음 문자는 오른쪽으로 추가 됨

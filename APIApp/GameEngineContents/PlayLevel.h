@@ -6,6 +6,9 @@
 class PlayLevel : public STLevel
 {
 public:
+	static std::vector<std::pair<int, int>> MapNames;
+
+public:
 	// constrcuter destructer
 	PlayLevel();
 	~PlayLevel();
@@ -15,6 +18,11 @@ public:
 	PlayLevel(PlayLevel&& _Other) noexcept = delete;
 	PlayLevel& operator=(const PlayLevel& _Other) = delete;
 	PlayLevel& operator=(PlayLevel&& _Other) noexcept = delete;
+
+	std::vector<std::pair<int, int>> GetMapNames()
+	{
+		return MapNames;
+	}
 
 protected:
 	void Loading() override;
@@ -27,7 +35,5 @@ protected:
 private:
 	void SoundLoad();
 	void ImageLoad();
-
-	
 };
 

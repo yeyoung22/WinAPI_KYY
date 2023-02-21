@@ -9,6 +9,8 @@
 
 
 
+
+
 float Map::SumMapWidth = 0.0f;
 Map* Map::MainMap = nullptr;
 

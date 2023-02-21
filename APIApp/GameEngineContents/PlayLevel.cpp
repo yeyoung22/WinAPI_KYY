@@ -1,4 +1,6 @@
 #include "PlayLevel.h"
+#include <vector>
+#include <string>
 #include <GameEngineBase/GameEngineDirectory.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineResources.h>
@@ -13,6 +15,8 @@
 
 
 
+std::vector<std::pair<int, int>> PlayLevel::MapNames;
+
 
 PlayLevel::PlayLevel() 
 {
@@ -20,6 +24,7 @@ PlayLevel::PlayLevel()
 
 PlayLevel::~PlayLevel() 
 {
+	MapNames.clear();
 }
 
 void PlayLevel::SoundLoad()
@@ -121,10 +126,14 @@ void PlayLevel::ImageLoad()
 		Dir.Move("Map");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
+
+		MapNames.push_back(std::make_pair(1, 1));
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_4.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
+
+		MapNames.push_back(std::make_pair(1, 4));
 
 		Dir.MoveParent();
 	}
@@ -177,6 +186,14 @@ void PlayLevel::ImageLoad()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Alphabet.bmp"));
 		Image->Cut(13, 2);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("SpecialSymbol.bmp"));
+		Image->Cut(7, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("CoinUI.bmp"));
+		Image->Cut(4, 1);
 
 		Dir.MoveParent();
 	}

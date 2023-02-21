@@ -190,6 +190,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="NumberRenderObjectEX.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="OpeningBack.h">
       <SubType>
       </SubType>
@@ -206,6 +210,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="SPSymbolRenderObject.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="STLevel.h">
       <SubType>
       </SubType>
@@ -214,7 +222,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="TextRenderObject.h">
+    <ClInclude Include="WordRenderObject.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -260,6 +268,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="NumberRenderObjectEX.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="OpeningBack.cpp">
       <SubType>
       </SubType>
@@ -277,6 +289,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="SPSymbolRenderObject.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="STLevel.cpp">
       <SubType>
       </SubType>
@@ -285,7 +301,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="TextRenderObject.cpp">
+    <ClCompile Include="WordRenderObject.cpp">
       <SubType>
       </SubType>
     </ClCompile>

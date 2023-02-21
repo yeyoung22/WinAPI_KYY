@@ -21,10 +21,10 @@ bool  Player::IsDebugMode = false;
 Player* Player::MainPlayer;
 PlayerMode Player::ModeValue = PlayerMode::MARIO;
 float Player::PlayTimer = 400.0f;
-int Player::TotalScore = 100;
-int Player::NumOfCoin = 10;
+int Player::TotalScore = 0;
+int Player::NumOfCoin = 0;
 int Player::WorldLevel = 1;
-
+int Player::MapLevel = 1;
 
 Player::Player() 
 {
@@ -123,6 +123,8 @@ void Player::Start()
 	ChangeColImage("ColWorld1_1.bmp");
 
 	ChangeState(PlayerState::IDLE);
+
+	AssignLevels(PlayLevel::MapNames, Round);
 }
 
 
@@ -139,6 +141,14 @@ void Player::ChangeColImage(const std::string& _ColMapName)
 
 	}
 }
+
+//Seperate WorldLevel and MapLevel from MapName
+void Player::AssignLevels(std::vector<std::pair<int, int>> _MapNames, int _Round)
+{
+	WorldLevel = _MapNames[_Round].first;
+	MapLevel = _MapNames[_Round].second;
+}
+
 
 
 
@@ -428,11 +438,11 @@ void Player::Update(float _DeltaTime)
 
 	if (GameEngineInput::IsDown("StageClear"))
 	{
+		++Round;
+
 		Map::MainMap->StageClearOn();
 		MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
 		ChangeColImage("ColWorld1_4.bmp");
-
-
 	}
 
 	if (GameEngineInput::IsDown("GoToCastle"))

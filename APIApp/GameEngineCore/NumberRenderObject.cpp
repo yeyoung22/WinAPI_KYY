@@ -115,7 +115,7 @@ void NumberRenderObject::SetValue(int _Value)
 	float4 RenderPos = Pos;
 	size_t NumRenderIndex = 0;
 
-	switch (AlignState)
+	/*switch (AlignState)
 	{
 	case Align::Left:
 		break;
@@ -127,7 +127,7 @@ void NumberRenderObject::SetValue(int _Value)
 		break;
 	default:
 		break;
-	}
+	}*/
 
 	if (true == Negative && nullptr == NegativeRender)
 	{
@@ -160,10 +160,10 @@ void NumberRenderObject::SetMove(float4 _RenderPos)
 }
 
 //정렬방법 설정
-void NumberRenderObject::SetAlign(Align _Align)
-{
-	AlignState = _Align;
-}
+//void NumberRenderObject::SetAlign(Align _Align)
+//{
+//	AlignState = _Align;
+//}
 
 //랜더 포지션 설정 및 값 설정 함수 호출
 void NumberRenderObject::SetRenderPos(float4 _Pos)

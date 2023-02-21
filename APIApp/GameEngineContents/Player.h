@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/NumberRenderObject.h>
 #include <GameEngineCore/GameEngineResources.h>
@@ -40,13 +41,14 @@ union ColorCheck
 class Player : public GameEngineActor
 {
 public:
-	static bool IsDebugMode;
+	static bool IsDebugMode;								//true: 디버그 모드(ColMap이 랜더, 충돌체 랜더, 플레이어의 좌표 줄력)
 	static Player* MainPlayer;
-	static PlayerMode ModeValue;
+	static PlayerMode ModeValue;							//플레이어의 상태(Mario, SuperMario, FireMario)
 	static float PlayTimer;									//Play Timer
-	static int TotalScore;
-	static int NumOfCoin;
-	static int WorldLevel;
+	static int TotalScore;									//Get Score
+	static int NumOfCoin;									//Number Of Coins
+	static int WorldLevel;									//World Level  (World Level - Map Level)
+	static int MapLevel;									//Map Level	 (Start at 1 and Finish at 4)
 
 	// constrcuter destructer
 	Player();
@@ -90,6 +92,8 @@ public:
 
 	void Camera(float4 _Pos);
 
+	void AssignLevels(std::vector<std::pair<int, int>> _MapNames, int _Round);
+
 
 protected:
 	void Start() override;
@@ -108,6 +112,7 @@ private:
 	int Black = RGB(0, 0, 0);
 	int Red = RGB(255, 0, 0);
 	int Magenta = RGB(255, 0, 255);
+	int Round = 1;
 
 
 	int StartFrame = 0;
