@@ -130,7 +130,7 @@ void GameEngineCore::ChangeLevel(const std::string_view& _Name)
 	}
 
 	//일치하는 레벨이 있으면 MainLevel 교체
-	MainLevel = FindIter->second;
+	NextLevel = FindIter->second;
 }
 
 void GameEngineCore::LevelLoading(GameEngineLevel* _Level, const std::string_view& _Name)

@@ -13,7 +13,6 @@
 #include "ContentsValue.h"
 #include "PlayLevel.h"
 #include "ContentsUI.h"
-//#include "STLevel.h"
 
 
 //screenSize = {1024, 960}

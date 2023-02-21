@@ -1,7 +1,7 @@
 #pragma once
 #include <GameEngineCore/GameEngineLevel.h>
 
-// 설명 :
+// 설명 : 레벨마다 들어갈 공통적인 요소(상속하고 싶은 부분)
 class STLevel :public GameEngineLevel
 {
 public:
