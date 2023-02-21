@@ -25,6 +25,7 @@ int Player::TotalScore = 0;
 int Player::NumOfCoin = 0;
 int Player::WorldLevel = 1;
 int Player::MapLevel = 1;
+int TopScore = 0;
 
 Player::Player() 
 {
@@ -520,17 +521,17 @@ void Player::Render(float _DeltaTime)
 	//	right.iy() + 5
 	//);
 
-	float4 left = GetPos() - GetLevel()->GetCameraPos();
-	left.y -= GetImgHalfHeight();
+	//float4 left = GetPos() - GetLevel()->GetCameraPos();
+	//left.y -= GetImgHalfHeight();
 
 
-	//<디버깅용_NextPos 보기위함>
-	Rectangle(DoubleDC,
-		left.ix() - 5,
-		left.iy() - 5,
-		left.ix() + 5,
-		left.iy() + 5
-	);
+	////<디버깅용_NextPos 보기위함>
+	//Rectangle(DoubleDC,
+	//	left.ix() - 5,
+	//	left.iy() - 5,
+	//	left.ix() + 5,
+	//	left.iy() + 5
+	//);
 	
 		if (true == IsDebugMode)
 		{

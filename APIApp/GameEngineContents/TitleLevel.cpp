@@ -2,11 +2,14 @@
 
 #include <GameEngineBase/GameEngineDirectory.h>
 #include <GameEnginePlatform/GameEngineInput.h>
+#include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCore.h>
 #include "TitleBack.h"
 #include "ContentsValue.h"
+#include "ContentsUI.h"
+#include "ContentsEnums.h"
 
 
 TitleLevel::TitleLevel() 
@@ -35,6 +38,26 @@ void TitleLevel::Loading()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ScoreCoin.bmp"));
 	}
+	//TextUI
+	{
+		Dir.Move("Text");
+
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Number.bmp"));
+		Image->Cut(10, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Alphabet.bmp"));
+		Image->Cut(13, 2);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("SpecialSymbol.bmp"));
+		Image->Cut(7, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("CoinUI.bmp"));
+		Image->Cut(4, 1);
+	}
+
 
 
 	if (false == GameEngineInput::IsKey("LevelChange"))
@@ -45,6 +68,11 @@ void TitleLevel::Loading()
 
 	TitleBack* Actor =  CreateActor<TitleBack>();
 
+	{
+		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
+		float4 StartPos = GameEngineWindow::GetScreenSize().half();
+		Actor->SetPos({ StartPos.x + 420, StartPos.y - 400 });
+	}
 
 }
 

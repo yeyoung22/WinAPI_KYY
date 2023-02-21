@@ -176,28 +176,6 @@ void PlayLevel::ImageLoad()
 
 		Dir.MoveParent();
 	}
-
-	//TextUI
-	{
-		Dir.Move("Text");
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Number.bmp"));
-		Image->Cut(10, 1);
-	}
-	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Alphabet.bmp"));
-		Image->Cut(13, 2);
-	}
-	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("SpecialSymbol.bmp"));
-		Image->Cut(7, 1);
-	}
-	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("CoinUI.bmp"));
-		Image->Cut(4, 1);
-
-		Dir.MoveParent();
-	}
-
 }
 
 //Loading 시점: 만들어야할 것들을 만드는 시점

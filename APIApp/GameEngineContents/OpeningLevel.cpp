@@ -1,11 +1,14 @@
 #include "OpeningLevel.h"
 
 #include <GameEngineBase/GameEngineDirectory.h>
+#include <GameEnginePlatform/GameEngineWindow.h>
+#include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineCore.h>
-#include <GameEnginePlatform/GameEngineInput.h>
 #include "OpeningBack.h"
 #include "PlayLevel.h"
+#include "ContentsUI.h"
+#include "ContentsEnums.h"
 
 OpeningLevel::OpeningLevel() 
 {
@@ -26,7 +29,10 @@ void OpeningLevel::Loading()
 	//이미지 로드
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Opening.bmp"));
+		Dir.MoveParent();
+
 	}
+
 
 	if (false == GameEngineInput::IsKey("LevelChange"))
 	{
@@ -34,6 +40,12 @@ void OpeningLevel::Loading()
 	}
 
 	CreateActor<OpeningBack>();
+
+	{
+		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
+		float4 StartPos = GameEngineWindow::GetScreenSize().half();
+		Actor->SetPos({ StartPos.x + 420, StartPos.y - 400 });
+	}
 }
 
 void OpeningLevel::Update(float _DeltaTime)

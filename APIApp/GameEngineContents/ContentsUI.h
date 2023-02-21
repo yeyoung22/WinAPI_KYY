@@ -18,19 +18,29 @@ public:
 	ContentsUI& operator=(const ContentsUI& _Other) = delete;
 	ContentsUI& operator=(ContentsUI&& _Other) noexcept = delete;
 
+	void IsRenderOnSwitch()
+	{
+		IsRenderOn != IsRenderOn;
+	}
+
+
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
 private:
-	float4 NumberScale = { 42, 48 };						//랜더링할 숫자 이미지 크기(사이즈)
-	float4 WordScale = { 38, 44 };							//랜더링할 알파벳 이미지 크기(사이즈)
-	float4 SymbolScale = { 36, 50 };
+	bool IsRenderOn = false;
+
+	float4 NumberScale = { 32, 38 };						//랜더링할 숫자 이미지 크기(사이즈)
+	float4 WordScale = { 32, 46 };							//랜더링할 알파벳 이미지 크기(사이즈)
+	float4 SymbolScale = { 29, 54 };
 
 	NumberRenderObjectEX TimerSets;
 	NumberRenderObjectEX ScoreSets;
 	NumberRenderObjectEX NumCoinSets;
 	NumberRenderObjectEX WorldLevelSets;
 	NumberRenderObjectEX MapLevelSets;
+	NumberRenderObjectEX TopScoreSets;
 
 	WordRenderObject W_Time;
 	WordRenderObject W_World;

@@ -49,6 +49,8 @@ public:
 	static int NumOfCoin;									//Number Of Coins
 	static int WorldLevel;									//World Level  (World Level - Map Level)
 	static int MapLevel;									//Map Level	 (Start at 1 and Finish at 4)
+	static int TopScore;
+
 
 	// constrcuter destructer
 	Player();
