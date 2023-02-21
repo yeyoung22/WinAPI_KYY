@@ -129,6 +129,7 @@ void ContentsUI::Start()
 	//코인 애니메이션용 랜더
 
 
+	
 
 
 	{

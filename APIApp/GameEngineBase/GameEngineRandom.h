@@ -34,7 +34,7 @@ public:
 	float RandomFloat(float _Min, float _Max)
 	{
 		std::uniform_real_distribution <float> Uniform(_Min, _Max);
-		return Uniform(MtGen);
+		return Uniform(MtGen);										//함수 객체 문법
 	}
 
 	//직접 시드값을 넣어주기 위한 함수
@@ -47,7 +47,7 @@ protected:
 
 private:
 	//랜덤 제너레이터 클래스: 여러 개가 될 수 있음
-	std::mt19937_64 MtGen = std::mt19937_64();				//메르센 트위스터 알고리즘을 사용한 제네러이터
+	std::mt19937_64 MtGen = std::mt19937_64();						//메르센 트위스터 알고리즘을 사용한 제네러이터
 
 	//랜덤 크리에이터 클래스: 1개만 될 수 있음
 };
