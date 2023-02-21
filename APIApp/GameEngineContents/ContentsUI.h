@@ -18,10 +18,10 @@ public:
 	ContentsUI& operator=(const ContentsUI& _Other) = delete;
 	ContentsUI& operator=(ContentsUI&& _Other) noexcept = delete;
 
-	void IsRenderOnSwitch()
-	{
-		IsRenderOn != IsRenderOn;
-	}
+	//void IsRenderOnSwitch()
+	//{
+	//	IsRenderOn != IsRenderOn;
+	//}
 
 
 

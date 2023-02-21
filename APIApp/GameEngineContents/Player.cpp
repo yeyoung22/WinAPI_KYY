@@ -144,13 +144,11 @@ void Player::ChangeColImage(const std::string& _ColMapName)
 }
 
 //Seperate WorldLevel and MapLevel from MapName
-void Player::AssignLevels(std::vector<std::pair<int, int>> _MapNames, int _Round)
+void Player::AssignLevels(std::vector<std::vector<int>> _MapNames, int _Round)
 {
-	WorldLevel = _MapNames[_Round].first;
-	MapLevel = _MapNames[_Round].second;
+	WorldLevel = _MapNames[_Round][0];
+	MapLevel = _MapNames[_Round][1];
 }
-
-
 
 
 void Player::AccGravity(float _DeltaTime)
@@ -171,7 +169,6 @@ void  Player::Friction(float4& _Pos, float _DeltaTime)
 {
 	_Pos.x *= (FrictionPower * _DeltaTime);
 }
-
 
 
 void Player::LimitSpeed(float4& _Pos)

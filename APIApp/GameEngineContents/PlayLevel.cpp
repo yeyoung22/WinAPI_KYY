@@ -15,8 +15,8 @@
 
 
 
-std::vector<std::pair<int, int>> PlayLevel::MapNames;
-
+std::vector<std::vector<int>> PlayLevel::MapNames;
+std::vector<int> PlayLevel::SubMapNames;
 
 PlayLevel::PlayLevel() 
 {
@@ -127,13 +127,17 @@ void PlayLevel::ImageLoad()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
 
-		MapNames.push_back(std::make_pair(1, 1));
+		SubMapNames.push_back(1);
+		SubMapNames.push_back(1);
+		MapNames.push_back(SubMapNames);
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_4.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
 
-		MapNames.push_back(std::make_pair(1, 4));
+		SubMapNames.push_back(1);
+		SubMapNames.push_back(4);
+		MapNames.push_back(SubMapNames);
 
 		Dir.MoveParent();
 	}

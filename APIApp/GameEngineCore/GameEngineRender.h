@@ -5,9 +5,9 @@
 
 enum class TextAlign
 {
-	Left = TA_LEFT,
-	Right = TA_RIGHT,
-	Center = TA_CENTER
+	Left = DT_LEFT,
+	Right = DT_RIGHT,
+	Center = DT_CENTER
 };
 
 
@@ -160,6 +160,7 @@ private:
 	std::string TextType = std::string();
 	TextAlign Align = TextAlign::Left;
 	COLORREF TextColor = RGB(0, 0, 0);
+	float4 TextBoxScale;
 	// 그런걸 하면 HBRUSH 만드는데 사용하고 나면 Release
 	// GameEngineImage를 참조
 };

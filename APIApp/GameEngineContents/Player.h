@@ -94,7 +94,7 @@ public:
 
 	void Camera(float4 _Pos);
 
-	void AssignLevels(std::vector<std::pair<int, int>> _MapNames, int _Round);
+	void AssignLevels(std::vector<std::vector<int>> _MapNames, int _Round);
 
 
 protected:

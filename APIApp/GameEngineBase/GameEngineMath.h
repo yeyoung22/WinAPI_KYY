@@ -11,7 +11,9 @@ public:
 	static std::vector<unsigned int> GetDigits(int _Value);
 	static unsigned int GetLenth(int _Value);
 	static const float PIE;
-	static const float PIE2;						
+	static const float PIE2;
+	static const float DegToRad;							//Degree->Radian
+	static const float RadToDeg;							//Radian->Degree
 
 private:
 	//순수가상함수로 만들어서 객체화하지 못하게 막음
@@ -29,6 +31,18 @@ public:
 	static const float4 Back;						
 	static const float4 Zero;						// w != 0
 	static const float4 Null;
+
+	static float4 AngleToDirection2DToDeg(float _Deg)
+	{
+		return AngleToDirection2DToRad(_Deg * GameEngineMath::DegToRad);
+	}
+
+	static float4 AngleToDirection2DToRad(float _Rad)
+	{
+		//r = 1인 원 위의 한 점에서의 벡터는  x = cos, y = sin이 됨(빗변 = 1)
+		return float4(cosf(_Rad), sinf(_Rad), 0.0f, 1.0f);
+	}
+
 
 public:
 	float x = 0.0f;

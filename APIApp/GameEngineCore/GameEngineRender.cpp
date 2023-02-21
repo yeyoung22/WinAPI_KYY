@@ -2,6 +2,7 @@
 #include <GameEngineBase/GameEngineString.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEngineCore/GameEngineResources.h>
+#include "GameEngineCore.h"
 #include "GameEngineActor.h"
 #include "GameEngineLevel.h"
 
@@ -148,11 +149,35 @@ void GameEngineRender::TextRender(float _DeltaTime)
 	hFont = CreateFontIndirect(&lf);
 	OldFont = static_cast<HFONT>(SelectObject(hdc, hFont));
 
-	SetTextAlign(hdc, static_cast<UINT>(Align));
+	//SetTextAlign(hdc, static_cast<UINT>(Align));
 	SetTextColor(hdc, TextColor);
 	SetBkMode(hdc, TRANSPARENT);
 
-	TextOutA(GameEngineWindow::GetDoubleBufferImage()->GetImageDC(), RenderPos.ix(), RenderPos.iy(), RenderText.c_str(), static_cast<int>(RenderText.size()));
+	RECT Rect;
+	Rect.left = RenderPos.ix();
+	Rect.top = RenderPos.iy();
+	Rect.right = RenderPos.ix() + TextBoxScale.ix();
+	Rect.bottom = RenderPos.iy() + TextBoxScale.iy();
+
+
+	if (GameEngineCore::GetInst()->IsDebug())
+	{
+		HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+		HBRUSH myBrush = static_cast<HBRUSH>(GetStockObject(NULL_BRUSH));
+		HBRUSH oldBrush = static_cast<HBRUSH>(SelectObject(DoubleDC, myBrush));
+		HPEN myPen = CreatePen(PS_DASH, 0, RGB(0, 0, 0));
+		HPEN oldPen = static_cast<HPEN>(SelectObject(DoubleDC, myPen));
+		Rectangle(GameEngineWindow::GetDoubleBufferImage()->GetImageDC(), Rect.left, Rect.top, Rect.right, Rect.bottom);
+
+		SelectObject(DoubleDC, oldBrush);
+		DeleteObject(myBrush);
+		SelectObject(DoubleDC, oldPen);
+		DeleteObject(myPen);
+	}
+
+	DrawTextA(GameEngineWindow::GetDoubleBufferImage()->GetImageDC(), RenderText.c_str(), static_cast<int>(RenderText.size()), &Rect, static_cast<UINT>(Align));
+
+	//TextOutA(GameEngineWindow::GetDoubleBufferImage()->GetImageDC(), RenderPos.ix(), RenderPos.iy(), RenderText.c_str(), static_cast<int>(RenderText.size()));
 
 	SelectObject(hdc, OldFont);
 	DeleteObject(hFont);
