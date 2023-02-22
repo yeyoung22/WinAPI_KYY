@@ -112,6 +112,32 @@ public:
 		return w * 0.5f;
 	}
 
+
+	float GetAnagleDeg()
+	{
+		return GetAnagleRad() * GameEngineMath::RadToDeg;
+	}
+
+	float GetAnagleRad()
+	{
+		float4 AngleCheck = (*this);
+		AngleCheck.Normalize();										//먼저 정규화를 시켜 r = 1인 원에 놓이는 위치로 변경
+
+		float Result = acosf(AngleCheck.x);							//arccos함수(치역: 각도), cos(정의역: 값)
+
+		if (AngleCheck.y > 0)
+		{
+			Result = GameEngineMath::PIE2 - Result;
+		}
+		return Result;
+	}
+
+
+
+
+
+
+
 	float4 half() const
 	{
 		return { x * 0.5f, y * 0.5f, z * 0.5f, w };
