@@ -12,6 +12,7 @@
 #include "ContentsUI.h"
 #include "ContentsEnums.h"
 #include "ContentsValue.h"
+#include "Block.h"
 
 
 
@@ -187,6 +188,20 @@ void PlayLevel::ImageLoad()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("QuestionBlock.bmp"));
 		Image->Cut(4, 1);
 
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Brick.bmp"));
+		Image->Cut(1, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("UsedBlock.bmp"));
+		Image->Cut(1, 1);
+
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Smithereens.bmp"));
+		Image->Cut(2, 1);
+
 		Dir.MoveParent();
 	}
 }
@@ -221,6 +236,27 @@ void PlayLevel::Loading()
 		float4 StartPos = GameEngineWindow::GetScreenSize().half();
 		Actor->SetPos({ StartPos.x + 420, StartPos.y-400 });
 	}
+	{
+		//QBlock1
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1058, 640 });	//Block 1개의 가로 = 64
+	}
+	{
+		//QBlock2
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1376, 640 });
+	}
+	{
+		//QBlock3
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1504, 640 });
+	}
+	{
+		//QBlock3
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1440, 384 });
+	}
+
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
 	{
