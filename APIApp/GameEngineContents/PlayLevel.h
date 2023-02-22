@@ -7,7 +7,7 @@ class PlayLevel : public STLevel
 {
 public:
 	static std::vector<std::vector<int>> MapNames;
-	static std::vector<int> SubMapNames;
+
 
 public:
 	// constrcuter destructer

@@ -34,9 +34,6 @@ void ContentsUI::Start()
 		TimerSets.SetRenderPos({ GetPos().x - 34, GetPos().y+ 36 });
 		TimerSets.SetCameraEffect(false);
 	}
-	
-	
-	
 	//Total Score
 	{
 		ScoreSets.SetOwner(this);
@@ -127,11 +124,6 @@ void ContentsUI::Start()
 		S_Asterisk.SetCameraEffectOff();
 	}
 	//코인 애니메이션용 랜더
-
-
-	
-
-
 	{
 		AnimationRender = CreateRender("CoinUI.bmp", MarioRenderOrder::UI);
 		AnimationRender->SetPosition({ GetPos().x - 574, GetPos().y + 42 });
@@ -139,14 +131,11 @@ void ContentsUI::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "CoinUI",  .ImageName = "CoinUI.bmp", .Start = 0, .End = 3, .Loop = true });
 		AnimationRender->EffectCameraOff();
 	}
-
-	
-
-
 }
 
 void ContentsUI::Update(float _DeltaTime)
 {
+
 	ScoreSets.SetValue(Player::TotalScore);
 	NumCoinSets.SetValue(Player::NumOfCoin);
 	WorldLevelSets.SetValue(Player::WorldLevel);
@@ -157,6 +146,5 @@ void ContentsUI::Update(float _DeltaTime)
 	AnimationRender->ChangeAnimation("CoinUI");
 	
 	
-
 	
 }

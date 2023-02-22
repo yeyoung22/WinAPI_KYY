@@ -64,26 +64,49 @@ void Map::Update(float _DeltaTime)
 	//	IsStageClear = false;
 	//}
 
-	if (true == Player::IsDebugMode)
+	if (true == Player::IsDebugMode && 0 == Player::Round)
 	{
 		MapRender0->SetImage("ColWorld1_1.bmp");
 		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
 		MapRender0->SetPosition(StartPos);
 		MapRender0->SetScaleToImage();
+
+		MapRender1->Off();
 	}
-	else
+	else if(false == Player::IsDebugMode && 0 == Player::Round)
 	{
 		MapRender0->SetImage("World1_1.bmp");
 		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
 		MapRender0->SetPosition(StartPos);
 		MapRender0->SetScaleToImage();
+
+		MapRender1->Off();
+	}
+	else if (true == Player::IsDebugMode && 1 == Player::Round)
+	{
+		MapRender0->Off();
+		MapRender1->On();
+
+		MapRender1->SetImage("ColWorld1_4.Bmp");
+		float4 RenPos = MapRender1->GetImage()->GetImageScale().half();
+		MapRender1->SetPosition({ RenPos.x, RenPos.y });
+		MapRender1->SetScaleToImage();
+
+	}
+	else if(false == Player::IsDebugMode && 1 == Player::Round)
+	{
+		MapRender0->Off();
+		MapRender1->On();
+
+		MapRender1->SetImage("World1_4.Bmp");
+		float4 RenPos = MapRender1->GetImage()->GetImageScale().half();
+		MapRender1->SetPosition({ RenPos.x, RenPos.y });
+		MapRender1->SetScaleToImage();
+
 	}
 
 	if (true == IsStageClear)
 	{
-		float4 RenPos = MapRender1->GetImage()->GetImageScale().half();
-		MapRender1->SetPosition({ RenPos.x, RenPos.y });
-
 		IsStageClear = false;
 	}
 }

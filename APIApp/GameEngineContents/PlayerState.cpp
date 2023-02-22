@@ -380,7 +380,6 @@ void Player::BrakeUpdate(float _Time)
 	}
 	
 
-
 	IsGround = LiftUp();
 	InitGravity(IsGround);
 }

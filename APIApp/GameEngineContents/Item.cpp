@@ -39,6 +39,7 @@ void Item::Start()
 
 void Item::Update(float _DeltaTime)
 {
+	//Off();//ÀÏ´Ü ¹ö¼¸À» ²¨µÒ
 	/*if (nullptr != BodyCollision)
 	{
 		std::vector<GameEngineCollision*> Collision;

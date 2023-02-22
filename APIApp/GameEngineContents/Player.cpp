@@ -24,7 +24,9 @@ int Player::TotalScore = 0;
 int Player::NumOfCoin = 0;
 int Player::WorldLevel = 1;
 int Player::MapLevel = 1;
-int TopScore = 0;
+int Player::TopScore = 0;
+int Player::Round = 0;
+
 
 Player::Player() 
 {
@@ -197,9 +199,14 @@ bool  Player::LiftUp(float4 _Pos)
 
 		int Color = ColImage->GetPixelColor(NextPos, Black);
 
+		if (true == CheckCeiling(_Pos))
+		{
+			SetMove(float4::Down);
+			return true;
+		}
+
 		if (Black == Color)
 		{
-		
 			SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
 			continue;
 		}
@@ -207,7 +214,7 @@ bool  Player::LiftUp(float4 _Pos)
 		break;
 	}
 
-
+	
 
 	if (true == GameEngineInput::IsPress("RightMove") && true == CheckRightWall(_Pos))
 	{
@@ -219,6 +226,7 @@ bool  Player::LiftUp(float4 _Pos)
 		SetMove(float4::Right);
 	}
 
+	
 	
 
 	//땅인지 아닌지 체크하는 부분
@@ -413,6 +421,8 @@ void Player::Update(float _DeltaTime)
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Door), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
+			++Round;
+			AssignLevels(PlayLevel::MapNames, Round);
 			Map::MainMap->StageClearOn();
 			MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
 			GetLevel()->SetCameraPos({ GetPos().x, 0 });
@@ -436,10 +446,12 @@ void Player::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("StageClear"))
 	{
 		++Round;
+		
 
 		Map::MainMap->StageClearOn();
 		MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
 		ChangeColImage("ColWorld1_4.bmp");
+		AssignLevels(PlayLevel::MapNames, Round);
 	}
 
 	if (GameEngineInput::IsDown("GoToCastle"))

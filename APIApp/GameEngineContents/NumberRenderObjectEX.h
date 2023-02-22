@@ -58,6 +58,7 @@ public:
 		SetNumOfDigits(-1);
 	}
 
+
 	//총 출력할 자릿수를 고정하겠다는 의미의 함수
 	inline void SetIsFixedOn()
 	{

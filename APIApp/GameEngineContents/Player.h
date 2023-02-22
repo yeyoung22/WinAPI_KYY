@@ -50,7 +50,7 @@ public:
 	static int WorldLevel;									//World Level  (World Level - Map Level)
 	static int MapLevel;									//Map Level	 (Start at 1 and Finish at 4)
 	static int TopScore;
-
+	static int Round;
 
 	// constrcuter destructer
 	Player();
@@ -114,7 +114,7 @@ private:
 	int Black = RGB(0, 0, 0);
 	int Red = RGB(255, 0, 0);
 	int Magenta = RGB(255, 0, 255);
-	int Round = 1;
+	
 
 
 	int StartFrame = 0;

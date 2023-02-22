@@ -49,13 +49,13 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="WordRenderObject.h">
-      <Filter>Text</Filter>
+      <Filter>TextImage</Filter>
     </ClInclude>
     <ClInclude Include="SPSymbolRenderObject.h">
-      <Filter>Text</Filter>
+      <Filter>TextImage</Filter>
     </ClInclude>
     <ClInclude Include="NumberRenderObjectEX.h">
-      <Filter>Text</Filter>
+      <Filter>TextImage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -109,13 +109,13 @@
       <Filter>Play</Filter>
     </ClCompile>
     <ClCompile Include="WordRenderObject.cpp">
-      <Filter>Text</Filter>
+      <Filter>TextImage</Filter>
     </ClCompile>
     <ClCompile Include="SPSymbolRenderObject.cpp">
-      <Filter>Text</Filter>
+      <Filter>TextImage</Filter>
     </ClCompile>
     <ClCompile Include="NumberRenderObjectEX.cpp">
-      <Filter>Text</Filter>
+      <Filter>TextImage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,7 +137,7 @@
     <Filter Include="UI">
       <UniqueIdentifier>{576d969e-d441-4733-9dc8-f57882a24d3c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text">
+    <Filter Include="TextImage">
       <UniqueIdentifier>{e89a4761-0e2b-412c-b0a4-27a9cb5e3709}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

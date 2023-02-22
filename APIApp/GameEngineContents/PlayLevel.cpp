@@ -16,7 +16,6 @@
 
 
 std::vector<std::vector<int>> PlayLevel::MapNames;
-std::vector<int> PlayLevel::SubMapNames;
 
 PlayLevel::PlayLevel() 
 {
@@ -127,6 +126,7 @@ void PlayLevel::ImageLoad()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_1.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_1.bmp"));
 
+		std::vector<int> SubMapNames;
 		SubMapNames.push_back(1);
 		SubMapNames.push_back(1);
 		MapNames.push_back(SubMapNames);
@@ -135,6 +135,7 @@ void PlayLevel::ImageLoad()
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("World1_4.bmp"));
 		GameEngineImage* ColImage = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ColWorld1_4.bmp"));
 
+		std::vector<int> SubMapNames;
 		SubMapNames.push_back(1);
 		SubMapNames.push_back(4);
 		MapNames.push_back(SubMapNames);
@@ -176,6 +177,14 @@ void PlayLevel::ImageLoad()
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_SuperMushroom.bmp"));
+		Image->Cut(4, 1);
+
+		Dir.MoveParent();
+	}
+	//Block
+	{
+		Dir.Move("Block");
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("QuestionBlock.bmp"));
 		Image->Cut(4, 1);
 
 		Dir.MoveParent();
@@ -233,10 +242,6 @@ void PlayLevel::Loading()
 
 void PlayLevel::Update(float _DeltaTime)
 {
-	/*BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
-	BGMPlayer.LoopCount(1);
-	BGMPlayer.Volume(0.1f);*/
-
 	if (GameEngineInput::IsDown("BGMPause"))
 	{
 		if (false == BGMPlayer.GetPause())
@@ -253,12 +258,18 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		DebugRenderSwitch();
 	}
+
+	if (GameEngineInput::IsDown("StageClear"))
+	{
+		//처음부터 다시 재생
+	}
 }
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
 	BGMPlayer.LoopCount(1);
+	BGMPlayer.Volume(0.1f);
 
 	ContentsValue::CameraScale = { 1020, 960 };
 }
