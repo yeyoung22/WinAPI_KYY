@@ -58,6 +58,25 @@ void NumberRenderObjectEX::SetNumberRenders(size_t _Index, int _TransColor, floa
 	}
 }
 
+void NumberRenderObjectEX::On()
+{
+	GameEngineObject::On();
+	for (size_t i = 0; i < NumberRenders.size(); i++)
+	{
+		NumberRenders[i]->On();
+	}
+}
+
+void NumberRenderObjectEX::Off()
+{
+	GameEngineObject::Off();
+	for (size_t i = 0; i < NumberRenders.size(); i++)
+	{
+		NumberRenders[i]->Off();
+	}
+}
+
+
 //랜더링하고 싶은 숫자 값 설정
 void NumberRenderObjectEX::SetValue(int _Value)
 {
@@ -92,7 +111,7 @@ void NumberRenderObjectEX::SetValue(int _Value)
 	//Negative가 true이면 1을 반환
 	//Digits는 음수인 경우, 출력하고 싶은 자릿수 + 부호 (+1)를 해줌
 	//Digits: 총 랜더링하고 싶은 자릿수
-	int Digits = (NumOfDigits == -1 ? Numbers.size() : NumOfDigits) + (Negative ? 1 : 0);
+	size_t Digits = (NumOfDigits == -1 ? Numbers.size() : NumOfDigits) + (Negative ? 1 : 0);
 
 	//랜더 수 고정(사용하지 않는 랜더는 0을 랜더함
 	if (true == IsFixed)

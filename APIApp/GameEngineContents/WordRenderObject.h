@@ -26,8 +26,8 @@ public:
 
 	virtual void SetCameraEffectOff();
 
-	void On() override;
 	void Off() override;
+	void On() override;
 
 	virtual void SetRenderPos(float4 _Pos);
 
@@ -35,6 +35,7 @@ public:
 	{
 		return Word;
 	}
+
 
 protected:
 	int Order = 0;

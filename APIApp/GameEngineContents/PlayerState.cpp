@@ -395,17 +395,18 @@ void Player::JumpStart()
 	if (ModeValue == PlayerMode::SUPERMARIO)
 	{
 		DirCheck("GrowthJump");
+		EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump_superMario.wav"); 
 	}
 	else if (ModeValue == PlayerMode::FIREMARIO)
 	{
 		DirCheck("FireJump");
+		EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump_superMario.wav");
 	}
 	else
 	{
 		DirCheck("Jump");
+		EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
 	}	
-
-	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
 	EffectPlayer.LoopCount(1);
 	EffectPlayer.Volume(0.3f);
 }
@@ -429,15 +430,16 @@ void Player::JumpUpdate(float _Time)
 		return;
 	}
 
+	
+
 
 	LimitSpeed(MoveDir);
 
 
 	SetMove(MoveDir * _Time);
-	AccGravity(_Time);
-
 	Camera(MoveDir * _Time);
-
+	
+	AccGravity(_Time);
 	IsGround = LiftUp();
 
 	InitGravity(IsGround);

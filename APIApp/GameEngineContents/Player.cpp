@@ -26,7 +26,7 @@ int Player::WorldLevel = 1;
 int Player::MapLevel = 1;
 int Player::TopScore = 0;
 int Player::Round = 0;
-
+int Player::Life = 3;
 
 Player::Player() 
 {
@@ -113,13 +113,27 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_FireAttack", .ImageName = "Left_FireMario.bmp", .Start = 20, .End = 20 });
 
 		//Star Mario-----------------------------------------
-
+		
 	}
-
 	{
-		BodyCollision = CreateCollision(MarioCollisionOrder::Player);
-		BodyCollision->SetScale({ 60, 60 });
-		BodyCollision->SetPosition({ GetPos().x, GetPos().y - 32 });
+		HeadCollision = CreateCollision(MarioCollisionOrder::Player);
+		HeadCollision->SetScale({ 45, 10 });
+		HeadCollision->SetPosition({ GetPos().x, GetPos().y - 60 });
+	}
+	{
+		RightBodyCollision = CreateCollision(MarioCollisionOrder::Player);
+		RightBodyCollision->SetScale({ 10, 60 });
+		RightBodyCollision->SetPosition({ GetPos().x + 32, GetPos().y - 32});
+	}
+	{
+		LeftBodyCollision = CreateCollision(MarioCollisionOrder::Player);
+		LeftBodyCollision->SetScale({ 10, 60 });
+		LeftBodyCollision->SetPosition({ GetPos().x - 32, GetPos().y - 32 });
+	}
+	{
+		BottomCollision = CreateCollision(MarioCollisionOrder::Player);
+		BottomCollision->SetScale({ 50, 10 });
+		BottomCollision->SetPosition({ GetPos().x, GetPos().y - 5});
 	}
 
 	ChangeColImage("ColWorld1_1.bmp");
@@ -344,9 +358,9 @@ bool Player::FreeMoveState(float _DeltaTime)
 
 void Player::Update(float _DeltaTime)
 {
+	PlayTimer -= _DeltaTime* TimeSpeed;
 
-	PlayTimer -= _DeltaTime;
-
+	
 
 	if (GetPos().x <= GetLevel()->GetCameraPos().x)							//Mario Can't be to the left of the camera position
 	{
@@ -354,49 +368,14 @@ void Player::Update(float _DeltaTime)
 	}
 
 
-	/*if (nullptr != BodyCollision)
-	{
-		std::vector<GameEngineCollision*> Collision;
-		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Item), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
-		{
-			ChangeMode(PlayerMode::SUPERMARIO);
-			DirCheck("Bigger");
+	
 
 
-			if (AnimationRender->IsAnimationEnd())
-			{
-				if (false == GameEngineInput::IsAnyKey())
-				{
-					ChangeState(PlayerState::IDLE);
-				}
-
-				if (GameEngineInput::IsPress("LeftMove") || GameEngineInput::IsPress("RightMove"))
-				{
-					ChangeState(PlayerState::MOVE);
-				}
-
-				if (GameEngineInput::IsDown("Jump"))
-				{
-					ChangeState(PlayerState::JUMP);
-				}
-
-				if (GameEngineInput::IsPress("Crouch"))
-				{
-					ChangeState(PlayerState::CROUCH);
-				}
-			
-			}
-
-
-		}
-	}*/
-
-
-	if (nullptr != BodyCollision)
+	if (nullptr != RightBodyCollision && nullptr != LeftBodyCollision)
 	{
 
 		std::vector<GameEngineCollision*> Collision;
-		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
 			if (ModeValue == PlayerMode::SUPERMARIO)
 			{
@@ -416,10 +395,10 @@ void Player::Update(float _DeltaTime)
 	}
 
 
-	if (BodyCollision != 0)
+	if (RightBodyCollision != 0)
 	{
 		std::vector<GameEngineCollision*> Collision;
-		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Door), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Door), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
 			++Round;
 			AssignLevels(PlayLevel::MapNames, Round);

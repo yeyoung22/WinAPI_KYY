@@ -29,6 +29,8 @@ void ContentsUI::Start()
 	LevelNames.push_back("PlayLevel");
 	LevelNames.push_back("EndingLevel");
 
+	
+
 	//Timer
 	{
 		TimerSets.SetOwner(this);
@@ -80,7 +82,27 @@ void ContentsUI::Start()
 		MapLevelSets.SetRenderPos({ GetPos().x - 244, GetPos().y + 36 });
 		MapLevelSets.SetCameraEffect(false);
 	}
+	//World Level2
+	{
+		WorldLevelSets2.SetOwner(this);
+		WorldLevelSets2.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
+		WorldLevelSets2.SetValue(Player::WorldLevel);
+		WorldLevelSets2.SetAlign(Align::Right);
 
+		WorldLevelSets2.SetRenderPos({ GetPos().x - 372, GetPos().y + 264 });
+		WorldLevelSets2.SetCameraEffect(false);
+	}
+	//Map Level2
+	{
+		MapLevelSets2.SetOwner(this);
+		MapLevelSets2.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
+		MapLevelSets2.SetValue(Player::MapLevel);
+		MapLevelSets2.SetAlign(Align::Right);
+					
+		MapLevelSets2.SetRenderPos({ GetPos().x - 308, GetPos().y + 264 });
+		MapLevelSets2.SetCameraEffect(false);
+	}
+	//TopScore
 	{
 		TopScoreSets.SetOwner(this);
 		TopScoreSets.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
@@ -89,6 +111,15 @@ void ContentsUI::Start()
 		TopScoreSets.SetAlign(Align::Right);
 		TopScoreSets.SetRenderPos({ GetPos().x - 244, GetPos().y + 680 });
 		TopScoreSets.SetCameraEffect(false);
+	}
+	//Life
+	{
+		LifeSets.SetOwner(this);
+		LifeSets.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
+		LifeSets.SetValue(Player::Life);
+		LifeSets.SetAlign(Align::Right);
+		LifeSets.SetRenderPos({ GetPos().x - 342, GetPos().y + 390 });
+		LifeSets.SetCameraEffect(false);
 	}
 
 	//Word
@@ -140,6 +171,35 @@ void ContentsUI::Start()
 
 void ContentsUI::Update(float _DeltaTime)
 {
+	std::string CurLevelName = GetLevel()->GetName();
+
+
+	if (LevelNames[0] == CurLevelName)
+	{
+		TimerSets.Off();
+		LifeSets.Off();
+		WorldLevelSets2.Off();
+		MapLevelSets2.Off();
+	}
+	else if (LevelNames[1] == CurLevelName)
+	{
+		TimerSets.Off();
+		TopScoreSets.Off();
+	}
+	else if (LevelNames[2] == CurLevelName)
+	{
+		TopScoreSets.Off();
+		LifeSets.Off();
+		WorldLevelSets2.Off();
+		MapLevelSets2.Off();
+	}
+	else if ((LevelNames[3] == CurLevelName))
+	{
+		TopScoreSets.Off();
+		LifeSets.Off();
+		WorldLevelSets2.Off();
+		MapLevelSets2.Off();
+	}
 
 	ScoreSets.SetValue(Player::TotalScore);
 	NumCoinSets.SetValue(Player::NumOfCoin);
@@ -150,10 +210,5 @@ void ContentsUI::Update(float _DeltaTime)
 	TimerSets.SetValue(static_cast<int>(Player::PlayTimer));
 	AnimationRender->ChangeAnimation("CoinUI");
 
-	std::string tmpstr = GetLevel()->GetName();
 	
-	if (LevelNames[3] == tmpstr)
-	{
-		Off();
-	}
 }

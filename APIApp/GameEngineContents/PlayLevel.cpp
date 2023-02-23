@@ -37,6 +37,9 @@ void PlayLevel::SoundLoad()
 	{
 		Dir.Move("BGM");
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("RunningAbout.mp3"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Running About_Hurry.mp3"));
 
 		Dir.MoveParent();
 	}
@@ -44,6 +47,12 @@ void PlayLevel::SoundLoad()
 	{
 		Dir.Move("SoundEffect");
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("jump.wav"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("jump_superMario.wav"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("growup.wav"));
 
 		Dir.MoveParent();
 	}
@@ -179,6 +188,22 @@ void PlayLevel::ImageLoad()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_SuperMushroom.bmp"));
 		Image->Cut(4, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_1UPMushroom.bmp"));
+		Image->Cut(4, 1);
+	} 
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_1UPMushroom.bmp"));
+		Image->Cut(4, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Coin.bmp"));
+		Image->Cut(4, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("FireFlower.bmp"));
+		Image->Cut(4, 1);
 
 		Dir.MoveParent();
 	}
@@ -223,78 +248,91 @@ void PlayLevel::Loading()
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ StartPos.x * 2- StartPos.half().x , StartPos.y - 128});
 	}
+	//1_1_GrowMushroom
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		//아이템 위치 수정해야 함
 		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ StartPos.hx(), StartPos.y - 128});
+		Actor->SetPos({ 1376, StartPos.y - 128});
 	}
+	//1_1_2ndItem
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 5024, StartPos.y - 128 });
+	}
+	//UI
 	{
 		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
 		float4 StartPos = GameEngineWindow::GetScreenSize().half();
 		Actor->SetPos({ StartPos.x + 420, StartPos.y-400 });
 	}
-	//QBlock1
+	{
+		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
+		float4 StartPos = GameEngineWindow::GetScreenSize().half();
+		Actor->SetPos({ StartPos.x + 420, StartPos.y - 400 });
+	}
+
+	//1_1_QBlock1
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({1060, 640});
 	}
-	//QBlock2
+	//1_1_QBlock2
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 1376, 640 });									//block 바로 옆 64 차임ㅁㅁㅁㅁㅁㅁㅈㅈㅈㅈㅈㅇ
 	}
-	//QBlock3
+	//1_1_QBlock3
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 1504, 640 });
 	}
-	//QBlock4
+	//1_1_QBlock4
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({1440, 384 });
 	}
-	//QBlock5
+	//1_1_QBlock5
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 5024, 640 });
 	}
-	//QBlock6
+	//1_1_QBlock6
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 6047, 384 });
 	}
-	//QBlock7
+	//1_1_QBlock7
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 6815, 640 });
 	}
-	//QBlock8
+	//1_1_QBlock8
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 7007, 640 });
 	}
-	//QBlock9
+	//1_1_QBlock9
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 7199, 640 });
 	}
-	//QBlock10
+	//1_1_QBlock10
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 7007, 384 });
 	}
-	//QBlock11
+	//1_1_QBlock11
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 8289, 384 });
 	}	
-	//QBlock12
+	//1_1_QBlock12
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 8353, 384 });
 	}
-	//QBlock9
+	//1_1_QBlock9
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 10913, 640 });
@@ -341,6 +379,13 @@ void PlayLevel::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("StageClear"))
 	{
 		//처음부터 다시 재생
+	}
+
+	if (100 > Player::PlayTimer)
+	{
+		BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("Running About_Hurry.mp3");
+		BGMPlayer.LoopCount(1);
+		BGMPlayer.Volume(0.1f);
 	}
 }
 

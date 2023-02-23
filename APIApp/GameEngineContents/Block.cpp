@@ -28,7 +28,7 @@ void Block::Start()
 	{
 		BlockCollision = CreateCollision(MarioCollisionOrder::Block);
 		BlockCollision->SetScale({ 64, 10 });
-		BlockCollision->SetPosition({ GetPos().x, GetPos().y - 10 });
+		BlockCollision->SetPosition({ GetPos().x, GetPos().y - 5 });
 		
 	}
 }
@@ -47,8 +47,51 @@ void Block::Update(float _DeltaTime)
 
 				GameEngineActor* ColActor = Collision[i]->GetActor();
 
+
 				BlockRender->ChangeAnimation("UsedBlock");
+
+
+				
+
+				MoveUp();
+
+
+			
+
+				//BlockCollision->Off();
 			}
 		}
+	}
+}
+
+void Block::MoveUp()
+{
+	if (0 == StartPos.y)
+	{
+		StartPos = GetPos();
+	}
+
+	//float MaxHeight = GetPos().y - BlockSizeHalf;
+	float MaxHeight = StartPos.y - 2;
+
+	if(GetPos().y >MaxHeight)
+	{
+		BlockRender->SetMove(float4::Up);
+		BlockCollision->SetMove(float4::Up);
+	} 
+	else if (GetPos().y <= MaxHeight)
+	{
+		return;
+	}
+
+}
+
+void Block::MoveDown()
+{
+	float EndPos = GetPos().y + BlockSizeHalf;
+
+	if (GetPos().y < EndPos)
+	{
+		BlockRender->SetMove(float4::Down);
 	}
 }

@@ -70,6 +70,9 @@ public:
 		IsFixed = false;
 	}
 
+	void Off() override;
+	void On() override;
+
 protected:
 
 private:

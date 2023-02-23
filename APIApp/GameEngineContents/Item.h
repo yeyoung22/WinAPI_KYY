@@ -1,6 +1,6 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
-
+#include <GameEngineCore/GameEngineResources.h>
 
 // 설명 : 게임 내 아이템과 관련된 기능
 class Item : public GameEngineActor
@@ -20,10 +20,11 @@ protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
 
+	GameEngineSoundPlayer EffectPlayer;
 private:
 	float MoveSpeed = 120.0f;
 
-	GameEngineRender* AnimationRender = nullptr;
+	GameEngineRender* ItemRender = nullptr;
 	GameEngineCollision* BodyCollision = nullptr;
 };
 

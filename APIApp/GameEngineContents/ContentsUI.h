@@ -40,6 +40,9 @@ private:
 	NumberRenderObjectEX WorldLevelSets;
 	NumberRenderObjectEX MapLevelSets;
 	NumberRenderObjectEX TopScoreSets;
+	NumberRenderObjectEX LifeSets;
+	NumberRenderObjectEX WorldLevelSets2;
+	NumberRenderObjectEX MapLevelSets2;
 
 	WordRenderObject W_Time;
 	WordRenderObject W_World;

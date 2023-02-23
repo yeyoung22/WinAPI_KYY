@@ -51,7 +51,7 @@ public:
 	static int MapLevel;									//Map Level	 (Start at 1 and Finish at 4)
 	static int TopScore;
 	static int Round;
-
+	static int Life;												//Base Player Life
 	// constrcuter destructer
 	Player();
 	~Player();
@@ -96,6 +96,9 @@ public:
 
 	void AssignLevels(std::vector<std::vector<int>> _MapNames, int _Round);
 
+	void DirCheck(const std::string_view& _AnimationName);
+
+	void ChangeState(PlayerState _State);
 
 protected:
 	void Start() override;
@@ -115,11 +118,12 @@ private:
 	int Red = RGB(255, 0, 0);
 	int Magenta = RGB(255, 0, 255);
 	
-
+	
 
 	int StartFrame = 0;
-	int Life = 3;												//Base Player Life
 	
+	
+	float TimeSpeed = 2.0f;										//Time Speed Control Constant
 	float MarioHeight = 150.0f;									//When MarioMode is changed, the Value should be changed
 	float MoveSpeed = 230.0f;									//Player Speed
 	float JumpPower = 0.0f;
@@ -147,16 +151,19 @@ private:
 
 
 	GameEngineRender* AnimationRender = nullptr;
-	GameEngineCollision* BodyCollision = nullptr;
+	GameEngineCollision* HeadCollision = nullptr;
+	GameEngineCollision* RightBodyCollision = nullptr;
+	GameEngineCollision* LeftBodyCollision = nullptr;
+	GameEngineCollision* BottomCollision = nullptr;
 
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 
-	void DirCheck(const std::string_view& _AnimationName);
+
 
 	// State
 	bool FreeMoveState(float _DeltaTime);
 
-	void ChangeState(PlayerState _State);
+	
 	void UpdateState(float _Time);
 
 	//Debug_현재 StateValue를 반환하는 함수

@@ -40,5 +40,6 @@ void Monster::Update(float _DeltaTime)
 		Death();
 	}
 
+
 	SetMove(Dir);
 }

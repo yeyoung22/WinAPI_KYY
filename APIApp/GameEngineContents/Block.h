@@ -23,7 +23,12 @@ protected:
 private:
 	float BlockSizeHalf = 32.0f;			//block 64*64
 
+	float4 StartPos = float4::Zero;
+
 	GameEngineRender* BlockRender = nullptr;
 	GameEngineCollision* BlockCollision = nullptr;
+
+	void MoveUp();
+	void MoveDown();
 };
 
