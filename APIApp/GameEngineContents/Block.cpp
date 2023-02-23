@@ -28,7 +28,8 @@ void Block::Start()
 	{
 		BlockCollision = CreateCollision(MarioCollisionOrder::Block);
 		BlockCollision->SetScale({ 64, 10 });
-		//BlockCollision->Off();
+		BlockCollision->SetPosition({ GetPos().x, GetPos().y - 10 });
+		
 	}
 }
 
@@ -38,7 +39,7 @@ void Block::Update(float _DeltaTime)
 	if (nullptr != BlockCollision)
 	{
 		std::vector<GameEngineCollision*> Collision;
-		if (true == BlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player) }, Collision))
+		if (true == BlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
 			for (size_t i = 0; i < Collision.size(); i++)
 			{

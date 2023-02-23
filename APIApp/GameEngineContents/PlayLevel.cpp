@@ -254,6 +254,52 @@ void PlayLevel::Loading()
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({1440, 384 });
 	}
+	//QBlock5
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5024, 640 });
+	}
+	//QBlock6
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 6047, 384 });
+	}
+	//QBlock7
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 6815, 640 });
+	}
+	//QBlock8
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 7007, 640 });
+	}
+	//QBlock9
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 7199, 640 });
+	}
+	//QBlock10
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 7007, 384 });
+	}
+	//QBlock11
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 8289, 384 });
+	}	
+	//QBlock12
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 8353, 384 });
+	}
+	//QBlock9
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 10913, 640 });
+	}
+
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
 	{

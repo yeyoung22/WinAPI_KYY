@@ -487,7 +487,6 @@ void Player::DirCheck(const std::string_view& _AnimationName)
 
 void Player::Camera(float4 _Pos)
 {
-
 	float4 ActPos = GetPos();
 	float4 CameraPos = GetLevel()->GetCameraPos();
 	CameraEndPos = Map::SumMapWidth - GameEngineWindow::GetScreenSize().hx();

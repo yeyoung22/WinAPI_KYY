@@ -24,6 +24,11 @@ std::string_view Symbols = "";
 
 void ContentsUI::Start()
 {
+	LevelNames.push_back("TitleLevel");
+	LevelNames.push_back("OpeningLevel");
+	LevelNames.push_back("PlayLevel");
+	LevelNames.push_back("EndingLevel");
+
 	//Timer
 	{
 		TimerSets.SetOwner(this);
@@ -144,7 +149,11 @@ void ContentsUI::Update(float _DeltaTime)
 
 	TimerSets.SetValue(static_cast<int>(Player::PlayTimer));
 	AnimationRender->ChangeAnimation("CoinUI");
+
+	std::string tmpstr = GetLevel()->GetName();
 	
-	
-	
+	if (LevelNames[3] == tmpstr)
+	{
+		Off();
+	}
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
+#include <string>
+#include <vector>
 #include "WordRenderObject.h"
 #include "SPSymbolRenderObject.h"
 #include "NumberRenderObjectEX.h"
@@ -29,6 +31,8 @@ private:
 	float4 NumberScale = { 32, 38 };						//랜더링할 숫자 이미지 크기(사이즈)
 	float4 WordScale = { 32, 46 };							//랜더링할 알파벳 이미지 크기(사이즈)
 	float4 SymbolScale = { 29, 54 };
+
+	std::vector<std::string> LevelNames = std::vector<std::string>();
 
 	NumberRenderObjectEX TimerSets;
 	NumberRenderObjectEX ScoreSets;
