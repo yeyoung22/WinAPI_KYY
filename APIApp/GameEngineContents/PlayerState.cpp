@@ -135,7 +135,6 @@ void Player::UpdateState(float _Time)
 	default:
 		break;
 	}
-
 }
 
 
@@ -408,7 +407,7 @@ void Player::JumpStart()
 
 	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
 	EffectPlayer.LoopCount(1);
-	EffectPlayer.Volume(0.5f);
+	EffectPlayer.Volume(0.3f);
 }
 void Player::JumpUpdate(float _Time)
 {

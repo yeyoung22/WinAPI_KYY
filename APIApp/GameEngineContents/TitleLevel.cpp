@@ -59,13 +59,6 @@ void TitleLevel::Loading()
 	}
 
 
-
-	if (false == GameEngineInput::IsKey("LevelChange"))
-	{
-		GameEngineInput::CreateKey("LevelChange", 'P');
-	}
-
-
 	TitleBack* Actor =  CreateActor<TitleBack>();
 
 	{
@@ -78,18 +71,9 @@ void TitleLevel::Loading()
 
 void TitleLevel::Update(float _DeltaTime)
 {
-	if (true == GameEngineInput::IsDown("LevelChange"))
-	{
-		GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
-	}
 
 	if (true == GameEngineInput::IsDown("Select") && false == TitleBack::IsMultiMode)
 	{
 		GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
 	}
-}
-
-void TitleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
-{
-	ContentsValue::CameraScale = { 1020, 960 };
 }

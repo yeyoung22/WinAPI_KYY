@@ -33,12 +33,6 @@ void OpeningLevel::Loading()
 
 	}
 
-
-	if (false == GameEngineInput::IsKey("LevelChange"))
-	{
-		GameEngineInput::CreateKey("LevelChange", 'P');
-	}
-
 	CreateActor<OpeningBack>();
 
 	{
@@ -52,7 +46,7 @@ void OpeningLevel::Update(float _DeltaTime)
 {
 	WaitTime -= _DeltaTime;
 
-	if ((true == GameEngineInput::IsDown("LevelChange")) || WaitTime <= 0)
+	if ((true == GameEngineInput::IsDown("Select")) || WaitTime <= 0)
 	{
 		GameEngineCore::GetInst()->ChangeLevel("PlayLevel");
 	}

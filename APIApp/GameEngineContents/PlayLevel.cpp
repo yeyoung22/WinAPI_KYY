@@ -12,6 +12,7 @@
 #include "ContentsUI.h"
 #include "ContentsEnums.h"
 #include "ContentsValue.h"
+#include "Block.h"
 
 
 
@@ -186,6 +187,18 @@ void PlayLevel::ImageLoad()
 		Dir.Move("Block");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("QuestionBlock.bmp"));
 		Image->Cut(4, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("UsedBlock.bmp"));
+		Image->Cut(1, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Brick.bmp"));
+		Image->Cut(1, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Smithereens.bmp"));
+		Image->Cut(2, 1);
 
 		Dir.MoveParent();
 	}
@@ -220,6 +233,26 @@ void PlayLevel::Loading()
 		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
 		float4 StartPos = GameEngineWindow::GetScreenSize().half();
 		Actor->SetPos({ StartPos.x + 420, StartPos.y-400 });
+	}
+	//QBlock1
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({1060, 640});
+	}
+	//QBlock2
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1376, 640 });									//block 郊稽 新 64 託績けけけけけけじじじじじし
+	}
+	//QBlock3
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1504, 640 });
+	}
+	//QBlock4
+	{
+		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		Actor->SetPos({1440, 384 });
 	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
@@ -270,6 +303,4 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
 	BGMPlayer.LoopCount(1);
 	BGMPlayer.Volume(0.1f);
-
-	ContentsValue::CameraScale = { 1020, 960 };
 }
