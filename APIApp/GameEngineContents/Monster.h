@@ -1,8 +1,8 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
+#include <GameEnginePlatform/GameEngineImage.h>
 
-
-// 설명 : 몬스터와 관련된 기능
+// 설명 :
 class Monster : public GameEngineActor
 {
 public:
