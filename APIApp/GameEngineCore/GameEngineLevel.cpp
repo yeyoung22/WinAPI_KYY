@@ -66,40 +66,34 @@ void GameEngineLevel::ActorsUpdate(float _DeltaTime)
 		for (; GroupStartIter != GroupEndIter; ++GroupStartIter)
 		{
 			std::list<GameEngineActor*>& ActorList = GroupStartIter->second;
-
-			for (GameEngineActor* Actor : ActorList)
+			int Order = GroupStartIter->first;
+			float CurTimeScale = 1.0f;
+			//현재 TimeScale은 1.0f이며, 일반적으로 영향을 주지 않음
+			//TimeScale을 0으로 설정하거나 그 외의 값을 주면
+			//화면을 정지(특정 그룹을 정지)시키거나 빠르게 움직여 보이게 할 수 있음
+			if (TimeScales.end() != TimeScales.find(Order))
 			{
-				if (nullptr == Actor || false == Actor->IsUpdate())
-				{
-					continue;
-				}
-
-				Actor->LiveTime += _DeltaTime;
-				Actor->Update(_DeltaTime);
+				CurTimeScale = TimeScales[Order];
 			}
-		}
-	}
-
-	{
-		std::map<int, std::list<GameEngineActor*>>::iterator GroupStartIter = Actors.begin();
-		std::map<int, std::list<GameEngineActor*>>::iterator GroupEndIter = Actors.end();
-
-		for (; GroupStartIter != GroupEndIter; ++GroupStartIter)
-		{
-			std::list<GameEngineActor*>& ActorList = GroupStartIter->second;
 
 			for (GameEngineActor* Actor : ActorList)
 			{
+				// Actors.erase()
 				if (nullptr == Actor || false == Actor->IsUpdate())
 				{
 					continue;
 				}
 
-				Actor->LateUpdate(_DeltaTime);
+				//LiveTime은 진짜 살아있는 시간
+				//TimeScale의 영향을 받지 않고 받아서도 안됨
+				Actor->TimeScale = CurTimeScale;
+				Actor->LiveTime += _DeltaTime;
+				Actor->Update(_DeltaTime * CurTimeScale);
 			}
 		}
 	}
 }
+
 
 
 
@@ -210,7 +204,7 @@ void GameEngineLevel::ActorsRender(float _DeltaTime)
 					continue;
 				}
 
-				Renderer->Render(_DeltaTime);
+				Renderer->Render(_DeltaTime * Renderer->GetActor()->TimeScale);
 			}
 		}
 	}

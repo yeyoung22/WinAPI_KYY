@@ -118,6 +118,19 @@ public:
 		return GetAnagleRad() * GameEngineMath::RadToDeg;
 	}
 
+	void RotaitonZDeg(float _Deg)
+	{
+		RotaitonZRad(_Deg * GameEngineMath::RadToDeg);
+	}
+
+	void RotaitonZRad(float _Rad)									//벡터 회전을 위한 함수
+	{
+		float4 Copy = *this;
+		x = Copy.x * cosf(_Rad) - Copy.y * sinf(_Rad);				//cos 합공식(나중 위치 = 처음 위치 + 각도만큼 이동->각도의 합에 의거한 공식)
+		y = Copy.x * sinf(_Rad) + Copy.y * cosf(_Rad);				//sin 합공식
+	}
+
+
 	float GetAnagleRad()
 	{
 		float4 AngleCheck = (*this);
@@ -131,12 +144,6 @@ public:
 		}
 		return Result;
 	}
-
-
-
-
-
-
 
 	float4 half() const
 	{

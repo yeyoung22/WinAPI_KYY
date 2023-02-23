@@ -99,9 +99,9 @@ protected:
 	virtual void LevelChangeEnd(GameEngineLevel* _PrevLevel);
 	virtual void LevelChangeStart(GameEngineLevel* _PrevLevel);
 private:
-
-	int Order;					//업데이트 순서
-	float LiveTime = 0.0;		//액터가 살아있는 시간 측정
+	float TimeScale = 0.0;			//기본적으로 0
+	int Order;						//업데이트 순서
+	float LiveTime = 0.0;			//액터가 살아있는 시간 측정
 	float4 Pos = { 0.0f, 0.0f };
 	std::list<GameEngineRender*> RenderList;
 	std::list<GameEngineCollision*> CollisionList;

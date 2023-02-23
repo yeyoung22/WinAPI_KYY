@@ -368,9 +368,6 @@ void Player::Update(float _DeltaTime)
 	}
 
 
-	
-
-
 	if (nullptr != RightBodyCollision && nullptr != LeftBodyCollision)
 	{
 
@@ -380,7 +377,6 @@ void Player::Update(float _DeltaTime)
 			if (ModeValue == PlayerMode::SUPERMARIO)
 			{
 				ChangeMode(PlayerMode::MARIO);
-				//작아지는 애니메이션 필요함_리버스??------------------------------------
 			}
 			else
 			{

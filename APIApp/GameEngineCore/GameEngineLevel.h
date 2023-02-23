@@ -131,6 +131,18 @@ public:
 		DebugTexts.push_back(_DebugText);
 	}
 
+	//TimeScale 설정
+	template<typename EnumType>
+	void SetTimeScale(EnumType _GroupIndex, float _Time)
+	{
+		SetTimeScale(static_cast<int>(_GroupIndex), _Time);
+	}
+
+	void SetTimeScale(int _GroupIndex, float _Time)
+	{
+		TimeScales[_GroupIndex] = _Time;
+	}
+
 protected:
 	virtual void Loading() = 0;
 	virtual void Update(float _DeltaTime) = 0;
@@ -162,6 +174,8 @@ private:
 	//map은 오름차순으로 정리되므로 값이 큰 쪽이 나중에 실행됨
 	std::map<int, std::list<GameEngineRender*>> Renders;
 	void PushRender(GameEngineRender* _Render, int _ChangeOrder);
+
+	std::map<int, float> TimeScales;
 
 	std::map<int, std::list<GameEngineCollision*>> Collisions;
 	void PushCollision(GameEngineCollision* _Collision, int _ChangeOrder);	//Collisio의 Order 변경 가능
