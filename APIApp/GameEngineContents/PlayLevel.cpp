@@ -348,6 +348,7 @@ void PlayLevel::Loading()
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
 		Actor->SetPos({ 1504, 750 });
+		Actor->Off();
 	}
 
 

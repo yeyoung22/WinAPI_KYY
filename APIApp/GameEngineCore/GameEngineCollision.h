@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <GameEngineBase/GameEngineMath.h>
 #include "GameEngineComponent.h"
 
 enum CollisionType
@@ -18,32 +19,32 @@ public:
 	CollisionType ThisColType = CollisionType::CT_CirCle;
 };
 
-class CollisionData
-{
-public:
-	float4 Position;
-	float4 Scale;					//반지름(R = x)
-
-	float Left() const
-	{
-		return Position.x - Scale.hx();
-	}
-
-	float Right() const
-	{
-		return Position.x + Scale.hx();
-	}
-
-	float Top() const
-	{
-		return Position.y - Scale.hy();
-	}
-
-	float Bot() const
-	{
-		return Position.y + Scale.hy();
-	}
-};
+//class CollisionData
+//{
+//public:
+//	float4 Position;
+//	float4 Scale;					//반지름(R = x)
+//
+//	float Left() const
+//	{
+//		return Position.x - Scale.hx();
+//	}
+//
+//	float Right() const
+//	{
+//		return Position.x + Scale.hx();
+//	}
+//
+//	float Top() const
+//	{
+//		return Position.y - Scale.hy();
+//	}
+//
+//	float Bot() const
+//	{
+//		return Position.y + Scale.hy();
+//	}
+//};
 
 // 설명 : 충돌 구조
 class CollisionFunctionInit;							//cpp쪽에 구현

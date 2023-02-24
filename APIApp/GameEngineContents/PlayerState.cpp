@@ -418,7 +418,7 @@ void Player::BrakeEnd()
 
 void Player::JumpStart()
 {
-	MoveDir.y = -750.0f;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
+	MoveDir.y = SuperJumpPower;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
 	Gravity = 1100.0f;												//아래로 떨어뜨리는 힘
 
 	if (ModeValue == PlayerMode::SUPERMARIO)
@@ -433,6 +433,7 @@ void Player::JumpStart()
 	}
 	else
 	{
+		MoveDir.y = JumpPower;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
 		DirCheck("Jump");
 		EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
 	}	
@@ -465,7 +466,14 @@ void Player::JumpUpdate(float _Time)
 	LimitSpeed(MoveDir);
 
 
-	if (true == CheckRightWall(MoveDir * _Time))
+	
+
+	if (false == CheckRightWall(MoveDir * _Time) && false == CheckLeftWall(MoveDir * _Time))
+	{
+		SetMove(MoveDir * _Time);
+		Camera(MoveDir * _Time);
+	}
+	else if (true == CheckRightWall(MoveDir * _Time))
 	{
 		SetMove(float4::Left);
 	}
@@ -473,9 +481,6 @@ void Player::JumpUpdate(float _Time)
 	{
 		SetMove(float4::Right);
 	}
-
-	SetMove(MoveDir * _Time);
-	Camera(MoveDir * _Time);
 	
 	AccGravity(_Time);
 	IsGround = LiftUp();
@@ -549,12 +554,14 @@ void Player::GrowStart()
 		ChangeMode(PlayerMode::SUPERMARIO);
 		DirCheck("Bigger");
 	}
+	else
+	{
+		IsChanged = false;
+	}
 
 	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("growup.wav");
 	EffectPlayer.LoopCount(1);
 	EffectPlayer.Volume(0.3f);
-
-	ChangeMode(PlayerMode::SUPERMARIO);
 }
 void Player::GrowUpdate(float _Time)
 {

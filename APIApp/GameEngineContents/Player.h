@@ -66,6 +66,7 @@ public:
 	void ChangeMode(PlayerMode _Mode)
 	{
 		ModeValue = _Mode;
+		IsChanged = true;
 	}
 
 	static void DebugModeSwitch()
@@ -126,7 +127,7 @@ protected:
 	GameEngineSoundPlayer EffectPlayer;
 
 private:
-
+	bool IsChanged = false;
 	bool IsLeftBrake = false;
 	bool IsGround = false;
 	bool CanMove = false;								//ColImg와 관계 없이 true이면 무조건 움직일 수 있게 하기 위함
@@ -136,15 +137,16 @@ private:
 	int Red = RGB(255, 0, 0);
 	int Magenta = RGB(255, 0, 255);
 	
-	
+	int Origin_ColHeight = 60;
+	int ColHeight = 124;
 
 	int StartFrame = 0;
 	
 	
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
-	float MarioHeight = 150.0f;									//When MarioMode is changed, the Value should be changed
 	float MoveSpeed = 230.0f;									//Player Speed
-	float JumpPower = 0.0f;
+	float JumpPower = -750.0f;
+	float SuperJumpPower = -770.0f;
 	float Gravity = 200.0f;										//For Decresing JumpPower
 	float FrictionPower = 0.0025f;
 	float BrakePower = 0.0f;
@@ -153,6 +155,7 @@ private:
 	float ImgHalfHeight = 64.0f;
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
+	
 
 	float CameraEndPos = 0.0f;
 

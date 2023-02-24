@@ -14,6 +14,11 @@ GameEngineRender::~GameEngineRender()
 {
 }
 
+void GameEngineRender::SetRotFilter(const std::string_view& _ImageName)
+{
+	RotationFilter = GameEngineResources::GetInst().ImageFind(_ImageName);
+}
+
 void GameEngineRender::SetImage(const std::string_view& _ImageName)
 {
 	Image = GameEngineResources::GetInst().ImageFind(_ImageName);
@@ -193,6 +198,7 @@ void GameEngineRender::ImageRender(float _DeltaTime)
 		CurrentAnimation->Render(_DeltaTime);
 		Frame = CurrentAnimation->FrameIndex[CurrentAnimation->CurrentIndex];
 		Image = CurrentAnimation->Image;
+		RotationFilter = CurrentAnimation->FilterImage;
 	}
 
 	if (nullptr == Image)
@@ -211,7 +217,16 @@ void GameEngineRender::ImageRender(float _DeltaTime)
 
 	if (true == Image->IsImageCutting())
 	{
-		if (255 == Alpha)
+		if (Angle != 0.0f)
+		{
+			if (nullptr == RotationFilter)
+			{
+				MsgAssert("회전시킬수 없는 이미지 입니다. 필터가 존재하지 않습니다.");
+			}
+
+			GameEngineWindow::GetDoubleBufferImage()->PlgCopy(Image, Frame, RenderPos, GetScale(), Angle, RotationFilter);
+		}
+		else if (255 == Alpha)
 		{
 			GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, Frame, RenderPos, GetScale(), TransColor);
 		}
@@ -222,7 +237,16 @@ void GameEngineRender::ImageRender(float _DeltaTime)
 	}
 	else
 	{
-		if (255 == Alpha)
+		if (Angle != 0.0f)
+		{
+			if (nullptr == RotationFilter)
+			{
+				MsgAssert("회전시킬수 없는 이미지 입니다. 필터가 존재하지 않습니다.");
+			}
+
+			GameEngineWindow::GetDoubleBufferImage()->PlgCopy(Image, Frame, RenderPos, GetScale(), Angle, RotationFilter);
+		}
+		else if (255 == Alpha)
 		{
 			GameEngineWindow::GetDoubleBufferImage()->TransCopy(Image, RenderPos, GetScale(), { 0, 0 }, Image->GetImageScale(), TransColor);
 		}
@@ -230,7 +254,6 @@ void GameEngineRender::ImageRender(float _DeltaTime)
 		{
 			GameEngineWindow::GetDoubleBufferImage()->AlphaCopy(Image, RenderPos, GetScale(), { 0, 0 }, Image->GetImageScale(), Alpha);
 		}
-		
 	}
 }
 
@@ -267,6 +290,16 @@ void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Parameter
 	FrameAnimation& NewAnimation = Animation[UpperName];	//포인터가 아니므로 map이 new, delete함
 
 	NewAnimation.Image = Image;
+
+	if (_Parameter.FilterName != "")
+	{
+		NewAnimation.FilterImage = GameEngineResources::GetInst().ImageFind(_Paramter.FilterName);
+
+		if (nullptr == NewAnimation.FilterImage)
+		{
+			MsgAssert("존재하지 않는 이미지로 로테이션 필터를 사용할수 없습니다.");
+		}
+	}
 
 
 	if (0 != _Parameter.FrameIndex.size())
@@ -320,66 +353,4 @@ void GameEngineRender::ChangeAnimation(const std::string_view& _AnimationName)
 	CurrentAnimation->CurrentIndex = 0;
 	
 	CurrentAnimation->CurrentTime = CurrentAnimation->FrameTime[CurrentAnimation->CurrentIndex];
-}
-
-
-
-void GameEngineRender::CreateReverseAnimation(const FrameAnimationParameter& _Parameter)
-{
-	GameEngineImage* Image = GameEngineResources::GetInst().ImageFind(_Parameter.ImageName);
-
-	//사용할 이미지 존재여부 확인
-	if (nullptr == Image)
-	{
-		MsgAssert("존재하지 않는 이미지로 애니메이션을 만들려고 했습니다.");
-	}
-
-	//잘려 있는 이미지 사용
-	if (false == Image->IsImageCutting())
-	{
-		MsgAssert("잘려있는 이미지만 프레임을 지정해줄 수 있습니다.");
-	}
-
-	std::string UpperName = GameEngineString::ToUpper(_Parameter.AnimationName);
-
-	//애니메이션 이름의 중복 불허
-	if (Animation.end() != Animation.find(UpperName))	//못 찾으면 end()반환
-	{
-		MsgAssert("이미 존재하는 이름의 애니메이션 입니다." + UpperName);
-	}
-
-	FrameAnimation& NewAnimation = Animation[UpperName];	//포인터가 아니므로 map이 new, delete함
-
-	NewAnimation.Image = Image;
-
-
-	if (0 != _Parameter.FrameIndex.size())
-	{
-		NewAnimation.FrameIndex = _Parameter.FrameIndex;
-	}
-	else
-	{
-		//직접 지정한 범위로 애니메이션 생성
-		for (int i = _Parameter.Start; i >= _Parameter.End; --i)
-		{
-			NewAnimation.FrameIndex.push_back(i);
-		}
-	}
-
-	if (0 != _Parameter.FrameTime.size())
-	{
-		//이미지가 노출될 일정한 시간
-		NewAnimation.FrameTime = _Parameter.FrameTime;
-	}
-	else
-	{
-		//직접 장면마다 노출되는 시간을 정함
-		for (int i = 0; i < NewAnimation.FrameIndex.size(); ++i)
-		{
-			NewAnimation.FrameTime.push_back(_Parameter.InterTime);
-		}
-	}
-
-	NewAnimation.Loop = _Parameter.Loop;
-	NewAnimation.Parent = this;
 }

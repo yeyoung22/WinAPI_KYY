@@ -118,7 +118,8 @@ void Player::Start()
 	{
 		HeadCollision = CreateCollision(MarioCollisionOrder::Player);
 		HeadCollision->SetScale({ 45, 10 });
-		HeadCollision->SetPosition({ GetPos().x, GetPos().y - 60 });
+		HeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight });
+		
 	}
 	{
 		RightBodyCollision = CreateCollision(MarioCollisionOrder::Player);
@@ -363,7 +364,11 @@ void Player::Update(float _DeltaTime)
 {
 	PlayTimer -= _DeltaTime* TimeSpeed;
 
-	
+	if ( true == IsChanged && ModeValue != PlayerMode::MARIO)
+	{
+		//HeadCollision->SetPosition({ GetPos().x, GetPos().y - ColHeight });
+		IsChanged = false;
+	}
 
 	if (GetPos().x <= GetLevel()->GetCameraPos().x)							//Mario Can't be to the left of the camera position
 	{

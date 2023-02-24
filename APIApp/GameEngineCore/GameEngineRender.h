@@ -16,6 +16,7 @@ class FrameAnimationParameter
 public:
 	std::string_view AnimationName = "";				//애니메이션 이름
 	std::string_view ImageName = "";					//애니메이션화할 이미지
+	std::string_view FilterName = "";					//회전을 위한 이미지
 	int Start = 0;										//애니메이션 시작 인덱스
 	int End = 0;										//애니메이션 끝 인덱스
 	int CurrentIndex = 0;
@@ -87,6 +88,14 @@ public:
 		Alpha = _Alpha;
 	}
 
+	inline void SetAngle(float _Angle)
+	{
+		Angle = _Angle;
+	}
+
+	//회전을 위한 이미지 설정
+	void SetRotFilter(const std::string_view& _ImageName);
+
 	void SetImage(const std::string_view& _ImageName);
 
 	void SetImageToScaleToImage(const std::string_view& _ImageName);
@@ -106,14 +115,13 @@ public:
 
 	void SetText(const std::string_view& _Text, const int _TextHeight = 20, const std::string_view& _TextType = "굴림", const TextAlign _TextAlign = TextAlign::Center, const COLORREF _TextColor = RGB(0, 0, 0));
 
-	//------test code
-	void CreateReverseAnimation(const FrameAnimationParameter& _Parameter);
 
 
 protected:
 
 private:
 	GameEngineImage* Image = nullptr;
+	GameEngineImage* RotationFilter = nullptr;
 
 	bool IsEffectCamera = true;					//카메라와 함께 움직이는 것들(true)
 
@@ -132,6 +140,7 @@ private:
 	public:
 		GameEngineRender* Parent = nullptr;
 		GameEngineImage* Image = nullptr;		//다듬어진 이미지여야 함
+		GameEngineImage* FilterImage = nullptr;
 		std::vector<int> FrameIndex;			//지정한 범위의 이미지로 애니메이션만들 경우
 		std::vector<float> FrameTime;			//이미지 사이 넘기는 시간 간격이 다를 경우 대비
 		int CurrentIndex = 0;					//현재 인덱스
@@ -161,6 +170,9 @@ private:
 	TextAlign Align = TextAlign::Left;
 	COLORREF TextColor = RGB(0, 0, 0);
 	float4 TextBoxScale;
+
+	//회전 시키면서 반투명하게 할 수 없음
+	float Angle = 0.0f;
 	// 그런걸 하면 HBRUSH 만드는데 사용하고 나면 Release
 	// GameEngineImage를 참조
 };

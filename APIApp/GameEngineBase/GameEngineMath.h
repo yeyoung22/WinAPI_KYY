@@ -3,6 +3,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include <Windows.h>
 
 //상속내릴 수 없음
 class GameEngineMath final
@@ -130,6 +131,12 @@ public:
 		y = Copy.x * sinf(_Rad) + Copy.y * cosf(_Rad);				//sin 합공식
 	}
 
+	float4 RotaitonZDegReturn(float _Deg)							//값 반환을 위한 함수(값을 한 번 받지 않으면 먼저 바뀐 값이 나중에 변경될 값에 영향을 줌)
+	{
+		float4 Copy = *this;
+		Copy.RotaitonZDeg(_Deg);
+		return Copy;
+	}
 
 	float GetAnagleRad()
 	{
@@ -143,6 +150,24 @@ public:
 			Result = GameEngineMath::PIE2 - Result;
 		}
 		return Result;
+	}
+
+	//회전은 라디안 값으로 계산됨
+	void RotaitonZDeg(float _Deg)
+	{
+		RotaitonZRad(_Deg * GameEngineMath::RadToDeg);
+	}
+	//벡터의 회전(삼각함수 합공식)
+	void RotaitonZRad(float _Rad)
+	{
+		float4 Copy = *this;
+		x = Copy.x * cosf(_Rad) - Copy.y * sinf(_Rad);
+		y = Copy.x * sinf(_Rad) + Copy.y * cosf(_Rad);
+	}
+
+	POINT ToWindowPOINT()
+	{
+		return POINT(ix(), iy());
 	}
 
 	float4 half() const
@@ -170,6 +195,14 @@ public:
 		y /= SizeValue;
 		z /= SizeValue;
 
+	}
+
+	//자기 자신의 벡터를 크기 1로 만들어 반환
+	float4 NormalizeReturn()
+	{
+		float4 Result = *this;
+		Result.Normalize();
+		return Result;
 	}
 
 	//선형보간법
@@ -292,5 +325,47 @@ public:
 		sprintf_s(ArrReturn, "x: %f, y: %f, z: %f, w: %f", x, y, z, w);
 
 		return std::string(ArrReturn);
+	}
+};
+
+
+class CollisionData
+{
+public:
+	float4 Position;
+	float4 Scale; // x만 원의 반지름으로 보겠습니다.
+
+	float Left() const
+	{
+		return Position.x - Scale.hx();
+	}
+	float Right() const
+	{
+		return Position.x + Scale.hx();
+	}
+	float Top() const
+	{
+		return Position.y - Scale.hy();
+	}
+	float Bot() const
+	{
+		return Position.y + Scale.hy();
+	}
+
+	float4 LeftTop() const
+	{
+		return float4{ Left(), Top() };
+	}
+	float4 RightTop() const
+	{
+		return float4{ Right(), Top() };
+	}
+	float4 LeftBot() const
+	{
+		return float4{ Left(), Bot() };
+	}
+	float4 RightBot() const
+	{
+		return float4{ Right(), Bot() };
 	}
 };
