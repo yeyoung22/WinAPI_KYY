@@ -87,7 +87,7 @@ void NumberRenderObject::SetValue(int _Value)
 	//Negative가 true이면 1을 반환
 	//Digits는 음수인 경우, 출력하고 싶은 자릿수 + 부호 (+1)를 해줌
 	//Digits: 총 랜더링하고 싶은 자릿수
-	int Digits = (NumOfDigits == -1 ? Numbers.size() : NumOfDigits) + (Negative ? 1 : 0);	
+	size_t Digits = (NumOfDigits == -1 ? Numbers.size() : NumOfDigits) + (Negative ? 1 : 0);	
 
 
 	if (NumberRenders.size() < Digits)											//NumberRenders를 추가해야 하는 경우								//NumberRenders를 추가해야 하는 경우

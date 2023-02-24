@@ -83,9 +83,6 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Crouch", .ImageName = "Right_Mario.bmp", .Start = 20, .End = 20 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_GrowthHang", .ImageName = "Right_Mario.bmp", .Start = 21, .End = 22 });
 		
-		//역순으로......._GameEngineRender.cpp에 있음
-		AnimationRender->CreateReverseAnimation({ .AnimationName = "Right_Smaller", .ImageName = "Right_Mario.bmp", .Start = 31, .End = 29 });
-		AnimationRender->CreateReverseAnimation({ .AnimationName = "Left_Smaller", .ImageName = "Left_Mario.bmp",  .Start = 31, .End = 29 });
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthIdle",  .ImageName = "Left_Mario.bmp", .Start = 14, .End = 14 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_GrowthMove",  .ImageName = "Left_Mario.bmp", .Start = 15, .End = 17 });
@@ -225,18 +222,6 @@ bool  Player::LiftUp(float4 _Pos)
 			break;
 		}
 
-	
-
-	/*if (true == CheckRightWall(_Pos))
-	{
-		SetMove(float4::Left);
-	}
-
-	if (true == CheckLeftWall(_Pos))
-	{
-		SetMove(float4::Right);
-	}*/
-
 	//땅인지 아닌지 체크하는 부분
 	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
 	float4 Down = GetPos() + _Pos;
@@ -249,39 +234,17 @@ bool  Player::LiftUp(float4 _Pos)
 }
 
 
-bool Player::CheckRightWall(float4 _Pos)
+bool Player::CheckWall(float4 _Pos, float4 _Pivot)
 {
-	float4 CheckCPos = GetPos() + _Pos;
-	float4 CheckRPos = CheckCPos;						//센터에서 한 칸 오른쪽
-	CheckRPos.x += GetImgHalfWidth() - 8;					//이미지의 우측
-
-
-
-	if (Black == ColImage->GetPixelColor(CheckRPos, Black))
-	{
-		return true;
-	}
-
-
-	return false;
-}
-
-bool Player::CheckLeftWall(float4 _Pos)
-{
-	float4 CheckCPos = GetPos() + _Pos;
-	float4 CheckLPos = CheckCPos;						//센터에서 한 칸 왼쪽
-	CheckLPos.x -= GetImgHalfWidth() - 8;					//이미지의 좌측
-
-
-
 	float4 CheckPos = GetPos() + _Pos;
+	CheckPos += _Pivot;
 
-	if (Black == ColImage->GetPixelColor(CheckLPos, Black))
+
+	if (Black == ColImage->GetPixelColor(CheckPos, Black))
 	{
 		return true;
 	}
 	
-
 	return false;
 }
 
@@ -366,7 +329,7 @@ void Player::Update(float _DeltaTime)
 
 	if ( true == IsChanged && ModeValue != PlayerMode::MARIO)
 	{
-		//HeadCollision->SetPosition({ GetPos().x, GetPos().y - ColHeight });
+		HeadCollision->SetPosition({ GetPos().x, GetPos().y - ColHeight });
 		IsChanged = false;
 	}
 

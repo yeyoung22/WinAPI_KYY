@@ -293,7 +293,7 @@ void GameEngineRender::CreateAnimation(const FrameAnimationParameter& _Parameter
 
 	if (_Parameter.FilterName != "")
 	{
-		NewAnimation.FilterImage = GameEngineResources::GetInst().ImageFind(_Paramter.FilterName);
+		NewAnimation.FilterImage = GameEngineResources::GetInst().ImageFind(_Parameter.FilterName);
 
 		if (nullptr == NewAnimation.FilterImage)
 		{

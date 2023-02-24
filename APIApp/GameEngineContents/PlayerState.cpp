@@ -295,22 +295,24 @@ void Player::MoveUpdate(float _Time)
 
 
 	
-	if (true == CheckRightWall(MoveDir * _Time))
+
+	if (true == CheckWall(MoveDir * _Time, PivotLPos))
 	{
-		SetMove(float4::Left);
+
+		return;
 	}
-	else if (true == CheckLeftWall(MoveDir * _Time))
+	else if (true == CheckWall(MoveDir * _Time, PivotRPos))
 	{
-		SetMove(float4::Right);
+		
+		return;
 	}
-	
 
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
-
 	IsGround = LiftUp();
 	InitGravity(IsGround);
+	
 }
 void Player::MoveEnd() 
 {
@@ -376,6 +378,18 @@ void Player::BrakeUpdate(float _Time)
 		MoveDir.x += BrakePower * _Time;			//우측 이동
 	}
 
+	if (true == CheckWall(MoveDir * _Time, PivotLPos))
+	{
+		ChangeState(PlayerState::IDLE);
+		return;
+	}
+	else if (true == CheckWall(MoveDir * _Time, PivotRPos))
+	{
+		ChangeState(PlayerState::IDLE);
+		return;
+	}
+
+
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
@@ -406,6 +420,8 @@ void Player::BrakeUpdate(float _Time)
 		ChangeState(PlayerState::FALL);
 		return;
 	}
+	
+
 	
 
 	IsGround = LiftUp();
@@ -465,22 +481,19 @@ void Player::JumpUpdate(float _Time)
 
 	LimitSpeed(MoveDir);
 
+	//점프는 점 2개를 검사해서 좀 더 위쪽에 있는 점이 false이면 x값을 0이 안 되게 함
+	if (true == CheckWall(MoveDir * _Time, PivotLPos) && true == CheckWall(MoveDir*_Time, PivotLPos2))
+	{
+		MoveDir.x = 0;
+	}
+	else if (true == CheckWall(MoveDir * _Time, PivotRPos) && true == CheckWall(MoveDir * _Time, PivotRPos2))
+	{
+		MoveDir.x = 0;
+	}
 
-	
+	SetMove(MoveDir * _Time);
+	Camera(MoveDir * _Time);
 
-	if (false == CheckRightWall(MoveDir * _Time) && false == CheckLeftWall(MoveDir * _Time))
-	{
-		SetMove(MoveDir * _Time);
-		Camera(MoveDir * _Time);
-	}
-	else if (true == CheckRightWall(MoveDir * _Time))
-	{
-		SetMove(float4::Left);
-	}
-	else if (true == CheckLeftWall(MoveDir * _Time))
-	{
-		SetMove(float4::Right);
-	}
 	
 	AccGravity(_Time);
 	IsGround = LiftUp();

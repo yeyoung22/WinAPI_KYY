@@ -159,6 +159,12 @@ private:
 
 	float CameraEndPos = 0.0f;
 
+	float4 PivotRPos = { ImgHalfWidth-8, -2 };
+	float4 PivotLPos = { -ImgHalfWidth - 8, -2 };
+
+	float4 PivotRPos2 = { ImgHalfWidth - 8, -4 };
+	float4 PivotLPos2 = { -ImgHalfWidth - 8, -4 };
+
 	//ColImage 관련 변수 및 함수
 	std::string ColMapName;
 	GameEngineImage* ColImage = nullptr;
@@ -245,9 +251,8 @@ private:
 	//위쪽이 천장인지 확인하는 함수
 	bool CheckCeiling(float4 _Pos);
 
-	//오른쪽 왼쪽이 벽인지 확인하는 함수
-	bool CheckRightWall(float4 _Pos);
-	bool CheckLeftWall(float4 _Pos);
+	//벽인지 확인하는 함수
+	bool CheckWall(float4 _Pos, float4 _Pivot = float4::Zero);
 
 	bool CheckAir(float4 _Pos);
 
