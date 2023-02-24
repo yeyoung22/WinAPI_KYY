@@ -9,6 +9,7 @@ enum class MarioRenderOrder
 	Block,
 	UI,
 	Player = 100,				//가장 나중에 랜더되어야 함
+	Pipe
 };
 
 enum class MarioCollisionOrder
@@ -17,6 +18,7 @@ enum class MarioCollisionOrder
 	Monster,
 	Item,
 	Block,
+	Pipe,
 	PlayerAttack,				//Fire Attack of Mario
 	MonsterAttack,				//Fire Breath of Kupa
 	Door,

@@ -68,46 +68,10 @@ void Item::Update(float _DeltaTime)
 		std::vector<GameEngineCollision*> Collision;
 		if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
-			if (Player::ModeValue == PlayerMode::MARIO)
-			{
-				EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("growup.wav");
-				EffectPlayer.LoopCount(1);
-				EffectPlayer.Volume(0.3f);
-
-				Player::MainPlayer->ChangeMode(PlayerMode::SUPERMARIO);
-				Player::MainPlayer->DirCheck("Bigger");
-			}
-			else
-			{
-				EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("growup.wav");
-				EffectPlayer.LoopCount(1);
-				EffectPlayer.Volume(0.3f);
-			}
+			Player::MainPlayer->Player::ChangeState(PlayerState::GROW);
 
 
-			if (ItemRender->IsAnimationEnd())
-			{
-				if (false == GameEngineInput::IsAnyKey())
-				{
-					Player::MainPlayer->ChangeState(PlayerState::IDLE);
-				}
-
-				if (GameEngineInput::IsPress("LeftMove") || GameEngineInput::IsPress("RightMove"))
-				{
-					Player::MainPlayer->ChangeState(PlayerState::MOVE);
-				}
-
-				if (GameEngineInput::IsDown("Jump"))
-				{
-					Player::MainPlayer->ChangeState(PlayerState::JUMP);
-				}
-
-				if (GameEngineInput::IsPress("Crouch"))
-				{
-					Player::MainPlayer->ChangeState(PlayerState::CROUCH);
-				}
-
-			}
+		
 			ItemRender->Death();
 			BodyCollision->Death();
 

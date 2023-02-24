@@ -57,6 +57,9 @@
     <ClInclude Include="NumberRenderObjectEX.h">
       <Filter>TextImage</Filter>
     </ClInclude>
+    <ClInclude Include="Pipe.h">
+      <Filter>Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -116,6 +119,9 @@
     </ClCompile>
     <ClCompile Include="NumberRenderObjectEX.cpp">
       <Filter>TextImage</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipe.cpp">
+      <Filter>Play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

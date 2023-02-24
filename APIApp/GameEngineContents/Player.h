@@ -12,6 +12,7 @@ enum class PlayerState
 	JUMP,
 	CROUCH,
 	ATTACK,
+	GROW,
 	FALL,
 	DEATH,
 };
@@ -100,6 +101,22 @@ public:
 
 	void ChangeState(PlayerState _State);
 
+
+	void SetCanMoveOn()
+	{
+		CanMove = true;
+	}
+
+	void SetCanMoveOff()
+	{
+		CanMove = false;
+	}
+
+	bool GetCanMove()
+	{
+		return CanMove;
+	}
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -112,6 +129,7 @@ private:
 
 	bool IsLeftBrake = false;
 	bool IsGround = false;
+	bool CanMove = false;								//ColImg와 관계 없이 true이면 무조건 움직일 수 있게 하기 위함
 
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);
@@ -168,7 +186,6 @@ private:
 
 	//Debug_현재 StateValue를 반환하는 함수
 	std::string GetStateName();
-
 	//FSM
 	void IdleStart();
 	void IdleUpdate(float _Time);
@@ -193,6 +210,10 @@ private:
 	void AttackStart();
 	void AttackUpdate(float _Time);
 	void AttackEnd();
+
+	void GrowStart();
+	void GrowUpdate(float _Time);
+	void GrowEnd();
 
 	void FallStart();
 	void FallUpdate(float _Time);

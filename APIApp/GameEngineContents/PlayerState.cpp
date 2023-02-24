@@ -24,6 +24,8 @@ std::string Player::GetStateName()
 		return "PlayerState::CROUCH";
 	case PlayerState::ATTACK:
 		return "PlayerState::ATTACK";
+	case PlayerState::GROW:
+		return "PlayerState::GROW";
 	case PlayerState::FALL:
 		return "PlayerState::FALL";
 	case PlayerState::DEATH:
@@ -31,6 +33,7 @@ std::string Player::GetStateName()
 	default:
 		break;
 	}
+	return "";
 }
 
 
@@ -62,6 +65,9 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::ATTACK:
 		AttackStart();
 		break;
+	case PlayerState::GROW:
+		GrowStart();
+		break;
 	case PlayerState::FALL:
 		FallStart();
 		break;
@@ -91,6 +97,9 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::ATTACK:
 		AttackEnd();
+		break;
+	case PlayerState::GROW:
+		GrowEnd();
 		break;
 	case PlayerState::FALL:
 		FallEnd();
@@ -125,6 +134,9 @@ void Player::UpdateState(float _Time)
 		break;
 	case PlayerState::ATTACK:
 		AttackUpdate(_Time);
+		break;
+	case PlayerState::GROW:
+		GrowUpdate(_Time);
 		break;
 	case PlayerState::FALL:
 		FallUpdate(_Time);
@@ -178,11 +190,19 @@ void Player::IdleUpdate(float _Time)
 		Friction(MoveDir, _Time);					//x값이 남아 계속 움직이는 문제 해결
 	}
 
+	
+
 	AccGravity(_Time);
 	ActorMove(_Time);
 
-	IsGround = LiftUp();
-    InitGravity(IsGround);
+
+	if (false == CanMove)
+	{
+		IsGround = LiftUp();
+		InitGravity(IsGround);
+	}
+
+
 	
 }
 void Player::IdleEnd() {
@@ -274,14 +294,23 @@ void Player::MoveUpdate(float _Time)
 	
 
 
+	
+	if (true == CheckRightWall(MoveDir * _Time))
+	{
+		SetMove(float4::Left);
+	}
+	else if (true == CheckLeftWall(MoveDir * _Time))
+	{
+		SetMove(float4::Right);
+	}
+	
+
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
 
 	IsGround = LiftUp();
 	InitGravity(IsGround);
-
-	
 }
 void Player::MoveEnd() 
 {
@@ -436,6 +465,15 @@ void Player::JumpUpdate(float _Time)
 	LimitSpeed(MoveDir);
 
 
+	if (true == CheckRightWall(MoveDir * _Time))
+	{
+		SetMove(float4::Left);
+	}
+	else if (true == CheckLeftWall(MoveDir * _Time))
+	{
+		SetMove(float4::Right);
+	}
+
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 	
@@ -504,6 +542,56 @@ void Player::AttackEnd()
 
 }
 
+void Player::GrowStart()
+{
+	if (ModeValue == PlayerMode::MARIO)
+	{
+		ChangeMode(PlayerMode::SUPERMARIO);
+		DirCheck("Bigger");
+	}
+
+	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("growup.wav");
+	EffectPlayer.LoopCount(1);
+	EffectPlayer.Volume(0.3f);
+
+	ChangeMode(PlayerMode::SUPERMARIO);
+}
+void Player::GrowUpdate(float _Time)
+{
+	if (true == AnimationRender->IsAnimationEnd())
+	{
+		if (false == GameEngineInput::IsAnyKey())
+		{
+			Player::MainPlayer->ChangeState(PlayerState::IDLE);
+			return;
+		}
+
+		if (GameEngineInput::IsPress("LeftMove") || GameEngineInput::IsPress("RightMove"))
+		{
+			Player::MainPlayer->ChangeState(PlayerState::MOVE);
+			return;
+		}
+
+		if (GameEngineInput::IsDown("Jump"))
+		{
+			Player::MainPlayer->ChangeState(PlayerState::JUMP);
+			return;
+		}
+
+		if (GameEngineInput::IsPress("Crouch"))
+		{
+			Player::MainPlayer->ChangeState(PlayerState::CROUCH);
+			return;
+		}
+	}
+
+	
+}
+void Player::GrowEnd()
+{
+	
+}
+
 
 
 //(떨어지면 Jump모션을 취하며 Y값은 계속 증가)
@@ -560,5 +648,4 @@ void Player::DeathUpdate(float _Time)
 void Player::DeathEnd()
 {
 }
-
 

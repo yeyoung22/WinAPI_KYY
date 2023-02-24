@@ -201,47 +201,40 @@ void Player::LimitSpeed(float4& _Pos)
 	}
 }
 
-
-
-
-
 bool  Player::LiftUp(float4 _Pos)
 {
-	while (true)
-	{
-		float4 NextPos = GetPos() + _Pos;
-
-		int Color = ColImage->GetPixelColor(NextPos, Black);
-
-		if (true == CheckCeiling(_Pos))
+		while (true)
 		{
-			SetMove(float4::Down);
-			return true;
-		}
+			float4 NextPos = GetPos() + _Pos;
 
-		if (Black == Color)
-		{
-			SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
-			continue;
-		}
+			int Color = ColImage->GetPixelColor(NextPos, Black);
 
-		break;
-	}
+			if (true == CheckCeiling(_Pos))
+			{
+				SetMove(float4::Down);
+				return true;
+			}
+
+			if (Black == Color)
+			{
+				SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
+				continue;
+			}
+
+			break;
+		}
 
 	
 
-	if (true == GameEngineInput::IsPress("RightMove") && true == CheckRightWall(_Pos))
+	/*if (true == CheckRightWall(_Pos))
 	{
 		SetMove(float4::Left);
 	}
 
-	if (true == GameEngineInput::IsPress("LeftMove") && true == CheckLeftWall(_Pos))
+	if (true == CheckLeftWall(_Pos))
 	{
 		SetMove(float4::Right);
-	}
-
-	
-	
+	}*/
 
 	//땅인지 아닌지 체크하는 부분
 	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
@@ -257,26 +250,36 @@ bool  Player::LiftUp(float4 _Pos)
 
 bool Player::CheckRightWall(float4 _Pos)
 {
-	float4 CheckRPos = GetPos() + _Pos;						//센터에서 한 칸 오른쪽
+	float4 CheckCPos = GetPos() + _Pos;
+	float4 CheckRPos = CheckCPos;						//센터에서 한 칸 오른쪽
 	CheckRPos.x += GetImgHalfWidth() - 8;					//이미지의 우측
 
-	if (Black == ColImage->GetPixelColor(CheckRPos + float4::Right, Black))
+
+
+	if (Black == ColImage->GetPixelColor(CheckRPos, Black))
 	{
 		return true;
 	}
+
 
 	return false;
 }
 
 bool Player::CheckLeftWall(float4 _Pos)
 {
-	float4 CheckLPos = GetPos() + _Pos;						//센터에서 한 칸 왼쪽
+	float4 CheckCPos = GetPos() + _Pos;
+	float4 CheckLPos = CheckCPos;						//센터에서 한 칸 왼쪽
 	CheckLPos.x -= GetImgHalfWidth() - 8;					//이미지의 좌측
 
-	if (Black == ColImage->GetPixelColor(CheckLPos + float4::Left, Black))
+
+
+	float4 CheckPos = GetPos() + _Pos;
+
+	if (Black == ColImage->GetPixelColor(CheckLPos, Black))
 	{
 		return true;
 	}
+	
 
 	return false;
 }
@@ -470,7 +473,7 @@ void Player::Camera(float4 _Pos)
 	{
 		if (ActPos.x >= CameraPos.x + GameEngineWindow::GetScreenSize().hx())		//Move the camera if Mario is to the right of the center of the screen
 		{
-			if (GameEngineInput::IsPress("RightMove"))
+			if (GameEngineInput::IsPress("RightMove") || (0 < _Pos.x))
 			{
 				GetLevel()->SetCameraMove({ _Pos.x, 0 });
 			}			
@@ -526,7 +529,6 @@ void Player::Render(float _DeltaTime)
 			std::string MarioStateText = "MarioState : ";
 			MarioStateText += MainPlayer->GetStateName();
 			GameEngineLevel::DebugTextPush(MarioStateText);
-
 		}
 
 }

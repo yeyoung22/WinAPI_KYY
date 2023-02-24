@@ -13,6 +13,7 @@
 #include "ContentsEnums.h"
 #include "ContentsValue.h"
 #include "Block.h"
+#include "Pipe.h"
 
 
 
@@ -227,6 +228,11 @@ void PlayLevel::ImageLoad()
 
 		Dir.MoveParent();
 	}
+	{
+		Dir.Move("Pipe");
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Pipe.bmp"));
+		Image->Cut(2, 1);
+	}
 }
 
 //Loading 시점: 만들어야할 것들을 만드는 시점
@@ -256,9 +262,9 @@ void PlayLevel::Loading()
 	}
 	//1_1_2ndItem
 	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		/*Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ 5024, StartPos.y - 128 });
+		Actor->SetPos({ 5024, StartPos.y - 128 });*/
 	}
 	//UI
 	{
@@ -336,6 +342,12 @@ void PlayLevel::Loading()
 	{
 		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
 		Actor->SetPos({ 10913, 640 });
+	}
+
+	//Pipe
+	{
+		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
+		Actor->SetPos({ 1504, 750 });
 	}
 
 
