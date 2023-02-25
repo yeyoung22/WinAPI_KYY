@@ -145,8 +145,8 @@ private:
 	
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
 	float MoveSpeed = 230.0f;									//Player Speed
-	float JumpPower = -750.0f;
-	float SuperJumpPower = -770.0f;
+	float JumpPower = -800.0f;
+	float SuperJumpPower = -835.0f;
 	float Gravity = 200.0f;										//For Decresing JumpPower
 	float FrictionPower = 0.0025f;
 	float BrakePower = 0.0f;
@@ -155,15 +155,15 @@ private:
 	float ImgHalfHeight = 64.0f;
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
-	
+	float BasicVolume = 0.3f;									//Set Volume
 
 	float CameraEndPos = 0.0f;
 
-	float4 PivotRPos = { ImgHalfWidth-8, -2 };
-	float4 PivotLPos = { -ImgHalfWidth - 8, -2 };
+	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
+	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };
 
-	float4 PivotRPos2 = { ImgHalfWidth - 8, -4 };
-	float4 PivotLPos2 = { -ImgHalfWidth - 8, -4 };
+	float4 PivotRPos2 = { ImgHalfWidth - 8, -17 };
+	float4 PivotLPos2 = { -ImgHalfWidth + 8, -17 };
 
 	//ColImage 관련 변수 및 함수
 	std::string ColMapName;

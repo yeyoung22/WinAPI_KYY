@@ -26,7 +26,7 @@ void Monster::Start()
 	{
 		BodyCollision = CreateCollision(MarioCollisionOrder::Monster);
 		BodyCollision->SetScale({ 50, 50 });
-		BodyCollision->Off();
+		//BodyCollision->Off();
 	}
 }
 
@@ -39,7 +39,6 @@ void Monster::Update(float _DeltaTime)
 	{
 		Death();
 	}
-
 
 	SetMove(Dir);
 }

@@ -339,6 +339,7 @@ void Player::Update(float _DeltaTime)
 	}
 
 
+	//Meet Monster
 	if (nullptr != RightBodyCollision && nullptr != LeftBodyCollision)
 	{
 
@@ -353,7 +354,6 @@ void Player::Update(float _DeltaTime)
 			{
 				--Life;
 				ChangeState(PlayerState::DEATH);
-				//MainPlayer->Death();
 
 
 				//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
@@ -412,7 +412,7 @@ void Player::Update(float _DeltaTime)
 
 void Player::DirCheck(const std::string_view& _AnimationName)
 {
-	std::string PrevDirString = DirString;
+	std::string PrevDirString = DirString;							//DirString = "Right_"
 	AnimationRender->ChangeAnimation(DirString + _AnimationName.data());
 
 	if (GameEngineInput::IsPress("LeftMove"))
@@ -423,7 +423,6 @@ void Player::DirCheck(const std::string_view& _AnimationName)
 	{
 		DirString = "Right_";
 	}
-
 
 	if (PrevDirString != DirString)
 	{

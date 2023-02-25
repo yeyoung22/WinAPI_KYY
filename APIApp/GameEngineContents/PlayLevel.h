@@ -30,6 +30,8 @@ protected:
 
 	GameEngineSoundPlayer BGMPlayer;	//SoundPlayer를 받아서 사용(제어)
 private:
+	float BGMVolume = 0.1f;
+
 	void SoundLoad();
 	void ImageLoad();
 };

@@ -248,7 +248,7 @@ void Player::MoveUpdate(float _Time)
 	//Brake State로 넘김------------------------------------
 	if (
 		(0 > MoveDir.x) &&									//왼쪽으로 가던 중에 오른쪽으로 감
-		(true == GameEngineInput::IsDown("RightMove"))
+		(true == GameEngineInput::IsPress("RightMove"))
 		)
 	{
 		IsLeftBrake = true;
@@ -258,7 +258,7 @@ void Player::MoveUpdate(float _Time)
 	
 	if (
 		(0 < MoveDir.x) &&									//오른쪽으로 가던 중에 왼쪽으로 감
-		(true == GameEngineInput::IsDown("LeftMove")) 
+		(true == GameEngineInput::IsPress("LeftMove"))
 		)
 	{
 		IsLeftBrake = false;
@@ -266,7 +266,7 @@ void Player::MoveUpdate(float _Time)
 		return;
 	}
 
- 
+	//Jump State로 넘김------------------------------------
 	if (GameEngineInput::IsDown("Jump"))
 	{
 		ChangeState(PlayerState::JUMP);
@@ -296,15 +296,40 @@ void Player::MoveUpdate(float _Time)
 
 	
 
-	if (true == CheckWall(MoveDir * _Time, PivotLPos))
+	if (true ==GameEngineInput::IsPress("LeftMove") && true == CheckWall(MoveDir * _Time, PivotLPos))
 	{
+		MoveDir.x = 0.0f;
 
-		return;
-	}
-	else if (true == CheckWall(MoveDir * _Time, PivotRPos))
-	{
+		if (true == GameEngineInput::IsPress("RightMove"))				//왼쪽으로 가던 중에 오른쪽으로 감
+		{
+			//ChangeState(PlayerState::MOVE);
+			if (ModeValue == PlayerMode::SUPERMARIO)											//Growth ver.Mario
+			{
+				AnimationRender->ChangeAnimation("Right_GrowthMove");
+			}
+			else if (ModeValue == PlayerMode::FIREMARIO)											//Growth ver.Mario
+			{
+				AnimationRender->ChangeAnimation("Right_FireMove");
+			}
+			else
+			{
+				AnimationRender->ChangeAnimation("Right_Move");
+			}
+
+
+			return;
+		}
 		
-		return;
+	}
+	else if (true == GameEngineInput::IsPress("RightMove") && true == CheckWall(MoveDir * _Time, PivotRPos))
+	{
+		MoveDir.x = 0.0f;
+
+		if (true == GameEngineInput::IsPress("LeftMove"))				//오른쪽으로 가던 중에 왼쪽으로 감
+		{
+			ChangeState(PlayerState::MOVE);
+			return;
+		}
 	}
 
 	SetMove(MoveDir * _Time);
@@ -380,7 +405,7 @@ void Player::BrakeUpdate(float _Time)
 
 	if (true == CheckWall(MoveDir * _Time, PivotLPos))
 	{
-		ChangeState(PlayerState::IDLE);
+		//ChangeState(PlayerState::IDLE);
 		return;
 	}
 	else if (true == CheckWall(MoveDir * _Time, PivotRPos))
@@ -435,7 +460,7 @@ void Player::BrakeEnd()
 void Player::JumpStart()
 {
 	MoveDir.y = SuperJumpPower;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
-	Gravity = 1100.0f;												//아래로 떨어뜨리는 힘
+	Gravity = 1250.0f;												//아래로 떨어뜨리는 힘
 
 	if (ModeValue == PlayerMode::SUPERMARIO)
 	{
@@ -454,7 +479,7 @@ void Player::JumpStart()
 		EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
 	}	
 	EffectPlayer.LoopCount(1);
-	EffectPlayer.Volume(0.3f);
+	EffectPlayer.Volume(BasicVolume);
 }
 void Player::JumpUpdate(float _Time)
 {
@@ -485,10 +510,22 @@ void Player::JumpUpdate(float _Time)
 	if (true == CheckWall(MoveDir * _Time, PivotLPos) && true == CheckWall(MoveDir*_Time, PivotLPos2))
 	{
 		MoveDir.x = 0;
+
+		if (true == IsGround && 0 <= MoveDir.y)
+		{
+			ChangeState(PlayerState::IDLE);
+			return;
+		}
 	}
 	else if (true == CheckWall(MoveDir * _Time, PivotRPos) && true == CheckWall(MoveDir * _Time, PivotRPos2))
 	{
 		MoveDir.x = 0;
+
+		if (true == IsGround && 0 <= MoveDir.y)
+		{
+			ChangeState(PlayerState::IDLE);
+			return;
+		}
 	}
 
 	SetMove(MoveDir * _Time);
@@ -574,7 +611,7 @@ void Player::GrowStart()
 
 	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("growup.wav");
 	EffectPlayer.LoopCount(1);
-	EffectPlayer.Volume(0.3f);
+	EffectPlayer.Volume(BasicVolume);
 }
 void Player::GrowUpdate(float _Time)
 {
@@ -659,11 +696,21 @@ void Player::DeathStart()
 	Gravity = 1000.0f;
 
 	DirCheck("Death");
-	
-}
+	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("Miss.mp3");
+	EffectPlayer.LoopCount(1);
+	EffectPlayer.Volume(BasicVolume);
+}	
 void Player::DeathUpdate(float _Time)
 {
-	
+	SetCanMoveOn();
+	float DeadLine = GameEngineWindow::GetScreenSize().y;
+	float4 PlayerPos = GetPos();
+
+	if (DeadLine <= GetPos().y)
+	{
+		MainPlayer->Death();
+	}
+
 }
 void Player::DeathEnd()
 {

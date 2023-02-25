@@ -40,7 +40,10 @@ void PlayLevel::SoundLoad()
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("RunningAbout.mp3"));
 	}
 	{
-		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Running About_Hurry.mp3"));
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("RunningAbout_Hurry.mp3"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Miss.mp3"));
 
 		Dir.MoveParent();
 	}
@@ -245,14 +248,16 @@ void PlayLevel::Loading()
 	{
 		Map* Actor = CreateActor<Map>();
 	}
+	//MainPlayer
 	{
 		Player* Actor = CreateActor<Player>();
 		Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
 	}
+	//Goomba1
 	{
 		Monster* Actor = CreateActor<Monster>(MarioRenderOrder::Monster);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ StartPos.x * 2- StartPos.half().x , StartPos.y - 128});
+		Actor->SetPos({1376, StartPos.y - 128});
 	}
 	//1_1_GrowMushroom
 	{
@@ -396,9 +401,9 @@ void PlayLevel::Update(float _DeltaTime)
 
 	if (100 > Player::PlayTimer)
 	{
-		BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("Running About_Hurry.mp3");
+		BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout_Hurry.mp3");
 		BGMPlayer.LoopCount(1);
-		BGMPlayer.Volume(0.1f);
+		BGMPlayer.Volume(BGMVolume);
 	}
 }
 
@@ -406,5 +411,5 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
 	BGMPlayer.LoopCount(1);
-	BGMPlayer.Volume(0.1f);
+	BGMPlayer.Volume(BGMVolume);
 }
