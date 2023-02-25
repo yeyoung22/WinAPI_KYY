@@ -3,6 +3,7 @@
 enum class MarioRenderOrder
 {
 	BackGround,					//가장 먼저 랜더되어야 함
+	BackGroundTxt,
 	Map,
 	Monster,
 	Item,
@@ -24,4 +25,11 @@ enum class MarioCollisionOrder
 	Door,
 	Flag,
 
+};
+
+enum class EndingScene
+{
+	Clear,
+	GameOver,
+	TimeOver,
 };

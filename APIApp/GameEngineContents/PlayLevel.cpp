@@ -14,10 +14,12 @@
 #include "ContentsValue.h"
 #include "Block.h"
 #include "Pipe.h"
+#include "EndingBack.h"
 
 
 
 std::vector<std::vector<int>> PlayLevel::MapNames;
+PlayLevel* PlayLevel::MainPlayLevel;
 
 PlayLevel::PlayLevel() 
 {
@@ -257,7 +259,7 @@ void PlayLevel::Loading()
 	{
 		Monster* Actor = CreateActor<Monster>(MarioRenderOrder::Monster);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({1376, StartPos.y - 128});
+		Actor->SetPos({1400, StartPos.y - 128});
 	}
 	//1_1_GrowMushroom
 	{
@@ -405,11 +407,27 @@ void PlayLevel::Update(float _DeltaTime)
 		BGMPlayer.LoopCount(1);
 		BGMPlayer.Volume(BGMVolume);
 	}
+
+	if (0 >= Player::PlayTimer)
+	{
+		EndingBack::Ending->SetEndingScene(EndingScene::TimeOver);
+	}
 }
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+	MainPlayLevel = this;
+
 	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
 	BGMPlayer.LoopCount(1);
 	BGMPlayer.Volume(BGMVolume);
+
+}
+
+void PlayLevel::SetBGMPlayer(const std::string_view& _String, int _loop, float _BasicVolume)
+{
+	BGMPlayer.Stop();
+	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String.data());
+	BGMPlayer.LoopCount(_loop);
+	BGMPlayer.Volume(_BasicVolume);
 }

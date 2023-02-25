@@ -15,6 +15,7 @@
 #include "ContentsUI.h"
 
 
+
 //screenSize = {1024, 960}
 bool  Player::IsDebugMode = false;
 Player* Player::MainPlayer;
@@ -342,7 +343,6 @@ void Player::Update(float _DeltaTime)
 	//Meet Monster
 	if (nullptr != RightBodyCollision && nullptr != LeftBodyCollision)
 	{
-
 		std::vector<GameEngineCollision*> Collision;
 		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
@@ -353,10 +353,14 @@ void Player::Update(float _DeltaTime)
 			else
 			{
 				--Life;
+				
 				ChangeState(PlayerState::DEATH);
-
+				
 
 				//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+				
+
+
 			}
 		}
 	}
@@ -406,6 +410,8 @@ void Player::Update(float _DeltaTime)
 		GetLevel()->SetCameraPos({GetPos().x, 0});
 
 	}
+
+	
 
 	UpdateState(_DeltaTime);
 }

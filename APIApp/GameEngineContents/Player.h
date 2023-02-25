@@ -127,6 +127,7 @@ protected:
 	GameEngineSoundPlayer EffectPlayer;
 
 private:
+
 	bool IsChanged = false;
 	bool IsLeftBrake = false;
 	bool IsGround = false;
@@ -158,6 +159,8 @@ private:
 	float BasicVolume = 0.3f;									//Set Volume
 
 	float CameraEndPos = 0.0f;
+
+	float WaitTime = 3.0f;
 
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };

@@ -24,6 +24,8 @@ public:
 	void SoundLoad(const std::string_view& _Path);
 	FMOD::Channel* Play();
 
+	bool EndOfMusic(FMOD::System* _SoundSystem, FMOD_CHANNELCONTROL_CALLBACK_TYPE _CallBackType);
+
 protected:
 
 private:

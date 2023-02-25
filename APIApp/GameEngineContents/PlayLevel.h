@@ -7,7 +7,7 @@ class PlayLevel : public STLevel
 {
 public:
 	static std::vector<std::vector<int>> MapNames;
-
+	static PlayLevel* MainPlayLevel;
 
 public:
 	// constrcuter destructer
@@ -20,6 +20,8 @@ public:
 	PlayLevel& operator=(const PlayLevel& _Other) = delete;
 	PlayLevel& operator=(PlayLevel&& _Other) noexcept = delete;
 
+
+	void SetBGMPlayer(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.1f);
 
 protected:
 	void Loading() override;

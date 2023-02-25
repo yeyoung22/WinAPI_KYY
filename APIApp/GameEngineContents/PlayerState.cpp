@@ -6,6 +6,8 @@
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineRender.h>
 #include "ContentsEnums.h"
+#include "PlayLevel.h"
+#include <GameEngineCore/GameEngineCore.h>
 
 
 std::string Player::GetStateName()
@@ -302,7 +304,6 @@ void Player::MoveUpdate(float _Time)
 
 		if (true == GameEngineInput::IsPress("RightMove"))				//왼쪽으로 가던 중에 오른쪽으로 감
 		{
-			//ChangeState(PlayerState::MOVE);
 			if (ModeValue == PlayerMode::SUPERMARIO)											//Growth ver.Mario
 			{
 				AnimationRender->ChangeAnimation("Right_GrowthMove");
@@ -315,8 +316,6 @@ void Player::MoveUpdate(float _Time)
 			{
 				AnimationRender->ChangeAnimation("Right_Move");
 			}
-
-
 			return;
 		}
 		
@@ -695,21 +694,29 @@ void Player::DeathStart()
 	MoveDir.y = -300.0f;
 	Gravity = 1000.0f;
 
+	PlayLevel::MainPlayLevel->SetBGMPlayer("Miss.mp3");
 	DirCheck("Death");
-	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("Miss.mp3");
-	EffectPlayer.LoopCount(1);
-	EffectPlayer.Volume(BasicVolume);
 }	
 void Player::DeathUpdate(float _Time)
 {
-	SetCanMoveOn();
 	float DeadLine = GameEngineWindow::GetScreenSize().y;
 	float4 PlayerPos = GetPos();
 
-	if (DeadLine <= GetPos().y)
+	MoveDir.x = 0.0f;
+
+	SetCanMoveOn();
+	AccGravity(_Time);
+	
+	WaitTime -= _Time;
+	SetMove(MoveDir * _Time);
+
+
+	if (0 >= WaitTime)
 	{
 		MainPlayer->Death();
+		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
+
 
 }
 void Player::DeathEnd()

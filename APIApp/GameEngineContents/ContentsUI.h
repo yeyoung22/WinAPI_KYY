@@ -47,6 +47,7 @@ private:
 	WordRenderObject W_Time;
 	WordRenderObject W_World;
 	WordRenderObject W_Nickname;
+
 	std::string_view Words = "";
 	
 	SPSymbolRenderObject S_Hyphen;
