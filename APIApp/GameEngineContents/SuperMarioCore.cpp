@@ -42,6 +42,8 @@ void SuperMarioCore::Update()
 {
 
 }
+
+//게임을 종료할 때 처리할 것들
 void SuperMarioCore::End()
 {
 

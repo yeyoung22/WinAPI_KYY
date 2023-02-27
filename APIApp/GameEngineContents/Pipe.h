@@ -26,5 +26,7 @@ private:
 
 	GameEngineRender* PipeRender = nullptr;
 	GameEngineCollision* GateCollision = nullptr;
+
+	
 };
 

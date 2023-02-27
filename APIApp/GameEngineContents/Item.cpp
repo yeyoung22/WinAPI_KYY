@@ -51,6 +51,9 @@ void Item::Start()
 		BodyCollision = CreateCollision(MarioCollisionOrder::Item);
 		BodyCollision->SetScale({ 60, 60 });;
 		BodyCollision->SetPosition({ GetPos().x, GetPos().y - 32 });
+
+		//ÀÏ´Ü ¾ÆÀÌÅÛ ²¨µÒ
+		BodyCollision->Off();
 	}
 }
 

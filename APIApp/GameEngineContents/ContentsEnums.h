@@ -33,3 +33,11 @@ enum class EndingScene
 	GameOver,
 	TimeOver,
 };
+
+//enum class EnterDir						//Direction For Entering the Pipe 
+//{
+//	Down,
+//	Up,
+//	Right,
+//	Left,
+//};

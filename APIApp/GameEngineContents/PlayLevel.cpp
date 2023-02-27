@@ -45,6 +45,12 @@ void PlayLevel::SoundLoad()
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("RunningAbout_Hurry.mp3"));
 	}
 	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Underground.mp3"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Underground_Hurry.mp3"));
+	}
+	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Miss.mp3"));
 
 		Dir.MoveParent();
@@ -56,6 +62,9 @@ void PlayLevel::SoundLoad()
 	}
 	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("jump_superMario.wav"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("pipe.wav"));
 	}
 	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("growup.wav"));
@@ -260,12 +269,19 @@ void PlayLevel::Loading()
 		Monster* Actor = CreateActor<Monster>(MarioRenderOrder::Monster);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({1400, StartPos.y - 128});
+
+		//ÀÏ´Ü ±À¹Ù ²û=-------------------------------------------------------------------------------------------
+		Actor->Off();
 	}
 	//1_1_GrowMushroom
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 1376, StartPos.y - 128});
+
+
+		//ÀÏ´Ü ±À¹Ù ²û=------------------------------------------------------------------------------------------
+		Actor->Off();
 	}
 	//1_1_2ndItem
 	{
@@ -354,8 +370,8 @@ void PlayLevel::Loading()
 	//Pipe
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
-		Actor->SetPos({ 1504, 750 });
-		Actor->Off();
+		Actor->SetPos({ 3712, 710 });		
+		
 	}
 
 
@@ -391,6 +407,7 @@ void PlayLevel::Update(float _DeltaTime)
 		}
 	}
 
+
 	if (GameEngineInput::IsDown("DebugRenderSwitch") || GameEngineInput::IsDown("DebuggingMode"))
 	{
 		DebugRenderSwitch();
@@ -401,12 +418,7 @@ void PlayLevel::Update(float _DeltaTime)
 		//Ã³À½ºÎÅÍ ´Ù½Ã Àç»ý
 	}
 
-	if (100 > Player::PlayTimer)
-	{
-		BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout_Hurry.mp3");
-		BGMPlayer.LoopCount(1);
-		BGMPlayer.Volume(BGMVolume);
-	}
+	
 
 	if (0 >= Player::PlayTimer)
 	{

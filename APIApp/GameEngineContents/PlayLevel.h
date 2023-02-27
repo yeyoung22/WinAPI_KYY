@@ -31,8 +31,13 @@ protected:
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 
 	GameEngineSoundPlayer BGMPlayer;	//SoundPlayer를 받아서 사용(제어)
+
 private:
 	float BGMVolume = 0.1f;
+
+
+	float HurryUpTime = 10
+		;
 
 	void SoundLoad();
 	void ImageLoad();

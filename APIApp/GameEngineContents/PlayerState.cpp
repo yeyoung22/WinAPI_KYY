@@ -5,9 +5,10 @@
 #include <GameEnginePlatform/GameEngineImage.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineRender.h>
+#include <GameEngineCore/GameEngineCore.h>
 #include "ContentsEnums.h"
 #include "PlayLevel.h"
-#include <GameEngineCore/GameEngineCore.h>
+#include "Pipe.h"
 
 
 std::string Player::GetStateName()
@@ -32,8 +33,8 @@ std::string Player::GetStateName()
 		return "PlayerState::FALL";
 	case PlayerState::DEATH:
 		return "PlayerState::DEATH";
-	case PlayerState::PAUSE:
-		return "PlayerState::PAUSE";
+	case PlayerState::ENTERPIPE:
+		return "PlayerState::ENTERPIPE";
 	default:
 		break;
 	}
@@ -78,8 +79,8 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::DEATH:
 		DeathStart();
 		break;
-	case PlayerState::PAUSE:
-		PauseStart();
+	case PlayerState::ENTERPIPE:
+		EnterPipeStart();
 		break;
 	default:
 		break;
@@ -114,8 +115,8 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::DEATH:
 		DeathEnd();
 		break;
-	case PlayerState::PAUSE:
-		PauseEnd();
+	case PlayerState::ENTERPIPE:
+		EnterPipeEnd();
 		break;
 	default:
 		break;
@@ -154,8 +155,8 @@ void Player::UpdateState(float _Time)
 	case PlayerState::DEATH:
 		DeathUpdate(_Time);
 		break;
-	case PlayerState::PAUSE:
-		PauseUpdate(_Time);
+	case PlayerState::ENTERPIPE:
+		EnterPipeUpdate(_Time);
 		break;
 	default:
 		break;
@@ -413,9 +414,10 @@ void Player::BrakeUpdate(float _Time)
 		MoveDir.x += BrakePower * _Time;			//우측 이동
 	}
 
+
 	if (true == CheckWall(MoveDir * _Time, PivotLPos))
 	{
-		//ChangeState(PlayerState::IDLE);
+		ChangeState(PlayerState::IDLE);
 		return;
 	}
 	else if (true == CheckWall(MoveDir * _Time, PivotRPos))
@@ -702,6 +704,7 @@ void Player::FallEnd()
 
 void Player::DeathStart()
 {
+	WaitTime = 3.0f;
 	MoveDir.y = -300.0f;
 	Gravity = 1000.0f;
 
@@ -734,14 +737,37 @@ void Player::DeathEnd()
 {
 }
 
-void Player::PauseStart()
+void Player::EnterPipeStart()
 {
+	WaitTime = 0.8f;
 
+
+	PlayLevel::MainPlayLevel->SetBGMPlayer("pipe.wav");
 }
-void Player::PauseUpdate(float _Time) 
+void Player::EnterPipeUpdate(float _Time)
 {
+   	WaitTime -= _Time;
 
+
+	DirCheck("Idle");
+	SetMove(float4::Down*100.0f*_Time);
+	
+
+	if (0 >= WaitTime)
+	{
+		IsUnderGround = true;
+		SetCanMoveOff();
+		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground.mp3");
+
+		MoveDir.x = 0.0f;
+		SetPos({ UnderGroundStart });
+		GetLevel()->SetCameraPos(UnderGroundCameraPos);
+		
+		ChangeState(PlayerState::FALL);
+
+		return;
+	}
 }
-void Player::PauseEnd()
+void Player::EnterPipeEnd()
 {
 }

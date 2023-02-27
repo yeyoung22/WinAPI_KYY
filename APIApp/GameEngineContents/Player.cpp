@@ -412,6 +412,11 @@ void Player::Update(float _DeltaTime)
 	}
 
 	
+	if (true == IsUnderGround && HurryUpTime > PlayTimer)
+	{
+		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground_Hurry.mp3");
+	}
+
 
 	UpdateState(_DeltaTime);
 }
@@ -442,7 +447,8 @@ void Player::Camera(float4 _Pos)
 	float4 CameraPos = GetLevel()->GetCameraPos();
 	CameraEndPos = Map::SumMapWidth - GameEngineWindow::GetScreenSize().hx();
 
-	if (ActPos.x < CameraEndPos)
+
+	if (ActPos.x < CameraEndPos && false == IsUnderGround)
 	{
 		if (ActPos.x >= CameraPos.x + GameEngineWindow::GetScreenSize().hx())		//Move the camera if Mario is to the right of the center of the screen
 		{

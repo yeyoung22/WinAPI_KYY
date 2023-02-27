@@ -15,7 +15,7 @@ enum class PlayerState
 	GROW,
 	FALL,
 	DEATH,
-	PAUSE,
+	ENTERPIPE,
 };
 
 enum class PlayerMode
@@ -128,7 +128,7 @@ protected:
 	GameEngineSoundPlayer EffectPlayer;
 
 private:
-
+	bool IsUnderGround = false;
 	bool IsChanged = false;
 	bool IsLeftBrake = false;
 	bool IsGround = false;
@@ -144,30 +144,41 @@ private:
 
 	int StartFrame = 0;
 	
-	
-	float TimeSpeed = 2.0f;										//Time Speed Control Constant
-	float MoveSpeed = 230.0f;									//Player Speed
-	float JumpPower = -800.0f;
-	float SuperJumpPower = -835.0f;
+
+	float HurryUpTime = 100.0f;
+
 	float Gravity = 200.0f;										//For Decresing JumpPower
-	float FrictionPower = 0.0025f;
-	float BrakePower = 0.0f;
-	float MaxSpeed = 250.0f;									
 	float ImgHalfWidth = 32.0f;									//To be cut PlayerImg's half size Width and Height
 	float ImgHalfHeight = 64.0f;
+
+	float TimeSpeed = 2.0f;										//Time Speed Control Constant
+	//float MoveSpeed = 230.0f;									//Player Speed
+	float MoveSpeed = 500.0f;
+	float MaxSpeed = 250.0f;									
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
+
+	float JumpPower = -800.0f;
+	float SuperJumpPower = -835.0f;
+	float BrakePower = 0.0f;
+	float FrictionPower = 0.0025f;
+
 	float BasicVolume = 0.3f;									//Set Volume
 
 	float CameraEndPos = 0.0f;
 
 	float WaitTime = 3.0f;
 
+	float4 UnderGroundCameraPos = { 3072.0f, 960.0f };			//Caemra Position at UnderGround
+	float4 UnderGroundStart = { 3202 , 1154 };					//Player Start Position at UnderGround
+
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };
 
 	float4 PivotRPos2 = { ImgHalfWidth - 8, -17 };
 	float4 PivotLPos2 = { -ImgHalfWidth + 8, -17 };
+
+	
 
 	//ColImage 관련 변수 및 함수
 	std::string ColMapName;
@@ -237,9 +248,9 @@ private:
 	void DeathUpdate(float _Time);
 	void DeathEnd();
 
-	void PauseStart();
-	void PauseUpdate(float _Time);
-	void PauseEnd();
+	void EnterPipeStart();
+	void EnterPipeUpdate(float _Time);
+	void EnterPipeEnd();
 
 	
 	//Garavitional Acceleration
