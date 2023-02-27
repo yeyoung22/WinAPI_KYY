@@ -1,4 +1,5 @@
 #include "Pipe.h"
+#include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineLevel.h>
@@ -44,7 +45,7 @@ void Pipe::Update(float _DeltaTime)
 	if (nullptr != GateCollision)
 	{
 		std::vector<GameEngineCollision*> Collision;
-		if (true == GateCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		if (true == GameEngineInput::IsPress("DownMove") && true == GateCollision->Collision({.TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect}, Collision))
 		{
 			Player::MainPlayer->SetCanMoveOn();
 

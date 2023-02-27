@@ -739,10 +739,9 @@ void Player::DeathEnd()
 
 void Player::EnterPipeStart()
 {
+	PlayLevel::MainPlayLevel->SetBGMPlayer("pipe.wav", 1);
 	WaitTime = 0.8f;
 
-
-	PlayLevel::MainPlayLevel->SetBGMPlayer("pipe.wav");
 }
 void Player::EnterPipeUpdate(float _Time)
 {
@@ -750,7 +749,7 @@ void Player::EnterPipeUpdate(float _Time)
 
 
 	DirCheck("Idle");
-	SetMove(float4::Down*100.0f*_Time);
+	SetMove(float4::Down* PipeEnterSpeed *_Time);
 	
 
 	if (0 >= WaitTime)
@@ -764,7 +763,6 @@ void Player::EnterPipeUpdate(float _Time)
 		GetLevel()->SetCameraPos(UnderGroundCameraPos);
 		
 		ChangeState(PlayerState::FALL);
-
 		return;
 	}
 }
