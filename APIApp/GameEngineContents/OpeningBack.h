@@ -15,10 +15,12 @@ public:
 	OpeningBack& operator=(const OpeningBack& _Other) = delete;
 	OpeningBack& operator=(OpeningBack&& _Other) noexcept = delete;
 
+	
+
 protected:
 	void Start() override;
 
 private:
-
+	
 };
 

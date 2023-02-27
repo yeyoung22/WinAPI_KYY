@@ -162,10 +162,10 @@ bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter, s
 			continue;
 		}
 
-		CollisionType Type = _Parameter.ThisColType;
-		CollisionType OtherType = _Parameter.TargetColType;
+		CollisionType Type = _Parameter.ThisColType;										//충돌을 체크할 당사자
+		CollisionType OtherType = _Parameter.TargetColType;									//충돌할 대상
 
-		OtherCollision->SetDebugRenderType(OtherType);
+		OtherCollision->SetDebugRenderType(OtherType);										//디버깅 할 때 랜더할 타입 세팅
 
 		if (nullptr == ColFunctionPtr[Type][OtherType])
 		{
@@ -186,18 +186,20 @@ CollisionData GameEngineCollision::GetCollisionData()
 	return { GetActorPlusPos(), GetScale() };
 }
 
+
 void GameEngineCollision::DebugRender()
 {
-	HDC BackBufferDc = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	float4 DebugRenderPos = GetActorPlusPos() - GetActor()->GetLevel()->GetCameraPos();
-	switch (DebugRenderType)
+	HDC BackBufferDc = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();			//Handle을 이용해 접근
+	float4 DebugRenderPos = GetActorPlusPos() - GetActor()->GetLevel()->GetCameraPos();	//Camera의 영향도 고려
+	
+	switch (DebugRenderType)															//Switch문으로 타입에 따라 랜더할 모양을 바꿈
 	{
 	case CT_Point:
 		break;
 	case CT_CirCle:
-	{
+	{																					//case에서 지역변수는 영역 안에 선언
 		int Radius = GetScale().hix();
-		Ellipse(BackBufferDc,
+		Ellipse(BackBufferDc,															//원형
 			DebugRenderPos.ix() - Radius,
 			DebugRenderPos.iy() - Radius,
 			DebugRenderPos.ix() + Radius,
@@ -206,7 +208,7 @@ void GameEngineCollision::DebugRender()
 	}
 	case CT_Rect:
 	{
-		Rectangle(BackBufferDc,
+		Rectangle(BackBufferDc,															//사각형
 			DebugRenderPos.ix() - GetScale().hix(),
 			DebugRenderPos.iy() - GetScale().hiy(),
 			DebugRenderPos.ix() + GetScale().hix(),

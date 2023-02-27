@@ -19,32 +19,6 @@ public:
 	CollisionType ThisColType = CollisionType::CT_CirCle;
 };
 
-//class CollisionData
-//{
-//public:
-//	float4 Position;
-//	float4 Scale;					//반지름(R = x)
-//
-//	float Left() const
-//	{
-//		return Position.x - Scale.hx();
-//	}
-//
-//	float Right() const
-//	{
-//		return Position.x + Scale.hx();
-//	}
-//
-//	float Top() const
-//	{
-//		return Position.y - Scale.hy();
-//	}
-//
-//	float Bot() const
-//	{
-//		return Position.y + Scale.hy();
-//	}
-//};
 
 // 설명 : 충돌 구조
 class CollisionFunctionInit;							//cpp쪽에 구현
@@ -80,6 +54,7 @@ public:
 
 	CollisionData GetCollisionData();
 
+	//사각형인지 원형인지 어떤 것으로 호출할지 모르므로 디버깅 할 때 나타날 모양을 직접 세팅
 	void SetDebugRenderType(CollisionType _DebugRenderType)
 	{
 		DebugRenderType = _DebugRenderType;
@@ -92,6 +67,9 @@ public:
 protected:
 
 private:
+	//Collision은 내가 원할 때, 원하는 모양으로 충돌시키므로
+	//Debug Mode에서는 Debug할때 보는 충돌체 랜더의 타입을 
+	//미리 정해줄 필요가 있음
 	CollisionType DebugRenderType = CollisionType::CT_CirCle;
 };
 

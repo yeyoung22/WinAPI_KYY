@@ -52,57 +52,58 @@ void Map::Start()
 		BodyCollision->SetPosition({ MapSize.x-420, MapSize.hy()-192});
 
 	}
+
+	//0Æ÷ÇÔ Â¦¼ö: ¿ø·¡ ¸Ê
+	//0Á¦¿Ü È¦¼ö: ÇÈ¼¿ Ãæµ¹¿ë ¸Ê
+	Maps.push_back("World1_1.bmp");
+	Maps.push_back("World1_4.Bmp");
+	ColMaps.push_back("ColWorld1_1.bmp");
+	ColMaps.push_back("ColWorld1_4.bmp");
+
+	MapRenders.push_back(MapRender0);
+	MapRenders.push_back(MapRender1);
 }
 
 
 void Map::Update(float _DeltaTime)
 {
-	//if (true == IsStageClear)
-	//{
-	//	SumMapWidth += MapRender1->GetImage()->GetImageScale().x;
-
-	//	IsStageClear = false;
-	//}
-
-	if (true == Player::IsDebugMode && 0 == Player::Round)
+	if (true == Player::IsDebugMode)
 	{
-		MapRender0->SetImage("ColWorld1_1.bmp");
-		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
-		MapRender0->SetPosition(StartPos);
-		MapRender0->SetScaleToImage();
+		MapRenders[Player::Round]->SetImage(ColMaps[Player::Round]);
+		float4 StartPos = MapRenders[Player::Round]->GetImage()->GetImageScale().half();
+		MapRenders[Player::Round]->SetPosition(StartPos);
+		MapRenders[Player::Round]->SetScaleToImage();
 
-		MapRender1->Off();
+		for (int i = 0; i < MapRenders.size(); i++)
+		{
+			if (i != Player::Round)
+			{
+				MapRenders[i]->Off();
+			}
+			else
+			{
+				MapRenders[i]->On();
+			}
+		}
 	}
-	else if(false == Player::IsDebugMode && 0 == Player::Round)
+	else if(false == Player::IsDebugMode)
 	{
-		MapRender0->SetImage("World1_1.bmp");
-		float4 StartPos = MapRender0->GetImage()->GetImageScale().half();				 //{ 6752, 960 }
-		MapRender0->SetPosition(StartPos);
-		MapRender0->SetScaleToImage();
+		MapRenders[Player::Round]->SetImage(Maps[Player::Round]);
+		float4 StartPos = MapRenders[Player::Round]->GetImage()->GetImageScale().half();
+		MapRenders[Player::Round]->SetPosition(StartPos);
+		MapRenders[Player::Round]->SetScaleToImage();
 
-		MapRender1->Off();
-	}
-	else if (true == Player::IsDebugMode && 1 == Player::Round)
-	{
-		MapRender0->Off();
-		MapRender1->On();
-
-		MapRender1->SetImage("ColWorld1_4.Bmp");
-		float4 RenPos = MapRender1->GetImage()->GetImageScale().half();
-		MapRender1->SetPosition({ RenPos.x, RenPos.y });
-		MapRender1->SetScaleToImage();
-
-	}
-	else if(false == Player::IsDebugMode && 1 == Player::Round)
-	{
-		MapRender0->Off();
-		MapRender1->On();
-
-		MapRender1->SetImage("World1_4.Bmp");
-		float4 RenPos = MapRender1->GetImage()->GetImageScale().half();
-		MapRender1->SetPosition({ RenPos.x, RenPos.y });
-		MapRender1->SetScaleToImage();
-
+		for (int i = 0; i < MapRenders.size(); i++)
+		{
+			if (i != Player::Round)
+			{
+				MapRenders[i]->Off();
+			}
+			else
+			{
+				MapRenders[i]->On();
+			}
+		}
 	}
 
 	if (true == IsStageClear)

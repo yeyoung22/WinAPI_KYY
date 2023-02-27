@@ -1,5 +1,7 @@
 #pragma once
+#include <vector>
 #include <GameEngineCore/GameEngineActor.h>
+
 
 // º≥∏Ì : ∞‘¿” ∏ 
 class Map : public GameEngineActor
@@ -36,4 +38,7 @@ private:
 
 	GameEngineCollision* BodyCollision = nullptr;
 
+	std::vector<GameEngineRender*> MapRenders = std::vector<GameEngineRender*>();
+	std::vector<std::string> Maps = std::vector<std::string>();
+	std::vector<std::string> ColMaps = std::vector<std::string>();
 };

@@ -152,7 +152,7 @@ protected:
 	virtual void LevelChangeStart(GameEngineLevel* _PrevLevel) = 0;
 
 private:
-	static bool IsDebugRender;
+	static bool IsDebugRender;										//모든 레벨에서 공통으로 사용할 것이므로 static
 
 	float4 CameraPos = float4::Zero;
 

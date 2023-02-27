@@ -32,6 +32,8 @@ std::string Player::GetStateName()
 		return "PlayerState::FALL";
 	case PlayerState::DEATH:
 		return "PlayerState::DEATH";
+	case PlayerState::PAUSE:
+		return "PlayerState::PAUSE";
 	default:
 		break;
 	}
@@ -76,6 +78,9 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::DEATH:
 		DeathStart();
 		break;
+	case PlayerState::PAUSE:
+		PauseStart();
+		break;
 	default:
 		break;
 	}
@@ -108,6 +113,9 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::DEATH:
 		DeathEnd();
+		break;
+	case PlayerState::PAUSE:
+		PauseEnd();
 		break;
 	default:
 		break;
@@ -145,6 +153,9 @@ void Player::UpdateState(float _Time)
 		break;
 	case PlayerState::DEATH:
 		DeathUpdate(_Time);
+		break;
+	case PlayerState::PAUSE:
+		PauseUpdate(_Time);
 		break;
 	default:
 		break;
@@ -723,3 +734,14 @@ void Player::DeathEnd()
 {
 }
 
+void Player::PauseStart()
+{
+
+}
+void Player::PauseUpdate(float _Time) 
+{
+
+}
+void Player::PauseEnd()
+{
+}

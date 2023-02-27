@@ -5,7 +5,7 @@
 #include "GameEngineRender.h"
 #include "GameEngineCollision.h"
 
-bool GameEngineLevel::IsDebugRender = false;		
+bool GameEngineLevel::IsDebugRender = false;												//기본적으로 false	
 float4 GameEngineLevel::TextOutStart = float4::Zero;
 std::vector<std::string> GameEngineLevel::DebugTexts;
 

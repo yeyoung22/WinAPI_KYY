@@ -15,6 +15,7 @@ enum class PlayerState
 	GROW,
 	FALL,
 	DEATH,
+	PAUSE,
 };
 
 enum class PlayerMode
@@ -235,6 +236,10 @@ private:
 	void DeathStart();
 	void DeathUpdate(float _Time);
 	void DeathEnd();
+
+	void PauseStart();
+	void PauseUpdate(float _Time);
+	void PauseEnd();
 
 	
 	//Garavitional Acceleration
