@@ -135,6 +135,7 @@ void Player::Start()
 		BottomCollision->SetPosition({ GetPos().x, GetPos().y - 5});
 	}
 
+
 	ChangeColImage("ColWorld1_1.bmp");
 
 	ChangeState(PlayerState::IDLE);
@@ -327,6 +328,9 @@ bool Player::FreeMoveState(float _DeltaTime)
 void Player::Update(float _DeltaTime)
 {
 	PlayTimer -= _DeltaTime* TimeSpeed;
+	
+	AnimationRender->SetAlpha(210);
+
 
 	if ( true == IsChanged && ModeValue != PlayerMode::MARIO)
 	{

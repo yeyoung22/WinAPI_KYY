@@ -417,11 +417,13 @@ void Player::BrakeUpdate(float _Time)
 
 	if (true == CheckWall(MoveDir * _Time, PivotLPos))
 	{
+		MoveDir.x = 0.0f;
 		ChangeState(PlayerState::IDLE);
 		return;
 	}
 	else if (true == CheckWall(MoveDir * _Time, PivotRPos))
 	{
+		MoveDir.x = 0.0f;
 		ChangeState(PlayerState::IDLE);
 		return;
 	}
