@@ -329,9 +329,6 @@ void Player::Update(float _DeltaTime)
 {
 	PlayTimer -= _DeltaTime* TimeSpeed;
 	
-	AnimationRender->SetAlpha(210);
-
-
 	if ( true == IsChanged && ModeValue != PlayerMode::MARIO)
 	{
 		HeadCollision->SetPosition({ GetPos().x, GetPos().y - ColHeight });
@@ -352,7 +349,9 @@ void Player::Update(float _DeltaTime)
 		{
 			if (ModeValue == PlayerMode::SUPERMARIO)
 			{
-				ChangeMode(PlayerMode::MARIO);
+				IsShrink = true;
+				SetEffectSound("pipe.wav");
+				
 			}
 			else
 			{
@@ -464,6 +463,12 @@ void Player::Camera(float4 _Pos)
 	}
 }
 
+void Player::SetEffectSound(const std::string_view& _String, int _loop, float _BasicVolume)
+{
+	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String);
+	EffectPlayer.LoopCount(_loop);
+	EffectPlayer.Volume(_BasicVolume);
+}
 
 void Player::Render(float _DeltaTime)
 {
@@ -514,4 +519,38 @@ void Player::Render(float _DeltaTime)
 			GameEngineLevel::DebugTextPush(MarioStateText);
 		}
 
+}
+
+void Player::ShrinkEffect(float _DeltaTime, int _BlinkCount)
+{
+	WaitTime -= _DeltaTime;
+	
+
+
+	if (0 == _BlinkCount || 0 == _BlinkCount % 2)
+	{
+		AnimationRender->SetAlpha(150);
+	}
+	else
+	{
+		AnimationRender->SetAlpha(255);
+	}
+	
+
+	//Mario Mode Change(Mode Down)
+	if (ModeValue == PlayerMode::SUPERMARIO && 1.6f >= WaitTime)
+	{
+		ChangeMode(PlayerMode::MARIO);
+	}
+	else if (ModeValue == PlayerMode::FIREMARIO && 1.6f >= WaitTime)
+	{
+		ChangeMode(PlayerMode::SUPERMARIO);
+	}
+
+
+	if (0.0f >= WaitTime)
+	{
+		IsShrink = false;
+		AnimationRender->SetAlpha(255);
+	}
 }

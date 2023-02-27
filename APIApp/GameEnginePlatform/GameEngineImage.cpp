@@ -222,6 +222,8 @@ void GameEngineImage::AlphaCopy(const GameEngineImage* _OtherImage, float4 _Copy
 		_OtherImageSize.iy(),
 		BF);										//원본 비트맵에 대한 알파 혼합 함수
 }
+
+
 void GameEngineImage::PlgCopy(const GameEngineImage* _OtherImage, int _CutIndex, float4 _CopyCenterPos, float4 _CopySize, float _Angle, GameEngineImage* _FilterImage)
 {
 	if (false == _OtherImage->IsCut)

@@ -133,6 +133,7 @@ private:
 	bool IsLeftBrake = false;
 	bool IsGround = false;
 	bool CanMove = false;								//ColImg와 관계 없이 true이면 무조건 움직일 수 있게 하기 위함
+	bool IsShrink = false;
 
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);
@@ -143,7 +144,8 @@ private:
 	int ColHeight = 124;
 
 	int StartFrame = 0;
-	
+
+	int BlinkCount = 0;
 
 	float HurryUpTime = 100.0f;
 
@@ -154,7 +156,7 @@ private:
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
 	//float MoveSpeed = 230.0f;									//Player Speed
 	float MoveSpeed = 450.0f;
-	float MaxSpeed = 500.f;
+	float MaxSpeed = 500.f;								//테스트용 값이므로 지워야 함-----------------------------------------
 	//float MaxSpeed = 250.0f;									
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
@@ -164,12 +166,13 @@ private:
 	float SuperJumpPower = -835.0f;
 	float BrakePower = 0.0f;
 	float FrictionPower = 0.0025f;
-
+	float ShrinkPower = 10.0f;
+	
 	float BasicVolume = 0.3f;									//Set Volume
 
 	float CameraEndPos = 0.0f;
 
-	float WaitTime = 3.0f;
+	float WaitTime = 2.0f;
 
 	float4 UnderGroundCameraPos = { 3072.0f, 960.0f };			//Caemra Position at UnderGround
 	float4 UnderGroundStart = { 3202 , 1154 };					//Player Start Position at UnderGround
@@ -189,7 +192,8 @@ private:
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
-	
+	PlayerState PrevState = PlayerState::IDLE;
+
 	float4 MoveDir = float4::Zero;								//옮겨갈 벡터
 	float4 OriginPos = { 160, 960 - 128 };
 
@@ -201,8 +205,6 @@ private:
 	GameEngineCollision* BottomCollision = nullptr;
 
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
-
-
 
 	// State
 	bool FreeMoveState(float _DeltaTime);
@@ -277,9 +279,15 @@ private:
 
 	bool CheckAir(float4 _Pos);
 
+	void ShrinkEffect(float _DeltaTime, int _BlinkCount);
+
+
 	void ActorMove(float _Time)
 	{
 		SetMove(MoveDir * _Time);							//움직임을 나타냄
 	}
 
+
+
+	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
 };

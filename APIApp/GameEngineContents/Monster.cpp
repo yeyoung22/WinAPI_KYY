@@ -31,7 +31,7 @@ void Monster::Start()
 		
 		
 		//ÀÏ´Ü ±À¹Ù ²¨µÒ
-		BodyCollision->Off();
+		//BodyCollision->Off();
 	}
 }
 

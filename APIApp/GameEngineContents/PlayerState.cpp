@@ -181,6 +181,12 @@ void Player::IdleStart()
 }
 void Player::IdleUpdate(float _Time)
 {
+	++BlinkCount;
+	if (true == IsShrink)
+	{
+		ShrinkEffect(_Time, BlinkCount);
+	}
+
 	if (GameEngineInput::IsPress("LeftMove") || GameEngineInput::IsPress("RightMove"))
 	{
 		ChangeState(PlayerState::MOVE);
@@ -219,8 +225,9 @@ void Player::IdleUpdate(float _Time)
 
 	
 }
-void Player::IdleEnd() {
-
+void Player::IdleEnd() 
+{
+	PrevState = PlayerState::IDLE;
 }
 
 
@@ -242,6 +249,12 @@ void Player::MoveStart()
 }
 void Player::MoveUpdate(float _Time)
 {
+	++BlinkCount;
+	if (true == IsShrink)
+	{
+		ShrinkEffect(_Time, BlinkCount);
+	}
+
 	if (
 		false == GameEngineInput::IsPress("LeftMove") &&
 		false == GameEngineInput::IsPress("RightMove")
@@ -307,9 +320,6 @@ void Player::MoveUpdate(float _Time)
 	AccGravity(_Time);
 	
 
-
-	
-
 	if (true ==GameEngineInput::IsPress("LeftMove") && true == CheckWall(MoveDir * _Time, PivotLPos))
 	{
 		MoveDir.x = 0.0f;
@@ -352,7 +362,7 @@ void Player::MoveUpdate(float _Time)
 }
 void Player::MoveEnd() 
 {
-
+	PrevState = PlayerState::MOVE;
 }
 
 
@@ -395,6 +405,12 @@ void Player::BrakeStart()
 }
 void Player::BrakeUpdate(float _Time)
 {
+	++BlinkCount;
+	if (true == IsShrink)
+	{
+		ShrinkEffect(_Time, BlinkCount);
+	}
+
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
 
@@ -461,13 +477,12 @@ void Player::BrakeUpdate(float _Time)
 	}
 	
 
-	
-
 	IsGround = LiftUp();
 	InitGravity(IsGround);
 }
 void Player::BrakeEnd()
 {
+	PrevState = PlayerState::BRAKE;
 }
 
 
@@ -479,24 +494,34 @@ void Player::JumpStart()
 	if (ModeValue == PlayerMode::SUPERMARIO)
 	{
 		DirCheck("GrowthJump");
-		EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump_superMario.wav"); 
+		//EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump_superMario.wav");
+
+		SetEffectSound("jump_superMario.wav");
 	}
 	else if (ModeValue == PlayerMode::FIREMARIO)
 	{
 		DirCheck("FireJump");
-		EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump_superMario.wav");
+		SetEffectSound("jump_superMario.wav");
+		//EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump_superMario.wav");
 	}
 	else
 	{
 		MoveDir.y = JumpPower;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
 		DirCheck("Jump");
-		EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
+		SetEffectSound("jump.wav");
+	//	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
 	}	
-	EffectPlayer.LoopCount(1);
-	EffectPlayer.Volume(BasicVolume);
+	//EffectPlayer.LoopCount(1);
+	//EffectPlayer.Volume(BasicVolume);
 }
 void Player::JumpUpdate(float _Time)
 {
+	++BlinkCount;
+	if (true == IsShrink)
+	{
+		ShrinkEffect(_Time, BlinkCount);
+	}
+
 	//좌우 방향키가 눌러져 있다면 점프를 해당 방향에 맞게 뜀
 	if (true == GameEngineInput::IsPress("LeftMove"))
 	{
@@ -514,9 +539,6 @@ void Player::JumpUpdate(float _Time)
 		ChangeState(PlayerState::IDLE);
 		return;
 	}
-
-	
-
 
 	LimitSpeed(MoveDir);
 
@@ -570,6 +592,12 @@ void Player::CrouchStart()
 }
 void Player::CrouchUpdate(float _Time)
 {
+	++BlinkCount;
+	if (true == IsShrink)
+	{
+		ShrinkEffect(_Time, BlinkCount);
+	}
+
 	if (
 		false == GameEngineInput::IsPress("LeftMove") &&
 		false == GameEngineInput::IsPress("RightMove") &&
@@ -594,7 +622,7 @@ void Player::CrouchUpdate(float _Time)
 }
 void Player::CrouchEnd()
 {
-
+	PrevState = PlayerState::CROUCH;
 }
 
 
@@ -608,7 +636,7 @@ void Player::AttackUpdate(float _Time)
 }
 void Player::AttackEnd()
 {
-
+	PrevState = PlayerState::ATTACK;
 }
 
 void Player::GrowStart()
@@ -623,9 +651,7 @@ void Player::GrowStart()
 		IsChanged = false;
 	}
 
-	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("growup.wav");
-	EffectPlayer.LoopCount(1);
-	EffectPlayer.Volume(BasicVolume);
+	SetEffectSound("growup.wav");
 }
 void Player::GrowUpdate(float _Time)
 {
@@ -660,10 +686,8 @@ void Player::GrowUpdate(float _Time)
 }
 void Player::GrowEnd()
 {
-	
+	PrevState = PlayerState::GROW;
 }
-
-
 
 //(떨어지면 Jump모션을 취하며 Y값은 계속 증가)
 void Player::FallStart()
@@ -683,6 +707,11 @@ void Player::FallStart()
 }
 void Player::FallUpdate(float _Time)
 {
+	/*if (true == IsShrink)
+	{
+		ShrinkEffect(_Time);
+	}*/
+
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
 	SetMove(MoveDir * _Time);
@@ -700,7 +729,7 @@ void Player::FallUpdate(float _Time)
 }
 void Player::FallEnd()
 {
-
+	PrevState = PlayerState::FALL;
 }
 
 
@@ -737,6 +766,7 @@ void Player::DeathUpdate(float _Time)
 }
 void Player::DeathEnd()
 {
+	PrevState = PlayerState::DEATH;
 }
 
 void Player::EnterPipeStart()
@@ -770,4 +800,5 @@ void Player::EnterPipeUpdate(float _Time)
 }
 void Player::EnterPipeEnd()
 {
+	PrevState = PlayerState::ENTERPIPE;
 }
