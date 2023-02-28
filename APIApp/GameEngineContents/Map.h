@@ -25,6 +25,18 @@ public:
 		IsStageClear = true;
 	}
 
+	std::vector<std::string> GetColMaps()
+	{
+		std::vector<std::string> ReturnVector;
+		ReturnVector.reserve(ColMaps.size());
+
+		for (int i = 0; i < ColMaps.size(); i++)
+		{
+			ReturnVector.push_back(ColMaps[i]);
+		}
+
+		return ReturnVector;
+	}
 
 protected:
 	void Start() override;

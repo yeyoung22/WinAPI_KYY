@@ -53,7 +53,7 @@ void Item::Start()
 		BodyCollision->SetPosition({ GetPos().x, GetPos().y - 32 });
 
 		//ÀÏ´Ü ¾ÆÀÌÅÛ ²¨µÒ
-		//BodyCollision->Off();
+		BodyCollision->Off();
 	}
 }
 
@@ -73,11 +73,8 @@ void Item::Update(float _DeltaTime)
 		{
 			Player::MainPlayer->Player::ChangeState(PlayerState::GROW);
 
-
-		
 			ItemRender->Death();
 			BodyCollision->Death();
-
 		}
 	}
 

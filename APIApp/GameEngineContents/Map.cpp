@@ -108,6 +108,10 @@ void Map::Update(float _DeltaTime)
 
 	if (true == IsStageClear)
 	{
+
+
+
+
 		IsStageClear = false;
 	}
 }

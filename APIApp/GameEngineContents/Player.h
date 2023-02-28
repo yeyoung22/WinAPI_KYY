@@ -119,6 +119,21 @@ public:
 		return CanMove;
 	}
 
+
+	//플레이어의 충돌체 별로 처리할게 다르므로 vector에 넣어서 다른 곳에서 볼 수 있게 해야 함
+	//복사본을 넘겨 주겠음
+	std::vector<GameEngineCollision*> GetPlayerCollisions()
+	{
+		std::vector<GameEngineCollision*> ReturnVector;
+		ReturnVector.reserve(PlayerCols.size());
+	
+		for (int i = 0; i < PlayerCols.size(); i++)
+		{
+			ReturnVector.push_back(PlayerCols[i]);
+		}
+		return ReturnVector;
+	}
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -143,9 +158,11 @@ private:
 	int Origin_ColHeight = 60;
 	int ColHeight = 124;
 
+	int MaxLoop = 20;
+
 	int StartFrame = 0;
 
-	int BlinkCount = 0;
+	bool IsAlphaOn = false;
 
 	float HurryUpTime = 100.0f;
 
@@ -172,7 +189,7 @@ private:
 
 	float CameraEndPos = 0.0f;
 
-	float WaitTime = 2.0f;
+	float WaitTime = 1.8f;
 
 	float4 UnderGroundCameraPos = { 3072.0f, 960.0f };			//Caemra Position at UnderGround
 	float4 UnderGroundStart = { 3202 , 1154 };					//Player Start Position at UnderGround
@@ -199,6 +216,9 @@ private:
 
 
 	GameEngineRender* AnimationRender = nullptr;
+
+	std::vector<GameEngineCollision*> PlayerCols;				//Player의 Collision은 넣어줄 벡터
+
 	GameEngineCollision* HeadCollision = nullptr;
 	GameEngineCollision* RightBodyCollision = nullptr;
 	GameEngineCollision* LeftBodyCollision = nullptr;
@@ -279,7 +299,7 @@ private:
 
 	bool CheckAir(float4 _Pos);
 
-	void ShrinkEffect(float _DeltaTime, int _BlinkCount);
+	void ShrinkEffect(float _DeltaTime);
 
 
 	void ActorMove(float _Time)

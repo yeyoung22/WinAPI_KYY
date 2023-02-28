@@ -3,7 +3,7 @@
 #include <GameEngineBase/GameEngineMath.h>
 #include "GameEngineComponent.h"
 
-enum CollisionType
+enum CollisionType						//enum class가 아니므로 static_cast<int>를 해줄 필요 없음
 {
 	CT_Point,
 	CT_CirCle,
@@ -25,7 +25,6 @@ class CollisionFunctionInit;							//cpp쪽에 구현
 class GameEngineCollision : public GameEngineComponent
 {
 	friend CollisionFunctionInit;
-
 public:
 	static bool CollisionCirCleToCirCle(const CollisionData& _Left, const CollisionData& _Right);
 	static bool CollisionCirCleToPoint(const CollisionData& _Left, const CollisionData& _Right);

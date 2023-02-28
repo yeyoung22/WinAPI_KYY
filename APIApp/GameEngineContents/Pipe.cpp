@@ -22,25 +22,24 @@ void Pipe::Start()
 		PipeRender = CreateRender(MarioRenderOrder::Pipe);
 		PipeRender->SetScale({ 160, 296 });
 
-
 		PipeRender->CreateAnimation({ .AnimationName = "Pipe",  .ImageName = "Pipe.bmp", .Start = 0, .End = 0 });
 		PipeRender->CreateAnimation({ .AnimationName = "Left_HorizontalPipe",  .ImageName = "Pipe.bmp", .Start = 1, .End = 1 });
 		PipeRender->ChangeAnimation("Pipe");
 	}
 
 	{
-		
 		GateCollision = CreateCollision(MarioCollisionOrder::Item);
 		GateCollision->SetScale({ 70, 20 });;
 		GateCollision->SetPosition({ GetPos().x, GetPos().y-130});
-		
+		GateCollision->SetPosition({ GetPos().x, GetPos().y - 130 });
+		GateCollision->SetDebugRenderType(CT_Rect);
 	}
 }
 
 void Pipe::Update(float _DeltaTime)
 {
-	std::vector<GameEngineActor*> Pipes = GetLevel()->GetActors(MarioRenderOrder::Pipe);
-
+	//std::vector<GameEngineActor*> Pipes = GetLevel()->GetActors(MarioRenderOrder::Pipe);
+	
 
 	if (nullptr != GateCollision)
 	{

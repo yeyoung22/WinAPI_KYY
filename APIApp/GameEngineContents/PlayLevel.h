@@ -36,8 +36,9 @@ private:
 	float BGMVolume = 0.1f;
 
 
-	float HurryUpTime = 10
-		;
+	float HurryUpTime = 100;
+
+	int MaxLoop = 20;
 
 	void SoundLoad();
 	void ImageLoad();

@@ -8,11 +8,13 @@
 static bool(*ColFunctionPtr[CT_Max][CT_Max])(const CollisionData& _Left, const CollisionData& _Right);	//기준: Left
 
 
+//cpp 내부에만 만듦
 class CollisionFunctionInit
 {
 public:
 	CollisionFunctionInit()
 	{
+		//전역이므로 main이 시작되기도 전에 이니셜라이즈
 		ColFunctionPtr[CT_CirCle][CT_CirCle] = GameEngineCollision::CollisionCirCleToCirCle;
 		ColFunctionPtr[CT_CirCle][CT_Point] = GameEngineCollision::CollisionCirCleToPoint;
 		ColFunctionPtr[CT_Rect][CT_Rect] = GameEngineCollision::CollisionRectToRect;
@@ -24,6 +26,7 @@ public:
 	}
 };
 
+//전역으로 하나 선언했으므로 무조건 한 번은 만들어짐
 CollisionFunctionInit Init = CollisionFunctionInit();
 
 GameEngineCollision::GameEngineCollision() 
@@ -105,6 +108,7 @@ void GameEngineCollision::SetOrder(int _Order)
 	GetActor()->GetLevel()->PushCollision(this, _Order);
 }
 
+//단순히 충돌여부만 알려줌
 bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter)
 {
 	if (false == IsUpdate())
@@ -112,6 +116,7 @@ bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter)
 		return false;
 	}
 
+	//충돌체를 모아둔 Map에서 Tartget이 되는 대상의 충돌체들의 list를 받아옴
 	std::list<GameEngineCollision*>& _TargetGroup = GetActor()->GetLevel()->Collisions[_Parameter.TargetGroup];
 
 	for (GameEngineCollision* OtherCollision : _TargetGroup)
@@ -126,30 +131,34 @@ bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter)
 			continue;
 		}
 
-		CollisionType Type = _Parameter.ThisColType;
-		CollisionType OtherType = _Parameter.TargetColType;
+		CollisionType Type = _Parameter.ThisColType;						//기준 충돌체 타입
+		CollisionType OtherType = _Parameter.TargetColType;					//대상 충돌체 타입
 
 		if (nullptr == ColFunctionPtr[Type][OtherType])
 		{
 			MsgAssert("아직 충돌함수를 만들지 않은 충돌 타입입니다");
 		}
 
+		//충돌 대상이 아무리 많아도 그 중 하나라도 충돌되었다면, true를 반환하는 함수
 		if (true == ColFunctionPtr[Type][OtherType](GetCollisionData(), OtherCollision->GetCollisionData()))
 		{
 			return true;
 		}
 	}
+	//모든 대상과 비교했는데, 충돌이 하나도 발생하지 않으면 false
 	return false;
 }
 
-
+//충돌 대상이 하나가 아닌 경우
+//For문 돌리기가 편하므로 Vector(&, 외부에서 넣어야 함)
 bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter, std::vector<GameEngineCollision*>& _Collision)
 {
 	if (false == IsUpdate())
 	{
 		return false;
 	}
-	_Collision.clear();
+
+	_Collision.clear();						//이전에 충돌한 것을 모두 제거하고 새로 집어넣어서 충돌 체크
 
 	std::list<GameEngineCollision*>& _TargetGroup = GetActor()->GetLevel()->Collisions[_Parameter.TargetGroup];
 
@@ -174,10 +183,13 @@ bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter, s
 
 		if (true == ColFunctionPtr[Type][OtherType](GetCollisionData(), OtherCollision->GetCollisionData()))
 		{
+			//충돌한 것을 반환
 			_Collision.push_back(OtherCollision);
 		}
 	}
 
+	//0이 아니면 충돌체가 있음->true
+	//0이면 충돌이 없음->false
 	return _Collision.size() != 0;
 }
 

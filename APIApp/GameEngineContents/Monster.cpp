@@ -21,18 +21,30 @@ void Monster::Start()
 		AnimationRender->SetScale({ 128, 128 });
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Goomba_Idle",  .ImageName = "Goomba.bmp", .Start = 0, .End = 1 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Goomba_Death",  .ImageName = "Goomba.bmp", .Start = 2, .End = 2 });
 		AnimationRender->ChangeAnimation("Goomba_Idle");
 	}
 	{
-		BodyCollision = CreateCollision(MarioCollisionOrder::Monster);
-		BodyCollision->SetScale({ 50, 50 });
-		BodyCollision->SetPosition({ GetPos() });
+		HeadCollision = CreateCollision(MarioCollisionOrder::Monster);
+		HeadCollision->SetScale({ 30, 20 });
+		HeadCollision->SetPosition({ GetPos().x, GetPos().y - 50 });
+	}
+	{
+		LeftBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
+		LeftBodyCollision->SetScale({ 10, 45 });
+		LeftBodyCollision->SetPosition({ GetPos().x-20, GetPos().y - 22});
 		
 		
 		
 		//ÀÏ´Ü ±À¹Ù ²¨µÒ
-		//BodyCollision->Off();
+		//LeftBodyCollision->Off();
 	}
+	{
+		RightBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
+		RightBodyCollision->SetScale({ 10, 45 });
+		RightBodyCollision->SetPosition({ GetPos().x+20, GetPos().y - 22});
+	}
+
 }
 
 
@@ -40,6 +52,36 @@ void Monster::Update(float _DeltaTime)
 {
 	float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
 	SetMove(Dir);
+
+	std::vector<GameEngineCollision*> PlayerCols = Player::MainPlayer->GetPlayerCollisions();
+
+
+
+	std::vector<GameEngineCollision*> Collision;
+	if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		&&
+		true == PlayerCols[3]->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		)
+	{
+		for (size_t i = 0; i < Collision.size(); i++)
+		{
+			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
+
+			//GameEngineActor* ColActor = Collision[i]->GetActor();
+
+			SetEffectSound("stomp.wav");
+			AnimationRender->ChangeAnimation("Goomba_Death");
+			Player::TotalScore += Point;
+			HeadCollision->Off();
+			LeftBodyCollision->Off();
+			RightBodyCollision->Off();
+
+			//FindMonster->Death();
+			
+			
+		}
+	}
+
 
 	//<±À¹Ù°¡ Á×´Â Á¶°Ç_with Koopa>
 	//¸ÊÀ» ¹þ¾î³µÀ¸¸é Á×¾î¾ß ÇÔ
@@ -56,4 +98,11 @@ void Monster::Update(float _DeltaTime)
 
 	
 
+}
+
+void Monster::SetEffectSound(const std::string_view& _String, int _loop, float _BasicVolume)
+{
+	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String);
+	EffectPlayer.LoopCount(_loop);
+	EffectPlayer.Volume(_BasicVolume);
 }

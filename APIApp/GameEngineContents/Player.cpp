@@ -136,11 +136,16 @@ void Player::Start()
 	}
 
 
+	PlayerCols.push_back(HeadCollision);
+	PlayerCols.push_back(RightBodyCollision);
+	PlayerCols.push_back(LeftBodyCollision);
+	PlayerCols.push_back(BottomCollision);
+
 	ChangeColImage("ColWorld1_1.bmp");
 
 	ChangeState(PlayerState::IDLE);
 
-	AssignLevels(PlayLevel::MapNames, Round);
+	AssignLevels(PlayLevel::MapNames, Round);									//Map이랑 World 지정
 }
 
 
@@ -375,13 +380,14 @@ void Player::Update(float _DeltaTime)
 		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Door), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
 			++Round;
+			std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
+
 			AssignLevels(PlayLevel::MapNames, Round);
 			Map::MainMap->StageClearOn();
 			MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
 			GetLevel()->SetCameraPos({ GetPos().x, 0 });
 
-
-			ChangeColImage("ColWorld1_4.bmp");
+			ChangeColImage(ChangeColName[Round]);
 		}
 	}
 
@@ -399,11 +405,12 @@ void Player::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("StageClear"))
 	{
 		++Round;
+		std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
 		
-
 		Map::MainMap->StageClearOn();
 		MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
-		ChangeColImage("ColWorld1_4.bmp");
+		ChangeColImage(ChangeColName[Round]);
+
 		AssignLevels(PlayLevel::MapNames, Round);
 	}
 
@@ -417,7 +424,7 @@ void Player::Update(float _DeltaTime)
 	
 	if (true == IsUnderGround && HurryUpTime > PlayTimer)
 	{
-		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground_Hurry.mp3");
+		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground_Hurry.mp3", MaxLoop);
 	}
 
 
@@ -448,6 +455,10 @@ void Player::Camera(float4 _Pos)
 {
 	float4 ActPos = GetPos();
 	float4 CameraPos = GetLevel()->GetCameraPos();
+
+	//지울거...------------------------------------------------------------------------------------------------------------------------------------------------Tmp CameraPos
+	//GetLevel()->SetCameraPos({ ActPos.x - 100,CameraPos.y });
+
 	CameraEndPos = Map::SumMapWidth - GameEngineWindow::GetScreenSize().hx();
 
 
@@ -521,13 +532,11 @@ void Player::Render(float _DeltaTime)
 
 }
 
-void Player::ShrinkEffect(float _DeltaTime, int _BlinkCount)
+void Player::ShrinkEffect(float _DeltaTime)
 {
 	WaitTime -= _DeltaTime;
 	
-
-
-	if (0 == _BlinkCount || 0 == _BlinkCount % 2)
+	if (true == IsAlphaOn)
 	{
 		AnimationRender->SetAlpha(150);
 	}
@@ -535,7 +544,6 @@ void Player::ShrinkEffect(float _DeltaTime, int _BlinkCount)
 	{
 		AnimationRender->SetAlpha(255);
 	}
-	
 
 	//Mario Mode Change(Mode Down)
 	if (ModeValue == PlayerMode::SUPERMARIO && 1.6f >= WaitTime)
@@ -551,6 +559,7 @@ void Player::ShrinkEffect(float _DeltaTime, int _BlinkCount)
 	if (0.0f >= WaitTime)
 	{
 		IsShrink = false;
+		IsAlphaOn = false;
 		AnimationRender->SetAlpha(255);
 	}
 }

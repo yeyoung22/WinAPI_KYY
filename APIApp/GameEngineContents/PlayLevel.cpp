@@ -67,6 +67,15 @@ void PlayLevel::SoundLoad()
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("pipe.wav"));
 	}
 	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("bump.wav"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("coin.wav"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("stomp.wav"));
+	}
+	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("growup.wav"));
 
 		Dir.MoveParent();
@@ -263,6 +272,8 @@ void PlayLevel::Loading()
 	{
 		Player* Actor = CreateActor<Player>();
 		Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
+
+		//Actor->SetPos({ 1000, GameEngineWindow::GetScreenSize().y - 128 });
 	}
 	//Goomba1
 	{
@@ -281,7 +292,7 @@ void PlayLevel::Loading()
 
 
 		//ÀÏ´Ü ±À¹Ù ²û=------------------------------------------------------------------------------------------
-		//Actor->Off();
+		Actor->Off();
 	}
 	//1_1_2ndItem
 	{
@@ -367,13 +378,23 @@ void PlayLevel::Loading()
 		Actor->SetPos({ 10913, 640 });
 	}
 
-	//Pipe
+	//Pipe1
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
-		Actor->SetPos({ 3712, 710 });		
-		
+		Actor->SetPos({ 3712, 710 });			
 	}
-
+	//Pipe2
+	{
+		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
+		Actor->SetPos({ 3712, 1820 });
+		Actor->Off();
+	}
+	//Pipe3
+	{
+		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
+		Actor->SetPos({ 7712, 710 });
+		Actor->Off();
+	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))
 	{
@@ -431,7 +452,7 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	MainPlayLevel = this;
 
 	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
-	BGMPlayer.LoopCount(1);
+	BGMPlayer.LoopCount(MaxLoop);
 	BGMPlayer.Volume(BGMVolume);
 
 }

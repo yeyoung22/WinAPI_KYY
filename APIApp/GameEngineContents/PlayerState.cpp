@@ -181,10 +181,10 @@ void Player::IdleStart()
 }
 void Player::IdleUpdate(float _Time)
 {
-	++BlinkCount;
 	if (true == IsShrink)
 	{
-		ShrinkEffect(_Time, BlinkCount);
+		!IsAlphaOn;
+		ShrinkEffect(_Time);
 	}
 
 	if (GameEngineInput::IsPress("LeftMove") || GameEngineInput::IsPress("RightMove"))
@@ -249,10 +249,10 @@ void Player::MoveStart()
 }
 void Player::MoveUpdate(float _Time)
 {
-	++BlinkCount;
 	if (true == IsShrink)
 	{
-		ShrinkEffect(_Time, BlinkCount);
+		!IsAlphaOn;
+		ShrinkEffect(_Time);
 	}
 
 	if (
@@ -405,10 +405,10 @@ void Player::BrakeStart()
 }
 void Player::BrakeUpdate(float _Time)
 {
-	++BlinkCount;
 	if (true == IsShrink)
 	{
-		ShrinkEffect(_Time, BlinkCount);
+		!IsAlphaOn;
+		ShrinkEffect(_Time);
 	}
 
 	LimitSpeed(MoveDir);
@@ -494,32 +494,26 @@ void Player::JumpStart()
 	if (ModeValue == PlayerMode::SUPERMARIO)
 	{
 		DirCheck("GrowthJump");
-		//EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump_superMario.wav");
-
 		SetEffectSound("jump_superMario.wav");
 	}
 	else if (ModeValue == PlayerMode::FIREMARIO)
 	{
 		DirCheck("FireJump");
 		SetEffectSound("jump_superMario.wav");
-		//EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump_superMario.wav");
 	}
 	else
 	{
 		MoveDir.y = JumpPower;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
 		DirCheck("Jump");
 		SetEffectSound("jump.wav");
-	//	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl("jump.wav");
 	}	
-	//EffectPlayer.LoopCount(1);
-	//EffectPlayer.Volume(BasicVolume);
 }
 void Player::JumpUpdate(float _Time)
 {
-	++BlinkCount;
 	if (true == IsShrink)
 	{
-		ShrinkEffect(_Time, BlinkCount);
+		!IsAlphaOn;
+		ShrinkEffect(_Time);
 	}
 
 	//좌우 방향키가 눌러져 있다면 점프를 해당 방향에 맞게 뜀
@@ -592,10 +586,10 @@ void Player::CrouchStart()
 }
 void Player::CrouchUpdate(float _Time)
 {
-	++BlinkCount;
 	if (true == IsShrink)
 	{
-		ShrinkEffect(_Time, BlinkCount);
+		!IsAlphaOn;
+		ShrinkEffect(_Time);
 	}
 
 	if (
@@ -788,7 +782,7 @@ void Player::EnterPipeUpdate(float _Time)
 	{
 		IsUnderGround = true;
 		SetCanMoveOff();
-		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground.mp3");
+		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground.mp3", MaxLoop);
 
 		MoveDir.x = 0.0f;
 		SetPos({ UnderGroundStart });

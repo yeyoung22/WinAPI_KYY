@@ -29,69 +29,107 @@ void Block::Start()
 		BlockCollision = CreateCollision(MarioCollisionOrder::Block);
 		BlockCollision->SetScale({ 64, 10 });
 		BlockCollision->SetPosition({ GetPos().x, GetPos().y - 5 });
-		
+		BlockCollision->SetDebugRenderType(CT_Rect);
 	}
+
+	{
+		BlockWallCollision = CreateCollision(MarioCollisionOrder::Block);
+		BlockWallCollision->SetScale({ 64, 64 });
+		BlockWallCollision->SetPosition({ GetPos().x, GetPos().y - 5 });
+		BlockCollision->SetDebugRenderType(CT_Rect);
+	}
+
 }
 
 
 void Block::Update(float _DeltaTime)
 {
+	std::vector<GameEngineCollision*> PlayerCols = Player::MainPlayer->GetPlayerCollisions();
+
+
+
 	if (nullptr != BlockCollision)
 	{
+		//플레이어의 머리에 부딪히면 일단 블록이 위아래로 움직임
 		std::vector<GameEngineCollision*> Collision;
-		if (true == BlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		if (true == BlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+			&&
+			true == PlayerCols[0]->Collision({.TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect}, Collision)
+			)
 		{
-			for (size_t i = 0; i < Collision.size(); i++)
+			
+
+			//SetEffectSound("coin.wav");
+			BlockRender->ChangeAnimation("UsedBlock");
+
+				
+			if (false == IsUp)
 			{
-				// Block* FindMonster = Collision[i]->GetOwner<Block>();
+				MoveUp(_DeltaTime);
+			}
+				
+			if (true == IsUp && false == IsDown)
+			{ 
+				float4 Dir = Player::MainPlayer->GetPos() - GetPos();
+				Dir.Normalize();
+				SetMove(Dir * 200.0f * _DeltaTime);
 
-				GameEngineActor* ColActor = Collision[i]->GetActor();
+				MoveDown(_DeltaTime);
+			}
 
-
-				BlockRender->ChangeAnimation("UsedBlock");
-
+			if (true == IsUp && true == IsDown)
+			{
+				//BlockCollision->Off();
+			}
 
 				
 
-				MoveUp();
-
-
 			
-
-				//BlockCollision->Off();
-			}
 		}
 	}
 }
 
-void Block::MoveUp()
+void Block::MoveUp(float _DeltaTime)
 {
 	if (0 == StartPos.y)
 	{
 		StartPos = GetPos();
 	}
+	
+	float MaxHeight = StartPos.y - BlockSizeHalf;
+	
+	//일단 큰 힘으로 위로 한 방에 올림
+	MoveDir.y -= BlockSizeHalf;
 
-	//float MaxHeight = GetPos().y - BlockSizeHalf;
-	float MaxHeight = StartPos.y - 2;
+	SetMove(MoveDir);
 
-	if(GetPos().y >MaxHeight)
+	if (GetPos().y <= MaxHeight)
 	{
-		BlockRender->SetMove(float4::Up);
-		BlockCollision->SetMove(float4::Up);
-	} 
-	else if (GetPos().y <= MaxHeight)
-	{
-		return;
+		MoveDir = float4::Zero;
 	}
-
+	IsUp = true;
 }
 
-void Block::MoveDown()
+void Block::MoveDown(float _DeltaTime)
 {
-	float EndPos = GetPos().y + BlockSizeHalf;
+	MoveDir.y += BlockSizeHalf;
+	
+	SetMove(MoveDir);
 
-	if (GetPos().y < EndPos)
+	if (GetPos().y >= StartPos.y)
 	{
-		BlockRender->SetMove(float4::Down);
+		MoveDir = float4::Zero;
 	}
+
+
+	StartPos = float4::Zero;
+	IsDown = true;
+}
+
+
+void Block::SetEffectSound(const std::string_view& _String, int _loop, float _BasicVolume)
+{
+	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String);
+	EffectPlayer.LoopCount(_loop);
+	EffectPlayer.Volume(_BasicVolume);
 }

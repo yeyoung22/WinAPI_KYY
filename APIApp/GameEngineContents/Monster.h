@@ -1,6 +1,6 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
-#include <GameEnginePlatform/GameEngineImage.h>
+#include <GameEngineCore/GameEngineResources.h>
 
 // 설명 :
 class Monster : public GameEngineActor
@@ -22,11 +22,23 @@ protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
 
+
+	GameEngineSoundPlayer EffectPlayer;
 private:
 	float MoveSpeed = 100.0f;
 
 	GameEngineRender* AnimationRender = nullptr;
-	GameEngineCollision* BodyCollision = nullptr;
+
+	GameEngineCollision* HeadCollision = nullptr;
+	GameEngineCollision* RightBodyCollision = nullptr;
+	GameEngineCollision* LeftBodyCollision = nullptr;
+
+
+	//Troopa는 timer필요
+
+	int Point = 100;
+
+	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
 	
 };
 
