@@ -19,26 +19,11 @@ public:
 
 
 protected:
-	void Start() override;
-	void Update(float _DeltaTime) override;
-
+	virtual void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f) {}
 
 	GameEngineSoundPlayer EffectPlayer;
+
 private:
-	float MoveSpeed = 100.0f;
-
-	GameEngineRender* AnimationRender = nullptr;
-
-	GameEngineCollision* HeadCollision = nullptr;
-	GameEngineCollision* RightBodyCollision = nullptr;
-	GameEngineCollision* LeftBodyCollision = nullptr;
-
-
-	//Troopa´Â timerÇÊ¿ä
-
-	int Point = 100;
-
-	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
 	
 };
 

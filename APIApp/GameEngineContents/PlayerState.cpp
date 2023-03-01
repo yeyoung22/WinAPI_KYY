@@ -221,8 +221,6 @@ void Player::IdleUpdate(float _Time)
 		IsGround = LiftUp();
 		InitGravity(IsGround);
 	}
-
-
 	
 }
 void Player::IdleEnd() 

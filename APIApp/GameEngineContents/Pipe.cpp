@@ -34,12 +34,30 @@ void Pipe::Start()
 		GateCollision->SetPosition({ GetPos().x, GetPos().y - 130 });
 		GateCollision->SetDebugRenderType(CT_Rect);
 	}
+
+	AnimNames.insert(std::make_pair(PipeType::TOP, "Pipe"));
+	AnimNames.insert(std::make_pair(PipeType::LEFT, "Left_HorizontalPipe"));
 }
 
 void Pipe::Update(float _DeltaTime)
 {
-	//std::vector<GameEngineActor*> Pipes = GetLevel()->GetActors(MarioRenderOrder::Pipe);
-	
+	if (PrevPipeMode != PipeMode)
+	{
+		PrevPipeMode = PipeMode;
+
+		std::map<PipeType, std::string>::iterator FindIter = AnimNames.find(PipeMode);
+
+		//찾고자 하는 ItemMode가 없는 경우
+		if (FindIter == AnimNames.end())
+		{
+			MsgAssert(static_cast<int>(PipeMode) + "존재하지 않는 PipeType(번호)의 Animation을 가져오려 했습니다");
+			return;
+		}
+
+		PipeRender->ChangeAnimation(FindIter->second);
+	}
+
+
 
 	if (nullptr != GateCollision)
 	{

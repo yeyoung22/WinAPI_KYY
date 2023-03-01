@@ -12,7 +12,7 @@
 #include "ContentsUI.h"
 #include "ContentsEnums.h"
 #include "ContentsValue.h"
-#include "Block.h"
+#include "QuestionBlock.h"
 #include "Pipe.h"
 #include "EndingBack.h"
 
@@ -296,9 +296,11 @@ void PlayLevel::Loading()
 	}
 	//1_1_2ndItem
 	{
-		/*Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ 5024, StartPos.y - 128 });*/
+		Actor->SetPos({ 5024, StartPos.y - 128 });
+
+		Actor->SetItemMode(ItemType::LIFEMUSHROOM);
 	}
 	//UI
 	{
@@ -314,67 +316,67 @@ void PlayLevel::Loading()
 
 	//1_1_QBlock1
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({1060, 640});
 	}
 	//1_1_QBlock2
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
-		Actor->SetPos({ 1376, 640 });									//block ¹Ù·Î ¿· 64 Â÷ÀÓ¤±¤±¤±¤±¤±¤±¤¸¤¸¤¸¤¸¤¸¤·
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1376, 640 });									//block ¹Ù·Î ¿· 64 Â÷ÀÓ
 	}
 	//1_1_QBlock3
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 1504, 640 });
 	}
 	//1_1_QBlock4
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({1440, 384 });
 	}
 	//1_1_QBlock5
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 5024, 640 });
 	}
 	//1_1_QBlock6
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 6047, 384 });
 	}
 	//1_1_QBlock7
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 6815, 640 });
 	}
 	//1_1_QBlock8
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 7007, 640 });
 	}
 	//1_1_QBlock9
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 7199, 640 });
 	}
 	//1_1_QBlock10
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 7007, 384 });
 	}
 	//1_1_QBlock11
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 8289, 384 });
 	}	
 	//1_1_QBlock12
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 8353, 384 });
 	}
 	//1_1_QBlock9
 	{
-		Block* Actor = CreateActor<Block>(MarioRenderOrder::Block);
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 10913, 640 });
 	}
 
@@ -387,13 +389,12 @@ void PlayLevel::Loading()
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
 		Actor->SetPos({ 3712, 1820 });
-		Actor->Off();
+		Actor->SetPipeMode(PipeType::LEFT);
 	}
 	//Pipe3
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
 		Actor->SetPos({ 7712, 710 });
-		Actor->Off();
 	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))

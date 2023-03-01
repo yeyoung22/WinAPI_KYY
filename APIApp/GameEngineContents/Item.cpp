@@ -53,12 +53,35 @@ void Item::Start()
 		BodyCollision->SetPosition({ GetPos().x, GetPos().y - 32 });
 
 		//일단 아이템 꺼둠
-		BodyCollision->Off();
+		//BodyCollision->Off();
 	}
+
+	AnimNames.insert(std::make_pair(ItemType::SUPERMUSHROOM, "Right_SuperMushroom_Idle"));
+	AnimNames.insert(std::make_pair(ItemType::LIFEMUSHROOM, "Right_1UPMushroom_Idle"));
+	AnimNames.insert(std::make_pair(ItemType::LIFEMUSHROOM, "FireFlower_Idle"));
 }
 
 void Item::Update(float _DeltaTime)
 {
+	if (PrevItemMode != ItemMode)
+	{
+		PrevItemMode = ItemMode;
+
+		std::map<ItemType, std::string>::iterator FindIter = AnimNames.find(ItemMode);
+
+		//찾고자 하는 ItemMode가 없는 경우
+		if (FindIter == AnimNames.end())
+		{
+			MsgAssert(static_cast<int>(ItemMode) + "존재하지 않는 ItemType(번호)의 Animation을 가져오려 했습니다");
+			return;
+		}
+		ItemRender->ChangeAnimation(FindIter->second);
+	}
+
+
+	
+
+
 	float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
 
 	SetMove(Dir);

@@ -11,12 +11,6 @@
     <ClInclude Include="PlayLevel.h">
       <Filter>Play</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Play</Filter>
-    </ClInclude>
     <ClInclude Include="TitleBack.h">
       <Filter>Title</Filter>
     </ClInclude>
@@ -28,9 +22,6 @@
       <Filter>Play</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
-      <Filter>Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Block.h">
       <Filter>Play</Filter>
     </ClInclude>
     <ClInclude Include="EndingLevel.h">
@@ -60,6 +51,27 @@
     <ClInclude Include="Pipe.h">
       <Filter>Play</Filter>
     </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Play\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Play\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionBlock.h">
+      <Filter>Play\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Play\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Play\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Goomba.h">
+      <Filter>Play\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Troopa.h">
+      <Filter>Play\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -68,12 +80,6 @@
     </ClCompile>
     <ClCompile Include="OpeningLevel.cpp">
       <Filter>Opening</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>Play</Filter>
     </ClCompile>
     <ClCompile Include="TitleBack.cpp">
       <Filter>Title</Filter>
@@ -84,13 +90,7 @@
     <ClCompile Include="Map.cpp">
       <Filter>Play</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerState.cpp">
-      <Filter>Play</Filter>
-    </ClCompile>
     <ClCompile Include="Item.cpp">
-      <Filter>Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Block.cpp">
       <Filter>Play</Filter>
     </ClCompile>
     <ClCompile Include="EndingLevel.cpp">
@@ -123,6 +123,30 @@
     <ClCompile Include="Pipe.cpp">
       <Filter>Play</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Play\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Play\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionBlock.cpp">
+      <Filter>Play\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>Play\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Play\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Goomba.cpp">
+      <Filter>Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Troopa.cpp">
+      <Filter>Play\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Title">
@@ -145,6 +169,15 @@
     </Filter>
     <Filter Include="TextImage">
       <UniqueIdentifier>{e89a4761-0e2b-412c-b0a4-27a9cb5e3709}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play\Blocks">
+      <UniqueIdentifier>{20b55b16-446b-465f-9d31-a4dd196a3590}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play\Monster">
+      <UniqueIdentifier>{81dc9dc2-4f10-485a-88d5-8d692b530173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play\Player">
+      <UniqueIdentifier>{1b14097f-9430-4b32-88b8-07a4f3514240}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
