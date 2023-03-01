@@ -16,6 +16,8 @@ enum class PlayerState
 	FALL,
 	DEATH,
 	ENTERPIPE,
+	ENTERLPIPE,
+	EXITPIPE,
 };
 
 enum class PlayerMode
@@ -275,8 +277,12 @@ private:
 	void EnterPipeStart();
 	void EnterPipeUpdate(float _Time);
 	void EnterPipeEnd();
-
 	
+	
+	void EnterLPipeStart();
+	void EnterLPipeUpdate(float _Time);
+	void EnterLPipeEnd();
+
 	//Garavitional Acceleration
 	void AccGravity(float _DeltaTime);
 	void InitGravity(bool _IsGround);

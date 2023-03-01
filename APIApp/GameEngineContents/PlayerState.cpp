@@ -35,6 +35,8 @@ std::string Player::GetStateName()
 		return "PlayerState::DEATH";
 	case PlayerState::ENTERPIPE:
 		return "PlayerState::ENTERPIPE";
+	case PlayerState::ENTERLPIPE:
+		return "PlayerState::ENTERLPIPE";
 	default:
 		break;
 	}
@@ -82,6 +84,9 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::ENTERPIPE:
 		EnterPipeStart();
 		break;
+	case PlayerState::ENTERLPIPE:
+		EnterLPipeStart();
+		break;
 	default:
 		break;
 	}
@@ -117,6 +122,9 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::ENTERPIPE:
 		EnterPipeEnd();
+		break;
+	case PlayerState::ENTERLPIPE:
+		EnterLPipeEnd();
 		break;
 	default:
 		break;
@@ -157,6 +165,9 @@ void Player::UpdateState(float _Time)
 		break;
 	case PlayerState::ENTERPIPE:
 		EnterPipeUpdate(_Time);
+		break;
+	case PlayerState::ENTERLPIPE:
+		EnterLPipeUpdate(_Time);
 		break;
 	default:
 		break;
@@ -766,13 +777,22 @@ void Player::EnterPipeStart()
 	PlayLevel::MainPlayLevel->SetBGMPlayer("pipe.wav", 1);
 	WaitTime = 0.8f;
 
+	if (ModeValue == PlayerMode::SUPERMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_GrowthIdle");
+	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_FireIdle");
+	}
+	else
+	{
+		AnimationRender->ChangeAnimation("Right_Idle");
+	}
 }
 void Player::EnterPipeUpdate(float _Time)
 {
    	WaitTime -= _Time;
-
-
-	DirCheck("Idle");
 	SetMove(float4::Down* PipeEnterSpeed *_Time);
 	
 
@@ -793,4 +813,47 @@ void Player::EnterPipeUpdate(float _Time)
 void Player::EnterPipeEnd()
 {
 	PrevState = PlayerState::ENTERPIPE;
+}
+
+
+void Player::EnterLPipeStart()
+{
+	PlayLevel::MainPlayLevel->SetBGMPlayer("pipe.wav", 1);
+	WaitTime = 0.8f;
+
+	if (ModeValue == PlayerMode::SUPERMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_GrowthIdle");
+	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_FireIdle");
+	}
+	else
+	{
+		AnimationRender->ChangeAnimation("Right_Idle");
+	}
+}
+void Player::EnterLPipeUpdate(float _Time)
+{
+	WaitTime -= _Time;
+	SetMove(float4::Right * PipeEnterSpeed * _Time);
+
+
+	if (0 >= WaitTime)
+	{
+		IsUnderGround = false;
+		PlayLevel::MainPlayLevel->SetBGMPlayer("RunningAbout.mp3", MaxLoop);
+
+		MoveDir.x = 0.0f;
+		SetPos({ UnderGroundStart });
+		GetLevel()->SetCameraPos({GetPos().x, 0.0f});
+
+		ChangeState(PlayerState::IDLE);
+		return;
+	}
+}
+void Player::EnterLPipeEnd() 
+{
+	PrevState = PlayerState::ENTERLPIPE;
 }

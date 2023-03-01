@@ -388,7 +388,7 @@ void PlayLevel::Loading()
 	//Pipe2
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
-		Actor->SetPos({ 3712, 1820 });
+		Actor->SetPos({ 7022, 1790 });
 		Actor->SetPipeMode(PipeType::LEFT);
 	}
 	//Pipe3
