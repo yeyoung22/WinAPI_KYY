@@ -510,8 +510,7 @@ void PlayLevel::Loading()
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
 		Actor->SetPos({ 3712, 710 });
-		Actor->SetPipeMode(PipeType::LEFT);
-		//Actor->SetExitColOff();
+		Actor->SetExitColOff();
 	}
 	//Pipe2
 	{
