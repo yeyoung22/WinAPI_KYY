@@ -15,6 +15,7 @@
 #include "QuestionBlock.h"
 #include "Pipe.h"
 #include "EndingBack.h"
+#include "Brick.h"
 
 
 
@@ -127,32 +128,6 @@ void PlayLevel::ImageLoad()
 
 		Dir.MoveParent();
 	}
-	//{
-	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_InvincibleMario.bmp"));
-	//	Image->Cut(4, 1);
-	//}
-	//{
-	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_InvincibleMario.bmp"));
-	//	Image->Cut(4, 1);
-	//}
-	//{
-	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_InvincibleGrowth.bmp"));
-	//	Image->Cut(4, 1);
-	//}
-	//{
-	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_InvincibleGrowth.bmp"));
-	//	Image->Cut(4, 1);
-	//}
-	//{
-	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_InvincibleFireMario.bmp"));
-	//	Image->Cut(4, 1);
-	//}
-	//{
-	//	GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_InvincibleFireMario.bmp"));
-	//	Image->Cut(4, 1);
-
-	//	Dir.MoveParent();
-	//}
 
 	//Map
 	{
@@ -374,27 +349,182 @@ void PlayLevel::Loading()
 		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 8353, 384 });
 	}
-	//1_1_QBlock9
+	//1_1_QBlock13
 	{
 		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 10913, 640 });
 	}
 
+	//1_1_Brick1
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1312, 640 });
+	}
+	//1_1_Brick2
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1440, 640 });
+	}
+	//1_1_Brick3
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 1568, 640 });
+	}
+	//1_1_Brick4
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 4960, 640 });
+	}
+	//1_1_Brick5
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5088, 640 });
+	}
+	//1_1_Brick6
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5152, 384 });
+	}
+	//1_1_Brick7
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5216, 384 });
+	}
+	//1_1_Brick8
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5280, 384 });
+	}
+	//1_1_Brick9
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5344, 384 });
+	}
+	//1_1_Brick10
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5408, 384 });
+	}
+	//1_1_Brick11
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5472, 384 });
+	}
+	//1_1_Brick12
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5536, 384 });
+	}
+	//1_1_Brick13
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5600, 384 });
+	}
+	//1_1_Brick14
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5855, 384 });
+	}
+	//1_1_Brick15
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5919, 384 });
+	}
+	//1_1_Brick16
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 5983, 384 });
+	}
+	//1_1_Brick17
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 6047, 640 });
+	}
+	//1_1_Brick18
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 6367, 640 });
+	}
+	//1_1_Brick19
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 6431, 640 });
+	}
+	//1_1_Brick20
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 7583, 640 });
+	}
+	//1_1_Brick21
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 7775, 384 });
+	}
+	//1_1_Brick22
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 7839, 384 });
+	}
+	//1_1_Brick23
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 7903, 384 });
+	}
+	//1_1_Brick24
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 8225, 384 });
+	}
+	//1_1_Brick25
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 8417, 384 });
+	}
+	//1_1_Brick26
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 8289, 640 });
+	}
+	//1_1_Brick27
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 8353, 640 });
+	}
+	//1_1_Brick28
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 10785, 640 });
+	}
+	//1_1_Brick29
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 10849, 640 });
+	}
+	//1_1_Brick30
+	{
+		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
+		Actor->SetPos({ 10977, 640 });
+	}
+
 	//Pipe1
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
-		Actor->SetPos({ 3712, 710 });			
+		Actor->SetPos({ 3712, 710 });
+		Actor->SetPipeMode(PipeType::LEFT);
+		//Actor->SetExitColOff();
 	}
 	//Pipe2
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
 		Actor->SetPos({ 7022, 1790 });
 		Actor->SetPipeMode(PipeType::LEFT);
+		Actor->SetGateColOff();
 	}
 	//Pipe3
 	{
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
-		Actor->SetPos({ 7712, 710 });
+		Actor->SetPos({ 10496, 840 });
+		Actor->SetAllColOff();
 	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))

@@ -111,6 +111,7 @@ void GameEngineCollision::SetOrder(int _Order)
 //단순히 충돌여부만 알려줌
 bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter)
 {
+	//업데이트가 꺼져있는 경우
 	if (false == IsUpdate())
 	{
 		return false;
@@ -126,6 +127,7 @@ bool GameEngineCollision::Collision(const CollisionCheckParameter& _Parameter)
 			continue;
 		}
 
+		//업데이트가 꺼져 있는 대상은 체크하지 않음
 		if (false == OtherCollision->IsUpdate())
 		{
 			continue;

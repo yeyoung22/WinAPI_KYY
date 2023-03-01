@@ -843,10 +843,11 @@ void Player::EnterLPipeUpdate(float _Time)
 	if (0 >= WaitTime)
 	{
 		IsUnderGround = false;
+		SetCanMoveOff();
 		PlayLevel::MainPlayLevel->SetBGMPlayer("RunningAbout.mp3", MaxLoop);
 
 		MoveDir.x = 0.0f;
-		SetPos({ UnderGroundStart });
+		SetPos({ UnderGroundEnd });
 		GetLevel()->SetCameraPos({GetPos().x, 0.0f});
 
 		ChangeState(PlayerState::IDLE);

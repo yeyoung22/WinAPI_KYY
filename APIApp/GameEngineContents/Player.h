@@ -175,7 +175,7 @@ private:
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
 	//float MoveSpeed = 230.0f;									//Player Speed
 	float MoveSpeed = 450.0f;
-	float MaxSpeed = 500.f;								//테스트용 값이므로 지워야 함-----------------------------------------
+	float MaxSpeed = 500.f;								//테스트용 값이므로 지워야 함--------------------------------------------------------------------------
 	//float MaxSpeed = 250.0f;									
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
@@ -195,6 +195,7 @@ private:
 
 	float4 UnderGroundCameraPos = { 3072.0f, 960.0f };			//Caemra Position at UnderGround
 	float4 UnderGroundStart = { 3202 , 1154 };					//Player Start Position at UnderGround
+	float4 UnderGroundEnd = { 10496.0f, 960.0f };
 
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };

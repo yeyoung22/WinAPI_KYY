@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/GameEngineResources.h>
+#include <GameEngineCore/GameEngineCollision.h>
 
 enum class PipeType
 {
@@ -28,6 +29,22 @@ public:
 		PipeMode = _Type;
 	}
 
+	void SetAllColOff()
+	{
+		GateCollision->Off();
+		ExitCollision->Off();
+	}
+
+	void SetGateColOff()
+	{
+		GateCollision->Off();
+	}
+
+	void SetExitColOff()
+	{
+		ExitCollision->Off();
+	}
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -44,6 +61,7 @@ private:
 
 	GameEngineRender* PipeRender = nullptr;
 	GameEngineCollision* GateCollision = nullptr;
+	GameEngineCollision* ExitCollision = nullptr;
 
 	
 };
