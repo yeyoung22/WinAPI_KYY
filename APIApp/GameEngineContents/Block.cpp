@@ -35,8 +35,8 @@ void Block::Start()
 	{
 		BlockWallCollision = CreateCollision(MarioCollisionOrder::Block);
 		BlockWallCollision->SetScale({ 64, 64 });
-		BlockWallCollision->SetPosition({ GetPos().x, GetPos().y - 5 });
-		BlockCollision->SetDebugRenderType(CT_Rect);
+		BlockWallCollision->SetPosition({ GetPos().x, GetPos().y - 20 });
+		BlockWallCollision->SetDebugRenderType(CT_Rect);
 	}
 
 }
@@ -70,9 +70,6 @@ void Block::Update(float _DeltaTime)
 				
 			if (true == IsUp && false == IsDown)
 			{ 
-				float4 Dir = Player::MainPlayer->GetPos() - GetPos();
-				Dir.Normalize();
-				SetMove(Dir * 200.0f * _DeltaTime);
 
 				MoveDown(_DeltaTime);
 			}
@@ -98,7 +95,6 @@ void Block::MoveUp(float _DeltaTime)
 	
 	float MaxHeight = StartPos.y - BlockSizeHalf;
 	
-	//일단 큰 힘으로 위로 한 방에 올림
 	MoveDir.y -= BlockSizeHalf;
 
 	SetMove(MoveDir);
@@ -112,18 +108,21 @@ void Block::MoveUp(float _DeltaTime)
 
 void Block::MoveDown(float _DeltaTime)
 {
-	MoveDir.y += BlockSizeHalf;
+	//MoveDir.y += BlockSizeHalf;
 	
+	MoveDir += float4::Down * 300.0f * _DeltaTime;
+
 	SetMove(MoveDir);
 
 	if (GetPos().y >= StartPos.y)
 	{
 		MoveDir = float4::Zero;
+		StartPos = float4::Zero;
+		IsDown = true;
+		return;
 	}
 
 
-	StartPos = float4::Zero;
-	IsDown = true;
 }
 
 
