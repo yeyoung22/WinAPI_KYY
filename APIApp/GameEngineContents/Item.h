@@ -2,12 +2,15 @@
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/GameEngineResources.h>
 
+
 enum class ItemType
 {
 	NONE,
 	SUPERMUSHROOM,
 	LIFEMUSHROOM,
 	FIREFLOWER,
+	COIN,
+	HIDDENCOIN,
 };
 
 
@@ -31,6 +34,12 @@ public:
 		ItemMode = _Type;
 	}
 
+	void SetItemRenderScale(float4 _Scale);
+
+	void SetColScale(float4 _Scale);
+
+	void SetColPos(float4 _Pos);
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -38,6 +47,8 @@ protected:
 	GameEngineSoundPlayer EffectPlayer;
 private:
 	float MoveSpeed = 120.0f;
+
+	float4 BasicScale = { 128, 128 };
 
 	ItemType PrevItemMode = ItemType::SUPERMUSHROOM;
 	ItemType ItemMode = ItemType::SUPERMUSHROOM;

@@ -21,7 +21,7 @@ void Item::Start()
 	//SuperMushroom
 	{
 		ItemRender = CreateRender(MarioRenderOrder::Item);
-		ItemRender->SetScale({ 128, 128 });
+		ItemRender->SetScale(BasicScale);
 
 
 		ItemRender->CreateAnimation({ .AnimationName = "Right_SuperMushroom_Idle",  .ImageName = "Right_SuperMushroom.bmp", .Start = 0, .End = 0 });
@@ -47,10 +47,19 @@ void Item::Start()
 		ItemRender->CreateAnimation({ .AnimationName = "FireFlower",  .ImageName = "FireFlower.bmp", .Start = 0, .End = 3 });
 
 	}
+	//Coin
+	{
+		ItemRender->CreateAnimation({ .AnimationName = "Coin",  .ImageName = "Coin.bmp", .Start = 0, .End = 3 });
+	}
+	//HiddenCoin
+	{
+		ItemRender->CreateAnimation({ .AnimationName = "HiddenCoin",  .ImageName = "HiddenCoin.bmp", .Start = 0, .End = 3 });
+	}
 	{
 		BodyCollision = CreateCollision(MarioCollisionOrder::Item);
-		BodyCollision->SetScale({ 60, 60 });;
+		BodyCollision->SetScale({ 60, 60 });
 		BodyCollision->SetPosition({ GetPos().x, GetPos().y - 32 });
+		BodyCollision->SetDebugRenderType(CT_Rect);
 
 		//일단 아이템 꺼둠
 		//BodyCollision->Off();
@@ -58,7 +67,9 @@ void Item::Start()
 
 	AnimNames.insert(std::make_pair(ItemType::SUPERMUSHROOM, "Right_SuperMushroom_Idle"));
 	AnimNames.insert(std::make_pair(ItemType::LIFEMUSHROOM, "Right_1UPMushroom_Idle"));
-	AnimNames.insert(std::make_pair(ItemType::LIFEMUSHROOM, "FireFlower_Idle"));
+	AnimNames.insert(std::make_pair(ItemType::FIREFLOWER, "FireFlower_Idle"));
+	AnimNames.insert(std::make_pair(ItemType::COIN, "Coin"));
+	AnimNames.insert(std::make_pair(ItemType::HIDDENCOIN, "HiddenCoin"));
 }
 
 void Item::Update(float _DeltaTime)
@@ -72,7 +83,7 @@ void Item::Update(float _DeltaTime)
 		//찾고자 하는 ItemMode가 없는 경우
 		if (FindIter == AnimNames.end())
 		{
-			MsgAssert(static_cast<int>(ItemMode) + "존재하지 않는 ItemType(번호)의 Animation을 가져오려 했습니다");
+			MsgAssert("존재하지 않는 ItemType(번호)의 Animation을 가져오려 했습니다");
 			return;
 		}
 		ItemRender->ChangeAnimation(FindIter->second);
@@ -82,9 +93,9 @@ void Item::Update(float _DeltaTime)
 	
 
 
-	float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
+	/*float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
 
-	SetMove(Dir);
+	SetMove(Dir);*/
 	
 	std::vector<GameEngineActor*> Items = GetLevel()->GetActors(MarioRenderOrder::Item);
 
@@ -101,4 +112,20 @@ void Item::Update(float _DeltaTime)
 		}
 	}
 
+}
+
+
+void Item::SetItemRenderScale(float4 _Scale)
+{
+	ItemRender->SetScale(_Scale);
+}
+
+void Item::SetColScale(float4 _Scale)
+{
+	BodyCollision->SetScale(_Scale);
+}
+
+void Item::SetColPos(float4 _Pos)
+{
+	BodyCollision->SetPosition(_Pos);
 }

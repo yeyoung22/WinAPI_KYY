@@ -197,6 +197,10 @@ void PlayLevel::ImageLoad()
 		Image->Cut(4, 1);
 	}
 	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("HiddenCoin.bmp"));
+		Image->Cut(4, 1);
+	}
+	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Coin.bmp"));
 		Image->Cut(4, 1);
 	}
@@ -277,6 +281,29 @@ void PlayLevel::Loading()
 
 		Actor->SetItemMode(ItemType::LIFEMUSHROOM);
 	}
+	//Coin1
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 6500,1200});
+
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetItemRenderScale({ 64, 64 });
+	}
+	//Coin2
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 7222, 1590 });
+
+		Actor->SetItemMode(ItemType::COIN);
+	}
+	//Coin3
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 7322, 1690 });
+
+		Actor->SetItemMode(ItemType::COIN);
+	}
+
 	//UI
 	{
 		ContentsUI* Actor = CreateActor<ContentsUI>(MarioRenderOrder::UI);
