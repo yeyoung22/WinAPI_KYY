@@ -17,11 +17,6 @@ public:
 	QuestionBlock& operator=(const QuestionBlock& _Other) = delete;
 	QuestionBlock& operator=(QuestionBlock&& _Other) noexcept = delete;
 
-	bool CheckRightBlock();
-	bool CheckLeftBlock();
-	bool CheckBottBlock();
-	bool CheckHeadBlock();
-
 
 protected:
 	void Start() override;

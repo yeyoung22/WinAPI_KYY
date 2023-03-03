@@ -6,6 +6,7 @@ enum class MarioRenderOrder
 	BackGroundTxt,
 	Map,
 	Monster,
+	PlayerAttack,
 	Item,
 	Block,
 	UI,

@@ -128,6 +128,8 @@ public:
 		IsShrink = true;
 	}
 
+	
+
 
 	//플레이어의 충돌체 별로 처리할게 다르므로 vector에 넣어서 다른 곳에서 볼 수 있게 해야 함
 	//복사본을 넘겨 주겠음
@@ -218,6 +220,10 @@ private:
 	void ChangeColImage(const std::string& _ColMapName);
 
 	std::string DirString = "Right_";
+	std::string RightStr = "Right_";
+	std::string LeftStr = "Left_";
+
+
 	PlayerState StateValue = PlayerState::IDLE;
 
 	float4 MoveDir = float4::Zero;								//옮겨갈 벡터

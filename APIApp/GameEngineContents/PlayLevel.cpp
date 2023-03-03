@@ -65,7 +65,13 @@ void PlayLevel::SoundLoad()
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("jump_superMario.wav"));
 	}
 	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("fireball.wav"));
+	}
+	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("pipe.wav"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("1-up.wav"));
 	}
 	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("bump.wav"));
@@ -169,11 +175,11 @@ void PlayLevel::ImageLoad()
 	{
 		Dir.Move("Effect");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_Fire.bmp"));
-		Image->Cut(4, 1);
+		Image->Cut(7, 1);
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_Fire.bmp"));
-		Image->Cut(4, 1);
+		Image->Cut(7, 1);
 
 		Dir.MoveParent();
 	}
@@ -253,7 +259,7 @@ void PlayLevel::Loading()
 		//Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
 
 		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
-		Actor->SetPos({ 3612, GameEngineWindow::GetScreenSize().y - 128 } );
+		Actor->SetPos({ 800, GameEngineWindow::GetScreenSize().y - 128 } );
 		SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});
 	}
 	//Goomba1
@@ -263,7 +269,7 @@ void PlayLevel::Loading()
 		Actor->SetPos({1400, StartPos.y - 128});
 
 		//일단 굼바 끔=-------------------------------------------------------------------------------------------
-		//Actor->Off();
+		Actor->Off();
 	}
 	//1_1_GrowMushroom
 	{
@@ -693,6 +699,8 @@ void PlayLevel::Loading()
 		GameEngineInput::CreateKey("CameraRightMove", VK_RIGHT);
 		GameEngineInput::CreateKey("CameraDownMove", VK_DOWN);
 		GameEngineInput::CreateKey("CameraUpMove", VK_UP);
+
+		GameEngineInput::CreateKey("Attack", VK_LSHIFT);
 
 		GameEngineInput::CreateKey("DebugRenderSwitch", 'R');
 		GameEngineInput::CreateKey("BGMPause", 'P');

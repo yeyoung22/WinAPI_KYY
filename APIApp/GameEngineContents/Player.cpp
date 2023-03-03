@@ -16,11 +16,11 @@
 #include "EndingBack.h"
 
 
-
 //screenSize = {1024, 960}
 bool  Player::IsDebugMode = false;
 Player* Player::MainPlayer;
-PlayerMode Player::ModeValue = PlayerMode::MARIO;
+//PlayerMode Player::ModeValue = PlayerMode::MARIO;
+PlayerMode Player::ModeValue = PlayerMode::FIREMARIO;
 float Player::PlayTimer = 400.0f;
 int Player::TotalScore = 0;
 int Player::NumOfCoin = 0;

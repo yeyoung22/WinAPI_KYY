@@ -72,6 +72,9 @@
     <ClInclude Include="Troopa.h">
       <Filter>Play\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Play\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -146,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="Troopa.cpp">
       <Filter>Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Play\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
