@@ -95,3 +95,66 @@ void Troopa::Update(float _DeltaTime)
 
 
 }
+
+
+void Troopa::AccGravity(float _DeltaTime)
+{
+	MoveDir += float4::Down * Gravity * _DeltaTime;
+}
+
+void Troopa::InitGravity(bool _IsGround)
+{
+	if (true == _IsGround)
+	{
+		MoveDir.y = 0.0f;
+	}
+}
+
+//좌우키가 안 눌렀을때 멈추게 할 저항
+void  Troopa::Friction(float4& _Pos, float _DeltaTime)
+{
+	_Pos.x *= (FrictionPower * _DeltaTime);
+}
+
+bool  Troopa::LiftUp(float4 _Pos)
+{
+	while (true)
+	{
+		float4 NextPos = GetPos() + _Pos;
+
+		int Color = Player::MainPlayer->ColImage->GetPixelColor(NextPos, Black);
+
+		if (Black == Color)
+		{
+			SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
+			continue;
+		}
+
+		break;
+	}
+
+	//땅인지 아닌지 체크하는 부분
+	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
+	float4 Down = GetPos() + _Pos;
+
+	if (Black == Player::MainPlayer->ColImage->GetPixelColor(Down + float4::Down, Black))
+	{
+		return true;
+	}
+	return false;
+}
+
+
+bool Troopa::CheckWall(float4 _Pos, float4 _Pivot)
+{
+	float4 CheckPos = GetPos() + _Pos;
+	CheckPos += _Pivot;
+
+
+	if (Black == Player::MainPlayer->ColImage->GetPixelColor(CheckPos, Black))
+	{
+		return true;
+	}
+
+	return false;
+}

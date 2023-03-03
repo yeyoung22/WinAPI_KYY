@@ -96,7 +96,7 @@ void Pipe::Update(float _DeltaTime)
 		{
 			Player::MainPlayer->SetCanMoveOn();
 
-			Player::MainPlayer->ChangeState(PlayerState::ENTERLPIPE);
+		//	Player::MainPlayer->ChangeState(PlayerState::ENTERLPIPE);
 
 
 		/*	float PipeCenterX = GetPos().x;

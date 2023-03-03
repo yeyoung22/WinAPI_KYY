@@ -56,6 +56,8 @@ public:
 	static int TopScore;
 	static int Round;
 	static int Life;												//Base Player Life
+	static GameEngineImage* ColImage;
+
 	// constrcuter destructer
 	Player();
 	~Player();
@@ -119,6 +121,11 @@ public:
 	bool GetCanMove()
 	{
 		return CanMove;
+	}
+
+	void SetIsShrinkOn()
+	{
+		IsShrink = true;
 	}
 
 
@@ -207,7 +214,7 @@ private:
 
 	//ColImage 관련 변수 및 함수
 	std::string ColMapName;
-	GameEngineImage* ColImage = nullptr;
+	
 	void ChangeColImage(const std::string& _ColMapName);
 
 	std::string DirString = "Right_";
@@ -226,6 +233,7 @@ private:
 	GameEngineCollision* RightBodyCollision = nullptr;
 	GameEngineCollision* LeftBodyCollision = nullptr;
 	GameEngineCollision* BottomCollision = nullptr;
+	GameEngineCollision* SHeadCollision = nullptr;
 
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 

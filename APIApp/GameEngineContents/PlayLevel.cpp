@@ -7,7 +7,7 @@
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include "Player.h"
 #include "Map.h"
-#include "Monster.h"
+#include "Goomba.h"
 #include "Item.h"
 #include "ContentsUI.h"
 #include "ContentsEnums.h"
@@ -256,7 +256,7 @@ void PlayLevel::Loading()
 	}
 	//Goomba1
 	{
-		Monster* Actor = CreateActor<Monster>(MarioRenderOrder::Monster);
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({1400, StartPos.y - 128});
 
@@ -280,6 +280,7 @@ void PlayLevel::Loading()
 		Actor->SetPos({ 5024, StartPos.y - 128 });
 
 		Actor->SetItemMode(ItemType::LIFEMUSHROOM);
+		Actor->Off();
 	}
 	//Coin1
 	{
@@ -544,7 +545,7 @@ void PlayLevel::Loading()
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
 		Actor->SetPos({ 7022, 1790 });
 		Actor->SetPipeMode(PipeType::LEFT);
-		Actor->SetGateColOff();
+		//Actor->SetGateColOff();
 	}
 	//Pipe3
 	{
@@ -613,6 +614,7 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	BGMPlayer.Volume(BGMVolume);
 
 }
+
 
 void PlayLevel::SetBGMPlayer(const std::string_view& _String, int _loop, float _BasicVolume)
 {

@@ -5,6 +5,8 @@
 #include "ContentsEnums.h"
 #include "Player.h"
 
+#include <GameEnginePlatform/GameEngineWindow.h>
+
 Goomba::Goomba() 
 {
 }
@@ -49,17 +51,33 @@ void Goomba::Start()
 
 void Goomba::Update(float _DeltaTime)
 {
+	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+	float4 ActorPos = GetPos();
+	ActorPos.x += ImgHalfWidth;
+
+	//<디버깅용_센터 보기위함>
+	Rectangle(DoubleDC,
+		ActorPos.ix() - 5,
+		ActorPos.iy() - 5,
+		ActorPos.ix() + 5,
+		ActorPos.iy() + 5
+	);
+
+
+
 	float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
-	SetMove(Dir);
+	//SetMove(Dir);
 
 	std::vector<GameEngineCollision*> PlayerCols = Player::MainPlayer->GetPlayerCollisions();
 
 	std::vector<GameEngineCollision*> Collision;
 	if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
 		&&
-		true == PlayerCols[3]->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		true == PlayerCols[4]->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
 		)
 	{
+		TimerStart = true;
+
 		for (size_t i = 0; i < Collision.size(); i++)
 		{
 			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
@@ -73,11 +91,60 @@ void Goomba::Update(float _DeltaTime)
 			LeftBodyCollision->Off();
 			RightBodyCollision->Off();
 
-			//FindMonster->Death();
-
+			
+			DeathMon = FindMonster;
 
 		}
 	}
+
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		)
+	{
+		for (size_t i = 0; i < Collision.size(); i++)
+		{
+			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
+			HeadCollision->Off();
+			LeftBodyCollision->Off();
+			RightBodyCollision->Off();
+
+
+		}
+
+
+		if (Player::ModeValue == PlayerMode::SUPERMARIO)
+		{
+			Player::MainPlayer->SetIsShrinkOn();
+			SetEffectSound("pipe.wav");
+
+		}
+		else
+		{
+			--Player::Life;
+
+			Player::MainPlayer->ChangeState(PlayerState::DEATH);
+
+
+			//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+		}
+	}
+
+
+
+
+
+
+	if (true == TimerStart)
+	{
+		WaitTime -= _DeltaTime;
+		if (0.0f >= WaitTime)
+		{
+			DeathMon->Death();
+			TimerStart = false;
+			WaitTime = 0.3f;
+		}
+	}
+
 
 
 	//<굼바가 죽는 조건_with Koopa>
@@ -86,19 +153,71 @@ void Goomba::Update(float _DeltaTime)
 	//불꽃에 맞아도 죽음
 	//머리를 밟혀도 죽음(마리오의 바닥 충돌체와 이 아이의 좌우 충돌체가 닿이면 죽음
 
-	//<트루파 죽는 조건>
-	//굼바와 대부분 동일
-	//밟으면 등껍질로 애니메이션 변경_안 죽음
-	//한 번더 밟으면 정해진 방향으로 날아감(기본은 오른쪽)
-	//일정시간동안 안 밟히면 다시 부활
-	//날아가다가 구멍에 빠지면 죽음
-
 
 }
 
-void Goomba::SetEffectSound(const std::string_view& _String, int _loop, float _BasicVolume)
+
+
+
+void Goomba::AccGravity(float _DeltaTime)
 {
-	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String);
-	EffectPlayer.LoopCount(_loop);
-	EffectPlayer.Volume(_BasicVolume);
+	MoveDir += float4::Down * Gravity * _DeltaTime;
+}
+
+void Goomba::InitGravity(bool _IsGround)
+{
+	if (true == _IsGround)
+	{
+		MoveDir.y = 0.0f;
+	}
+}
+
+//좌우키가 안 눌렀을때 멈추게 할 저항
+void  Goomba::Friction(float4& _Pos, float _DeltaTime)
+{
+	_Pos.x *= (FrictionPower * _DeltaTime);
+}
+
+
+bool  Goomba::LiftUp(float4 _Pos)
+{
+	while (true)
+	{
+		float4 NextPos = GetPos() + _Pos;
+
+		int Color = Player::MainPlayer->ColImage->GetPixelColor(NextPos, Black);
+
+		if (Black == Color)
+		{
+			SetMove(float4::Up);							//Underground(Black)-> 1 pixel Up
+			continue;
+		}
+
+		break;
+	}
+
+	//땅인지 아닌지 체크하는 부분
+	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
+	float4 Down = GetPos() + _Pos;
+
+	if (Black == Player::MainPlayer->ColImage->GetPixelColor(Down + float4::Down, Black))
+	{
+		return true;
+	}
+	return false;
+}
+
+
+bool Goomba::CheckWall(float4 _Pos, float4 _Pivot)
+{
+	float4 CheckPos = GetPos() + _Pos;
+	CheckPos += _Pivot;
+
+
+	if (Black == Player::MainPlayer->ColImage->GetPixelColor(CheckPos, Black))
+	{
+		return true;
+	}
+
+	return false;
 }

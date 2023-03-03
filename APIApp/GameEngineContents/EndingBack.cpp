@@ -20,8 +20,8 @@ void EndingBack::Start()
 
 	float4 Size = GameEngineWindow::GetScreenSize();
 
-	SceneName.push_back("Ending2.bmp");
 	SceneName.push_back("GameOver.bmp");
+	SceneName.push_back("Ending2.bmp");
 	SceneName.push_back("TimeUp.bmp");
 
 	{

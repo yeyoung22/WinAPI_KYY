@@ -54,37 +54,39 @@ void QuestionBlock::Update(float _DeltaTime)
 			true == PlayerCols[0]->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
 			)
 		{
+			TimerStart = true;
 
-
-			//SetEffectSound("coin.wav");
-			BlockRender->ChangeAnimation("UsedBlock");
-
-
-			if (false == IsUp)
+			for (size_t i = 0; i < Collision.size(); i++)
 			{
-				MoveUp(_DeltaTime);
-			}
+				Block* FindBlock = Collision[i]->GetOwner<Block>();
 
-			if (true == IsUp && false == IsDown)
-			{
+				//SetEffectSound("coin.wav");
+				BlockRender->ChangeAnimation("UsedBlock");
+				MoveUp();
 
-				MoveDown(_DeltaTime);
-			}
+				BlockCollision->Off();
 
-			if (true == IsUp && true == IsDown)
-			{
-				//BlockCollision->Off();
 			}
 
 
+		}
+	}
 
+	if (true == TimerStart)
+	{
+		WaitTime -= _DeltaTime;
+		MoveDown(WaitTime);
 
+		if (0.0f >= WaitTime)
+		{
+			TimerStart = false;
+			WaitTime = 0.3f;
 		}
 	}
 }
 
 
-void QuestionBlock::MoveUp(float _DeltaTime)
+void QuestionBlock::MoveUp()
 {
 	if (0 == StartPos.y)
 	{
@@ -101,13 +103,10 @@ void QuestionBlock::MoveUp(float _DeltaTime)
 	{
 		MoveDir = float4::Zero;
 	}
-	IsUp = true;
 }
 
 void QuestionBlock::MoveDown(float _DeltaTime)
 {
-	//MoveDir.y += BlockSizeHalf;
-
 	MoveDir += float4::Down * Gravity * _DeltaTime;
 
 	SetMove(MoveDir);
@@ -116,7 +115,6 @@ void QuestionBlock::MoveDown(float _DeltaTime)
 	{
 		MoveDir = float4::Zero;
 		StartPos = float4::Zero;
-		IsDown = true;
 		return;
 	}
 }

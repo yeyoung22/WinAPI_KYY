@@ -13,6 +13,7 @@
 #include "ContentsValue.h"
 #include "PlayLevel.h"
 #include "ContentsUI.h"
+#include "EndingBack.h"
 
 
 
@@ -28,6 +29,7 @@ int Player::MapLevel = 1;
 int Player::TopScore = 0;
 int Player::Round = 0;
 int Player::Life = 3;
+GameEngineImage* Player::ColImage = nullptr;
 
 Player::Player() 
 {
@@ -138,9 +140,16 @@ void Player::Start()
 		BottomCollision->SetPosition({ GetPos().x, GetPos().y - 5});
 		BottomCollision->SetDebugRenderType(CT_Rect);
 	}
-
+	{
+		SHeadCollision = CreateCollision(MarioCollisionOrder::Player);
+		SHeadCollision->SetScale({ 45, 10 });
+		SHeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight*2 });
+		SHeadCollision->SetDebugRenderType(CT_Rect);
+	}
+	
 
 	PlayerCols.push_back(HeadCollision);
+	PlayerCols.push_back(SHeadCollision);
 	PlayerCols.push_back(RightBodyCollision);
 	PlayerCols.push_back(LeftBodyCollision);
 	PlayerCols.push_back(BottomCollision);
@@ -149,6 +158,7 @@ void Player::Start()
 
 	ChangeState(PlayerState::IDLE);
 
+	//SHeadCollision->Off();
 	AssignLevels(PlayLevel::MapNames, Round);									//MapÀÌ¶û World ÁöÁ¤
 }
 
@@ -337,6 +347,17 @@ bool Player::FreeMoveState(float _DeltaTime)
 void Player::Update(float _DeltaTime)
 {
 	PlayTimer -= _DeltaTime* TimeSpeed;
+
+	if (ModeValue == PlayerMode::MARIO)
+	{
+		HeadCollision->On();
+		SHeadCollision->Off();
+	}
+	else
+	{
+		HeadCollision->Off();
+		SHeadCollision->On();
+	}
 	
 	if ( true == IsChanged && ModeValue != PlayerMode::MARIO)
 	{
@@ -349,32 +370,11 @@ void Player::Update(float _DeltaTime)
 		SetPos({ GetLevel()->GetCameraPos().x, GetPos().y });
 	}
 
-
-	//Meet Monster
-	if (nullptr != RightBodyCollision && nullptr != LeftBodyCollision)
+	if (StateValue == PlayerState::DEATH)
 	{
-		std::vector<GameEngineCollision*> Collision;
-		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
-		{
-			if (ModeValue == PlayerMode::SUPERMARIO)
-			{
-				IsShrink = true;
-				SetEffectSound("pipe.wav");
-				
-			}
-			else
-			{
-				--Life;
-				
-				ChangeState(PlayerState::DEATH);
-				
-
-				//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
-				
-
-
-			}
-		}
+		PlayLevel::MainPlayLevel->SetBGMStop();
+		EndingBack::Ending->SetEndingScene(EndingScene::GameOver);
+		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
 
 
@@ -383,7 +383,7 @@ void Player::Update(float _DeltaTime)
 		std::vector<GameEngineCollision*> Collision;
 		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Door), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
-			++Round;
+			/*++Round;
 			std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
 
 			AssignLevels(PlayLevel::MapNames, Round);
@@ -391,7 +391,11 @@ void Player::Update(float _DeltaTime)
 			MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
 			GetLevel()->SetCameraPos({ GetPos().x, 0 });
 
-			ChangeColImage(ChangeColName[Round]);
+			ChangeColImage(ChangeColName[Round]);*/
+
+			PlayLevel::MainPlayLevel->SetBGMStop();
+			EndingBack::Ending->SetEndingScene(EndingScene::Clear);
+			GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 		}
 	}
 
@@ -408,15 +412,21 @@ void Player::Update(float _DeltaTime)
 
 	if (GameEngineInput::IsDown("StageClear"))
 	{
-		++Round;
-		std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
-		
-		Map::MainMap->StageClearOn();
-		MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
-		ChangeColImage(ChangeColName[Round]);
+		//++Round;
+		//std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
+		//
+		//Map::MainMap->StageClearOn();
+		//MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
+		//ChangeColImage(ChangeColName[Round]);
 
-		AssignLevels(PlayLevel::MapNames, Round);
+		//AssignLevels(PlayLevel::MapNames, Round);
+
+		PlayLevel::MainPlayLevel->SetBGMStop();
+		EndingBack::Ending->SetEndingScene(EndingScene::Clear);
+		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
+
+
 
 	if (GameEngineInput::IsDown("GoToCastle"))
 	{

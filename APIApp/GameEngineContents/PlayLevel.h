@@ -22,6 +22,10 @@ public:
 
 
 	void SetBGMPlayer(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.1f);
+	void SetBGMStop()
+	{
+		BGMPlayer.Stop();
+	}
 
 protected:
 	void Loading() override;
