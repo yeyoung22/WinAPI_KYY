@@ -8,6 +8,10 @@
 #include "ContentsEnums.h"
 #include "Player.h"
 
+
+
+
+
 Item::Item() 
 {
 }
@@ -89,7 +93,22 @@ void Item::Update(float _DeltaTime)
 		ItemRender->ChangeAnimation(FindIter->second);
 	}
 
+	if (ItemMode == ItemType::COIN)
+	{
+		if (nullptr != BodyCollision)
+		{
+			std::vector<GameEngineCollision*> Collision;
+			if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+			{
+				++Player::MainPlayer->NumOfCoin;
+				Player::MainPlayer->TotalScore += Point;
 
+				ItemRender->Death();
+				BodyCollision->Death();
+			}
+		}
+
+	}
 	
 
 

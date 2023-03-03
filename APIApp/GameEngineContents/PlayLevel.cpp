@@ -250,9 +250,11 @@ void PlayLevel::Loading()
 	//MainPlayer
 	{
 		Player* Actor = CreateActor<Player>();
-		Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
+		//Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
 
-		//Actor->SetPos({ 1000, GameEngineWindow::GetScreenSize().y - 128 });
+		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
+		Actor->SetPos({ 3612, GameEngineWindow::GetScreenSize().y - 128 } );
+		SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});
 	}
 	//Goomba1
 	{
@@ -285,23 +287,25 @@ void PlayLevel::Loading()
 	//Coin1
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 6500,1200});
-
+		Actor->SetPos({ 3424,1342});
+		Actor->SetColScale({ 32, 58 });
 		Actor->SetItemMode(ItemType::COIN);
-		Actor->SetItemRenderScale({ 64, 64 });
+		Actor->SetItemRenderScale({ 64, 128 });
 	}
 	//Coin2
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 7222, 1590 });
-
+		Actor->SetPos({ 3424, 1472 });
+		Actor->SetItemRenderScale({ 64, 128 });
+		Actor->SetColScale({ 32, 58 });
 		Actor->SetItemMode(ItemType::COIN);
 	}
 	//Coin3
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 7322, 1690 });
-
+		Actor->SetPos({ 3424, 1598 });
+		Actor->SetItemRenderScale({ 64, 128 });
+		Actor->SetColScale({ 32, 58 });
 		Actor->SetItemMode(ItemType::COIN);
 	}
 

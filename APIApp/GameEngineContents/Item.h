@@ -46,6 +46,8 @@ protected:
 
 	GameEngineSoundPlayer EffectPlayer;
 private:
+	int Point = 100;
+
 	float MoveSpeed = 120.0f;
 
 	float4 BasicScale = { 128, 128 };
