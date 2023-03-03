@@ -158,6 +158,7 @@ private:
 	bool IsGround = false;
 	bool CanMove = false;								//ColImg와 관계 없이 true이면 무조건 움직일 수 있게 하기 위함
 	bool IsShrink = false;
+	bool IsAlphaOn = false;
 
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);
@@ -171,7 +172,6 @@ private:
 
 	int StartFrame = 0;
 
-	bool IsAlphaOn = false;
 
 	float HurryUpTime = 100.0f;
 
@@ -201,8 +201,8 @@ private:
 	float WaitTime = 1.8f;
 
 	float4 UnderGroundCameraPos = { 3072.0f, 960.0f };			//Caemra Position at UnderGround
-	float4 UnderGroundStart = { 3202 , 1154 };					//Player Start Position at UnderGround
-	float4 UnderGroundEnd = { 10496.0f, 960.0f };
+	float4 UnderGroundStart = { 3202.0f , 1154.0f };					//Player Start Position at UnderGround
+	float4 UnderGroundEnd = { 10496.0f, 770.0f};
 
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };
@@ -219,7 +219,6 @@ private:
 
 	std::string DirString = "Right_";
 	PlayerState StateValue = PlayerState::IDLE;
-	PlayerState PrevState = PlayerState::IDLE;
 
 	float4 MoveDir = float4::Zero;								//옮겨갈 벡터
 	float4 OriginPos = { 160, 960 - 128 };
@@ -234,6 +233,8 @@ private:
 	GameEngineCollision* LeftBodyCollision = nullptr;
 	GameEngineCollision* BottomCollision = nullptr;
 	GameEngineCollision* SHeadCollision = nullptr;
+
+	GameEngineCollision* FlagCollision = nullptr;				//깃발
 
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 
@@ -287,10 +288,14 @@ private:
 	void EnterPipeUpdate(float _Time);
 	void EnterPipeEnd();
 	
-	
 	void EnterLPipeStart();
 	void EnterLPipeUpdate(float _Time);
 	void EnterLPipeEnd();
+
+	void ExitPipeStart();
+	void ExitPipeUpdate(float _Time);
+	void ExitPipeEnd();
+
 
 	//Garavitional Acceleration
 	void AccGravity(float _DeltaTime);
@@ -320,6 +325,11 @@ private:
 	void ActorMove(float _Time)
 	{
 		SetMove(MoveDir * _Time);							//움직임을 나타냄
+	}
+	
+	void SetIsAlphaSwitch()
+	{
+		IsAlphaOn = !IsAlphaOn;
 	}
 
 

@@ -146,7 +146,13 @@ void Player::Start()
 		SHeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight*2 });
 		SHeadCollision->SetDebugRenderType(CT_Rect);
 	}
-	
+	{
+		FlagCollision = CreateCollision(MarioCollisionOrder::Player);
+		FlagCollision->SetScale({ 20,1000 });
+		FlagCollision->SetPosition({ 3712, 400});
+		FlagCollision->SetDebugRenderType(CT_Rect);
+	}
+
 
 	PlayerCols.push_back(HeadCollision);
 	PlayerCols.push_back(SHeadCollision);

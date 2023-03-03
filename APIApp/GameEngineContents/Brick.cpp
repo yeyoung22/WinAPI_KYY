@@ -36,6 +36,8 @@ void Brick::Start()
 		BlockWallCollision->SetPosition({ GetPos().x, GetPos().y - 20 });
 		BlockWallCollision->SetDebugRenderType(CT_Rect);
 	}
+
+	BlockWallCollision->Off();
 }
 
 void Brick::Update(float _DeltaTime)
@@ -43,10 +45,3 @@ void Brick::Update(float _DeltaTime)
 
 }
 
-
-void Brick::SetEffectSound(const std::string_view& _String, int _loop, float _BasicVolume)
-{
-	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String);
-	EffectPlayer.LoopCount(_loop);
-	EffectPlayer.Volume(_BasicVolume);
-}

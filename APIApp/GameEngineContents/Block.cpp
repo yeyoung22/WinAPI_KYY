@@ -13,7 +13,9 @@ Block::~Block()
 }
 
 
-void Block::Update(float _DeltaTime)
+void Block::SetEffectSound(const std::string_view& _String, int _loop, float _BasicVolume)
 {
-
+	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String);
+	EffectPlayer.LoopCount(_loop);
+	EffectPlayer.Volume(_BasicVolume);
 }

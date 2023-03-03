@@ -17,10 +17,10 @@ public:
 	Block& operator=(Block&& _Other) noexcept = delete;
 
 protected:
-	void Update(float _DeltaTime) override;
+	void Update(float _DeltaTime) override {}
 
 	GameEngineSoundPlayer EffectPlayer;
-	virtual void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f) {}
+	virtual void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
 
 private:
 

@@ -40,6 +40,8 @@ public:
 
 	void SetColPos(float4 _Pos);
 
+	void CreateItem(float4 _Pos, float4 _Scale, float4 _ColScale, ItemType _Type);
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;

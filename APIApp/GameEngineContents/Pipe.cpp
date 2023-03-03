@@ -35,8 +35,8 @@ void Pipe::Start()
 	}
 	{
 		ExitCollision = CreateCollision(MarioCollisionOrder::Pipe);
-		ExitCollision->SetScale({ 20, 100 });;
-		ExitCollision->SetPosition({ GetPos().x - 66, GetPos().y - 65 });
+		ExitCollision->SetScale({ 20, 80 });;
+		ExitCollision->SetPosition({ GetPos().x - 66, GetPos().y - 70 });
 		ExitCollision->SetDebugRenderType(CT_Rect);
 	}
 
@@ -71,20 +71,7 @@ void Pipe::Update(float _DeltaTime)
 
 			Player::MainPlayer->ChangeState(PlayerState::ENTERPIPE);
 
-			
-			float PipeCenterX = GetPos().x;
-			float PlayerCurX = Player::MainPlayer->GetPos().x;
-
-
-			if (PipeCenterX < PlayerCurX)
-			{
-				Player::MainPlayer->SetMove(float4::Left * MoveSpeed * _DeltaTime);
-			}
-			else if (PipeCenterX > PlayerCurX)
-			{
-				Player::MainPlayer->SetMove(float4::Right * MoveSpeed * _DeltaTime);
-			}
-
+			MoveCenterOnPipe(_DeltaTime);
 
 
 		}
@@ -94,26 +81,29 @@ void Pipe::Update(float _DeltaTime)
 	{
 		if (true == GameEngineInput::IsPress("RightMove") && true == ExitCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
 		{
-			Player::MainPlayer->SetCanMoveOn();
-
-		//	Player::MainPlayer->ChangeState(PlayerState::ENTERLPIPE);
+			Player::MainPlayer->ChangeState(PlayerState::ENTERLPIPE);
 
 
-		/*	float PipeCenterX = GetPos().x;
-			float PlayerCurX = Player::MainPlayer->GetPos().x;
-
-
-			if (PipeCenterX < PlayerCurX)
-			{
-				Player::MainPlayer->SetMove(float4::Left * MoveSpeed * _DeltaTime);
-			}
-			else if (PipeCenterX > PlayerCurX)
-			{
-				Player::MainPlayer->SetMove(float4::Right * MoveSpeed * _DeltaTime);
-			}*/
+			
 
 
 
 		}
+	}
+}
+
+void Pipe::MoveCenterOnPipe(float _DeltaTime)
+{
+	float PipeCenterX = GetPos().x;
+	float PlayerCurX = Player::MainPlayer->GetPos().x;
+
+
+	if (PipeCenterX < PlayerCurX)
+	{
+		Player::MainPlayer->SetMove(float4::Left * MoveSpeed * _DeltaTime);
+	}
+	else if (PipeCenterX > PlayerCurX)
+	{
+		Player::MainPlayer->SetMove(float4::Right * MoveSpeed * _DeltaTime);
 	}
 }

@@ -45,6 +45,8 @@ public:
 		ExitCollision->Off();
 	}
 
+	void MoveCenterOnPipe(float _DeltaTime);
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;

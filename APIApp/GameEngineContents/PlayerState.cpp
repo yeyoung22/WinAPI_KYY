@@ -9,6 +9,7 @@
 #include "ContentsEnums.h"
 #include "PlayLevel.h"
 #include "Pipe.h"
+#include "QuestionBlock.h"
 
 
 std::string Player::GetStateName()
@@ -37,6 +38,8 @@ std::string Player::GetStateName()
 		return "PlayerState::ENTERPIPE";
 	case PlayerState::ENTERLPIPE:
 		return "PlayerState::ENTERLPIPE";
+	case PlayerState::EXITPIPE:
+		return "PlayerState::EXITPIPE";
 	default:
 		break;
 	}
@@ -87,6 +90,9 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::ENTERLPIPE:
 		EnterLPipeStart();
 		break;
+	case PlayerState::EXITPIPE:
+		ExitPipeStart();
+		break;
 	default:
 		break;
 	}
@@ -125,6 +131,9 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::ENTERLPIPE:
 		EnterLPipeEnd();
+		break;
+	case PlayerState::EXITPIPE:
+		ExitPipeEnd();
 		break;
 	default:
 		break;
@@ -169,6 +178,9 @@ void Player::UpdateState(float _Time)
 	case PlayerState::ENTERLPIPE:
 		EnterLPipeUpdate(_Time);
 		break;
+	case PlayerState::EXITPIPE:
+		ExitPipeUpdate(_Time);
+		break;
 	default:
 		break;
 	}
@@ -194,7 +206,7 @@ void Player::IdleUpdate(float _Time)
 {
 	if (true == IsShrink)
 	{
-		!IsAlphaOn;
+		SetIsAlphaSwitch();
 		ShrinkEffect(_Time);
 	}
 
@@ -236,7 +248,6 @@ void Player::IdleUpdate(float _Time)
 }
 void Player::IdleEnd() 
 {
-	PrevState = PlayerState::IDLE;
 }
 
 
@@ -260,7 +271,7 @@ void Player::MoveUpdate(float _Time)
 {
 	if (true == IsShrink)
 	{
-		!IsAlphaOn;
+		SetIsAlphaSwitch();
 		ShrinkEffect(_Time);
 	}
 
@@ -328,8 +339,8 @@ void Player::MoveUpdate(float _Time)
 	LimitSpeed(MoveDir);
 	AccGravity(_Time);
 	
-
-	if (true ==GameEngineInput::IsPress("LeftMove") && true == CheckWall(MoveDir * _Time, PivotLPos))
+	
+	if (true == GameEngineInput::IsPress("LeftMove") && true == CheckWall(MoveDir * _Time, PivotLPos))
 	{
 		MoveDir.x = 0.0f;
 
@@ -349,7 +360,7 @@ void Player::MoveUpdate(float _Time)
 			}
 			return;
 		}
-		
+
 	}
 	else if (true == GameEngineInput::IsPress("RightMove") && true == CheckWall(MoveDir * _Time, PivotRPos))
 	{
@@ -361,6 +372,10 @@ void Player::MoveUpdate(float _Time)
 			return;
 		}
 	}
+	
+	
+
+
 
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
@@ -371,7 +386,6 @@ void Player::MoveUpdate(float _Time)
 }
 void Player::MoveEnd() 
 {
-	PrevState = PlayerState::MOVE;
 }
 
 
@@ -416,7 +430,7 @@ void Player::BrakeUpdate(float _Time)
 {
 	if (true == IsShrink)
 	{
-		!IsAlphaOn;
+		SetIsAlphaSwitch();
 		ShrinkEffect(_Time);
 	}
 
@@ -491,7 +505,6 @@ void Player::BrakeUpdate(float _Time)
 }
 void Player::BrakeEnd()
 {
-	PrevState = PlayerState::BRAKE;
 }
 
 
@@ -521,7 +534,7 @@ void Player::JumpUpdate(float _Time)
 {
 	if (true == IsShrink)
 	{
-		!IsAlphaOn;
+		SetIsAlphaSwitch();
 		ShrinkEffect(_Time);
 	}
 
@@ -567,6 +580,19 @@ void Player::JumpUpdate(float _Time)
 		}
 	}
 
+
+	////왼쪽 벽(Block)
+	//if (true == )
+	//{
+	//	MoveDir.x = 0;
+	//	if (true == IsGround && 0 <= MoveDir.y)
+	//	{
+	//		ChangeState(PlayerState::IDLE);
+	//		return;
+	//	}
+	//}
+
+
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
@@ -597,7 +623,7 @@ void Player::CrouchUpdate(float _Time)
 {
 	if (true == IsShrink)
 	{
-		!IsAlphaOn;
+		SetIsAlphaSwitch();
 		ShrinkEffect(_Time);
 	}
 
@@ -625,13 +651,12 @@ void Player::CrouchUpdate(float _Time)
 }
 void Player::CrouchEnd()
 {
-	PrevState = PlayerState::CROUCH;
 }
 
 
 void Player::AttackStart()
 {
-
+	DirCheck("FireAttack");
 }
 void Player::AttackUpdate(float _Time)
 {
@@ -639,7 +664,6 @@ void Player::AttackUpdate(float _Time)
 }
 void Player::AttackEnd()
 {
-	PrevState = PlayerState::ATTACK;
 }
 
 void Player::GrowStart()
@@ -689,7 +713,6 @@ void Player::GrowUpdate(float _Time)
 }
 void Player::GrowEnd()
 {
-	PrevState = PlayerState::GROW;
 }
 
 //(떨어지면 Jump모션을 취하며 Y값은 계속 증가)
@@ -732,7 +755,6 @@ void Player::FallUpdate(float _Time)
 }
 void Player::FallEnd()
 {
-	PrevState = PlayerState::FALL;
 }
 
 
@@ -769,7 +791,6 @@ void Player::DeathUpdate(float _Time)
 }
 void Player::DeathEnd()
 {
-	PrevState = PlayerState::DEATH;
 }
 
 void Player::EnterPipeStart()
@@ -812,7 +833,6 @@ void Player::EnterPipeUpdate(float _Time)
 }
 void Player::EnterPipeEnd()
 {
-	PrevState = PlayerState::ENTERPIPE;
 }
 
 
@@ -833,6 +853,9 @@ void Player::EnterLPipeStart()
 	{
 		AnimationRender->ChangeAnimation("Right_Idle");
 	}
+
+
+
 }
 void Player::EnterLPipeUpdate(float _Time)
 {
@@ -843,18 +866,53 @@ void Player::EnterLPipeUpdate(float _Time)
 	if (0 >= WaitTime)
 	{
 		IsUnderGround = false;
-		SetCanMoveOff();
 		PlayLevel::MainPlayLevel->SetBGMPlayer("RunningAbout.mp3", MaxLoop);
 
 		MoveDir.x = 0.0f;
 		SetPos({ UnderGroundEnd });
-		GetLevel()->SetCameraPos({GetPos().x, 0.0f});
 
-		ChangeState(PlayerState::IDLE);
+
+		ChangeState(PlayerState::EXITPIPE);
 		return;
 	}
 }
 void Player::EnterLPipeEnd() 
 {
-	PrevState = PlayerState::ENTERLPIPE;
+}
+
+void Player::ExitPipeStart()
+{
+	PlayLevel::MainPlayLevel->SetBGMPlayer("pipe.wav", 1);
+	WaitTime = 0.9f;
+
+	if (ModeValue == PlayerMode::SUPERMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_GrowthIdle");
+	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_FireIdle");
+	}
+	else
+	{
+		AnimationRender->ChangeAnimation("Right_Idle");
+	}
+
+	SetPos({ UnderGroundEnd });
+	GetLevel()->SetCameraPos({ GetPos().x - 100, 0.0f });
+}
+void Player::ExitPipeUpdate(float _Time)
+{
+	WaitTime -= _Time;
+	SetMove(float4::Up * PipeEnterSpeed * _Time);
+
+
+	if (0 >= WaitTime)
+	{
+		ChangeState(PlayerState::IDLE);
+		return;
+	}
+}
+void Player::ExitPipeEnd()
+{
 }

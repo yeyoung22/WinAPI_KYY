@@ -4,6 +4,8 @@
 // 설명 :
 class QuestionBlock :public Block
 {
+public: 
+	//static QuestionBlock* QBlock;
 public:
 	// constrcuter destructer
 	QuestionBlock();
@@ -15,14 +17,25 @@ public:
 	QuestionBlock& operator=(const QuestionBlock& _Other) = delete;
 	QuestionBlock& operator=(QuestionBlock&& _Other) noexcept = delete;
 
+	bool CheckRightBlock();
+	bool CheckLeftBlock();
+	bool CheckBottBlock();
+	bool CheckHeadBlock();
+
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
 
-	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f) override;
 
 private:
 	bool TimerStart = false;
+
+	float BlockScale = 64.0f;
+	float BlockHalfScale = 32.0f;
+	float MicroCtrlVert = 5.0f;
+	float MicroCtrlHorz = 28.0f;
+
 
 	float BasicVolume = 0.3f;									//Set Volume
 	float WaitTime = 0.2f;
@@ -35,8 +48,14 @@ private:
 
 
 	GameEngineRender* BlockRender = nullptr;
-	GameEngineCollision* BlockCollision = nullptr;
-	GameEngineCollision* BlockWallCollision = nullptr;
+	GameEngineCollision* BlockCollision = nullptr;				//효과를 주면 없앨 충돌체
+
+
+	//벽면이 될 충돌채
+	GameEngineCollision* HeadBlockCollision = nullptr;			
+	GameEngineCollision* LeftBlockCollision = nullptr;
+	GameEngineCollision* RightBlockCollision = nullptr;
+	GameEngineCollision* BottomBlockCollision = nullptr;
 
 
 	void MoveUp();

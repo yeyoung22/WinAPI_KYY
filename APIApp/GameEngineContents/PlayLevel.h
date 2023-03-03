@@ -37,12 +37,16 @@ protected:
 	GameEngineSoundPlayer BGMPlayer;	//SoundPlayer를 받아서 사용(제어)
 
 private:
+	int MaxLoop = 20;
+	
 	float BGMVolume = 0.1f;
-
-
 	float HurryUpTime = 100;
 
-	int MaxLoop = 20;
+	float4 CoinRenScale = { 64.0f, 128.0f };
+	float4 CoinColScale = { 32.0f, 58.0f };
+
+
+
 
 	void SoundLoad();
 	void ImageLoad();

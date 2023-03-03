@@ -7,6 +7,7 @@
 #include <GameEngineCore/GameEngineLevel.h>
 #include "ContentsEnums.h"
 #include "Player.h"
+#include "PlayLevel.h"
 
 
 
@@ -147,4 +148,13 @@ void Item::SetColScale(float4 _Scale)
 void Item::SetColPos(float4 _Pos)
 {
 	BodyCollision->SetPosition(_Pos);
+}
+
+void Item::CreateItem(float4 _Pos, float4 _Scale, float4 _ColScale, ItemType _Type)
+{
+	Item* Actor = GetLevel()->CreateActor<Item>(MarioRenderOrder::Item);
+	Actor->SetPos(_Pos);
+	Actor->SetItemRenderScale(_Scale);
+	Actor->SetColScale(_ColScale);
+	Actor->SetItemMode(_Type);
 }

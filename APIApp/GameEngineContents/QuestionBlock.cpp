@@ -5,6 +5,9 @@
 #include "ContentsEnums.h"
 #include "Player.h"
 
+
+//QuestionBlock* QuestionBlock::QBlock = nullptr;
+
 QuestionBlock::QuestionBlock() 
 {
 }
@@ -31,13 +34,37 @@ void QuestionBlock::Start()
 		BlockCollision->SetPosition({ GetPos().x, GetPos().y - 5 });
 		BlockCollision->SetDebugRenderType(CT_Rect);
 	}
-
+	BlockCollision->Off();
+	
 	{
-		BlockWallCollision = CreateCollision(MarioCollisionOrder::Block);
-		BlockWallCollision->SetScale({ 64, 64 });
-		BlockWallCollision->SetPosition({ GetPos().x, GetPos().y - 20 });
-		BlockWallCollision->SetDebugRenderType(CT_Rect);
+		HeadBlockCollision = CreateCollision(MarioCollisionOrder::Block);
+		HeadBlockCollision->SetScale({ 64, 10 });
+		HeadBlockCollision->SetPosition({ GetPos().x, GetPos().y - BlockScale + MicroCtrlVert});
+		HeadBlockCollision->SetDebugRenderType(CT_Rect);
 	}
+	{
+		LeftBlockCollision = CreateCollision(MarioCollisionOrder::Block);
+		LeftBlockCollision->SetScale({ 10, 64 });
+		LeftBlockCollision->SetPosition({ GetPos().x - MicroCtrlHorz, GetPos().y - BlockHalfScale });
+		LeftBlockCollision->SetDebugRenderType(CT_Rect);
+	}
+	{
+		RightBlockCollision = CreateCollision(MarioCollisionOrder::Block);
+		RightBlockCollision->SetScale({ 10, 64 });
+		RightBlockCollision->SetPosition({ GetPos().x + MicroCtrlHorz, GetPos().y - BlockHalfScale });
+		RightBlockCollision->SetDebugRenderType(CT_Rect);
+	}
+	{
+		BottomBlockCollision = CreateCollision(MarioCollisionOrder::Block);
+		BottomBlockCollision->SetScale({ 64, 10 });
+		BottomBlockCollision->SetPosition({ GetPos().x, GetPos().y - MicroCtrlVert });
+		BottomBlockCollision->SetDebugRenderType(CT_Rect);
+	}
+
+	/*HeadBlockCollision->Off();
+	LeftBlockCollision->Off();
+	RightBlockCollision->Off();
+	BottomBlockCollision->Off();*/
 }
 
 void QuestionBlock::Update(float _DeltaTime)
@@ -65,17 +92,14 @@ void QuestionBlock::Update(float _DeltaTime)
 				MoveUp();
 
 				BlockCollision->Off();
-
 			}
-
-
 		}
 	}
 
 	if (true == TimerStart)
 	{
 		WaitTime -= _DeltaTime;
-		MoveDown(WaitTime);
+		MoveDown(_DeltaTime);
 
 		if (0.0f >= WaitTime)
 		{
@@ -119,14 +143,68 @@ void QuestionBlock::MoveDown(float _DeltaTime)
 	}
 }
 
-
-
-
-
-
-void QuestionBlock::SetEffectSound(const std::string_view& _String, int _loop, float _BasicVolume)
+bool  QuestionBlock::CheckRightBlock()
 {
-	EffectPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String);
-	EffectPlayer.LoopCount(_loop);
-	EffectPlayer.Volume(_BasicVolume);
+	std::vector<GameEngineCollision*> Collision;
+	if (nullptr != RightBlockCollision)
+	{
+		if (true == RightBlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect}, Collision))
+		{
+			/*for (size_t i = 0; i < Collision.size(); i++)
+			{
+				QuestionBlock* FindBlock = Collision[i]->GetOwner<QuestionBlock>();
+
+			}*/
+			return true;				//º®
+		}
+
+	}
+	return false;
 }
+
+bool  QuestionBlock::CheckLeftBlock()
+{
+	std::vector<GameEngineCollision*> Collision;
+	if (nullptr != LeftBlockCollision)
+	{
+		if (true == LeftBlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+
+			return true;
+		}
+
+	}
+	return false;
+}
+
+bool  QuestionBlock::CheckBottBlock()
+{
+	std::vector<GameEngineCollision*> Collision;
+	if (nullptr != BottomBlockCollision)
+	{
+		if (true == BottomBlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+
+			return true;
+		}
+
+	}
+	return false;
+}
+
+bool  QuestionBlock::CheckHeadBlock()
+{
+	std::vector<GameEngineCollision*> Collision;
+	if (nullptr != HeadBlockCollision)
+	{
+		if (true == HeadBlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+
+			return true;
+		}
+
+	}
+	return false;
+}
+
+
