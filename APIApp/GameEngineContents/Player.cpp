@@ -14,6 +14,8 @@
 #include "PlayLevel.h"
 #include "ContentsUI.h"
 #include "EndingBack.h"
+#include "QuestionBlock.h"
+#include "Brick.h"
 
 
 //screenSize = {1024, 960}
@@ -66,7 +68,6 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Jump", .ImageName = "Right_Mario.bmp", .Start = 5, .End = 5});
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Death", .ImageName = "Right_Mario.bmp", .Start = 6, .End = 6});
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Hang", .ImageName = "Right_Mario.bmp", .Start = 7, .End = 8 });
-		//AnimationRender->CreateAnimation({ .AnimationName = "Right_Bigger", .ImageName = "Right_Mario.bmp", .Start = 29, .End = 31 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Right_Bigger", .ImageName = "Right_Bigger.bmp", .Start = 0, .End = 6, .Loop = false });
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Idle",  .ImageName = "Left_Mario.bmp", .Start = 0, .End = 0});
@@ -75,7 +76,6 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Jump", .ImageName = "Left_Mario.bmp", .Start = 5, .End = 5 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Death", .ImageName = "Left_Mario.bmp", .Start = 6, .End = 6 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Hang", .ImageName = "Left_Mario.bmp", .Start = 7, .End = 8 });
-		//AnimationRender->CreateAnimation({ .AnimationName = "Left_Bigger", .ImageName = "Left_Mario.bmp", .Start = 29, .End = 31 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_Bigger", .ImageName = "Left_Bigger.bmp", .Start = 0, .End = 6 , .Loop = false});
 
 		//Growth Mario
@@ -111,11 +111,7 @@ void Player::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_FireJump", .ImageName = "Left_FireMario.bmp", .Start = 5, .End = 5 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_FireCrouch", .ImageName = "Left_FireMario.bmp", .Start = 6, .End = 6 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_FireHang", .ImageName = "Left_FireMario.bmp", .Start = 7, .End = 8 });
-		AnimationRender->CreateAnimation({ .AnimationName = "Left_FireAttack", .ImageName = "Left_FireMario.bmp", .Start = 20, .End = 20});
-
-
-		//Star Mario-----------------------------------------
-		
+		AnimationRender->CreateAnimation({ .AnimationName = "Left_FireAttack", .ImageName = "Left_FireMario.bmp", .Start = 20, .End = 20});		
 	}
 	{
 		HeadCollision = CreateCollision(MarioCollisionOrder::Player);
@@ -148,12 +144,12 @@ void Player::Start()
 		SHeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight*2 });
 		SHeadCollision->SetDebugRenderType(CT_Rect);
 	}
-	{
-		FlagCollision = CreateCollision(MarioCollisionOrder::Player);
-		FlagCollision->SetScale({ 20,1000 });
-		FlagCollision->SetPosition({ 3712, 400});
-		FlagCollision->SetDebugRenderType(CT_Rect);
-	}
+	//{
+	//	FlagCollision = CreateCollision(MarioCollisionOrder::Player);
+	//	FlagCollision->SetScale({ 20,1000 });
+	//	FlagCollision->SetPosition({ 3712, 400});
+	//	FlagCollision->SetDebugRenderType(CT_Rect);
+	//}
 
 
 	PlayerCols.push_back(HeadCollision);
@@ -377,6 +373,68 @@ void Player::Update(float _DeltaTime)
 	{
 		SetPos({ GetLevel()->GetCameraPos().x, GetPos().y });
 	}
+
+
+
+
+
+	if (nullptr != HeadCollision)
+	{
+		//플레이어의 머리와 QBlock 충돌 체크
+		std::vector<GameEngineCollision*> Collision;
+		if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::BlockItem), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+			|| true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::BlockItem), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+			for (size_t i = 0; i < Collision.size(); i++)
+			{
+				QuestionBlock* FindBlock = Collision[i]->GetOwner<QuestionBlock>();
+
+				//아이템을 가진 블록은 일단 부딪히면 움직이고 그 다음부터는 움직이지 않음
+
+				FindBlock->SetImgChange();
+				FindBlock->SetQBlockColOff();
+				FindBlock->IsMoveOn();
+
+
+			}
+		}
+		//플레이어의 머리와 Brick 충돌 체크
+		if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+			|| true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+			for (size_t i = 0; i < Collision.size(); i++)
+			{
+				Brick* FindBrick = Collision[i]->GetOwner<Brick>();
+
+				if (ModeValue == PlayerMode::MARIO)
+				{
+					//마리오이면 벽돌이 움직임
+					SetEffectSound("bump.wav");
+					FindBrick->IsMoveOn();
+					
+				}
+				else
+				{
+					//그 외는 벽돌이 부서짐
+					SetEffectSound("breakblock.wav");
+					FindBrick->SetChipOn();
+	
+					if (FindBrick->GetIsChipMoveEnd())
+					{
+						FindBrick->Death();
+
+					}
+				}
+
+
+			}
+		}
+
+
+	}
+
+
+
 
 	if (StateValue == PlayerState::DEATH)
 	{

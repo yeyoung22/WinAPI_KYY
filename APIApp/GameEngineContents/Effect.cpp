@@ -62,11 +62,15 @@ void Effect::Update(float _DeltaTime)
 		{
 			Death();
 		}
-	
 	}
-	
-	
-	
+
+	if (true == FireCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		|| true == FireCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+	{
+		Death();
+	}
+
+
 
 }
 

@@ -19,12 +19,17 @@ enum class MarioCollisionOrder
 	Player,
 	Monster,
 	Item,
-	Block,
+	Brick,
+	QBlock,
+	BlockItem,
 	Pipe,
 	PlayerAttack,				//Fire Attack of Mario
 	MonsterAttack,				//Fire Breath of Kupa
 	Door,
 	Flag,
+	DeadLine,
+	MoveStart,
+
 
 };
 

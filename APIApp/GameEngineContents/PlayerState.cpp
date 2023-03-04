@@ -232,23 +232,6 @@ void Player::IdleUpdate(float _Time)
 	{
 		ChangeState(PlayerState::ATTACK);
 		return;
-		//SetEffectSound("fireball.wav");
-		//DirCheck("FireAttack");												//캐릭터 모션
-
-		//float4 FirePos = GetPos();
-		//Effect* Actor = GetLevel()->CreateActor<Effect>(MarioRenderOrder::PlayerAttack);
-		//
-		//if (RightStr == DirString)
-		//{
-		//	Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
-		//}
-		//else
-		//{
-		//	Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
-		//}
-		//Actor->SetEffectDir(DirString);
-		//Actor->DirCheck("Fire");											//투사체 모션
-		
 	}
 
 	if (false == GameEngineInput::IsAnyKey())		//move하면서 jump를 연속으로 하다가 idle상태로 오면
@@ -318,23 +301,6 @@ void Player::MoveUpdate(float _Time)
 	{
 		ChangeState(PlayerState::ATTACK);
 		return;
-		//SetEffectSound("fireball.wav");
-		//DirCheck("FireAttack");												//캐릭터 모션
-
-		//float4 FirePos = GetPos();
-		//Effect* Actor = GetLevel()->CreateActor<Effect>(MarioRenderOrder::PlayerAttack);
-		//
-		//if (RightStr == DirString)
-		//{
-		//	Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
-		//}
-		//else
-		//{
-		//	Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
-		//}
-		//Actor->SetEffectDir(DirString);
-		//Actor->DirCheck("Fire");											//투사체 모션
-
 	}
 
 	//Brake State로 넘김------------------------------------
@@ -489,6 +455,12 @@ void Player::BrakeUpdate(float _Time)
 		return;
 	}
 
+	//if (ModeValue == PlayerMode::FIREMARIO && GameEngineInput::IsDown("Attack"))
+	//{
+	//	Friction(MoveDir, _Time);
+	//	ChangeState(PlayerState::ATTACK);
+	//	return;
+	//}
 
 	if (0 < MoveDir.x)
 	{
@@ -574,6 +546,8 @@ void Player::JumpStart()
 		DirCheck("Jump");
 		SetEffectSound("jump.wav");
 	}	
+	
+
 }
 void Player::JumpUpdate(float _Time)
 {
@@ -586,7 +560,9 @@ void Player::JumpUpdate(float _Time)
 	//좌우 방향키가 눌러져 있다면 점프를 해당 방향에 맞게 뜀
 	if (true == GameEngineInput::IsPress("LeftMove"))
 	{
-		if ((false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+		if ((false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+			&& (false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+			)
 		{
 			MoveDir += float4::Left * MoveSpeed * _Time;	
 		}
@@ -599,7 +575,9 @@ void Player::JumpUpdate(float _Time)
 	else if (true == GameEngineInput::IsPress("RightMove"))
 	{
 
-		if ((false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+		if ((false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+			&& (false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+			)
 		{
 			MoveDir += float4::Right * MoveSpeed * _Time;
 
@@ -613,14 +591,50 @@ void Player::JumpUpdate(float _Time)
 		
 	}
 
-	if ((true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-		||true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+	if ((true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		|| (true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+	{
+		MoveDir.y = 0.0f;
+		SetMove(float4::Down);
+	}
+	
+	if ((true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		|| (true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
 	{
 		MoveDir.y = 0.0f;
 		SetMove(float4::Down);
 	}
 
+	//Attack while Jumping
+	{
+		WaitTime -= _Time;
 
+		if (ModeValue == PlayerMode::FIREMARIO && true == GameEngineInput::IsDown("Attack"))
+		{
+			WaitTime = 0.2f;
+			SetEffectSound("fireball.wav");
+			DirCheck("FireAttack");												//캐릭터 모션
+			float4 FirePos = GetPos();
+			Effect* Actor = GetLevel()->CreateActor<Effect>(MarioRenderOrder::PlayerAttack);
+
+			if (RightStr == DirString)
+			{
+				Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
+			}
+			else
+			{
+				Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
+			}
+			Actor->SetEffectDir(DirString);
+			Actor->DirCheck("Fire");											//투사체 모션
+
+
+		}
+		if (0 >= WaitTime)
+		{
+			DirCheck("FireJump");
+		}
+	}
 
 
 	//땅에 닿으면 Idle
@@ -657,7 +671,9 @@ void Player::JumpUpdate(float _Time)
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
-	if ((false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+	if ((false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
 	{
 		AccGravity(_Time);
 
@@ -745,8 +761,9 @@ void Player::AttackStart()
 	{
 		Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
 	}
+
 	Actor->SetEffectDir(DirString);
-	Actor->DirCheck("Fire");											//투사체 모션
+	Actor->DirCheck("Fire");
 }
 void Player::AttackUpdate(float _Time)
 {
@@ -777,7 +794,6 @@ void Player::AttackUpdate(float _Time)
 			ChangeState(PlayerState::JUMP);
 			return;
 		}
-
 	}
 	
 

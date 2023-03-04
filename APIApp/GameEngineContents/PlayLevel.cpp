@@ -77,6 +77,9 @@ void PlayLevel::SoundLoad()
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("bump.wav"));
 	}
 	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("breakblock.wav"));
+	}
+	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("coin.wav"));
 	}
 	{
@@ -226,7 +229,7 @@ void PlayLevel::ImageLoad()
 		Image->Cut(1, 1);
 	}
 	{
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Smithereens.bmp"));
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Chip.bmp"));
 		Image->Cut(2, 1);
 
 		Dir.MoveParent();

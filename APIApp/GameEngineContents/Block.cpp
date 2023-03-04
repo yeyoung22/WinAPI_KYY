@@ -19,3 +19,5 @@ void Block::SetEffectSound(const std::string_view& _String, int _loop, float _Ba
 	EffectPlayer.LoopCount(_loop);
 	EffectPlayer.Volume(_BasicVolume);
 }
+
+

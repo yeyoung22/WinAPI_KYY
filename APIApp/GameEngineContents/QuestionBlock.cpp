@@ -28,119 +28,79 @@ void QuestionBlock::Start()
 	{
 		BlockRender->CreateAnimation({ .AnimationName = "UsedBlock",  .ImageName = "UsedBlock.bmp", .Start = 0, .End = 0 });
 	}
+	//For UpDown Movement Effect
 	{
-		BlockCollision = CreateCollision(MarioCollisionOrder::Block);
-		BlockCollision->SetScale({ 64, 10 });
-		BlockCollision->SetPosition({ GetPos().x, GetPos().y - 5 });
+		EffectCollision = CreateCollision(MarioCollisionOrder::BlockItem);
+		EffectCollision->SetScale({ 58, 10 });
+		EffectCollision->SetPosition({ GetPos().x, GetPos().y - MicroCtrlVert });
+		EffectCollision->SetDebugRenderType(CT_Rect);
+	}
+	//Role like Wall
+	{
+		BlockCollision = CreateCollision(MarioCollisionOrder::QBlock);
+		BlockCollision->SetScale({ 64, 64 });
+		BlockCollision->SetPosition({ GetPos().x, GetPos().y - BlockHalfScale });
 		BlockCollision->SetDebugRenderType(CT_Rect);
 	}
-	BlockCollision->Off();
-	
-	{
-		HeadBlockCollision = CreateCollision(MarioCollisionOrder::Block);
-		HeadBlockCollision->SetScale({ 64, 10 });
-		HeadBlockCollision->SetPosition({ GetPos().x, GetPos().y - BlockScale + MicroCtrlVert});
-		HeadBlockCollision->SetDebugRenderType(CT_Rect);
-	}
-	{
-		LeftBlockCollision = CreateCollision(MarioCollisionOrder::Block);
-		LeftBlockCollision->SetScale({ 10, 64 });
-		LeftBlockCollision->SetPosition({ GetPos().x - MicroCtrlHorz, GetPos().y - BlockHalfScale });
-		LeftBlockCollision->SetDebugRenderType(CT_Rect);
-	}
-	{
-		RightBlockCollision = CreateCollision(MarioCollisionOrder::Block);
-		RightBlockCollision->SetScale({ 10, 64 });
-		RightBlockCollision->SetPosition({ GetPos().x + MicroCtrlHorz, GetPos().y - BlockHalfScale });
-		RightBlockCollision->SetDebugRenderType(CT_Rect);
-	}
-	{
-		BottomBlockCollision = CreateCollision(MarioCollisionOrder::Block);
-		BottomBlockCollision->SetScale({ 64, 10 });
-		BottomBlockCollision->SetPosition({ GetPos().x, GetPos().y - MicroCtrlVert });
-		BottomBlockCollision->SetDebugRenderType(CT_Rect);
-	}
-
-	/*HeadBlockCollision->Off();
-	LeftBlockCollision->Off();
-	RightBlockCollision->Off();
-	BottomBlockCollision->Off();*/
 }
 
 void QuestionBlock::Update(float _DeltaTime)
 {
-	std::vector<GameEngineCollision*> PlayerCols = Player::MainPlayer->GetPlayerCollisions();
-
-
-	if (nullptr != BlockCollision)
+	if (true == IsMove && false == IsUpEnd)
 	{
-		//플레이어의 머리에 부딪히면 일단 블록이 위아래로 움직임
-		std::vector<GameEngineCollision*> Collision;
-		if (true == BlockCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
-			&&
-			true == PlayerCols[0]->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
-			)
-		{
-			TimerStart = true;
-
-			for (size_t i = 0; i < Collision.size(); i++)
-			{
-				Block* FindBlock = Collision[i]->GetOwner<Block>();
-
-				//SetEffectSound("coin.wav");
-				BlockRender->ChangeAnimation("UsedBlock");
-				MoveUp();
-
-				BlockCollision->Off();
-			}
-		}
+		MoveUp(_DeltaTime);
 	}
 
-	if (true == TimerStart)
+	if (true == IsMove && true == IsUpEnd)
 	{
-		WaitTime -= _DeltaTime;
 		MoveDown(_DeltaTime);
-
-		if (0.0f >= WaitTime)
-		{
-			TimerStart = false;
-			WaitTime = 0.3f;
-		}
 	}
 }
 
 
-void QuestionBlock::MoveUp()
+void QuestionBlock::MoveUp(float _DeltaTime)
 {
 	if (0 == StartPos.y)
 	{
 		StartPos = GetPos();
 	}
 
-	float MaxHeight = StartPos.y - BlockSizeHalf;
-
-	MoveDir.y -= BlockSizeHalf;
+	MoveDir += float4::Up * MoveSpeed * _DeltaTime;
 
 	SetMove(MoveDir);
 
-	if (GetPos().y <= MaxHeight)
+	float UpLimit = StartPos.y - UpPower;
+
+	if (UpLimit >= GetPos().y)
 	{
 		MoveDir = float4::Zero;
+		IsUpEnd = true;
+		return;
 	}
 }
 
 void QuestionBlock::MoveDown(float _DeltaTime)
 {
 	MoveDir += float4::Down * Gravity * _DeltaTime;
+	SetMove(MoveDir*_DeltaTime);
 
-	SetMove(MoveDir);
 
-	if (GetPos().y >= StartPos.y)
+	if (StartPos.y <= GetPos().y)
 	{
 		MoveDir = float4::Zero;
+		IsMove = false;
+		IsUpEnd = false;
 		StartPos = float4::Zero;
 		return;
 	}
 }
 
+void QuestionBlock::SetImgChange()
+{
+	BlockRender->ChangeAnimation("UsedBlock");
+}
 
+void QuestionBlock::SetQBlockColOff()
+{
+	EffectCollision->Off();
+}
