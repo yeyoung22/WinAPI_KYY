@@ -20,7 +20,7 @@ void Effect::Start()
 {
 	{
 		FireRender = CreateRender(MarioRenderOrder::PlayerAttack);
-		FireRender->SetScale({ 64, 64 });
+		FireRender->SetScale({ 128, 128 });
 
 		FireRender->CreateAnimation({ .AnimationName = "Right_Fire",  .ImageName = "Right_Fire.bmp", .Start = 0, .End = 3 });
 		FireRender->CreateAnimation({ .AnimationName = "Right_FireHit",  .ImageName = "Right_Fire.bmp", .Start = 4, .End = 6 });
@@ -30,8 +30,8 @@ void Effect::Start()
 	}
 	{
 		FireCollision = CreateCollision(MarioCollisionOrder::PlayerAttack);
-		FireCollision->SetScale({ 10, 10 });
-		FireCollision->SetPosition({ GetPos().x, GetPos().y -7});
+		FireCollision->SetScale({ 20, 20 });
+		FireCollision->SetPosition({ GetPos().x, GetPos().y -16});
 		FireCollision->SetDebugRenderType(CT_Rect);
 	}
 
@@ -42,47 +42,31 @@ void Effect::Start()
 
 void Effect::Update(float _DeltaTime)
 {
-	UpDir += float4::Down*500.0f*_DeltaTime;
-	SetMove(UpDir * _DeltaTime);
+	MoveDir += float4::Down* Gravity *_DeltaTime;
+	SetMove(MoveDir * _DeltaTime);
 
 	SetMove(Dir * MoveSpeed * _DeltaTime);
 	
 	if (true == LiftUp(float4::Zero))
 	{
-		UpDir = float4::Up * 300.0f;
+		MoveDir = float4::Up * JumpPower;
 	} 
 	
-	
-	
-	
 
-	/*AccGravity(_DeltaTime); 
-
-
-	IsGround = LiftUp();
-
-	if (true == IsGround)
+	if (true == CheckWall(PivotRPos))
 	{
-		MoveDir.y = JumpPower;
-	}
-
-	InitGravity(IsGround);
-
-
-	
-
-
-
-	if (true == CheckWall(MoveDir * _DeltaTime, PivotPos))
-	{
-		MoveDir.x = 0.0f;
+		Dir.x = 0.0f;
 		DirCheck("FireHit");
 
 		if (true == FireRender->GameEngineRender::IsAnimationEnd())
 		{
 			Death();
 		}
-	}*/
+	
+	}
+	
+	
+	
 
 }
 
@@ -110,18 +94,7 @@ void Effect::DirCheck(const std::string_view& _AnimationName)
 	}
 }
 
-void Effect::AccGravity(float _DeltaTime)
-{
-	MoveDir += float4::Down * Gravity * _DeltaTime;
-}
 
-void Effect::InitGravity(bool _IsGround)
-{
-	if (true == _IsGround)
-	{
-		MoveDir.y = 0.0f;
-	}
-}
 
 bool  Effect::LiftUp(float4 _Pos)
 {
@@ -152,9 +125,9 @@ bool  Effect::LiftUp(float4 _Pos)
 }
 
 
-bool Effect::CheckWall(float4 _Pos, float4 _Pivot)
+bool Effect::CheckWall(float4 _Pivot)
 {
-	float4 CheckPos = GetPos() + _Pos;
+	float4 CheckPos = GetPos();
 	CheckPos += _Pivot;
 
 

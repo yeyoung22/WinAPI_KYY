@@ -31,13 +31,30 @@ void Brick::Start()
 	}
 
 	{
-		BlockWallCollision = CreateCollision(MarioCollisionOrder::Block);
-		BlockWallCollision->SetScale({ 64, 64 });
-		BlockWallCollision->SetPosition({ GetPos().x, GetPos().y - 20 });
-		BlockWallCollision->SetDebugRenderType(CT_Rect);
+		HeadBlockCollision = CreateCollision(MarioCollisionOrder::Block);
+		HeadBlockCollision->SetScale({ 64, 10 });
+		HeadBlockCollision->SetPosition({ GetPos().x, GetPos().y - BlockScale + MicroCtrlVert });
+		HeadBlockCollision->SetDebugRenderType(CT_Rect);
+	}
+	{
+		LeftBlockCollision = CreateCollision(MarioCollisionOrder::Block);
+		LeftBlockCollision->SetScale({ 10, 64 });
+		LeftBlockCollision->SetPosition({ GetPos().x - MicroCtrlHorz, GetPos().y - BlockHalfScale });
+		LeftBlockCollision->SetDebugRenderType(CT_Rect);
+	}
+	{
+		RightBlockCollision = CreateCollision(MarioCollisionOrder::Block);
+		RightBlockCollision->SetScale({ 10, 64 });
+		RightBlockCollision->SetPosition({ GetPos().x + MicroCtrlHorz, GetPos().y - BlockHalfScale });
+		RightBlockCollision->SetDebugRenderType(CT_Rect);
+	}
+	{
+		BottomBlockCollision = CreateCollision(MarioCollisionOrder::Block);
+		BottomBlockCollision->SetScale({ 64, 10 });
+		BottomBlockCollision->SetPosition({ GetPos().x, GetPos().y - MicroCtrlVert });
+		BottomBlockCollision->SetDebugRenderType(CT_Rect);
 	}
 
-	BlockWallCollision->Off();
 }
 
 void Brick::Update(float _DeltaTime)

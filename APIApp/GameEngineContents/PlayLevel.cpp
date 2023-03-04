@@ -103,11 +103,6 @@ void PlayLevel::ImageLoad()
 	//이미지 로드
 	//Player
 	{
-		//test image(transparent)------------------------------------------------------------------------------
-		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Transparent.bmp"));
-		Image->Cut(1, 1);
-	}
-	{
 		Dir.Move("Player");
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_Mario.bmp"));
 		Image->Cut(4, 9);

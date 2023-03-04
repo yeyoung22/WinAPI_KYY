@@ -230,25 +230,25 @@ void Player::IdleUpdate(float _Time)
 
 	if (ModeValue == PlayerMode::FIREMARIO && GameEngineInput::IsDown("Attack"))
 	{
-		SetEffectSound("fireball.wav");
-		DirCheck("FireAttack");												//캐릭터 모션
+		ChangeState(PlayerState::ATTACK);
+		return;
+		//SetEffectSound("fireball.wav");
+		//DirCheck("FireAttack");												//캐릭터 모션
 
-		float4 FirePos = GetPos();
-		Effect* Actor = GetLevel()->CreateActor<Effect>(MarioRenderOrder::PlayerAttack);
+		//float4 FirePos = GetPos();
+		//Effect* Actor = GetLevel()->CreateActor<Effect>(MarioRenderOrder::PlayerAttack);
+		//
+		//if (RightStr == DirString)
+		//{
+		//	Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
+		//}
+		//else
+		//{
+		//	Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
+		//}
+		//Actor->SetEffectDir(DirString);
+		//Actor->DirCheck("Fire");											//투사체 모션
 		
-		if (RightStr == DirString)
-		{
-			Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
-		}
-		else
-		{
-			Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
-		}
-		Actor->SetEffectDir(DirString);
-		Actor->DirCheck("Fire");											//투사체 모션
-
-		
-
 	}
 
 	if (false == GameEngineInput::IsAnyKey())		//move하면서 jump를 연속으로 하다가 idle상태로 오면
@@ -312,6 +312,29 @@ void Player::MoveUpdate(float _Time)
 		Friction(MoveDir, _Time);
 		ChangeState(PlayerState::CROUCH);
 		return;
+	}
+
+	if (ModeValue == PlayerMode::FIREMARIO && GameEngineInput::IsDown("Attack"))
+	{
+		ChangeState(PlayerState::ATTACK);
+		return;
+		//SetEffectSound("fireball.wav");
+		//DirCheck("FireAttack");												//캐릭터 모션
+
+		//float4 FirePos = GetPos();
+		//Effect* Actor = GetLevel()->CreateActor<Effect>(MarioRenderOrder::PlayerAttack);
+		//
+		//if (RightStr == DirString)
+		//{
+		//	Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
+		//}
+		//else
+		//{
+		//	Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
+		//}
+		//Actor->SetEffectDir(DirString);
+		//Actor->DirCheck("Fire");											//투사체 모션
+
 	}
 
 	//Brake State로 넘김------------------------------------
@@ -590,6 +613,15 @@ void Player::JumpUpdate(float _Time)
 		
 	}
 
+	if ((true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		||true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+	{
+		MoveDir.y = 0.0f;
+		SetMove(float4::Down);
+	}
+
+
+
 
 	//땅에 닿으면 Idle
 	if (true == IsGround && 0 <= MoveDir.y)
@@ -622,24 +654,25 @@ void Player::JumpUpdate(float _Time)
 		}
 	}
 
-
-	////왼쪽 벽(Block)
-	//if (true == )
-	//{
-	//	MoveDir.x = 0;
-	//	if (true == IsGround && 0 <= MoveDir.y)
-	//	{
-	//		ChangeState(PlayerState::IDLE);
-	//		return;
-	//	}
-	//}
-
-
 	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
+	if ((false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Block), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+	{
+		AccGravity(_Time);
+
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+
+		ChangeState(PlayerState::IDLE);
+		return;
+	}
 	
-	AccGravity(_Time);
 	IsGround = LiftUp();
 
 	InitGravity(IsGround);
@@ -698,43 +731,55 @@ void Player::CrouchEnd()
 
 void Player::AttackStart()
 {
-	DirCheck("FireAttack");
+	WaitTime = 0.2f;
+	SetEffectSound("fireball.wav");
+	DirCheck("FireAttack");												//캐릭터 모션
+	float4 FirePos = GetPos();
+	Effect* Actor = GetLevel()->CreateActor<Effect>(MarioRenderOrder::PlayerAttack);
+
+	if (RightStr == DirString)
+	{
+		Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
+	}
+	else
+	{
+		Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
+	}
+	Actor->SetEffectDir(DirString);
+	Actor->DirCheck("Fire");											//투사체 모션
 }
 void Player::AttackUpdate(float _Time)
 {
-	SetEffectSound("fireball.wav");
-	DirCheck("FireAttack");												//캐릭터 모션
+	WaitTime -= _Time;
 
-	float4 FirePos = GetPos();
-	Effect* Actor = GetLevel()->CreateActor<Effect>(MarioRenderOrder::PlayerAttack);
-	Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
-	Actor->DirCheck("Fire");											//투사체 모션
+	if (0 >= WaitTime)
+	{
+		if (true != GameEngineInput::IsAnyKey())
+		{
+			ChangeState(PlayerState::IDLE);
+			return;
+		}
+
+		if (true == GameEngineInput::IsPress("RightMove") || true == GameEngineInput::IsPress("LeftMove"))
+		{
+			ChangeState(PlayerState::MOVE);
+			return;
+		}
+
+		if (true == GameEngineInput::IsPress("Crouch"))
+		{
+			ChangeState(PlayerState::CROUCH);
+			return;
+		}
+
+		if (true == GameEngineInput::IsPress("Jump"))
+		{
+			ChangeState(PlayerState::JUMP);
+			return;
+		}
+
+	}
 	
-
-	if (true != GameEngineInput::IsAnyKey())
-	{
-		ChangeState(PlayerState::IDLE);
-		return;
-	}
-
-	if (true == GameEngineInput::IsPress("RightMove") || true == GameEngineInput::IsPress("LeftMove"))
-	{
-		ChangeState(PlayerState::MOVE);
-		return;
-	}
-
-	if (true == GameEngineInput::IsPress("Crouch"))
-	{
-		ChangeState(PlayerState::CROUCH);
-		return;
-	}
-
-	if (true == GameEngineInput::IsPress("Jump"))
-	{
-		ChangeState(PlayerState::JUMP);
-		return;
-	}
-
 
 
 }
