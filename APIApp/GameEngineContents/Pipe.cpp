@@ -67,8 +67,6 @@ void Pipe::Update(float _DeltaTime)
 	{
 		if (true == GameEngineInput::IsPress("DownMove") && true == GateCollision->Collision({.TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect}))
 		{
-			Player::MainPlayer->SetCanMoveOn();
-
 			Player::MainPlayer->ChangeState(PlayerState::ENTERPIPE);
 
 			MoveCenterOnPipe(_DeltaTime);

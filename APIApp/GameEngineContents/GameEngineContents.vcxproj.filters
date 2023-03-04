@@ -30,12 +30,6 @@
     <ClInclude Include="EndingBack.h">
       <Filter>Ending</Filter>
     </ClInclude>
-    <ClInclude Include="STLevel.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="ContentsValue.h">
-      <Filter>Global</Filter>
-    </ClInclude>
     <ClInclude Include="ContentsUI.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -75,6 +69,13 @@
     <ClInclude Include="Effect.h">
       <Filter>Play\Player</Filter>
     </ClInclude>
+    <ClInclude Include="PlayCollision.h" />
+    <ClInclude Include="STLevel.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsValue.h">
+      <Filter>Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SuperMarioCore.cpp" />
@@ -101,12 +102,6 @@
     </ClCompile>
     <ClCompile Include="EndingBack.cpp">
       <Filter>Ending</Filter>
-    </ClCompile>
-    <ClCompile Include="STLevel.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="ContentsValue.cpp">
-      <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="ContentsUI.cpp">
       <Filter>UI</Filter>
@@ -152,6 +147,13 @@
     </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Play\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayCollision.cpp" />
+    <ClCompile Include="STLevel.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsValue.cpp">
+      <Filter>Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

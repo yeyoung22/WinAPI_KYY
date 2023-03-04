@@ -11,7 +11,6 @@
 #include "Item.h"
 #include "ContentsUI.h"
 #include "ContentsEnums.h"
-#include "ContentsValue.h"
 #include "QuestionBlock.h"
 #include "Pipe.h"
 #include "EndingBack.h"
@@ -254,11 +253,11 @@ void PlayLevel::Loading()
 	//MainPlayer
 	{
 		Player* Actor = CreateActor<Player>();
-		//Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
+		Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
 
 		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
-		Actor->SetPos({ 800, GameEngineWindow::GetScreenSize().y - 128 } );
-		SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});
+		/*Actor->SetPos({ 800, GameEngineWindow::GetScreenSize().y - 128 } );
+		SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});*/
 	}
 	//Goomba1
 	{
@@ -267,7 +266,7 @@ void PlayLevel::Loading()
 		Actor->SetPos({1400, StartPos.y - 128});
 
 		//일단 굼바 끔=-------------------------------------------------------------------------------------------
-		Actor->Off();
+		//Actor->Off();
 	}
 	//1_1_GrowMushroom
 	{
@@ -711,6 +710,7 @@ void PlayLevel::Loading()
 		GameEngineInput::CreateKey("FreeMoveSwitch", '1');
 		GameEngineInput::CreateKey("StageClear", '2');
 		GameEngineInput::CreateKey("GoToCastle", '3');
+		GameEngineInput::CreateKey("InvincibleMode", '7');
 		GameEngineInput::CreateKey("DebuggingMode", '8');		//For Debug
 	}
 
@@ -736,10 +736,10 @@ void PlayLevel::Update(float _DeltaTime)
 		DebugRenderSwitch();
 	}
 
-	if (GameEngineInput::IsDown("StageClear"))
-	{
-		//처음부터 다시 재생
-	}
+	//if (GameEngineInput::IsDown("StageClear"))
+	//{
+	//	//처음부터 다시 재생
+	//}
 
 	
 

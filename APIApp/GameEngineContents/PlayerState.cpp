@@ -239,17 +239,27 @@ void Player::IdleUpdate(float _Time)
 		Friction(MoveDir, _Time);					//x값이 남아 계속 움직이는 문제 해결
 	}
 
-	
-	AccGravity(_Time);
-	ActorMove(_Time);
 
 
-	if (false == CanMove)
+	if ((false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
 	{
-		IsGround = LiftUp();
-		InitGravity(IsGround);
+		AccGravity(_Time);
+
 	}
-	
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+		//ChangeState(PlayerState::IDLE);
+		//return;
+	}
+
+	IsGround = LiftUp();
+	InitGravity(IsGround);
 }
 void Player::IdleEnd() 
 {
@@ -340,17 +350,9 @@ void Player::MoveUpdate(float _Time)
 		MoveDir += float4::Right * MoveSpeed * _Time;
 	}
 	
-	if (true == CheckAir(MoveDir * _Time))
-	{
-		ChangeState(PlayerState::FALL);
-		return;
-	}
 
 
-	LimitSpeed(MoveDir);
-	AccGravity(_Time);
-	
-	
+
 	if (true == GameEngineInput::IsPress("LeftMove") && true == CheckWall(MoveDir * _Time, PivotLPos))
 	{
 		MoveDir.x = 0.0f;
@@ -383,12 +385,40 @@ void Player::MoveUpdate(float _Time)
 			return;
 		}
 	}
+
+
+
+	LimitSpeed(MoveDir);
+	//AccGravity(_Time);
 	
+	//Stand on blocks
+	if ((false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		if (true == CheckAir(MoveDir * _Time))
+		{
+			ChangeState(PlayerState::FALL);
+			return;
+		}
+
+		AccGravity(_Time);
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		//MoveDir.y = pos.y;
+		SetPos({ GetPos().x, pos.y });
+	}
+
+	
+
 	
 
 
 
-	SetMove(MoveDir * _Time);
+	SetMove(MoveDir* _Time);
 	Camera(MoveDir * _Time);
 
 	IsGround = LiftUp();
@@ -446,21 +476,13 @@ void Player::BrakeUpdate(float _Time)
 	}
 
 	LimitSpeed(MoveDir);
-	AccGravity(_Time);
-
+	
 	if (ModeValue != PlayerMode::MARIO && true == GameEngineInput::IsDown("Crouch"))
 	{
 		Friction(MoveDir, _Time);
 		ChangeState(PlayerState::CROUCH);
 		return;
 	}
-
-	//if (ModeValue == PlayerMode::FIREMARIO && GameEngineInput::IsDown("Attack"))
-	//{
-	//	Friction(MoveDir, _Time);
-	//	ChangeState(PlayerState::ATTACK);
-	//	return;
-	//}
 
 	if (0 < MoveDir.x)
 	{
@@ -485,11 +507,6 @@ void Player::BrakeUpdate(float _Time)
 	}
 
 
-	SetMove(MoveDir * _Time);
-	Camera(MoveDir * _Time);
-
-	IsGround = LiftUp();
-	InitGravity(IsGround);
 	
 	if (LeftSpeed >= abs(MoveDir.x))						//남은 속도가 5.0f이하이면 상태를 바꿈
 	{
@@ -510,12 +527,29 @@ void Player::BrakeUpdate(float _Time)
 		}
 	}
 
-	if (true == CheckAir(MoveDir * _Time))
+	//Stand on blocks
+	if ((false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
 	{
-		ChangeState(PlayerState::FALL);
-		return;
+		if (true == CheckAir(MoveDir * _Time))
+		{
+			ChangeState(PlayerState::FALL);
+			return;
+		}
+
+		AccGravity(_Time);
 	}
-	
+	else
+	{
+		float4 pos = GetPos();
+
+		//MoveDir.y = pos.y;
+		SetPos({ GetPos().x, pos.y });
+	}
+
+	SetMove(MoveDir * _Time);
+	Camera(MoveDir * _Time);
 
 	IsGround = LiftUp();
 	InitGravity(IsGround);
@@ -540,7 +574,7 @@ void Player::JumpStart()
 		DirCheck("FireJump");
 		SetEffectSound("jump_superMario.wav");
 	}
-	else
+	else if(ModeValue == PlayerMode::MARIO)
 	{
 		MoveDir.y = JumpPower;											//점프를 하는 순간 큰 힘으로 빠르게 위로 올라가야 함
 		DirCheck("Jump");
@@ -630,7 +664,7 @@ void Player::JumpUpdate(float _Time)
 
 
 		}
-		if (0 >= WaitTime)
+		if (ModeValue == PlayerMode::FIREMARIO && 0 >= WaitTime)
 		{
 			DirCheck("FireJump");
 		}
@@ -795,8 +829,6 @@ void Player::AttackUpdate(float _Time)
 			return;
 		}
 	}
-	
-
 
 }
 void Player::AttackEnd()
@@ -906,22 +938,20 @@ void Player::DeathStart()
 }	
 void Player::DeathUpdate(float _Time)
 {
-	float DeadLine = GameEngineWindow::GetScreenSize().y;
-	float4 PlayerPos = GetPos();
+	SetMove(MoveDir * _Time);
 
 	MoveDir.x = 0.0f;
 
-	SetCanMoveOn();
 	AccGravity(_Time);
+	SetMove(MoveDir * _Time);
 	
 	WaitTime -= _Time;
-	SetMove(MoveDir * _Time);
 
 
 	if (0 >= WaitTime)
 	{
 		MainPlayer->Death();
-		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+		//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
 
 
@@ -957,7 +987,6 @@ void Player::EnterPipeUpdate(float _Time)
 	if (0 >= WaitTime)
 	{
 		IsUnderGround = true;
-		SetCanMoveOff();
 		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground.mp3", MaxLoop);
 
 		MoveDir.x = 0.0f;

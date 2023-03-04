@@ -22,7 +22,7 @@
 bool  Player::IsDebugMode = false;
 Player* Player::MainPlayer;
 //PlayerMode Player::ModeValue = PlayerMode::MARIO;
-PlayerMode Player::ModeValue = PlayerMode::FIREMARIO;
+PlayerMode Player::ModeValue = PlayerMode::MARIO;
 float Player::PlayTimer = 400.0f;
 int Player::TotalScore = 0;
 int Player::NumOfCoin = 0;
@@ -115,7 +115,7 @@ void Player::Start()
 	}
 	{
 		HeadCollision = CreateCollision(MarioCollisionOrder::Player);
-		HeadCollision->SetScale({ 45, 10 });
+		HeadCollision->SetScale({ 38, 10 });
 		HeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight });
 		HeadCollision->SetDebugRenderType(CT_Rect);
 		
@@ -123,24 +123,24 @@ void Player::Start()
 	{
 		RightBodyCollision = CreateCollision(MarioCollisionOrder::Player);
 		RightBodyCollision->SetScale({ 10, 60 });
-		RightBodyCollision->SetPosition({ GetPos().x + 32, GetPos().y - 32});
+		RightBodyCollision->SetPosition({ GetPos().x + 24, GetPos().y - 32});
 		RightBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		LeftBodyCollision = CreateCollision(MarioCollisionOrder::Player);
 		LeftBodyCollision->SetScale({ 10, 60 });
-		LeftBodyCollision->SetPosition({ GetPos().x - 32, GetPos().y - 32 });
+		LeftBodyCollision->SetPosition({ GetPos().x - 24, GetPos().y - 32 });
 		LeftBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		BottomCollision = CreateCollision(MarioCollisionOrder::Player);
-		BottomCollision->SetScale({ 50, 10 });
+		BottomCollision->SetScale({ 44, 10 });
 		BottomCollision->SetPosition({ GetPos().x, GetPos().y - 5});
 		BottomCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		SHeadCollision = CreateCollision(MarioCollisionOrder::Player);
-		SHeadCollision->SetScale({ 45, 10 });
+		SHeadCollision->SetScale({ 38, 10 });
 		SHeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight*2 });
 		SHeadCollision->SetDebugRenderType(CT_Rect);
 	}
@@ -352,6 +352,7 @@ void Player::Update(float _DeltaTime)
 {
 	PlayTimer -= _DeltaTime* TimeSpeed;
 
+	//플레이어 모드에 따라 머리 부분 충돌체를 교체
 	if (ModeValue == PlayerMode::MARIO)
 	{
 		HeadCollision->On();
@@ -362,20 +363,11 @@ void Player::Update(float _DeltaTime)
 		HeadCollision->Off();
 		SHeadCollision->On();
 	}
-	
-	if ( true == IsChanged && ModeValue != PlayerMode::MARIO)
-	{
-		HeadCollision->SetPosition({ GetPos().x, GetPos().y - ColHeight });
-		IsChanged = false;
-	}
 
 	if (GetPos().x <= GetLevel()->GetCameraPos().x)							//Mario Can't be to the left of the camera position
 	{
 		SetPos({ GetLevel()->GetCameraPos().x, GetPos().y });
 	}
-
-
-
 
 
 	if (nullptr != HeadCollision)
@@ -439,8 +431,8 @@ void Player::Update(float _DeltaTime)
 	if (StateValue == PlayerState::DEATH)
 	{
 		PlayLevel::MainPlayLevel->SetBGMStop();
-		EndingBack::Ending->SetEndingScene(EndingScene::GameOver);
-		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+		//EndingBack::Ending->SetEndingScene(EndingScene::GameOver);
+		//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
 
 
@@ -501,6 +493,12 @@ void Player::Update(float _DeltaTime)
 
 	}
 
+	
+	if (GameEngineInput::IsDown("InvincibleMode"))
+	{
+		RightBodyCollision->Off();
+		LeftBodyCollision->Off();
+	}
 	
 	if (true == IsUnderGround && HurryUpTime > PlayTimer)
 	{

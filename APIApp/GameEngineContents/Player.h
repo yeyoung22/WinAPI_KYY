@@ -107,22 +107,6 @@ public:
 
 	void ChangeState(PlayerState _State);
 
-
-	void SetCanMoveOn()
-	{
-		CanMove = true;
-	}
-
-	void SetCanMoveOff()
-	{
-		CanMove = false;
-	}
-
-	bool GetCanMove()
-	{
-		return CanMove;
-	}
-
 	void SetIsShrinkOn()
 	{
 		IsShrink = true;
@@ -158,7 +142,6 @@ private:
 	bool IsChanged = false;
 	bool IsLeftBrake = false;
 	bool IsGround = false;
-	bool CanMove = false;								//ColImg와 관계 없이 true이면 무조건 움직일 수 있게 하기 위함
 	bool IsShrink = false;
 	bool IsAlphaOn = false;
 
