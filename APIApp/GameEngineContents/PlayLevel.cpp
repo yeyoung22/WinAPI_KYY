@@ -518,6 +518,12 @@ void PlayLevel::Loading()
 		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 10913, 640 });
 	}
+	//1_1_HiddenQBlock
+	{
+		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
+		Actor->SetPos({ 4128, 576 });
+		Actor->SetQBlockRenOff();
+	}
 
 	//1_1_Brick1
 	{

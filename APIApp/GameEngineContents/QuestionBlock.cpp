@@ -48,6 +48,7 @@ void QuestionBlock::Update(float _DeltaTime)
 {
 	if (true == IsMove && false == IsUpEnd)
 	{
+		BlockRender->On();
 		MoveUp(_DeltaTime);
 	}
 
@@ -103,4 +104,9 @@ void QuestionBlock::SetImgChange()
 void QuestionBlock::SetQBlockColOff()
 {
 	EffectCollision->Off();
+}
+
+void QuestionBlock::SetQBlockRenOff()
+{
+	BlockRender->Off();
 }

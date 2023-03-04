@@ -20,6 +20,7 @@ public:
 
 	void SetImgChange(); 
 	void SetQBlockColOff();
+	void SetQBlockRenOff();
 	void IsMoveOn()
 	{
 		IsMove = true;
