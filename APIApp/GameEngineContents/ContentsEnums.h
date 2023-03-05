@@ -29,7 +29,7 @@ enum class MarioCollisionOrder
 	Door,
 	Flag,
 	DeadLine,
-	MoveStart,
+	MonsterTrigger,
 
 
 };

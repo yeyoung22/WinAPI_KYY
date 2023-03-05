@@ -133,8 +133,7 @@ void Item::Update(float _DeltaTime)
 				Player::MainPlayer->TotalScore += TPoint;
 			}
 
-			ItemRender->Death();
-			BodyCollision->Death();
+			Death();
 		}
 	}
 
@@ -166,7 +165,6 @@ void Item::Update(float _DeltaTime)
 			//블럭을 타고 우측으로 이동
 			if (true == IsUpEnd)
 			{
-
 				//블럭과 충돌하지 않으면 중력의 영향으로 하강
 				if (false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
 					&& false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
@@ -177,23 +175,27 @@ void Item::Update(float _DeltaTime)
 					SetMove(MoveDir * _DeltaTime);
 				}
 
-				//좌측벽과 조우
-				if (true == CheckWall(PivotLPos))
-				{
 
-					Dir = -Dir;
-					return;
-				}
 				//우측벽과 조우
 				if (true == CheckWall(PivotRPos))
 				{
-					Dir = -Dir;
-					return;
+					Dir = float4::Left;
 				}
+				else
+				{
+					Dir = float4::Right;
+				}
+
 				if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
 				{
-					Dir = -Dir;
-					MoveDir.x = 0.0f;
+					if (0 > Dir.x)
+					{
+						Dir = float4::Right;
+					}
+					else
+					{
+						Dir = float4::Left;
+					}
 				}
 
 				SetMove(Dir * MoveSpeed * _DeltaTime);
@@ -201,14 +203,67 @@ void Item::Update(float _DeltaTime)
 				//땅 위로 올림
 				LiftUp();
 			}
-
-
-
-
 			break;
 		}
 		case ItemType::LIFEMUSHROOM:
+		{
+			//서서히 위로 올라감
+			if (false == IsUpEnd)
+			{
+				MoveDir += float4::Up * UpSpeed * _DeltaTime;
+				SetMove(float4::Up * UpSpeed* _DeltaTime);
+
+				if (MoveDir.y <= UpLimit)
+				{
+					MoveDir = float4::Zero;
+					IsUpEnd = true;
+					SetBodyColOn();
+					return;
+				}
+			}
+			//블럭을 타고 우측으로 이동
+			if (true == IsUpEnd)
+			{
+				//블럭과 충돌하지 않으면 중력의 영향으로 하강
+				if (false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+					&& false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+				{
+					MoveDir.x = 0.0f;
+					Gravity = 7000.0f;
+					AccGravity(_DeltaTime);
+					SetMove(MoveDir * _DeltaTime);
+				}
+
+
+				//우측벽과 조우
+				if (true == CheckWall(PivotRPos))
+				{
+					Dir = float4::Left;
+				}
+				else if(true == CheckWall(PivotLPos))
+				{
+					Dir = float4::Right;
+				}
+
+				if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+				{
+					if (0 > Dir.x)
+					{
+						Dir = float4::Right;
+					}
+					else
+					{
+						Dir = float4::Left;
+					}
+				}
+
+				SetMove(Dir * MoveSpeed * _DeltaTime);
+
+				//땅 위로 올림
+				LiftUp();
+			}
 			break;
+		}
 		case ItemType::FIREFLOWER:
 		{
 			if (false == IsUpEnd)
@@ -245,8 +300,7 @@ void Item::Update(float _DeltaTime)
 			{
 				IsUpEnd = false;
 
-				ItemRender->Death();
-				BodyCollision->Death();
+				Death();
 			}
 
 			break;

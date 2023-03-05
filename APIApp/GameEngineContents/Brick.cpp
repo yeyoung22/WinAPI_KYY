@@ -4,6 +4,7 @@
 #include <GameEngineCore/GameEngineLevel.h>
 #include "ContentsEnums.h"
 #include "Player.h"
+#include "Item.h"
 
 Brick::Brick() 
 {
@@ -22,6 +23,9 @@ void Brick::Start()
 
 		BlockRender->CreateAnimation({ .AnimationName = "Brick",  .ImageName = "Brick.bmp", .Start = 0, .End = 0 });
 		BlockRender->ChangeAnimation("Brick");
+	}
+	{
+		BlockRender->CreateAnimation({ .AnimationName = "UsedBlock",  .ImageName = "UsedBlock.bmp", .Start = 0, .End = 0 });
 	}
 	//LeftUp
 	{
@@ -83,6 +87,37 @@ void Brick::Update(float _DeltaTime)
 		MoveDown(_DeltaTime);
 	}
 
+
+	if (true == SpcBrick)
+	{
+		if (true == StartSpcTimer)
+		{
+			SpcTimer -= _DeltaTime;
+			--Count;
+		}
+
+
+		if (false == IsLast)
+		{
+			//1_1_Item15(SpcBrick)
+			Item* Actor = GetLevel()->CreateActor<Item>(MarioRenderOrder::Item);
+			Actor->SetPos({ 6047, 640 });
+			Actor->SetItemRenderOff();
+		}
+
+
+		if (0 >= SpcTimer || 0 == Count)
+		{
+			IsLast = true;
+		}
+
+		if (true == IsLast)
+		{
+			SpcBrick = false;
+			BlockRender->ChangeAnimation("UsedBlock");
+		}
+
+	}
 
 	if (true == IsChipMove)
 	{

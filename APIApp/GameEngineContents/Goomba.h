@@ -18,6 +18,8 @@ public:
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
+	void Render(float _DeltaTime) override;
+
 
 	virtual void AccGravity(float _DeltaTime);
 	virtual void InitGravity(bool _IsGround);
@@ -27,6 +29,7 @@ protected:
 
 private:
 	bool TimerStart = false;
+	bool MoveStart = false;
 
 	Monster* DeathMon = nullptr;
 
@@ -56,12 +59,17 @@ private:
 	float4 PivotRPos2 = { ImgHalfWidth - 8, -17 };
 	float4 PivotLPos2 = { -ImgHalfWidth + 8, -17 };
 
+	float4 TriggerScale = { 10, 700 };
+	float4 TiriggerCtrlPos = { -500, -350 };
+
 
 
 
 	GameEngineCollision* HeadCollision = nullptr;
 	GameEngineCollision* RightBodyCollision = nullptr;
 	GameEngineCollision* LeftBodyCollision = nullptr;
+
+	GameEngineCollision* TriggerCollision = nullptr;
 
 
 	GameEngineRender* AnimationRender = nullptr;

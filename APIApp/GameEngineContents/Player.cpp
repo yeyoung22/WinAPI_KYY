@@ -20,8 +20,8 @@
 
 //screenSize = {1024, 960}
 bool  Player::IsDebugMode = false;
+bool Player::InvincibleMode = false;
 Player* Player::MainPlayer;
-//PlayerMode Player::ModeValue = PlayerMode::MARIO;
 PlayerMode Player::ModeValue = PlayerMode::MARIO;
 float Player::PlayTimer = 400.0f;
 int Player::TotalScore = 0;
@@ -357,11 +357,32 @@ void Player::Update(float _DeltaTime)
 	{
 		HeadCollision->On();
 		SHeadCollision->Off();
+
+		RightBodyCollision->SetScale({ 10, 60 });
+		LeftBodyCollision->SetScale({ 10, 60 });
+
+		if (true == ColLongger)
+		{
+			RightBodyCollision->SetMove({ 0, +32 });
+			LeftBodyCollision->SetMove({ 0, +32 });
+			ColLongger = false;
+		}
 	}
 	else
 	{
 		HeadCollision->Off();
 		SHeadCollision->On();
+
+		RightBodyCollision->SetScale({ 10, 120 });
+		LeftBodyCollision->SetScale({ 10, 120 });
+
+		if (false == ColLongger)
+		{
+			RightBodyCollision->SetMove({ 0, -32 });
+			LeftBodyCollision->SetMove({ 0, -32 });
+			ColLongger = true;
+			ColShorter = false;
+		}
 	}
 
 	if (GetPos().x <= GetLevel()->GetCameraPos().x)							//Mario Can't be to the left of the camera position
@@ -494,19 +515,38 @@ void Player::Update(float _DeltaTime)
 					//마리오이면 벽돌이 움직임
 					SetEffectSound("bump.wav");
 					FindBrick->IsMoveOn();
-					
+
+					if (false == FindBrick->GetIsSpcBrick())
+					{
+						//마리오이면 벽돌이 움직임
+						SetEffectSound("bump.wav");
+						FindBrick->IsMoveOn();
+					}
+					else
+					{
+						FindBrick->StartSpcTimerOn();
+					}
 				}
 				else
 				{
-					//그 외는 벽돌이 부서짐
-					SetEffectSound("breakblock.wav");
-					FindBrick->SetChipOn();
-	
-					if (FindBrick->GetIsChipMoveEnd())
+					if (false == FindBrick->GetIsSpcBrick())
 					{
-						FindBrick->Death();
+						//그 외는 벽돌이 부서짐
+						SetEffectSound("breakblock.wav");
+						FindBrick->SetChipOn();
 
+						if (FindBrick->GetIsChipMoveEnd())
+						{
+							FindBrick->Death();
+						}
 					}
+					else
+					{
+						FindBrick->SetChipOff();
+						FindBrick->StartSpcTimerOn();
+					}
+
+				
 				}
 
 
@@ -521,7 +561,7 @@ void Player::Update(float _DeltaTime)
 
 	if (StateValue == PlayerState::DEATH)
 	{
-		PlayLevel::MainPlayLevel->SetBGMStop();
+
 		//EndingBack::Ending->SetEndingScene(EndingScene::GameOver);
 		//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
@@ -587,8 +627,7 @@ void Player::Update(float _DeltaTime)
 	
 	if (GameEngineInput::IsDown("InvincibleMode"))
 	{
-		RightBodyCollision->Off();
-		LeftBodyCollision->Off();
+		InvincibleMode = true;
 	}
 	
 	if (true == IsUnderGround && HurryUpTime > PlayTimer)
@@ -704,6 +743,9 @@ void Player::Render(float _DeltaTime)
 void Player::ShrinkEffect(float _DeltaTime)
 {
 	WaitTime -= _DeltaTime;
+	InvincibleTimer -= _DeltaTime;
+
+	InvincibleMode = true;
 	
 	if (true == IsAlphaOn)
 	{
@@ -730,5 +772,11 @@ void Player::ShrinkEffect(float _DeltaTime)
 		IsShrink = false;
 		IsAlphaOn = false;
 		AnimationRender->SetAlpha(255);
+	}
+
+	if (0.0f > InvincibleTimer)
+	{
+		InvincibleMode = false;
+		InvincibleTimer = 2.0f;
 	}
 }

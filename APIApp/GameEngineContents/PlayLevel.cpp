@@ -269,12 +269,11 @@ void PlayLevel::Loading()
 		Actor->SetPos({1400, StartPos.y - 128});
 
 		//ÀÏ´Ü ±À¹Ù ²û=-------------------------------------------------------------------------------------------
-		Actor->Off();
+		//Actor->Off();
 	}
 	//1_1_ITem1
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 1376, 640 });
 		Actor->SetItemMode(ItemType::SUPERMUSHROOM);
 		Actor->SetItemRenderOff();
@@ -283,7 +282,6 @@ void PlayLevel::Loading()
 	//1_1_Item2
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 4128, 576 });
 		Actor->SetItemMode(ItemType::LIFEMUSHROOM);
 		Actor->SetItemRenderOff();
@@ -291,7 +289,6 @@ void PlayLevel::Loading()
 	//1_1_Item3
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 5024, 640 });
 		Actor->SetItemMode(ItemType::SUPERMUSHROOM);
 		Actor->SetItemRenderOff();
@@ -299,81 +296,71 @@ void PlayLevel::Loading()
 	//1_1_Item4
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 1060, 640 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item5
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 1504, 640 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item6
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 1440, 384 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item7
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 6047, 384 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item8
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 6815, 640 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item9
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 7007, 640 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item10
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 7199, 640 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item11
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ 7007, 640 });
+		Actor->SetPos({ 7007, 384 });
 		Actor->SetItemMode(ItemType::SUPERMUSHROOM);
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item12
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 8289, 384 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item13
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 8353, 384 });
 		Actor->SetItemRenderOff();
 	}
 	//1_1_Item14
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 10913, 640 });
 		Actor->SetItemRenderOff();
 	}
+
 
 
 	//UI
@@ -544,6 +531,7 @@ void PlayLevel::Loading()
 	{
 		Brick* Actor = CreateActor<Brick>(MarioRenderOrder::Block);
 		Actor->SetPos({ 6047, 640 });
+	//	Actor->SetSpcBrick();                                            //¿¡·¯³²!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 	//1_1_Brick18
 	{
@@ -859,6 +847,14 @@ void PlayLevel::Update(float _DeltaTime)
 	}
 }
 
+void PlayLevel::SetBGMPlayer(const std::string_view& _String, int _loop, float _BasicVolume)
+{
+	BGMPlayer.Stop();
+	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String.data());
+	BGMPlayer.LoopCount(_loop);
+	BGMPlayer.Volume(_BasicVolume);
+}
+
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	MainPlayLevel = this;
@@ -869,11 +865,9 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 
 }
 
-
-void PlayLevel::SetBGMPlayer(const std::string_view& _String, int _loop, float _BasicVolume)
+void PlayLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	BGMPlayer.Stop();
-	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String.data());
-	BGMPlayer.LoopCount(_loop);
-	BGMPlayer.Volume(_BasicVolume);
 }
+
+

@@ -46,6 +46,7 @@ class Player : public GameEngineActor
 {
 public:
 	static bool IsDebugMode;								//true: 디버그 모드(ColMap이 랜더, 충돌체 랜더, 플레이어의 좌표 줄력)
+	static bool InvincibleMode;								//무적상태: 몬스터와 부딪혀도 죽지 않음
 	static Player* MainPlayer;
 	static PlayerMode ModeValue;							//플레이어의 상태(Mario, SuperMario, FireMario)
 	static float PlayTimer;									//Play Timer
@@ -144,6 +145,8 @@ private:
 	bool IsGround = false;
 	bool IsShrink = false;
 	bool IsAlphaOn = false;
+	bool ColLongger = false;
+	bool ColShorter = false;
 
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);
@@ -185,6 +188,7 @@ private:
 	float CameraEndPos = 0.0f;
 
 	float WaitTime = 1.8f;
+	float InvincibleTimer = 2.0f;
 
 	float4 UnderGroundCameraPos = { 3072.0f, 960.0f };			//Caemra Position at UnderGround
 	float4 UnderGroundStart = { 3202.0f , 1154.0f };					//Player Start Position at UnderGround

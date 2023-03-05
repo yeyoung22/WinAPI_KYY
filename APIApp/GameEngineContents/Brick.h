@@ -28,6 +28,21 @@ public:
 		return IsChipMoveEnd;
 	}
 
+	void SetSpcBrick()
+	{
+		SpcBrick = true;
+	}
+
+	bool GetIsSpcBrick()
+	{
+		return	SpcBrick;
+	}
+
+	void StartSpcTimerOn()
+	{
+		StartSpcTimer = true;
+	}
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -39,6 +54,11 @@ private:
 	bool IsUpEnd = false;
 	bool IsChipMove = false;
 	bool IsChipUp = false;
+	bool SpcBrick = false;
+	bool IsLast = false;
+	bool StartSpcTimer = false;
+
+	int Count = 7;
 
 	float BlockScale = 64.0f;
 	float BlockHalfScale = 32.0f;
@@ -47,6 +67,7 @@ private:
 	float MicroCtrlHorz = 28.0f;
 	float UpPower = 16.0f;
 
+	float SpcTimer = 8.0f;
 	float WaitTime = 1.0f;
 	float Gravity = 500.0f;
 	float MoveSpeed = 300.0f;

@@ -78,16 +78,18 @@ private:
 	float JumpPower = 380.0f;
 	float ImgHalfWidth = 32.0f;
 	float UpLimit = -62.0f;
-	float MoveSpeed = 310.0f;
+	float UpSpeed = 300.0f;
+	float MoveSpeed = 150.0f;
 	float Gravity = 800.0f;
 	float WaitTime = 0.7f;
 
 	float4 Dir = float4::Right;						//기본적인 방향: right
 	float4 BasicScale = { 128, 128 };
 	float4 MoveDir = float4::Zero;
-	float4 PivotRPos = { ImgHalfWidth - 5, -10 };
-	float4 PivotLPos = { -ImgHalfWidth +5, -10 };
-
+	/*float4 PivotRPos = { ImgHalfWidth - 5, -10 };
+	float4 PivotLPos = { -ImgHalfWidth +5, -10 };*/
+	float4 PivotRPos = {  20, -15 };
+	float4 PivotLPos = { -20, -15 };
 
 	ItemType PrevItemMode = ItemType::HIDDENCOIN;
 	ItemType ItemMode = ItemType::HIDDENCOIN;

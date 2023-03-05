@@ -29,44 +29,50 @@ void Goomba::Start()
 		HeadCollision = CreateCollision(MarioCollisionOrder::Monster);
 		HeadCollision->SetScale({ 30, 20 });
 		HeadCollision->SetPosition({ GetPos().x, GetPos().y - 50 });
+		HeadCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		LeftBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
 		LeftBodyCollision->SetScale({ 10, 45 });
 		LeftBodyCollision->SetPosition({ GetPos().x - 20, GetPos().y - 22 });
-
-
-
-		//일단 굼바 꺼둠
-		//LeftBodyCollision->Off();
+		LeftBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		RightBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
 		RightBodyCollision->SetScale({ 10, 45 });
 		RightBodyCollision->SetPosition({ GetPos().x + 20, GetPos().y - 22 });
+		RightBodyCollision->SetDebugRenderType(CT_Rect);
 	}
-
+	{
+		TriggerCollision = CreateCollision(MarioCollisionOrder::MonsterTrigger);
+		TriggerCollision->SetScale(TriggerScale);
+		TriggerCollision->SetPosition(GetPos() + TiriggerCtrlPos);
+		TriggerCollision->SetDebugRenderType(CT_Rect);
+	}
+	
 }
 
 
 void Goomba::Update(float _DeltaTime)
 {
-	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	float4 ActorPos = GetPos();
-	ActorPos.x += ImgHalfWidth;
+	
+	if (nullptr != TriggerCollision)
+	{
+		if (true == TriggerCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		{
+			MoveStart = true;
+			TriggerCollision->Off();
 
-	//<디버깅용_센터 보기위함>
-	Rectangle(DoubleDC,
-		ActorPos.ix() - 5,
-		ActorPos.iy() - 5,
-		ActorPos.ix() + 5,
-		ActorPos.iy() + 5
-	);
+		}
 
+	}
 
-
-	float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
-	//SetMove(Dir);
+	if (true == MoveStart)
+	{
+		float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
+		SetMove(Dir);
+	}
+	
 
 	std::vector<GameEngineCollision*> PlayerCols = Player::MainPlayer->GetPlayerCollisions();
 
@@ -111,22 +117,26 @@ void Goomba::Update(float _DeltaTime)
 
 		}
 
-
-		if (Player::ModeValue == PlayerMode::SUPERMARIO)
+		if (false == Player::InvincibleMode)
 		{
-			Player::MainPlayer->SetIsShrinkOn();
-			SetEffectSound("pipe.wav");
+			if (Player::ModeValue == PlayerMode::SUPERMARIO)
+			{
+				Player::MainPlayer->SetIsShrinkOn();
+				SetEffectSound("pipe.wav");
 
+			}
+			else
+			{
+				--Player::Life;
+
+				Player::MainPlayer->ChangeState(PlayerState::DEATH);
+
+
+				//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+			}
 		}
-		else
-		{
-			--Player::Life;
 
-			Player::MainPlayer->ChangeState(PlayerState::DEATH);
-
-
-			//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
-		}
+		
 	}
 
 
@@ -220,4 +230,37 @@ bool Goomba::CheckWall(float4 _Pos, float4 _Pivot)
 	}
 
 	return false;
+}
+
+void Goomba::Render(float _DeltaTime)
+{
+	//float4 PivotRPos = { ImgHalfWidth, -3 };
+	//float4 PivotLPos = { -ImgHalfWidth, -3 };
+
+	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+	float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
+	ActorPos += PivotLPos;
+	//ActorPos.x -= ImgHalfWidth;
+
+	//<디버깅용_센터 보기위함>
+	Rectangle(DoubleDC,
+		ActorPos.ix() - 5,
+		ActorPos.iy() - 5,
+		ActorPos.ix() + 5,
+		ActorPos.iy() + 5
+	);
+
+	float4 right = GetPos() - GetLevel()->GetCameraPos();
+	right += PivotRPos;
+
+	//<디버깅용_NextPos 보기위함>
+	Rectangle(DoubleDC,
+		right.ix() - 5,
+		right.iy() - 5,
+		right.ix() + 5,
+		right.iy() + 5
+	);
+
+
+
 }
