@@ -19,11 +19,19 @@ public:
 
 
 	void SetImgChange(); 
-	void SetQBlockColOff();
+	//void SetQBlockColOff();
 	void SetQBlockRenOff();
 	void IsMoveOn()
 	{
 		IsMove = true;
+	}
+	void SetIsUsedOn()
+	{
+		IsUsed = true;
+	}
+	bool GetIsUsed()
+	{
+		return IsUsed;
 	}
 
 
@@ -33,6 +41,7 @@ protected:
 
 
 private:
+	bool IsUsed = false;
 	bool IsMove = false;
 	bool IsUpEnd = false;
 
@@ -49,7 +58,6 @@ private:
 
 	float4 StartPos = float4::Zero;
 	float4 MoveDir = float4::Zero;								//ø≈∞‹∞• ∫§≈Õ
-
 
 
 	GameEngineRender* BlockRender = nullptr;

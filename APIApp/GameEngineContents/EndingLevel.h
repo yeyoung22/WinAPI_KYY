@@ -24,7 +24,7 @@ protected:
 	void Loading() override;
 	void Update(float _DeltaTime) override;
 
-	void LevelChangeEnd(GameEngineLevel* _NextLevel) override {}
+	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 
 	GameEngineSoundPlayer BGMPlayer;	//SoundPlayer를 받아서 사용(제어)

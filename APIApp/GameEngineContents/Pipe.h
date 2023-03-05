@@ -45,6 +45,8 @@ public:
 		ExitCollision->Off();
 	}
 
+	void SetPipeRenScale(float4 _Scale);
+
 	void MoveCenterOnPipe(float _DeltaTime);
 
 protected:

@@ -115,10 +115,16 @@ void Player::Start()
 	}
 	{
 		HeadCollision = CreateCollision(MarioCollisionOrder::Player);
-		HeadCollision->SetScale({ 38, 10 });
+		HeadCollision->SetScale({ 30, 10 });
 		HeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight });
 		HeadCollision->SetDebugRenderType(CT_Rect);
 		
+	}
+	{
+		SHeadCollision = CreateCollision(MarioCollisionOrder::Player);
+		SHeadCollision->SetScale({ 30, 10 });
+		SHeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight*2 });
+		SHeadCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		RightBodyCollision = CreateCollision(MarioCollisionOrder::Player);
@@ -134,15 +140,9 @@ void Player::Start()
 	}
 	{
 		BottomCollision = CreateCollision(MarioCollisionOrder::Player);
-		BottomCollision->SetScale({ 44, 10 });
+		BottomCollision->SetScale({ 40, 10 });
 		BottomCollision->SetPosition({ GetPos().x, GetPos().y - 5});
 		BottomCollision->SetDebugRenderType(CT_Rect);
-	}
-	{
-		SHeadCollision = CreateCollision(MarioCollisionOrder::Player);
-		SHeadCollision->SetScale({ 38, 10 });
-		SHeadCollision->SetPosition({ GetPos().x, GetPos().y - Origin_ColHeight*2 });
-		SHeadCollision->SetDebugRenderType(CT_Rect);
 	}
 	//{
 	//	FlagCollision = CreateCollision(MarioCollisionOrder::Player);
@@ -374,22 +374,113 @@ void Player::Update(float _DeltaTime)
 	{
 		//플레이어의 머리와 QBlock 충돌 체크
 		std::vector<GameEngineCollision*> Collision;
-		if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::BlockItem), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
-			|| true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::BlockItem), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+			|| true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
 			for (size_t i = 0; i < Collision.size(); i++)
 			{
 				QuestionBlock* FindBlock = Collision[i]->GetOwner<QuestionBlock>();
 
 				//아이템을 가진 블록은 일단 부딪히면 움직이고 그 다음부터는 움직이지 않음
+				if (false == FindBlock->GetIsUsed())
+				{
+					FindBlock->SetImgChange();
+					FindBlock->SetIsUsedOn();					//사용된 블록임을 표시
+					FindBlock->IsMoveOn();
+				}
+				else
+				{
+					SetEffectSound("bump.wav");
+				}
+			}
+		}
 
-				FindBlock->SetImgChange();
-				FindBlock->SetQBlockColOff();
-				FindBlock->IsMoveOn();
+		if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::ItemOn), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+			|| true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::ItemOn), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+			for (size_t i = 0; i < Collision.size(); i++)
+			{
+				Item* FindItem = Collision[i]->GetOwner<Item>();
+				FindItem->SetItemRenderOn();
+				FindItem->SetSwitchColOff();
+				
+
+				ItemType FindTemType = FindItem->GetItemMode();
+
+				if (FindTemType == ItemType::COIN)
+				{
+					FindItem->SetBodyColOn();
+				}
+
+				if (FindTemType == ItemType::HIDDENCOIN)
+				{
+					++NumOfCoin;
+					TotalScore += Point;
+
+				}
+
+
+				if (FindTemType != ItemType::HIDDENCOIN && FindTemType != ItemType::LIFEMUSHROOM)
+				{
+					if (ModeValue == PlayerMode::MARIO)
+					{
+						FindItem->SetItemMode(ItemType::SUPERMUSHROOM);
+					}
+					else if (ModeValue == PlayerMode::SUPERMARIO || ModeValue == PlayerMode::FIREMARIO)
+					{
+						FindItem->SetItemMode(ItemType::FIREFLOWER);
+					}
+				}
+
+				switch (FindTemType)
+				{
+				case ItemType::NONE:
+					break;
+				case ItemType::SUPERMUSHROOM:
+				{
+					SetEffectSound("vine.wav");
+					break;
+				}
+				case ItemType::LIFEMUSHROOM:
+				{
+					SetEffectSound("vine.wav");
+					break;
+				}
+				case ItemType::FIREFLOWER:
+				{
+					SetEffectSound("vine.wav");
+					break;
+				}
+				case ItemType::COIN:
+				{
+					SetEffectSound("coin.wav");
+					break;
+				}
+				case ItemType::HIDDENCOIN:
+				{
+					SetEffectSound("coin.wav");
+					break;
+				}
+				default:
+					break;
+				}
+
+				//박스위로 움직이거나 하다가 떨어져야 함
+
+			
+
+						
+
+
+				
+
 
 
 			}
 		}
+		
+
+
 		//플레이어의 머리와 Brick 충돌 체크
 		if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
 			|| true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))

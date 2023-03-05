@@ -85,6 +85,9 @@ void PlayLevel::SoundLoad()
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("stomp.wav"));
 	}
 	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("vine.wav"));
+	}
+	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("growup.wav"));
 
 		Dir.MoveParent();
@@ -253,11 +256,11 @@ void PlayLevel::Loading()
 	//MainPlayer
 	{
 		Player* Actor = CreateActor<Player>();
-		Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
+		//Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
 
 		//Å×½ºÆ®¿ë À§Ä¡ ------------------------------------------------------------Áö¿ö¾ß ÇÔ!!!!!!
-		/*Actor->SetPos({ 800, GameEngineWindow::GetScreenSize().y - 128 } );
-		SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});*/
+		Actor->SetPos({ 800, GameEngineWindow::GetScreenSize().y - 128 } );
+		SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});
 	}
 	//Goomba1
 	{
@@ -266,188 +269,112 @@ void PlayLevel::Loading()
 		Actor->SetPos({1400, StartPos.y - 128});
 
 		//ÀÏ´Ü ±À¹Ù ²û=-------------------------------------------------------------------------------------------
-		//Actor->Off();
+		Actor->Off();
 	}
-	//1_1_GrowMushroom
+	//1_1_ITem1
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ 1504, 640 });
-
-
+		Actor->SetPos({ 1376, 640 });
+		Actor->SetItemMode(ItemType::SUPERMUSHROOM);
+		Actor->SetItemRenderOff();
 		//ÀÏ´Ü ±À¹Ù ²û=------------------------------------------------------------------------------------------
-		//Actor->Off();
 	}
 	//1_1_Item2
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 4128, 576 });
-
 		Actor->SetItemMode(ItemType::LIFEMUSHROOM);
-		Actor->Off();
+		Actor->SetItemRenderOff();
 	}
 	//1_1_Item3
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 5024, 640 });
+		Actor->SetItemMode(ItemType::SUPERMUSHROOM);
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item4
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 1060, 640 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item5
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 1504, 640 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item6
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 1440, 384 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item7
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 6047, 384 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item8
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 6815, 640 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item9
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 7007, 640 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item10
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 7199, 640 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item11
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 7007, 640 });
+		Actor->SetItemMode(ItemType::SUPERMUSHROOM);
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item12
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 8289, 384 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item13
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 8353, 384 });
+		Actor->SetItemRenderOff();
+	}
+	//1_1_Item14
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 10913, 640 });
+		Actor->SetItemRenderOff();
+	}
 
-		Actor->SetItemMode(ItemType::LIFEMUSHROOM);
-		Actor->Off();
-	}
-	//Coin1(diff = 64)
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3424,1344});
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin2
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3488,1344 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin3
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3552,1344 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin4
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3616,1344 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin5
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3680,1344 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin6
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3360, 1472 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin7
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3424, 1472 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin8
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3488, 1472 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin9
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3552, 1472 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin10
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3616, 1472 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin11
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3680, 1472 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin12
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3744, 1472 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin13
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3360, 1600 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin14
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3424, 1600 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin15
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3488, 1600 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin16
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3552, 1600 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin17
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3616, 1600 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin18
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3680, 1600 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
-	//Coin19
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 3744, 1600 });
-		Actor->SetItemRenderScale(CoinRenScale);
-		Actor->SetColScale(CoinColScale);
-		Actor->SetItemMode(ItemType::COIN);
-	}
 
 	//UI
 	{
@@ -695,6 +622,7 @@ void PlayLevel::Loading()
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
 		Actor->SetPos({ 3978, 1790 });
 		Actor->SetPipeMode(PipeType::LEFT);
+		Actor->SetPipeRenScale({ 160, 308 });
 		Actor->SetGateColOff();
 	}
 	//Pipe3
@@ -702,6 +630,179 @@ void PlayLevel::Loading()
 		Pipe* Actor = CreateActor<Pipe>(MarioRenderOrder::Pipe);
 		Actor->SetPos({ 10496, 840 });
 		Actor->SetAllColOff();
+	}
+	//Coin1(diff = 64)
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3424,1344 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin2
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3488,1344 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin3
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3552,1344 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin4
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3616,1344 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+
+	}
+	//Coin5
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3680,1344 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	
+	}
+	//Coin6
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3360, 1472 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin7
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3424, 1472 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin8
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3488, 1472 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin9
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3552, 1472 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin10
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3616, 1472 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin11
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3680, 1472 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin12
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3744, 1472 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin13
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3360, 1600 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin14
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3424, 1600 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin15
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3488, 1600 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin16
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3552, 1600 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin17
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3616, 1600 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin18
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3680, 1600 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
+	}
+	//Coin19
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 3744, 1600 });
+		Actor->SetItemRenderScale(CoinRenScale);
+		Actor->SetColScale(CoinColScale);
+		Actor->SetItemMode(ItemType::COIN);
+		Actor->SetCoinMode();
 	}
 
 	if (false == GameEngineInput::IsKey("DebugRenderSwitch"))

@@ -1,7 +1,7 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/GameEngineResources.h>
-
+#include <GameEngineCore/GameEngineRender.h>
 
 enum class ItemType
 {
@@ -12,7 +12,6 @@ enum class ItemType
 	COIN,
 	HIDDENCOIN,
 };
-
 
 
 // 설명 : 게임 내 아이템과 관련된 기능
@@ -40,26 +39,69 @@ public:
 
 	void SetColPos(float4 _Pos);
 
+	void SetItemRenderOff();
+
+	void SetItemRenderOn();
+
+	void SetBodyColOn();
+
+	void SetBodyColOff();
+
+	void SetSwitchColOn();
+
+	void SetSwitchColOff();
+
+	void SetCoinMode();
+
+	ItemType GetItemMode()
+	{
+		return ItemMode;
+	}
+
 	void CreateItem(float4 _Pos, float4 _Scale, float4 _ColScale, ItemType _Type);
 
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
+	void Render(float _DeltaTime) override;
 
 	GameEngineSoundPlayer EffectPlayer;
 private:
+	bool IsSwitchOn = false;
+	bool IsUpEnd = false;
+	bool IsDownEnd = false;
+
 	int Point = 100;
+	int TPoint = 1000;
+	int Black = RGB(0, 0, 0);
 
-	float MoveSpeed = 120.0f;
+	float JumpPower = 380.0f;
+	float ImgHalfWidth = 32.0f;
+	float UpLimit = -62.0f;
+	float MoveSpeed = 310.0f;
+	float Gravity = 800.0f;
+	float WaitTime = 0.7f;
 
+	float4 Dir = float4::Right;						//기본적인 방향: right
 	float4 BasicScale = { 128, 128 };
+	float4 MoveDir = float4::Zero;
+	float4 PivotRPos = { ImgHalfWidth - 5, -10 };
+	float4 PivotLPos = { -ImgHalfWidth +5, -10 };
 
-	ItemType PrevItemMode = ItemType::SUPERMUSHROOM;
-	ItemType ItemMode = ItemType::SUPERMUSHROOM;
+
+	ItemType PrevItemMode = ItemType::HIDDENCOIN;
+	ItemType ItemMode = ItemType::HIDDENCOIN;
 
 	GameEngineRender* ItemRender = nullptr;
 	GameEngineCollision* BodyCollision = nullptr;
+	GameEngineCollision* SwitchCollision = nullptr;
 	
+	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
+	void AccGravity(float _DeltaTime);
+	bool CheckWall( float4 _Pivot);
+	//bool CheckWall(float4 _Pos, float4 _Pivot);
+	bool LiftUp();
+
 	std::map<ItemType, std::string> AnimNames = std::map<ItemType, std::string>();
 };
 

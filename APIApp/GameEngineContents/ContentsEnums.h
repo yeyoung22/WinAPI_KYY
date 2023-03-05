@@ -22,6 +22,7 @@ enum class MarioCollisionOrder
 	Brick,
 	QBlock,
 	BlockItem,
+	ItemOn,
 	Pipe,
 	PlayerAttack,				//Fire Attack of Mario
 	MonsterAttack,				//Fire Breath of Kupa
@@ -39,3 +40,4 @@ enum class EndingScene
 	GameOver,
 	TimeOver,
 };
+

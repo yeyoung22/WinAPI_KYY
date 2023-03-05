@@ -157,6 +157,7 @@ private:
 
 	int StartFrame = 0;
 
+	int Point = 100;
 
 	float HurryUpTime = 100.0f;
 

@@ -98,3 +98,8 @@ void EndingLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	BGMPlayer.LoopCount(1);
 	BGMPlayer.Volume(BGMVolume);
 }
+
+void EndingLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
+	BGMPlayer.Stop();
+}

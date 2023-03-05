@@ -28,13 +28,13 @@ void QuestionBlock::Start()
 	{
 		BlockRender->CreateAnimation({ .AnimationName = "UsedBlock",  .ImageName = "UsedBlock.bmp", .Start = 0, .End = 0 });
 	}
-	//For UpDown Movement Effect
-	{
-		EffectCollision = CreateCollision(MarioCollisionOrder::BlockItem);
-		EffectCollision->SetScale({ 58, 10 });
-		EffectCollision->SetPosition({ GetPos().x, GetPos().y - MicroCtrlVert });
-		EffectCollision->SetDebugRenderType(CT_Rect);
-	}
+	////For UpDown Movement Effect
+	//{
+	//	EffectCollision = CreateCollision(MarioCollisionOrder::BlockItem);
+	//	EffectCollision->SetScale({ 58, 10 });
+	//	EffectCollision->SetPosition({ GetPos().x, GetPos().y - MicroCtrlVert });
+	//	EffectCollision->SetDebugRenderType(CT_Rect);
+	//}
 	//Role like Wall
 	{
 		BlockCollision = CreateCollision(MarioCollisionOrder::QBlock);
@@ -101,10 +101,10 @@ void QuestionBlock::SetImgChange()
 	BlockRender->ChangeAnimation("UsedBlock");
 }
 
-void QuestionBlock::SetQBlockColOff()
-{
-	EffectCollision->Off();
-}
+//void QuestionBlock::SetQBlockColOff()
+//{
+//	EffectCollision->Off();
+//}
 
 void QuestionBlock::SetQBlockRenOff()
 {

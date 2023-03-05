@@ -36,7 +36,7 @@ void Pipe::Start()
 	{
 		ExitCollision = CreateCollision(MarioCollisionOrder::Pipe);
 		ExitCollision->SetScale({ 20, 80 });;
-		ExitCollision->SetPosition({ GetPos().x - 66, GetPos().y - 70 });
+		ExitCollision->SetPosition({ GetPos().x - 66, GetPos().y - 40 });
 		ExitCollision->SetDebugRenderType(CT_Rect);
 	}
 
@@ -104,4 +104,9 @@ void Pipe::MoveCenterOnPipe(float _DeltaTime)
 	{
 		Player::MainPlayer->SetMove(float4::Right * MoveSpeed * _DeltaTime);
 	}
+}
+
+void Pipe::SetPipeRenScale(float4 _Scale)
+{
+	PipeRender->SetScale(_Scale);
 }
