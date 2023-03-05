@@ -765,13 +765,29 @@ void Player::CrouchUpdate(float _Time)
 	
 	LimitSpeed(MoveDir);
 
-	SetMove(MoveDir * _Time);
-	AccGravity(_Time);
 
+	if ((false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == BottomCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		AccGravity(_Time);
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+		//ChangeState(PlayerState::IDLE);
+		//return;
+	}
+
+
+
+	SetMove(MoveDir * _Time);
 	Camera(MoveDir * _Time);
 
 	IsGround = LiftUp();
-
 	InitGravity(IsGround);
 }
 void Player::CrouchEnd()

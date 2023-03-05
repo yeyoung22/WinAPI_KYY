@@ -272,17 +272,26 @@ void PlayLevel::Loading()
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ 1376, StartPos.y - 128});
+		Actor->SetPos({ 1504, 640 });
 
 
 		//ÀÏ´Ü ±À¹Ù ²û=------------------------------------------------------------------------------------------
-		Actor->Off();
+		//Actor->Off();
 	}
-	//1_1_2ndItem
+	//1_1_Item2
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ 5024, StartPos.y - 128 });
+		Actor->SetPos({ 4128, 576 });
+
+		Actor->SetItemMode(ItemType::LIFEMUSHROOM);
+		Actor->Off();
+	}
+	//1_1_Item3
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 5024, 640 });
 
 		Actor->SetItemMode(ItemType::LIFEMUSHROOM);
 		Actor->Off();
