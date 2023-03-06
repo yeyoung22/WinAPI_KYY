@@ -176,27 +176,32 @@ void Item::Update(float _DeltaTime)
 				}
 
 
-				//우측벽과 조우
-				if (true == CheckWall(PivotRPos))
+				if (true == LiftUp())
 				{
-					Dir = float4::Left;
-				}
-				else
-				{
-					Dir = float4::Right;
-				}
-
-				if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-				{
-					if (0 > Dir.x)
-					{
-						Dir = float4::Right;
-					}
-					else
+					//우측벽과 조우
+					if (true == CheckWall(PivotRPos))
 					{
 						Dir = float4::Left;
 					}
+					
+					if(true == CheckWall(PivotLPos))
+					{
+						Dir = float4::Right;
+					}
+
+					if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+					{
+						if (0 > Dir.x)
+						{
+							Dir = float4::Right;
+						}
+						else
+						{
+							Dir = float4::Left;
+						}
+					}
 				}
+				
 
 				SetMove(Dir * MoveSpeed * _DeltaTime);
 
@@ -235,25 +240,29 @@ void Item::Update(float _DeltaTime)
 				}
 
 
-				//우측벽과 조우
-				if (true == CheckWall(PivotRPos))
+				if (true == LiftUp())
 				{
-					Dir = float4::Left;
-				}
-				else if(true == CheckWall(PivotLPos))
-				{
-					Dir = float4::Right;
-				}
+					//우측벽과 조우
+					if (true == CheckWall(PivotRPos))
+					{
+						Dir = float4::Left;
+					}
 
-				if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-				{
-					if (0 > Dir.x)
+					if (true == CheckWall(PivotLPos))
 					{
 						Dir = float4::Right;
 					}
-					else
+
+					if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
 					{
-						Dir = float4::Left;
+						if (0 > Dir.x)
+						{
+							Dir = float4::Right;
+						}
+						else
+						{
+							Dir = float4::Left;
+						}
 					}
 				}
 
