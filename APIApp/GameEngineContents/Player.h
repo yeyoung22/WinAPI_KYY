@@ -18,6 +18,7 @@ enum class PlayerState
 	ENTERPIPE,
 	ENTERLPIPE,
 	EXITPIPE,
+	FALG,
 };
 
 enum class PlayerMode
@@ -291,6 +292,10 @@ private:
 	void ExitPipeStart();
 	void ExitPipeUpdate(float _Time);
 	void ExitPipeEnd();
+
+	void FlagStart();
+	void FlagUpdate(float _Time);
+	void FlagEnd();
 
 
 	//Garavitional Acceleration

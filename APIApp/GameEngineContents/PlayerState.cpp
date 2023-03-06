@@ -40,6 +40,8 @@ std::string Player::GetStateName()
 		return "PlayerState::ENTERLPIPE";
 	case PlayerState::EXITPIPE:
 		return "PlayerState::EXITPIPE";
+	case PlayerState::FALG:
+		return "PlayerState::FALG";
 	default:
 		break;
 	}
@@ -93,6 +95,9 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::EXITPIPE:
 		ExitPipeStart();
 		break;
+	case PlayerState::FALG:
+		FlagStart();
+		break;
 	default:
 		break;
 	}
@@ -134,6 +139,9 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::EXITPIPE:
 		ExitPipeEnd();
+		break;
+	case PlayerState::FALG:
+		FlagEnd();
 		break;
 	default:
 		break;
@@ -180,6 +188,9 @@ void Player::UpdateState(float _Time)
 		break;
 	case PlayerState::EXITPIPE:
 		ExitPipeUpdate(_Time);
+		break;
+	case PlayerState::FALG:
+		FlagUpdate(_Time);
 		break;
 	default:
 		break;
@@ -1105,5 +1116,55 @@ void Player::ExitPipeUpdate(float _Time)
 	}
 }
 void Player::ExitPipeEnd()
+{
+}
+
+
+void Player::FlagStart()
+{
+	if (ModeValue == PlayerMode::SUPERMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_GrowthHang");
+	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_FireHang");
+	}
+	else
+	{
+		AnimationRender->ChangeAnimation("Right_Hang");
+	}
+	MoveDir.x = 0.0f;
+}
+void Player::FlagUpdate(float _Time)
+{
+	AccGravity(_Time);
+	SetMove(MoveDir * _Time);
+
+
+	IsGround = LiftUp();
+
+	InitGravity(IsGround);
+
+	if (true == IsGround)
+	{
+		if (ModeValue == PlayerMode::SUPERMARIO)
+		{
+			AnimationRender->ChangeAnimation("Left_GrowthHang");
+		}
+		else if (ModeValue == PlayerMode::FIREMARIO)
+		{
+			AnimationRender->ChangeAnimation("Left_FireHang");
+		}
+		else
+		{
+			AnimationRender->ChangeAnimation("Left_Hang");
+		}
+	}
+
+
+
+}
+void Player::FlagEnd() 
 {
 }

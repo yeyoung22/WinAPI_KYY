@@ -85,5 +85,14 @@ void PlayCollision::Update(float _DeltaTime)
 		}
 	}
 
+	if (nullptr != FlagCollision)
+	{
+		if ((true == FlagCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+		{
+			Player::MainPlayer->ChangeState(PlayerState::FALG);
+		}
+
+	}
+
 	
 }
