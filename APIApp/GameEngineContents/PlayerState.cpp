@@ -949,6 +949,15 @@ void Player::DeathStart()
 	MoveDir.y = -300.0f;
 	Gravity = 1000.0f;
 
+
+	HeadCollision->Death();
+	SHeadCollision->Death();
+	RightBodyCollision->Death();
+	LeftBodyCollision->Death();
+	BottomCollision->Death();
+
+
+
 	PlayLevel::MainPlayLevel->SetBGMPlayer("Miss.mp3");
 	DirCheck("Death");
 }	

@@ -143,14 +143,7 @@ void Player::Start()
 		BottomCollision->SetScale({ 40, 10 });
 		BottomCollision->SetPosition({ GetPos().x, GetPos().y - 5});
 		BottomCollision->SetDebugRenderType(CT_Rect);
-	}
-	//{
-	//	FlagCollision = CreateCollision(MarioCollisionOrder::Player);
-	//	FlagCollision->SetScale({ 20,1000 });
-	//	FlagCollision->SetPosition({ 3712, 400});
-	//	FlagCollision->SetDebugRenderType(CT_Rect);
-	//}
-
+	}	
 
 	PlayerCols.push_back(HeadCollision);
 	PlayerCols.push_back(SHeadCollision);
@@ -353,33 +346,33 @@ void Player::Update(float _DeltaTime)
 	PlayTimer -= _DeltaTime* TimeSpeed;
 
 	//플레이어 모드에 따라 머리 부분 충돌체를 교체
-	if (ModeValue == PlayerMode::MARIO)
+	if (ModeValue == PlayerMode::MARIO && StateValue != PlayerState::DEATH)
 	{
 		HeadCollision->On();
 		SHeadCollision->Off();
 
-		RightBodyCollision->SetScale({ 10, 60 });
-		LeftBodyCollision->SetScale({ 10, 60 });
+		RightBodyCollision->SetScale(MarioColScale);
+		LeftBodyCollision->SetScale(MarioColScale);
 
 		if (true == ColLongger)
 		{
-			RightBodyCollision->SetMove({ 0, +32 });
-			LeftBodyCollision->SetMove({ 0, +32 });
+			RightBodyCollision->SetMove({ 0, ColMoveValue });
+			LeftBodyCollision->SetMove({ 0, ColMoveValue });
 			ColLongger = false;
 		}
 	}
-	else
+	else if(ModeValue != PlayerMode::MARIO && StateValue != PlayerState::DEATH)
 	{
 		HeadCollision->Off();
 		SHeadCollision->On();
 
-		RightBodyCollision->SetScale({ 10, 120 });
-		LeftBodyCollision->SetScale({ 10, 120 });
+		RightBodyCollision->SetScale(SMarioColScale);
+		LeftBodyCollision->SetScale(SMarioColScale);
 
 		if (false == ColLongger)
 		{
-			RightBodyCollision->SetMove({ 0, -32 });
-			LeftBodyCollision->SetMove({ 0, -32 });
+			RightBodyCollision->SetMove({ 0, -ColMoveValue });
+			LeftBodyCollision->SetMove({ 0, -ColMoveValue });
 			ColLongger = true;
 			ColShorter = false;
 		}
@@ -555,7 +548,6 @@ void Player::Update(float _DeltaTime)
 
 
 	}
-
 
 
 

@@ -15,6 +15,7 @@
 #include "Pipe.h"
 #include "EndingBack.h"
 #include "Brick.h"
+#include "PlayCollision.h"
 
 
 
@@ -253,6 +254,10 @@ void PlayLevel::Loading()
 	{
 		Map* Actor = CreateActor<Map>();
 	}
+	//¾×ÅÍ »ý¼º
+	{
+		PlayCollision* Actor = CreateActor<PlayCollision>();
+	}
 	//MainPlayer
 	{
 		Player* Actor = CreateActor<Player>();
@@ -270,6 +275,12 @@ void PlayLevel::Loading()
 
 		//ÀÏ´Ü ±À¹Ù ²û=-------------------------------------------------------------------------------------------
 		//Actor->Off();
+	}
+	//Goomba2
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 3200, StartPos.y - 128 });
 	}
 	//1_1_ITem1
 	{

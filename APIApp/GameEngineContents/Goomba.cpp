@@ -69,8 +69,29 @@ void Goomba::Update(float _DeltaTime)
 
 	if (true == MoveStart)
 	{
-		float4 Dir = float4::Left * MoveSpeed * _DeltaTime;
-		SetMove(Dir);
+		MoveDir = Dir * MoveSpeed * _DeltaTime;
+		SetMove(MoveDir);
+
+		if (true == CheckWall(PivotLPos))
+		{
+			Dir = float4::Right;
+		}
+
+		if (true == CheckWall(PivotRPos))
+		{
+			Dir = float4::Left;
+		}
+
+		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		{
+			Dir = float4::Left;
+		}
+
+		if (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		{
+			Dir = float4::Right;
+		}
+		
 	}
 	
 
@@ -218,9 +239,9 @@ bool  Goomba::LiftUp(float4 _Pos)
 }
 
 
-bool Goomba::CheckWall(float4 _Pos, float4 _Pivot)
+bool Goomba::CheckWall(float4 _Pivot)
 {
-	float4 CheckPos = GetPos() + _Pos;
+	float4 CheckPos = GetPos();
 	CheckPos += _Pivot;
 
 

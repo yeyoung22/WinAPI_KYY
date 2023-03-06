@@ -15,11 +15,16 @@ public:
 	PlayCollision& operator=(const PlayCollision& _Other) = delete;
 	PlayCollision& operator=(PlayCollision&& _Other) noexcept = delete;
 
+
+
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
 
 private:
+	float WaitTime = 0.2f;
+
 	GameEngineCollision* DeadLineCol1 = nullptr;
 	GameEngineCollision* DeadLineCol2 = nullptr;
 	GameEngineCollision* DeadLineCol3 = nullptr;

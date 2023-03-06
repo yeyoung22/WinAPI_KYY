@@ -189,6 +189,8 @@ private:
 
 	float WaitTime = 1.8f;
 	float InvincibleTimer = 2.0f;
+	float ColMoveValue = 32.0f;
+
 
 	float4 UnderGroundCameraPos = { 3072.0f, 960.0f };			//Caemra Position at UnderGround
 	float4 UnderGroundStart = { 3202.0f , 1154.0f };					//Player Start Position at UnderGround
@@ -200,7 +202,8 @@ private:
 	float4 PivotRPos2 = { ImgHalfWidth - 8, -17 };
 	float4 PivotLPos2 = { -ImgHalfWidth + 8, -17 };
 
-	
+	float4 MarioColScale = { 10, 60 };
+	float4 SMarioColScale = { 10, 120 };
 
 	//ColImage 관련 변수 및 함수
 	std::string ColMapName;
@@ -228,7 +231,6 @@ private:
 	GameEngineCollision* BottomCollision = nullptr;
 	GameEngineCollision* SHeadCollision = nullptr;
 
-	GameEngineCollision* FlagCollision = nullptr;				//깃발
 
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 

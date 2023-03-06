@@ -25,7 +25,7 @@ protected:
 	virtual void InitGravity(bool _IsGround) {}
 	virtual void  Friction(float4& _Pos, float _DeltaTime) {}
 	virtual bool LiftUp(float4 _Pos) { return false; }
-	virtual bool CheckWall(float4 _Pos, float4 _Pivot) { return false; }
+	virtual bool CheckWall(float4 _Pivot) { return false; }
 
 
 	float4 MoveDir = float4::Zero;
