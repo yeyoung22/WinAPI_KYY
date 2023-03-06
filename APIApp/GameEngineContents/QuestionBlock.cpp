@@ -42,6 +42,16 @@ void QuestionBlock::Start()
 		BlockCollision->SetPosition({ GetPos().x, GetPos().y - BlockHalfScale });
 		BlockCollision->SetDebugRenderType(CT_Rect);
 	}
+	{
+		HiddenCollision = CreateCollision(MarioCollisionOrder::Hidden);
+		HiddenCollision->SetScale({ 64, 64 });
+		HiddenCollision->SetPosition({ GetPos().x, GetPos().y - BlockHalfScale });
+		HiddenCollision->SetDebugRenderType(CT_Rect);
+
+		HiddenCollision->Off();
+	}
+
+	
 }
 
 void QuestionBlock::Update(float _DeltaTime)
@@ -56,6 +66,8 @@ void QuestionBlock::Update(float _DeltaTime)
 	{
 		MoveDown(_DeltaTime);
 	}
+
+
 }
 
 
@@ -101,10 +113,17 @@ void QuestionBlock::SetImgChange()
 	BlockRender->ChangeAnimation("UsedBlock");
 }
 
-//void QuestionBlock::SetQBlockColOff()
-//{
-//	EffectCollision->Off();
-//}
+void QuestionBlock::SetHiddenColOn()
+{
+	HiddenCollision->On();
+	BlockCollision->Off();
+}
+
+void QuestionBlock::SetHiddenColOff()
+{
+	HiddenCollision->Off();
+	BlockCollision->On();
+}
 
 void QuestionBlock::SetQBlockRenOff()
 {

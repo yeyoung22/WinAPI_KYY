@@ -31,6 +31,8 @@ enum class MarioCollisionOrder
 	Flag,
 	DeadLine,
 	MonsterTrigger,
+	Hidden,
+
 
 
 };

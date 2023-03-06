@@ -33,7 +33,8 @@ public:
 	{
 		return IsUsed;
 	}
-
+	void SetHiddenColOn();
+	void SetHiddenColOff();
 
 protected:
 	void Start() override;
@@ -62,7 +63,7 @@ private:
 
 	GameEngineRender* BlockRender = nullptr;
 	GameEngineCollision* EffectCollision = nullptr;				//효과를 주면 없앨 충돌체
-
+	GameEngineCollision* HiddenCollision = nullptr;
 
 	//벽면이 될 충돌채
 	GameEngineCollision* BlockCollision = nullptr;			

@@ -42,6 +42,8 @@ std::string Player::GetStateName()
 		return "PlayerState::EXITPIPE";
 	case PlayerState::FALG:
 		return "PlayerState::FALG";
+	case PlayerState::GOCASTLE:
+		return "PlayerState::GOCASTLE";
 	default:
 		break;
 	}
@@ -98,6 +100,9 @@ void Player::ChangeState(PlayerState _State)
 	case PlayerState::FALG:
 		FlagStart();
 		break;
+	case PlayerState::GOCASTLE:
+		GoCastleStart();
+		break;
 	default:
 		break;
 	}
@@ -142,6 +147,9 @@ void Player::ChangeState(PlayerState _State)
 		break;
 	case PlayerState::FALG:
 		FlagEnd();
+		break;
+	case PlayerState::GOCASTLE:
+		GoCastleEnd();
 		break;
 	default:
 		break;
@@ -191,6 +199,9 @@ void Player::UpdateState(float _Time)
 		break;
 	case PlayerState::FALG:
 		FlagUpdate(_Time);
+		break;
+	case PlayerState::GOCASTLE:
+		GoCastleUpdate(_Time);
 		break;
 	default:
 		break;
@@ -1135,19 +1146,20 @@ void Player::FlagStart()
 		AnimationRender->ChangeAnimation("Right_Hang");
 	}
 	MoveDir.x = 0.0f;
+	WaitTime = 1.0f;
+
+
+
+	PlayLevel::MainPlayLevel->SetBGMPlayer("flagpole.wav");
 }
 void Player::FlagUpdate(float _Time)
 {
-	AccGravity(_Time);
-	SetMove(MoveDir * _Time);
+	MoveDir = float4::Down * FlagDownSpeed;
+	SetMove(MoveDir * _Time );
 
-
-	IsGround = LiftUp();
-
-	InitGravity(IsGround);
-
-	if (true == IsGround)
+	if (true == FlagDownEnd)
 	{
+		WaitTime -= _Time;
 		if (ModeValue == PlayerMode::SUPERMARIO)
 		{
 			AnimationRender->ChangeAnimation("Left_GrowthHang");
@@ -1160,11 +1172,100 @@ void Player::FlagUpdate(float _Time)
 		{
 			AnimationRender->ChangeAnimation("Left_Hang");
 		}
+		SetPos({ GetPos().x + 48, GetPos().y });
+		FlagDownEnd = false;
+
+		if (0.0f >= WaitTime);
+		{
+			ChangeState(PlayerState::GOCASTLE);
+			return;
+		
+		}
+
 	}
 
+
+	if (true == IsGround)
+	{
+		FlagDownEnd = true;
+	}
+
+
+	IsGround = LiftUp();
+	InitGravity(IsGround);
 
 
 }
 void Player::FlagEnd() 
+{
+}
+
+
+void Player::GoCastleStart()
+{
+	if (ModeValue == PlayerMode::SUPERMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_GrowthMove");
+	}
+	else if (ModeValue == PlayerMode::FIREMARIO)
+	{
+		AnimationRender->ChangeAnimation("Right_FireMove");
+	}
+	else
+	{
+		AnimationRender->ChangeAnimation("Right_Move");
+	}
+	MoveSpeed = 150.0f;
+	PlayLevel::MainPlayLevel->SetBGMPlayer("LevelComplete.mp3");
+
+	WaitTime = 16.0f;
+}
+void Player::GoCastleUpdate(float _Time)
+{
+	WaitTime -= _Time;
+
+	if (false == IsMoveStop)
+	{
+		SetMove(float4::Right * MoveSpeed * _Time);
+	}
+
+	if (RightBodyCollision != 0)
+	{
+		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Door), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		{
+			AnimationRender->Off();
+			IsMoveStop = true;
+
+			int Timer = static_cast<int>(PlayTimer);
+			if (0 != Timer)
+			{
+				--PlayTimer;
+				++TotalScore;
+			}
+			else
+			{
+				++Round;
+				IsMoveStop = false;
+
+				if (0 >= WaitTime)
+				{
+
+					GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
+				}
+
+			}
+		}
+	}
+
+	AccGravity(_Time);
+	SetMove(MoveDir * _Time);
+
+
+	IsGround = LiftUp();
+	InitGravity(IsGround);
+
+
+}
+void Player::GoCastleEnd()
 {
 }

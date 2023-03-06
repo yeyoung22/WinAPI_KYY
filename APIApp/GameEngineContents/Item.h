@@ -78,7 +78,7 @@ private:
 	float JumpPower = 380.0f;
 	float ImgHalfWidth = 32.0f;
 	float UpLimit = -62.0f;
-	float UpSpeed = 300.0f;
+	float UpSpeed = 400.0f;
 	float MoveSpeed = 150.0f;
 	float Gravity = 800.0f;
 	float WaitTime = 0.7f;

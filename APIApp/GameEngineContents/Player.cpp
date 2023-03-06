@@ -128,20 +128,20 @@ void Player::Start()
 	}
 	{
 		RightBodyCollision = CreateCollision(MarioCollisionOrder::Player);
-		RightBodyCollision->SetScale({ 10, 60 });
+		RightBodyCollision->SetScale({ 5, 60 });
 		RightBodyCollision->SetPosition({ GetPos().x + 24, GetPos().y - 32});
 		RightBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		LeftBodyCollision = CreateCollision(MarioCollisionOrder::Player);
-		LeftBodyCollision->SetScale({ 10, 60 });
+		LeftBodyCollision->SetScale({ 5, 60 });
 		LeftBodyCollision->SetPosition({ GetPos().x - 24, GetPos().y - 32 });
 		LeftBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		BottomCollision = CreateCollision(MarioCollisionOrder::Player);
-		BottomCollision->SetScale({ 40, 10 });
-		BottomCollision->SetPosition({ GetPos().x, GetPos().y - 5});
+		BottomCollision->SetScale({ 38, 10 });
+		BottomCollision->SetPosition({ GetPos().x, GetPos().y - 4});
 		BottomCollision->SetDebugRenderType(CT_Rect);
 	}	
 
@@ -481,14 +481,7 @@ void Player::Update(float _DeltaTime)
 
 				//박스위로 움직이거나 하다가 떨어져야 함
 
-			
-
-						
-
-
-				
-
-
+	
 
 			}
 		}
@@ -546,6 +539,15 @@ void Player::Update(float _DeltaTime)
 			}
 		}
 
+		if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Hidden), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		|| true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Hidden), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+		{
+			for (size_t i = 0; i < Collision.size(); i++)
+			{
+				QuestionBlock* FindQBlock = Collision[i]->GetOwner<QuestionBlock>();
+				FindQBlock->SetHiddenColOff();
+			}
+		}
 
 	}
 
@@ -559,26 +561,7 @@ void Player::Update(float _DeltaTime)
 	}
 
 
-	if (RightBodyCollision != 0)
-	{
-		std::vector<GameEngineCollision*> Collision;
-		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Door), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
-		{
-			/*++Round;
-			std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
-
-			AssignLevels(PlayLevel::MapNames, Round);
-			Map::MainMap->StageClearOn();
-			MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
-			GetLevel()->SetCameraPos({ GetPos().x, 0 });
-
-			ChangeColImage(ChangeColName[Round]);*/
-
-			PlayLevel::MainPlayLevel->SetBGMStop();
-			EndingBack::Ending->SetEndingScene(EndingScene::Clear);
-			GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
-		}
-	}
+	
 
 
 	if (true == FreeMoveState(_DeltaTime))

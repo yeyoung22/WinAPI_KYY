@@ -53,6 +53,9 @@ void PlayLevel::SoundLoad()
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Underground_Hurry.mp3"));
 	}
 	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("LevelComplete.mp3"));
+	}
+	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Miss.mp3"));
 
 		Dir.MoveParent();
@@ -88,6 +91,9 @@ void PlayLevel::SoundLoad()
 	}
 	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("vine.wav"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("flagpole.wav"));
 	}
 	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("growup.wav"));
@@ -471,6 +477,7 @@ void PlayLevel::Loading()
 		QuestionBlock* Actor = CreateActor<QuestionBlock>(MarioRenderOrder::Block);
 		Actor->SetPos({ 4128, 576 });
 		Actor->SetQBlockRenOff();
+		Actor->SetHiddenColOn();
 	}
 
 	//1_1_Brick1
@@ -860,13 +867,6 @@ void PlayLevel::Update(float _DeltaTime)
 		DebugRenderSwitch();
 	}
 
-	//if (GameEngineInput::IsDown("StageClear"))
-	//{
-	//	//처음부터 다시 재생
-	//}
-
-	
-
 	if (0 >= Player::PlayTimer)
 	{
 		EndingBack::Ending->SetEndingScene(EndingScene::TimeOver);
@@ -894,6 +894,11 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 void PlayLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	BGMPlayer.Stop();
+
+	if (Player::TopScore < Player::TotalScore)
+	{
+		Player::TopScore = Player::TotalScore;
+	}
 }
 
 

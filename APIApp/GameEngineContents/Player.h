@@ -19,6 +19,7 @@ enum class PlayerState
 	ENTERLPIPE,
 	EXITPIPE,
 	FALG,
+	GOCASTLE,
 };
 
 enum class PlayerMode
@@ -131,6 +132,11 @@ public:
 		return ReturnVector;
 	}
 
+	PlayerState GetPlayerState()
+	{
+		return StateValue;
+	}
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -148,6 +154,8 @@ private:
 	bool IsAlphaOn = false;
 	bool ColLongger = false;
 	bool ColShorter = false;
+	bool FlagDownEnd = false;
+	bool IsMoveStop = false;
 
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);
@@ -177,6 +185,7 @@ private:
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 	float PipeEnterSpeed = 68.0f;
+	float FlagDownSpeed = 150.0f;
 
 	float JumpPower = -800.0f;
 	float SuperJumpPower = -835.0f;
@@ -203,8 +212,8 @@ private:
 	float4 PivotRPos2 = { ImgHalfWidth - 8, -17 };
 	float4 PivotLPos2 = { -ImgHalfWidth + 8, -17 };
 
-	float4 MarioColScale = { 10, 60 };
-	float4 SMarioColScale = { 10, 120 };
+	float4 MarioColScale = { 5, 60 };
+	float4 SMarioColScale = { 5, 120 };
 
 	//ColImage 관련 변수 및 함수
 	std::string ColMapName;
@@ -296,6 +305,11 @@ private:
 	void FlagStart();
 	void FlagUpdate(float _Time);
 	void FlagEnd();
+
+	void GoCastleStart();
+	void GoCastleUpdate(float _Time);
+	void GoCastleEnd();
+
 
 
 	//Garavitional Acceleration

@@ -71,7 +71,7 @@ private:
 	float4 TriggerScale = { 10, 700 };
 	float4 TiriggerCtrlPos = { -500, -350 };
 
-
+	std::string DirString = "Left_";
 
 	GameEngineCollision* HeadCollision = nullptr;
 	GameEngineCollision* RightBodyCollision = nullptr;
@@ -81,6 +81,10 @@ private:
 	GameEngineCollision* TriggerCollision = nullptr;
 
 	GameEngineRender* AnimationRender = nullptr;
+
+
+
+	void DirCheck(const std::string_view& _AnimationName);
 
 };
 

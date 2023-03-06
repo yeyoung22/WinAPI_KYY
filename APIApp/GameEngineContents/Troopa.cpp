@@ -1,4 +1,5 @@
 #include "Troopa.h"
+#include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineLevel.h>
@@ -19,7 +20,7 @@ void Troopa::Start()
 {
 	{
 		AnimationRender = CreateRender(MarioRenderOrder::Monster);
-		AnimationRender->SetScale({ 128, 128 });
+		AnimationRender->SetScale({ 256, 256 });
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_TroopaIdle",  .ImageName = "Left_Troopa.bmp", .Start = 0, .End = 1 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Left_TroopaShell",  .ImageName = "Left_Troopa.bmp", .Start = 4, .End = 5 });
@@ -32,7 +33,7 @@ void Troopa::Start()
 	{
 		HeadCollision = CreateCollision(MarioCollisionOrder::Monster);
 		HeadCollision->SetScale({ 30, 20 });
-		HeadCollision->SetPosition({ GetPos().x, GetPos().y - 50 });
+		HeadCollision->SetPosition({ GetPos().x, GetPos().y - 52 });
 	}
 	{
 		LeftBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
@@ -46,13 +47,13 @@ void Troopa::Start()
 	}
 	{
 		LeftShellCollision = CreateCollision(MarioCollisionOrder::Monster);
-		LeftShellCollision->SetScale({ 10, 45 });
-		LeftShellCollision->SetPosition({ GetPos().x - 20, GetPos().y - 22 });
+		LeftShellCollision->SetScale({ 30, 45 });
+		LeftShellCollision->SetPosition({ GetPos().x - 12, GetPos().y - 22 });
 	}
 	{
 		RightShellCollision = CreateCollision(MarioCollisionOrder::Monster);
-		RightShellCollision->SetScale({ 10, 45 });
-		RightShellCollision->SetPosition({ GetPos().x + 20, GetPos().y - 22 });
+		RightShellCollision->SetScale({ 30, 45 });
+		RightShellCollision->SetPosition({ GetPos().x +12, GetPos().y - 22 });
 	}
 	{
 		TriggerCollision = CreateCollision(MarioCollisionOrder::MonsterTrigger);
@@ -86,13 +87,13 @@ void Troopa::Update(float _DeltaTime)
 		if (true == CheckWall(PivotLPos))
 		{
 			Dir = float4::Right;
-			AnimationRender->ChangeAnimation("Right_TroopaIdle");
+			DirCheck("TroopaIdle");
 		}
 
 		if (true == CheckWall(PivotRPos))
 		{
 			Dir = float4::Left;
-			AnimationRender->ChangeAnimation("Left_TroopaIdle");
+			DirCheck("TroopaIdle");
 		}
 
 		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
@@ -127,8 +128,7 @@ void Troopa::Update(float _DeltaTime)
 
 		//}
 
-			//dircheckÇÊ¿ä!!
-		AnimationRender->ChangeAnimation("Left_TroopaShell");
+		DirCheck("TroopaShell");
 		Player::TotalScore += Point;
 		HeadCollision->Off();
 		LeftBodyCollision->Off();
@@ -144,9 +144,9 @@ void Troopa::Update(float _DeltaTime)
 		)
 	{
 
-			HeadCollision->Off();
+			/*HeadCollision->Off();
 			LeftBodyCollision->Off();
-			RightBodyCollision->Off();
+			RightBodyCollision->Off();*/
 
 
 		if (false == Player::InvincibleMode)
@@ -254,6 +254,27 @@ void Troopa::SetShellColOff()
 {
 	LeftShellCollision->Off();
 	RightShellCollision->Off();
+}
+
+
+void Troopa::DirCheck(const std::string_view& _AnimationName)
+{
+	std::string PrevDirString = DirString;							//DirString = "Right_"
+	AnimationRender->ChangeAnimation(DirString + _AnimationName.data());
+
+	if (GameEngineInput::IsPress("LeftMove"))
+	{
+		DirString = "Left_";
+	}
+	else if (GameEngineInput::IsPress("RightMove"))
+	{
+		DirString = "Right_";
+	}
+
+	if (PrevDirString != DirString)
+	{
+		AnimationRender->ChangeAnimation(DirString + _AnimationName.data());
+	}
 }
 
 void Troopa::Render(float _DeltaTime)
