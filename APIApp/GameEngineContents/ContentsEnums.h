@@ -26,6 +26,7 @@ enum class MarioCollisionOrder
 	Pipe,
 	PlayerAttack,				//Fire Attack of Mario
 	MonsterAttack,				//Fire Breath of Kupa
+	Shell,
 	Door,
 	Flag,
 	DeadLine,

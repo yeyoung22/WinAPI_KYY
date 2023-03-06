@@ -16,6 +16,7 @@
 #include "EndingBack.h"
 #include "Brick.h"
 #include "PlayCollision.h"
+#include "Troopa.h"
 
 
 
@@ -168,6 +169,14 @@ void PlayLevel::ImageLoad()
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("ReverseGoomba.bmp"));
 		Image->Cut(2, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Left_Troopa.bmp"));
+		Image->Cut(6, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Right_Troopa.bmp"));
+		Image->Cut(6, 1);
 
 		Dir.MoveParent();
 	}
@@ -281,6 +290,12 @@ void PlayLevel::Loading()
 		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
 		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({ 3200, StartPos.y - 128 });
+	}
+	//Troopa
+	{
+		Troopa* Actor = CreateActor<Troopa>(MarioRenderOrder::Monster);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 2200, StartPos.y - 128 });
 	}
 	//1_1_ITem1
 	{

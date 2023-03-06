@@ -950,11 +950,11 @@ void Player::DeathStart()
 	Gravity = 1000.0f;
 
 
-	HeadCollision->Death();
-	SHeadCollision->Death();
-	RightBodyCollision->Death();
-	LeftBodyCollision->Death();
-	BottomCollision->Death();
+	HeadCollision      ->Off();
+	SHeadCollision     ->Off();
+	RightBodyCollision ->Off();
+	LeftBodyCollision  ->Off();
+	BottomCollision    ->Off();
 
 
 
@@ -975,7 +975,7 @@ void Player::DeathUpdate(float _Time)
 
 	if (0 >= WaitTime)
 	{
-		MainPlayer->Death();
+		AnimationRender->Off();
 		//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
 

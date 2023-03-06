@@ -65,7 +65,7 @@ void Item::Start()
 	}
 	{
 		SwitchCollision = CreateCollision(MarioCollisionOrder::ItemOn);
-		SwitchCollision->SetScale({ 40, 20 });
+		SwitchCollision->SetScale({ 50, 20 });
 		SwitchCollision->SetPosition({ GetPos().x, GetPos().y - 10});
 		SwitchCollision->SetDebugRenderType(CT_Rect);
 
