@@ -95,10 +95,12 @@ void Troopa::Update(float _DeltaTime)
 	if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
 	{
 		SetEffectSound("stomp.wav");
-		Player::TotalScore += Point;
+		//Player::TotalScore += Point;
+
 		HeadCollision->Off();
 		LeftBodyCollision->Off();
 		RightBodyCollision->Off();
+
 		StateValue = MonsterState::IDLE;
 		return;
 	}
@@ -135,6 +137,7 @@ void Troopa::Update(float _DeltaTime)
 
 		if (0.0f >= ShellColOffTime)
 		{
+			ShellColOffTime = 1.0f;
 			SetShellColOn();
 		}
 	}
@@ -312,6 +315,7 @@ void Troopa::IdleUpdate(float _DeltaTime)
 			RightBodyCollision->On();
 			SetShellColOff();
 
+			WaitTime = 2.0f;
 			TimerStart = false;
 			count = 0;
 			StateValue = MonsterState::MOVE;

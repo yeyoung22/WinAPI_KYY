@@ -20,14 +20,21 @@ void EndingBack::Start()
 
 	float4 Size = GameEngineWindow::GetScreenSize();
 
-	SceneName.push_back("GameOver.bmp");
 	SceneName.push_back("Ending2.bmp");
+	SceneName.push_back("GameOver.bmp");
 	SceneName.push_back("TimeUp.bmp");
 
+	//Original Mario
 	{
-		GameEngineRender* Render = CreateRender(SceneName[static_cast<int>(Scene)], MarioRenderOrder::BackGround);
+		Render = CreateRender(MarioRenderOrder::BackGround);
 		Render->SetPosition(GameEngineWindow::GetScreenSize().half());
 		Render->SetScale(GameEngineWindow::GetScreenSize());
+
+		Render->CreateAnimation({ .AnimationName = "Ending2.bmp",  .ImageName = "Ending2.bmp", .Start = 0, .End = 0 });
+		Render->CreateAnimation({ .AnimationName = "GameOver.bmp",  .ImageName = "GameOver.bmp", .Start = 0, .End = 0 });
+		Render->CreateAnimation({ .AnimationName = "TimeUp.bmp",  .ImageName = "TimeUp.bmp", .Start = 0, .End = 0 });
+
+		Render->ChangeAnimation(SceneName[static_cast<int>(Scene)]);
 	}
 
 	{
@@ -54,7 +61,8 @@ void EndingBack::Start()
 void EndingBack::Update(float _DeltaTime)
 {
 	WaitTime -= _DeltaTime;
-	
+	Render->ChangeAnimation(SceneName[static_cast<int>(Scene)]);
+
 	if (EndingScene::Clear == Scene)
 	{
 		if (8.0f >= WaitTime)
@@ -72,5 +80,6 @@ void EndingBack::Update(float _DeltaTime)
 			TxtImgRender3->On();
 		}
 	}
+
 
 }

@@ -40,6 +40,8 @@ private:
 
 	float WaitTime = 10.0f;
 
+	GameEngineRender* Render  = nullptr;
+
 	GameEngineRender* TxtImgRender1 = nullptr;
 	GameEngineRender* TxtImgRender2 = nullptr;
 	GameEngineRender* TxtImgRender3 = nullptr;

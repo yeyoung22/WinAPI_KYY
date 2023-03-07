@@ -5,6 +5,7 @@
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
+#include <GameEngineCore/GameEngineCore.h>
 #include "Player.h"
 #include "Map.h"
 #include "Goomba.h"
@@ -94,6 +95,9 @@ void PlayLevel::SoundLoad()
 	}
 	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("flagpole.wav"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("kick.wav"));
 	}
 	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("growup.wav"));
@@ -926,17 +930,11 @@ void PlayLevel::Update(float _DeltaTime)
 
 	if (0 >= Player::PlayTimer)
 	{
-		EndingBack::Ending->SetEndingScene(EndingScene::TimeOver);
+ 		EndingBack::Ending->SetEndingScene(EndingScene::TimeOver);
+		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
 }
 
-void PlayLevel::SetBGMPlayer(const std::string_view& _String, int _loop, float _BasicVolume)
-{
-	BGMPlayer.Stop();
-	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String.data());
-	BGMPlayer.LoopCount(_loop);
-	BGMPlayer.Volume(_BasicVolume);
-}
 
 void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
@@ -945,6 +943,8 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
 	BGMPlayer.LoopCount(MaxLoop);
 	BGMPlayer.Volume(BGMVolume);
+
+	Player::MainPlayer->ResetPlayTimer();
 
 }
 
@@ -959,3 +959,10 @@ void PlayLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 }
 
 
+void PlayLevel::SetBGMPlayer(const std::string_view& _String, int _loop, float _BasicVolume)
+{
+	BGMPlayer.Stop();
+	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl(_String.data());
+	BGMPlayer.LoopCount(_loop);
+	BGMPlayer.Volume(_BasicVolume);
+}

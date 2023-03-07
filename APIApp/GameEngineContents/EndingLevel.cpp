@@ -41,12 +41,15 @@ void EndingLevel::ImageLoad()
 
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("Ending2.bmp"));
+		Image->Cut(1, 1);
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("GameOver.bmp"));
+		Image->Cut(1, 1);
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("TimeUp.bmp"));
+		Image->Cut(1, 1);
 	}
 	{
 		GameEngineImage* Image = GameEngineResources::GetInst().ImageLoad(Dir.GetPlusFileName("txt1.bmp"));

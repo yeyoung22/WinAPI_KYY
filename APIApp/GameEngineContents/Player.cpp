@@ -588,6 +588,7 @@ void Player::Update(float _DeltaTime)
 		//AssignLevels(PlayLevel::MapNames, Round);
 
 		PlayLevel::MainPlayLevel->SetBGMStop();
+
 		EndingBack::Ending->SetEndingScene(EndingScene::Clear);
 		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}

@@ -118,7 +118,10 @@ public:
 		IsShrink = true;
 	}
 
-	
+	void ResetPlayTimer()
+	{
+		PlayTimer = 10.0f;
+	}
 
 
 	//플레이어의 충돌체 별로 처리할게 다르므로 vector에 넣어서 다른 곳에서 볼 수 있게 해야 함
