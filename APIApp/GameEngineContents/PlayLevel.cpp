@@ -281,11 +281,11 @@ void PlayLevel::Loading()
 	//MainPlayer
 	{
 		Player* Actor = CreateActor<Player>();
-		//Actor->SetPos({ 160, StartPos.y - 128});					// x = 128+mario.half
+		Actor->SetPos({ 160, StartPos.y - 128});					// x = 128+mario.half
 
 		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
-		Actor->SetPos({ 800, StartPos.y - 128 } );					//800
-		SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});
+		//Actor->SetPos({ 800, StartPos.y - 128 } );					//800
+		//SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});
 	}
 	//Goomba1
 	{
@@ -945,7 +945,7 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	BGMPlayer.Volume(BGMVolume);
 
 	Player::MainPlayer->ResetPlayTimer();
-
+	Player::MainPlayer->SetPlayerColOn();
 }
 
 void PlayLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)

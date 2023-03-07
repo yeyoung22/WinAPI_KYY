@@ -55,7 +55,6 @@ private:
 	float MoveSpeed2 = 80.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 
-	float FrictionPower = 0.0025f;
 
 	float4 MoveDir = float4::Zero;
 	float4 Dir = float4::Left;									//몬스터의 움직이는 방향
@@ -63,11 +62,8 @@ private:
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };
 
-	float4 PivotRPos2 = { ImgHalfWidth - 8, -17 };
-	float4 PivotLPos2 = { -ImgHalfWidth + 8, -17 };
-
 	float4 TriggerScale = { 10, 700 };
-	float4 TiriggerCtrlPos = { -600, -350 };
+	float4 TiriggerCtrlPos = { -700, -350 };
 
 
 	MonsterState StateValue = MonsterState::MOVE;

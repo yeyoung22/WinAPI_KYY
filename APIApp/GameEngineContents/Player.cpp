@@ -770,3 +770,21 @@ void Player::ShrinkEffect(float _DeltaTime)
 		InvincibleTimer = 2.0f;
 	}
 }
+
+void Player::SetPlayerColOff()
+{
+	HeadCollision->Off();
+	SHeadCollision->Off();
+	RightBodyCollision->Off();
+	LeftBodyCollision->Off();
+	BottomCollision->Off();
+}
+
+void Player::SetPlayerColOn()
+{
+	HeadCollision->On();
+	SHeadCollision->On();
+	RightBodyCollision->On();
+	LeftBodyCollision->On();
+	BottomCollision->On();
+}

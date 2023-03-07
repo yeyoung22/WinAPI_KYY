@@ -121,6 +121,7 @@ void Brick::Update(float _DeltaTime)
 
 	if (true == IsChipMove)
 	{
+		BlockCollision->Off();
 		IsChipMoveEnd = false;
 		BlockRender->Off();
 		WaitTime -= _DeltaTime;

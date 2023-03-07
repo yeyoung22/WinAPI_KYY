@@ -120,9 +120,10 @@ public:
 
 	void ResetPlayTimer()
 	{
-		PlayTimer = 10.0f;
+		PlayTimer = 400.0f;
 	}
-
+	void SetPlayerColOn();
+	void SetPlayerColOff();
 
 	//플레이어의 충돌체 별로 처리할게 다르므로 vector에 넣어서 다른 곳에서 볼 수 있게 해야 함
 	//복사본을 넘겨 주겠음
@@ -150,6 +151,16 @@ protected:
 
 
 	GameEngineSoundPlayer EffectPlayer;
+
+
+	GameEngineSoundPlayer EffectPlayer1;
+	GameEngineSoundPlayer EffectPlayer2;
+	GameEngineSoundPlayer EffectPlayer3;
+	GameEngineSoundPlayer EffectPlayer4;
+	GameEngineSoundPlayer EffectPlayer5;
+	GameEngineSoundPlayer EffectPlayer6;
+
+
 
 private:
 	bool IsUnderGround = false;
@@ -185,10 +196,8 @@ private:
 	float ImgHalfHeight = 64.0f;
 
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
-	//float MoveSpeed = 230.0f;									//Player Speed
-	float MoveSpeed = 450.0f;
-	float MaxSpeed = 500.f;								//테스트용 값이므로 지워야 함--------------------------------------------------------------------------
-	//float MaxSpeed = 250.0f;									
+	float MoveSpeed = 230.0f;									//Player Speed
+	float MaxSpeed = 250.0f;									
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 	float PipeEnterSpeed = 68.0f;

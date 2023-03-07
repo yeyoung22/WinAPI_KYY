@@ -8,6 +8,7 @@
 #include <GameEngineCore/GameEngineCore.h>
 #include "ContentsEnums.h"
 #include "PlayLevel.h"
+#include "EndingBack.h"
 #include "Pipe.h"
 #include "QuestionBlock.h"
 #include "Effect.h"
@@ -993,13 +994,7 @@ void Player::DeathStart()
 	Gravity = 1000.0f;
 
 
-	HeadCollision      ->Off();
-	SHeadCollision     ->Off();
-	RightBodyCollision ->Off();
-	LeftBodyCollision  ->Off();
-	BottomCollision    ->Off();
-
-
+	SetPlayerColOff();
 
 	PlayLevel::MainPlayLevel->SetBGMPlayer("Miss.mp3");
 	DirCheck("Death");
@@ -1019,7 +1014,8 @@ void Player::DeathUpdate(float _Time)
 	if (0 >= WaitTime)
 	{
 		AnimationRender->Off();
-		//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+		EndingBack::Ending->SetEndingScene(EndingScene::GameOver);
+		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
 
 
@@ -1239,7 +1235,7 @@ void Player::GoCastleStart()
 	MoveSpeed = 150.0f;
 	PlayLevel::MainPlayLevel->SetBGMPlayer("LevelComplete.mp3");
 
-	WaitTime = 16.0f;
+	WaitTime = 9.0f;
 }
 void Player::GoCastleUpdate(float _Time)
 {
@@ -1262,15 +1258,16 @@ void Player::GoCastleUpdate(float _Time)
 			{
 				--PlayTimer;
 				++TotalScore;
+
+				
 			}
 			else
 			{
-				++Round;
-				IsMoveStop = false;
-
 				if (0 >= WaitTime)
 				{
-
+					IsMoveStop = false;
+					++Round;
+					NumOfCoin = 0;
 					GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
 				}
 
