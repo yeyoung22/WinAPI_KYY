@@ -4,6 +4,7 @@
 
 enum class MonsterState
 {
+	IDLE,
 	MOVE,
 	FALL,
 	DEATH,

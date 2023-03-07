@@ -159,6 +159,7 @@ private:
 	bool ColShorter = false;
 	bool FlagDownEnd = false;
 	bool IsMoveStop = false;
+	bool TimerStop = false;
 
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);

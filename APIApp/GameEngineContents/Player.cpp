@@ -342,7 +342,10 @@ bool Player::FreeMoveState(float _DeltaTime)
 
 void Player::Update(float _DeltaTime)
 {
-	PlayTimer -= _DeltaTime* TimeSpeed;
+	if (false == TimerStop)
+	{
+		PlayTimer -= _DeltaTime* TimeSpeed;
+	}
 
 	//플레이어 모드에 따라 머리 부분 충돌체를 교체
 	if (ModeValue == PlayerMode::MARIO && StateValue != PlayerState::DEATH)

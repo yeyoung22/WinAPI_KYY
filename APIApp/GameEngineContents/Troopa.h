@@ -43,8 +43,10 @@ private:
 	int Red = RGB(255, 0, 0);
 	int Magenta = RGB(255, 0, 255);
 	int Point = 100;
+	int count = 0;
 
-	float WaitTime = 1.5f;
+	float ShellColOffTime = 1.0f;
+	float WaitTime = 2.0f;
 
 	float Gravity = 200.0f;										//For Decresing JumpPower
 	float ImgHalfWidth = 32.0f;									//To be cut PlayerImg's half size Width and Height
@@ -85,6 +87,7 @@ private:
 
 	void DirCheck(const std::string_view& _AnimationName);
 	void MonsterMove(float _DeltaTime);
+	void IdleUpdate(float _DeltaTime);
 	void MoveUpdate(float _DeltaTime);
 	void FallUpdate(float _DeltaTime);
 	void ShellUpdate(float _DeltaTime);

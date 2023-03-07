@@ -120,9 +120,6 @@ void Goomba::Update(float _DeltaTime)
 		}
 	}
 
-
-
-
 	//플레이어의 공격과 충돌한 경우
 	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::PlayerAttack), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
 		|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::PlayerAttack), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
@@ -140,6 +137,23 @@ void Goomba::Update(float _DeltaTime)
 		}
 	}
 
+	//Troopa등껍질이랑 충돌한 경우
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		|| (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+	{
+		TimerStart = true;
+
+		SetEffectSound("stomp.wav");
+		AnimationRender->ChangeAnimation("Goomba_Reverse");
+		Player::TotalScore += Point;
+		HeadCollision->Off();
+		LeftBodyCollision->Off();
+		RightBodyCollision->Off();
+
+		AccGravity(_DeltaTime);
+		SetMove(MoveDir * _DeltaTime);
+		DeathMon = this;
+	}
 
 	if (true == TimerStart)
 	{

@@ -6,6 +6,7 @@
 #include "ContentsEnums.h"
 #include "Player.h"
 #include "Effect.h"
+#include "Goomba.h"
 
 #include <GameEnginePlatform/GameEngineWindow.h>
 
@@ -93,26 +94,13 @@ void Troopa::Update(float _DeltaTime)
 	//플레이어가 머리부분과 충돌했을 경우
 	if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
 	{
-		//for (size_t i = 0; i < Collision.size(); i++)
-		//{
-		//	Monster* FindMonster = Collision[i]->GetOwner<Monster>();
-
-		//	//GameEngineActor* ColActor = Collision[i]->GetActor();
-
-		//	SetEffectSound("stomp.wav");
-
-		//
-
-
-		//}
-
-		DirCheck("TroopaShell");
+		SetEffectSound("stomp.wav");
 		Player::TotalScore += Point;
 		HeadCollision->Off();
 		LeftBodyCollision->Off();
 		RightBodyCollision->Off();
-		SetShellColOn();
-		//FindMonster->Death();
+		StateValue = MonsterState::IDLE;
+		return;
 	}
 
 
@@ -121,11 +109,6 @@ void Troopa::Update(float _DeltaTime)
 		|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect } )
 		)
 	{
-
-			/*HeadCollision->Off();
-			LeftBodyCollision->Off();
-			RightBodyCollision->Off();*/
-
 
 		if (false == Player::InvincibleMode)
 		{
@@ -140,23 +123,22 @@ void Troopa::Update(float _DeltaTime)
 				--Player::Life;
 
 				Player::MainPlayer->ChangeState(PlayerState::DEATH);
-
-
-				//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 			}
 		}
 
 
 	}
 
+	if (StateValue == MonsterState::IDLE)
+	{
+		ShellColOffTime -= _DeltaTime;
 
-	//<트루파 죽는 조건>
-	//밟으면 등껍질로 애니메이션 변경_안 죽음
-	//한 번더 밟으면 정해진 방향으로 날아감(기본은 오른쪽)
-	//일정시간동안 안 밟히면 다시 부활
-	//날아가다가 구멍에 빠지면 죽음
-
-
+		if (0.0f >= ShellColOffTime)
+		{
+			SetShellColOn();
+		}
+	}
+	
 }
 
 
@@ -265,7 +247,6 @@ void Troopa::DirCheck(const std::string_view& _AnimationName)
 	{
 		DirString = "Right_";
 	}
-
 }
 
 
@@ -273,6 +254,11 @@ void Troopa::MonsterMove(float _DeltaTime)
 {
 	switch (StateValue)
 	{
+	case MonsterState::IDLE:
+	{
+		IdleUpdate(_DeltaTime);
+		break;
+	}
 	case MonsterState::MOVE:
 	{
 		MoveUpdate(_DeltaTime);
@@ -293,6 +279,46 @@ void Troopa::MonsterMove(float _DeltaTime)
 	}
 }
 
+void Troopa::IdleUpdate(float _DeltaTime)
+{
+	
+	WaitTime -= _DeltaTime;
+	DirCheck("TroopaShell");
+	MoveDir = float4::Zero;
+
+	if (true == LeftShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+	{
+		SetEffectSound("kick.wav");
+		Dir = float4::Right;
+
+		StateValue = MonsterState::SHELL;
+		return;
+	}
+	else if (true == RightShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+	{
+		SetEffectSound("kick.wav");
+		Dir = float4::Left;
+		StateValue = MonsterState::SHELL;
+		return;
+	}
+	else if (false == LeftShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		&& (false == RightShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+	{
+		if (0.0f >= WaitTime)
+		{
+			DirCheck("TroopaIdle");
+			HeadCollision->On();
+			LeftBodyCollision->On();
+			RightBodyCollision->On();
+			SetShellColOff();
+
+			TimerStart = false;
+			count = 0;
+			StateValue = MonsterState::MOVE;
+			return;
+		}
+	}
+}
 
 void Troopa::MoveUpdate(float _DeltaTime)
 {
@@ -359,11 +385,7 @@ void Troopa::MoveUpdate(float _DeltaTime)
 	//몬스터끼리 충돌한 경우
 	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 	{
-		for (size_t i = 0; i < Collision.size(); i++)
-		{
-			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
-			//	FindMonster->SetDirSwitch();
-		}
+	
 		SetDirSwitch();
 	}
 
@@ -412,7 +434,56 @@ void Troopa::FallUpdate(float _DeltaTime)
 
 void Troopa::ShellUpdate(float _DeltaTime)
 {
+	DirCheck("TroopaShell");
+	AccGravity(_DeltaTime);
+	MoveSpeed = 500.0f;
+	MoveDir = Dir * MoveSpeed * _DeltaTime;
+	SetMove(MoveDir);
 
+	if (true == CheckWall(PivotLPos))
+	{
+		SetEffectSound("bump.wav");
+		Dir = float4::Right;
+		DirCheck("TroopaShell");
+	}
+
+	if (true == CheckWall(PivotRPos))
+	{
+		SetEffectSound("bump.wav");
+		Dir = float4::Left;
+		DirCheck("TroopaShell");
+	}
+
+
+
+	if ((true == RightShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		|| (true == LeftShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+ 		if (false == Player::InvincibleMode)
+		{
+			if (Player::ModeValue == PlayerMode::SUPERMARIO)
+			{
+				Player::MainPlayer->SetIsShrinkOn();
+				SetEffectSound("pipe.wav");
+
+			}
+			else
+			{
+				--Player::Life;
+
+				Player::MainPlayer->ChangeState(PlayerState::DEATH);
+			}
+		}
+	}
+
+
+
+
+	SetMove(MoveDir * _DeltaTime);
+
+	IsGround = LiftUp();
+	InitGravity(IsGround);
 }
 
 

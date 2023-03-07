@@ -1169,7 +1169,7 @@ void Player::FlagStart()
 	MoveDir.x = 0.0f;
 	WaitTime = 1.0f;
 
-
+	TimerStop = true;
 
 	PlayLevel::MainPlayLevel->SetBGMPlayer("flagpole.wav");
 }
