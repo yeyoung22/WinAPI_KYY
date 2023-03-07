@@ -167,6 +167,7 @@ void ContentsUI::Start()
 		AnimationRender->CreateAnimation({ .AnimationName = "CoinUI",  .ImageName = "CoinUI.bmp", .Start = 0, .End = 3, .Loop = true });
 		AnimationRender->EffectCameraOff();
 	}
+	AnimationRender->ChangeAnimation("CoinUI");
 }
 
 void ContentsUI::Update(float _DeltaTime)
@@ -208,7 +209,7 @@ void ContentsUI::Update(float _DeltaTime)
 
 
 	TimerSets.SetValue(static_cast<int>(Player::PlayTimer));
-	AnimationRender->ChangeAnimation("CoinUI");
+	//AnimationRender->ChangeAnimation("CoinUI");
 
 	
 }

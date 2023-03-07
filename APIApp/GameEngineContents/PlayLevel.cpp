@@ -265,6 +265,7 @@ void PlayLevel::Loading()
 	SoundLoad();
 	ImageLoad();
 
+	float4 StartPos = GameEngineWindow::GetScreenSize();
 	//액터 생성
 	{
 		Map* Actor = CreateActor<Map>();
@@ -276,32 +277,88 @@ void PlayLevel::Loading()
 	//MainPlayer
 	{
 		Player* Actor = CreateActor<Player>();
-		//Actor->SetPos({ 160, GameEngineWindow::GetScreenSize().y - 128});					// x = 128+mario.half
+		//Actor->SetPos({ 160, StartPos.y - 128});					// x = 128+mario.half
 
 		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
-		Actor->SetPos({ 800, GameEngineWindow::GetScreenSize().y - 128 } );
+		Actor->SetPos({ 800, StartPos.y - 128 } );					//800
 		SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});
 	}
 	//Goomba1
 	{
 		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
 		Actor->SetPos({1400, StartPos.y - 128});
-
-		//일단 굼바 끔=-------------------------------------------------------------------------------------------
-		//Actor->Off();
 	}
 	//Goomba2
 	{
 		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Actor->SetPos({ 2800, StartPos.y - 128 });
+	}
+	//Goomba3
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
 		Actor->SetPos({ 3200, StartPos.y - 128 });
+	}
+	//Goomba4
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 3264, StartPos.y - 128 });
+	}
+	//Goomba5
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 5148, 320 });
+		Actor->SetTriggerPos({ -600,180});
+	}
+	//Goomba6
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 5224, 320 });
+		Actor->SetTriggerPos({ -600, 180 });
+	}
+	//Goomba7
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 6300, StartPos.y - 128 });
+	}
+	//Goomba8
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 6380, StartPos.y - 128 });					
+	}
+	//Goomba9
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 7750, StartPos.y - 128 });
+	}
+	//Goomba10
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 7786, StartPos.y - 128 });
+	}
+	//Goomba11
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 7890, StartPos.y - 128 });
+	}
+	//Goomba12
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 8460, StartPos.y - 128 });
+	}
+	//Goomba13
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 11300, StartPos.y - 128 });
+	}
+	//Goomba14
+	{
+		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
+		Actor->SetPos({ 11364, StartPos.y - 128 });
 	}
 	//Troopa
 	{
 		Troopa* Actor = CreateActor<Troopa>(MarioRenderOrder::Monster);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Actor->SetPos({ 2200, StartPos.y - 128 });
+		Actor->SetPos({ 2200, StartPos.y - 128 });			//7000
 	}
 	//1_1_ITem1
 	{

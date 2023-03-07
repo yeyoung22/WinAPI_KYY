@@ -5,6 +5,8 @@
 #include <GameEngineCore/GameEngineLevel.h>
 #include "ContentsEnums.h"
 #include "Player.h"
+#include "Effect.h"
+
 #include <GameEnginePlatform/GameEngineWindow.h>
 
 
@@ -81,31 +83,7 @@ void Troopa::Update(float _DeltaTime)
 
 	if (true == MoveStart)
 	{
-		MoveDir = Dir * MoveSpeed * _DeltaTime;
-		SetMove(MoveDir);
-
-		if (true == CheckWall(PivotLPos))
-		{
-			Dir = float4::Right;
-			DirCheck("TroopaIdle");
-		}
-
-		if (true == CheckWall(PivotRPos))
-		{
-			Dir = float4::Left;
-			DirCheck("TroopaIdle");
-		}
-
-		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-		{
-			Dir = float4::Left;
-		}
-
-		if (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-		{
-			Dir = float4::Right;
-		}
-
+		MonsterMove(_DeltaTime);
 	}
 
 
@@ -195,17 +173,11 @@ void Troopa::InitGravity(bool _IsGround)
 	}
 }
 
-//좌우키가 안 눌렀을때 멈추게 할 저항
-void  Troopa::Friction(float4& _Pos, float _DeltaTime)
-{
-	_Pos.x *= (FrictionPower * _DeltaTime);
-}
-
-bool Troopa::LiftUp(float4 _Pos)
+bool Troopa::LiftUp()
 {
 	while (true)
 	{
-		float4 NextPos = GetPos() + _Pos;
+		float4 NextPos = GetPos() ;
 
 		int Color = Player::MainPlayer->ColImage->GetPixelColor(NextPos, Black);
 
@@ -220,7 +192,7 @@ bool Troopa::LiftUp(float4 _Pos)
 
 	//땅인지 아닌지 체크하는 부분
 	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
-	float4 Down = GetPos() + _Pos;
+	float4 Down = GetPos();
 
 	if (Black == Player::MainPlayer->ColImage->GetPixelColor(Down + float4::Down, Black))
 	{
@@ -244,6 +216,17 @@ bool Troopa::CheckWall(float4 _Pivot)
 	return false;
 }
 
+bool Troopa::CheckAir()
+{
+	float4 CheckPos = GetPos();
+
+	if (Magenta == Player::MainPlayer->ColImage->GetPixelColor(CheckPos + float4::Down, Black))
+	{
+		return true;
+	}
+	return false;
+}
+
 void Troopa::SetShellColOn()
 {
 	LeftShellCollision->On();
@@ -256,26 +239,182 @@ void Troopa::SetShellColOff()
 	RightShellCollision->Off();
 }
 
+void Troopa::SetDirSwitch()
+{
+	if (0.0f > Dir.x)
+	{
+		Dir = float4::Right;
+	}
+	else if (0.0f < Dir.x)
+	{
+		Dir = float4::Left;
+	}
+}
+
+
 
 void Troopa::DirCheck(const std::string_view& _AnimationName)
-{
-	std::string PrevDirString = DirString;							//DirString = "Right_"
+{				
 	AnimationRender->ChangeAnimation(DirString + _AnimationName.data());
 
-	if (GameEngineInput::IsPress("LeftMove"))
+	if (0.0f > Dir.x)
 	{
 		DirString = "Left_";
 	}
-	else if (GameEngineInput::IsPress("RightMove"))
+	else if (0.0f < Dir.x)
 	{
 		DirString = "Right_";
 	}
 
-	if (PrevDirString != DirString)
+}
+
+
+void Troopa::MonsterMove(float _DeltaTime)
+{
+	switch (StateValue)
 	{
-		AnimationRender->ChangeAnimation(DirString + _AnimationName.data());
+	case MonsterState::MOVE:
+	{
+		MoveUpdate(_DeltaTime);
+		break;
+	}
+	case MonsterState::FALL:
+	{
+		FallUpdate(_DeltaTime);
+		break;
+	}
+	case MonsterState::SHELL:
+	{
+		ShellUpdate(_DeltaTime);
+		break;
+	}
+	default:
+		break;
 	}
 }
+
+
+void Troopa::MoveUpdate(float _DeltaTime)
+{
+	DirCheck("TroopaIdle");
+	MoveDir = Dir * MoveSpeed * _DeltaTime;
+	SetMove(MoveDir);
+
+	if (true == CheckWall(PivotLPos))
+	{
+		Dir = float4::Right;
+		DirCheck("TroopaIdle");
+	}
+
+	if (true == CheckWall(PivotRPos))
+	{
+		Dir = float4::Left;
+		DirCheck("TroopaIdle");
+	}
+
+	//블럭과 충돌한 경우
+	std::vector<GameEngineCollision*> Collision;
+	if ((false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		if (true == CheckAir())
+		{
+			StateValue = MonsterState::FALL;
+			return;
+		}
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+
+		StateValue = MonsterState::MOVE;
+		return;
+	}
+
+	if ((false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		if (true == CheckAir())
+		{
+			StateValue = MonsterState::FALL;
+			return;
+		}
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+
+		StateValue = MonsterState::MOVE;
+		return;
+	}
+
+	//몬스터끼리 충돌한 경우
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+	{
+		for (size_t i = 0; i < Collision.size(); i++)
+		{
+			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
+			//	FindMonster->SetDirSwitch();
+		}
+		SetDirSwitch();
+	}
+
+	if (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+	{
+		SetDirSwitch();
+	}
+	DirCheck("TroopaIdle");
+}
+
+
+void Troopa::FallUpdate(float _DeltaTime)
+{
+
+	if ((false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		AccGravity(_DeltaTime);
+		SetMove(Dir * MoveSpeed2 * _DeltaTime);
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+
+		StateValue = MonsterState::MOVE;
+		return;
+	}
+
+
+	SetMove(MoveDir * _DeltaTime);
+
+	IsGround = LiftUp();
+	InitGravity(IsGround);
+
+	//땅에 닿으면 Idle
+	if (true == IsGround)
+	{
+		StateValue = MonsterState::MOVE;
+		return;
+	}
+}
+
+void Troopa::ShellUpdate(float _DeltaTime)
+{
+
+}
+
 
 void Troopa::Render(float _DeltaTime)
 {

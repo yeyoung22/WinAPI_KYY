@@ -91,6 +91,8 @@ private:
 	float4 PivotRPos = {  20, -15 };
 	float4 PivotLPos = { -20, -15 };
 
+	std::string DirString = "Right_";
+
 	ItemType PrevItemMode = ItemType::HIDDENCOIN;
 	ItemType ItemMode = ItemType::HIDDENCOIN;
 
@@ -100,8 +102,8 @@ private:
 	
 	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
 	void AccGravity(float _DeltaTime);
+	void DirCheck(const std::string_view& _AnimationName);
 	bool CheckWall( float4 _Pivot);
-	//bool CheckWall(float4 _Pos, float4 _Pivot);
 	bool LiftUp();
 
 	std::map<ItemType, std::string> AnimNames = std::map<ItemType, std::string>();

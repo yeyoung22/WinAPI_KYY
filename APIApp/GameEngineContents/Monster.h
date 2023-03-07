@@ -2,6 +2,16 @@
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/GameEngineResources.h>
 
+enum class MonsterState
+{
+	MOVE,
+	FALL,
+	DEATH,
+	SHELL,
+
+};
+
+
 // Ό³Έν :
 class Monster : public GameEngineActor
 {
@@ -16,6 +26,7 @@ public:
 	Monster& operator=(const Monster& _Other) = delete;
 	Monster& operator=(Monster&& _Other) noexcept = delete;
 
+	virtual void SetDirSwitch() {}
 
 
 protected:
@@ -23,12 +34,10 @@ protected:
 
 	virtual void AccGravity(float _DeltaTime){}
 	virtual void InitGravity(bool _IsGround) {}
-	virtual void  Friction(float4& _Pos, float _DeltaTime) {}
-	virtual bool LiftUp(float4 _Pos) { return false; }
+	virtual bool LiftUp() { return false; }
 	virtual bool CheckWall(float4 _Pivot) { return false; }
+	virtual bool CheckAir() { return false; }
 
-
-	float4 MoveDir = float4::Zero;
 	GameEngineSoundPlayer EffectPlayer;
 private:
 

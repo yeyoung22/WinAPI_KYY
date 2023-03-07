@@ -15,27 +15,25 @@ public:
 	Troopa& operator=(const Troopa& _Other) = delete;
 	Troopa& operator=(Troopa&& _Other) noexcept = delete;
 
-
-
 	void SetShellColOn();
-
 	void SetShellColOff();
-
 
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
 	void Render(float _DeltaTime) override;
 	
-	virtual void AccGravity(float _DeltaTime);
-	virtual void InitGravity(bool _IsGround);
-	virtual void  Friction(float4& _Pos, float _DeltaTime);
-	virtual bool LiftUp(float4 _Pos);
-	virtual bool CheckWall(float4 _Pivot);
+	void AccGravity(float _DeltaTime)override;
+	void InitGravity(bool _IsGround)override;
+	bool LiftUp()override;
+	bool CheckWall(float4 _Pivot)override;
+	bool CheckAir()override;
+	void SetDirSwitch()override;
 
 private:
 	bool TimerStart = false;
 	bool MoveStart = false;
+	bool IsGround = false;
 
 	Monster* DeathMon = nullptr;
 
@@ -54,6 +52,7 @@ private:
 
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
 	float MoveSpeed = 170.0f;									//Player Speed								
+	float MoveSpeed2 = 80.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 
 	float FrictionPower = 0.0025f;
@@ -82,9 +81,12 @@ private:
 
 	GameEngineRender* AnimationRender = nullptr;
 
-
+	MonsterState StateValue = MonsterState::MOVE;
 
 	void DirCheck(const std::string_view& _AnimationName);
-
+	void MonsterMove(float _DeltaTime);
+	void MoveUpdate(float _DeltaTime);
+	void FallUpdate(float _DeltaTime);
+	void ShellUpdate(float _DeltaTime);
 };
 

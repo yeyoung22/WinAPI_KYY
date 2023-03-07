@@ -16,3 +16,4 @@ void Monster::SetEffectSound(const std::string_view& _String, int _loop, float _
 	EffectPlayer.LoopCount(_loop);
 	EffectPlayer.Volume(_BasicVolume);
 }
+

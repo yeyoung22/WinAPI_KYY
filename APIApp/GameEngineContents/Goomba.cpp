@@ -4,6 +4,7 @@
 #include <GameEngineCore/GameEngineLevel.h>
 #include "ContentsEnums.h"
 #include "Player.h"
+#include "Effect.h"
 
 #include <GameEnginePlatform/GameEngineWindow.h>
 
@@ -23,6 +24,7 @@ void Goomba::Start()
 
 		AnimationRender->CreateAnimation({ .AnimationName = "Goomba_Idle",  .ImageName = "Goomba.bmp", .Start = 0, .End = 1 });
 		AnimationRender->CreateAnimation({ .AnimationName = "Goomba_Death",  .ImageName = "Goomba.bmp", .Start = 2, .End = 2 });
+		AnimationRender->CreateAnimation({ .AnimationName = "Goomba_Reverse",  .ImageName = "ReverseGoomba.bmp", .Start = 0, .End = 0 });
 		AnimationRender->ChangeAnimation("Goomba_Idle");
 	}
 	{
@@ -55,6 +57,7 @@ void Goomba::Start()
 
 void Goomba::Update(float _DeltaTime)
 {
+	std::vector<GameEngineCollision*> Collision;
 	
 	if (nullptr != TriggerCollision)
 	{
@@ -62,54 +65,22 @@ void Goomba::Update(float _DeltaTime)
 		{
 			MoveStart = true;
 			TriggerCollision->Off();
-
 		}
-
 	}
-
+	//trigger와 플레이어가 충돌하면 몬스터가 움직임
 	if (true == MoveStart)
 	{
-		MoveDir = Dir * MoveSpeed * _DeltaTime;
-		SetMove(MoveDir);
-
-		if (true == CheckWall(PivotLPos))
-		{
-			Dir = float4::Right;
-		}
-
-		if (true == CheckWall(PivotRPos))
-		{
-			Dir = float4::Left;
-		}
-
-		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-		{
-			Dir = float4::Left;
-		}
-
-		if (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-		{
-			Dir = float4::Right;
-		}
-		
+		MonsterMove(_DeltaTime);
 	}
-	
 
-	std::vector<GameEngineCollision*> PlayerCols = Player::MainPlayer->GetPlayerCollisions();
-
-	std::vector<GameEngineCollision*> Collision;
-	if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
-		&&
-		true == PlayerCols[4]->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
-		)
-	{
-		TimerStart = true;
-
-		for (size_t i = 0; i < Collision.size(); i++)
+	if (false == Player::InvincibleMode)
+	{	
+		//플레이어와 몬스터의 머리 충돌체가 충돌한 경우
+		std::vector<GameEngineCollision*> PlayerCols = Player::MainPlayer->GetPlayerCollisions();
+		if (true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+			&& true == PlayerCols[4]->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 		{
-			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
-
-			//GameEngineActor* ColActor = Collision[i]->GetActor();
+			TimerStart = true;
 
 			SetEffectSound("stomp.wav");
 			AnimationRender->ChangeAnimation("Goomba_Death");
@@ -118,51 +89,56 @@ void Goomba::Update(float _DeltaTime)
 			LeftBodyCollision->Off();
 			RightBodyCollision->Off();
 
-			
-			DeathMon = FindMonster;
 
-		}
-	}
-
-	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
-		|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
-		)
-	{
-		for (size_t i = 0; i < Collision.size(); i++)
-		{
-			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
-			HeadCollision->Off();
-			LeftBodyCollision->Off();
-			RightBodyCollision->Off();
-
-
+			DeathMon = this;
 		}
 
-		if (false == Player::InvincibleMode)
+		//플레이어와 몬스터의 좌우측 충돌체가 충돌한 경우
+		if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+			|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+			)
 		{
+			for (size_t i = 0; i < Collision.size(); i++)
+			{
+				Monster* FindMonster = Collision[i]->GetOwner<Monster>();
+				//HeadCollision->Off();
+				//LeftBodyCollision->Off();
+				//RightBodyCollision->Off();
+			}
+
 			if (Player::ModeValue == PlayerMode::SUPERMARIO)
 			{
 				Player::MainPlayer->SetIsShrinkOn();
 				SetEffectSound("pipe.wav");
-
 			}
 			else
 			{
 				--Player::Life;
-
 				Player::MainPlayer->ChangeState(PlayerState::DEATH);
-
-
-				//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 			}
-		}
 
-		
+		}
 	}
 
 
 
 
+	//플레이어의 공격과 충돌한 경우
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::PlayerAttack), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::PlayerAttack), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		)
+	{
+		TimerStart = true;
+		for (size_t i = 0; i < Collision.size(); i++)
+		{
+			Effect* HitAttack = Collision[i]->GetOwner<Effect>();
+			HitAttack->Death();
+
+			AnimationRender->ChangeAnimation("Goomba_Reverse");
+
+			DeathMon = this;
+		}
+	}
 
 
 	if (true == TimerStart)
@@ -175,20 +151,7 @@ void Goomba::Update(float _DeltaTime)
 			WaitTime = 0.3f;
 		}
 	}
-
-
-
-	//<굼바가 죽는 조건_with Koopa>
-	//맵을 벗어났으면 죽어야 함
-	//구멍에 빠지면 죽음
-	//불꽃에 맞아도 죽음
-	//머리를 밟혀도 죽음(마리오의 바닥 충돌체와 이 아이의 좌우 충돌체가 닿이면 죽음
-
-
 }
-
-
-
 
 void Goomba::AccGravity(float _DeltaTime)
 {
@@ -203,18 +166,12 @@ void Goomba::InitGravity(bool _IsGround)
 	}
 }
 
-//좌우키가 안 눌렀을때 멈추게 할 저항
-void  Goomba::Friction(float4& _Pos, float _DeltaTime)
-{
-	_Pos.x *= (FrictionPower * _DeltaTime);
-}
 
-
-bool  Goomba::LiftUp(float4 _Pos)
+bool  Goomba::LiftUp()
 {
 	while (true)
 	{
-		float4 NextPos = GetPos() + _Pos;
+		float4 NextPos = GetPos();
 
 		int Color = Player::MainPlayer->ColImage->GetPixelColor(NextPos, Black);
 
@@ -229,7 +186,7 @@ bool  Goomba::LiftUp(float4 _Pos)
 
 	//땅인지 아닌지 체크하는 부분
 	//Ground: Player가 서있을 곳(Down)보다 한 칸 아래쪽이 Black이면 땅으로 판단_Player는 Black이 아님
-	float4 Down = GetPos() + _Pos;
+	float4 Down = GetPos();
 
 	if (Black == Player::MainPlayer->ColImage->GetPixelColor(Down + float4::Down, Black))
 	{
@@ -252,6 +209,169 @@ bool Goomba::CheckWall(float4 _Pivot)
 
 	return false;
 }
+
+bool Goomba::CheckAir()
+{
+	float4 CheckPos = GetPos();
+
+	if (Magenta == Player::MainPlayer->ColImage->GetPixelColor(CheckPos + float4::Down, Black))
+	{
+		return true;
+	}
+	return false;
+}
+
+void Goomba::SetTriggerPos(float4 _Pos)
+{
+	TriggerCollision->SetPosition(_Pos);
+}
+
+void Goomba::SetDirSwitch()
+{
+	if (0.0f > Dir.x)
+	{
+		Dir = float4::Right;
+	}
+	else if (0.0f <= Dir.x)
+	{
+		Dir = float4::Left;
+	}
+}
+
+void Goomba::MonsterMove(float _DeltaTime)
+{
+	switch (StateValue)
+	{
+	case MonsterState::MOVE:
+	{
+		MoveUpdate(_DeltaTime);
+		break;
+	}
+	case MonsterState::FALL:
+	{
+		FallUpdate(_DeltaTime);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+
+void Goomba::MoveUpdate(float _DeltaTime)
+{
+
+	MoveDir = Dir * MoveSpeed * _DeltaTime;
+	SetMove(MoveDir);
+
+	if (true == CheckWall(PivotLPos))
+	{
+		Dir = float4::Right;
+	}
+
+	if (true == CheckWall(PivotRPos))
+	{
+		Dir = float4::Left;
+	}
+
+	//블럭과 충돌한 경우
+	std::vector<GameEngineCollision*> Collision;
+	if ((false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		if (true == CheckAir())
+		{
+			StateValue = MonsterState::FALL;
+			return;
+		}
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+
+		StateValue = MonsterState::MOVE;
+		return;
+	}
+
+	if ((false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		if (true == CheckAir())
+		{
+			StateValue = MonsterState::FALL;
+			return;
+		}
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+
+		StateValue = MonsterState::MOVE;
+		return;
+	}
+
+	//몬스터끼리 충돌한 경우
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+	{
+		for (size_t i = 0; i < Collision.size(); i++)
+		{
+			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
+		//	FindMonster->SetDirSwitch();
+		}
+ 		SetDirSwitch();
+
+	}
+	
+	if (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
+	{
+		SetDirSwitch();
+	}
+}
+
+void Goomba::FallUpdate(float _DeltaTime)
+{
+
+	if ((false == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		&& (false == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		AccGravity(_DeltaTime);
+		SetMove(Dir * MoveSpeed2 * _DeltaTime);
+	}
+	else
+	{
+		float4 pos = GetPos();
+
+		MoveDir.y = 0.0f;
+		SetPos({ GetPos().x, pos.y });
+
+		StateValue = MonsterState::MOVE;
+		return;
+	}
+
+
+	SetMove(MoveDir * _DeltaTime);
+
+	IsGround = LiftUp();
+	InitGravity(IsGround);
+
+	//땅에 닿으면 Idle
+	if (true == IsGround)
+	{
+		StateValue = MonsterState::MOVE;
+		return;
+	}
+}
+
+
 
 void Goomba::Render(float _DeltaTime)
 {

@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/NumberRenderObject.h>
 #include <GameEngineCore/GameEngineResources.h>
@@ -60,6 +59,10 @@ public:
 	static int Round;
 	static int Life;												//Base Player Life
 	static GameEngineImage* ColImage;
+
+
+
+
 
 	// constrcuter destructer
 	Player();
@@ -347,6 +350,10 @@ private:
 		IsAlphaOn = !IsAlphaOn;
 	}
 
+	void SetInvincibleSwitch()
+	{
+		InvincibleMode = !InvincibleMode;
+	}
 
 
 	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);

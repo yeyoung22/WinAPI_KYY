@@ -182,11 +182,13 @@ void Item::Update(float _DeltaTime)
 					if (true == CheckWall(PivotRPos))
 					{
 						Dir = float4::Left;
+						DirCheck("SuperMushroom_Move");
 					}
 					
 					if(true == CheckWall(PivotLPos))
 					{
 						Dir = float4::Right;
+						DirCheck("SuperMushroom_Move");
 					}
 
 					if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
@@ -194,10 +196,12 @@ void Item::Update(float _DeltaTime)
 						if (0 > Dir.x)
 						{
 							Dir = float4::Right;
+							DirCheck("SuperMushroom_Move");
 						}
 						else
 						{
 							Dir = float4::Left;
+							DirCheck("SuperMushroom_Move");
 						}
 					}
 				}
@@ -246,11 +250,13 @@ void Item::Update(float _DeltaTime)
 					if (true == CheckWall(PivotRPos))
 					{
 						Dir = float4::Left;
+						DirCheck("1UPMushroom_Move");
 					}
 
 					if (true == CheckWall(PivotLPos))
 					{
 						Dir = float4::Right;
+						DirCheck("1UPMushroom_Move");
 					}
 
 					if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
@@ -258,10 +264,12 @@ void Item::Update(float _DeltaTime)
 						if (0 > Dir.x)
 						{
 							Dir = float4::Right;
+							DirCheck("1UPMushroom_Move");
 						}
 						else
 						{
 							Dir = float4::Left;
+							DirCheck("1UPMushroom_Move");
 						}
 					}
 				}
@@ -324,19 +332,6 @@ void Item::AccGravity(float _DeltaTime)
 {
 	MoveDir += float4::Down * Gravity * _DeltaTime;
 }
-
-//bool Item::CheckWall(float4 _Pos, float4 _Pivot)
-//{
-//	float4 CheckPos = GetPos() + _Pos;
-//	CheckPos += _Pivot;
-//
-//	if (Black == Player::MainPlayer->ColImage->GetPixelColor(CheckPos, Black))
-//	{
-//		return true;
-//	}
-//
-//	return false;
-//}
 
 bool Item::CheckWall(float4 _Pivot)
 {
@@ -451,6 +446,26 @@ void Item::SetCoinMode()
 	SwitchCollision->Off();
 	SetBodyColOn();
 	SetItemRenderOn();
+}
+
+void Item::DirCheck(const std::string_view& _AnimationName)
+{
+	std::string PrevDirString = DirString;							//DirString = "Right_"
+	ItemRender->ChangeAnimation(DirString + _AnimationName.data());
+
+	if (GameEngineInput::IsPress("LeftMove"))
+	{
+		DirString = "Left_";
+	}
+	else if (GameEngineInput::IsPress("RightMove"))
+	{
+		DirString = "Right_";
+	}
+
+	if (PrevDirString != DirString)
+	{
+		ItemRender->ChangeAnimation(DirString + _AnimationName.data());
+	}
 }
 
 void Item::Render(float _DeltaTime)

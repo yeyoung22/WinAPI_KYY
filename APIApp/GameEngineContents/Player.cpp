@@ -150,7 +150,6 @@ void Player::Start()
 	PlayerCols.push_back(RightBodyCollision);
 	PlayerCols.push_back(LeftBodyCollision);
 	PlayerCols.push_back(BottomCollision);
-
 	ChangeColImage("ColWorld1_1.bmp");
 
 	ChangeState(PlayerState::IDLE);
@@ -602,7 +601,7 @@ void Player::Update(float _DeltaTime)
 	
 	if (GameEngineInput::IsDown("InvincibleMode"))
 	{
-		InvincibleMode = true;
+		SetInvincibleSwitch();
 	}
 	
 	if (true == IsUnderGround && HurryUpTime > PlayTimer)
@@ -711,6 +710,18 @@ void Player::Render(float _DeltaTime)
 			std::string MarioStateText = "MarioState : ";
 			MarioStateText += MainPlayer->GetStateName();
 			GameEngineLevel::DebugTextPush(MarioStateText);
+
+			//InvincibleMode
+			std::string MarioInvincibleMode = "Invincible : ";
+			if (InvincibleMode)
+			{
+				MarioInvincibleMode += "true";
+			}
+			else
+			{
+				MarioInvincibleMode += "false";
+			}
+			GameEngineLevel::DebugTextPush(MarioInvincibleMode);
 		}
 
 }
