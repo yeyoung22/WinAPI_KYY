@@ -42,27 +42,31 @@ void Effect::Start()
 
 void Effect::Update(float _DeltaTime)
 {
-	MoveDir += float4::Down* Gravity *_DeltaTime;
-	SetMove(MoveDir * _DeltaTime);
-
-	SetMove(Dir * MoveSpeed * _DeltaTime);
-	
-	if (true == LiftUp(float4::Zero))
+	if (false == IsStop)
 	{
-		MoveDir = float4::Up * JumpPower;
-	} 
-	
+		MoveDir += float4::Down * Gravity * _DeltaTime;
+		SetMove(MoveDir * _DeltaTime);
 
-	if (true == CheckWall(PivotRPos))
-	{
-		Dir.x = 0.0f;
-		DirCheck("FireHit");
+		SetMove(Dir * MoveSpeed * _DeltaTime);
 
-		if (true == FireRender->GameEngineRender::IsAnimationEnd())
+		if (true == LiftUp(float4::Zero))
 		{
-			Death();
+			MoveDir = float4::Up * JumpPower;
+		}
+
+
+		if (true == CheckWall(PivotRPos))
+		{
+			Dir.x = 0.0f;
+			DirCheck("FireHit");
+
+			if (true == FireRender->GameEngineRender::IsAnimationEnd())
+			{
+				Death();
+			}
 		}
 	}
+	
 
 	if (true == FireCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
 		|| true == FireCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))

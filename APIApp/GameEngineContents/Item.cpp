@@ -1,6 +1,7 @@
 #include "Item.h"
 #include <vector>
 #include <GameEngineBase/GameEnginePath.h>
+#include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCollision.h>
@@ -9,7 +10,6 @@
 #include "Player.h"
 #include "PlayLevel.h"
 #include "NumberRenderObjectEX.h"
-#include <GameEnginePlatform/GameEngineWindow.h>
 
 Item::Item() 
 {
@@ -78,7 +78,7 @@ void Item::Start()
 		PointSet.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
 		PointSet.SetValue(Point);
 		PointSet.SetAlign(Align::Right);
-		PointSet.SetRenderPos({GetPos().x, GetPos().y  - 70});
+		PointSet.SetRenderPos({GetPos().x - 30, GetPos().y  - 70});
 		PointSet.SetCameraEffect(true);
 		PointSet.Off();
 	}
@@ -368,6 +368,7 @@ void Item::Update(float _DeltaTime)
 	if (true == IsStop)
 	{
 		PointSetOnTimer -= _DeltaTime;
+		PointSet.SetMove(float4::Up*NumSpeed* _DeltaTime);
 		if (0.0f >= PointSetOnTimer)
 		{
 			PointSet.Off();
@@ -484,7 +485,7 @@ void Item::SetBodyColOff()
 }
 
 
-//bool 값을 사용할지 말지 정해야 함------------------------------------------------------
+
 void Item::SetSwitchColOn()
 {
 	SwitchCollision->On();
@@ -529,20 +530,18 @@ void Item::Render(float _DeltaTime)
 	//float4 PivotRPos = { ImgHalfWidth, -3 };
 	//float4 PivotLPos = { -ImgHalfWidth, -3 };
 
-	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	/*float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();*/
-	/*ActorPos += PivotLPos;*/
-	//ActorPos.x -= ImgHalfWidth;
+	//HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+	//float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
+	//ActorPos += PivotLPos;
 
-	float4 ActorPos = PointSet.GetPos() - GetLevel()->GetCameraPos();
 
-	//<디버깅용_센터 보기위함>
-	Rectangle(DoubleDC,
-		ActorPos.ix() - 5,
-		ActorPos.iy() - 5,
-		ActorPos.ix() + 5,
-		ActorPos.iy() + 5
-	);
+	////<디버깅용_센터 보기위함>
+	//Rectangle(DoubleDC,
+	//	ActorPos.ix() - 5,
+	//	ActorPos.iy() - 5,
+	//	ActorPos.ix() + 5,
+	//	ActorPos.iy() + 5
+	//);
 
 	//float4 right = GetPos() - GetLevel()->GetCameraPos();
 	//right += PivotRPos;

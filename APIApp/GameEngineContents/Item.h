@@ -86,13 +86,14 @@ private:
 	float MoveSpeed = 150.0f;
 	float Gravity = 800.0f;
 	float WaitTime = 0.7f;
+	float NumSpeed = 60.0f;
 
 	float4 Dir = float4::Right;						//기본적인 방향: right
 	float4 BasicScale = { 128, 128 };
 	float4 MoveDir = float4::Zero;
 	float4 PivotRPos = {  20, -15 };
 	float4 PivotLPos = { -20, -15 };
-	float4 NumberScale = { 16, 32 };
+	float4 NumberScale = { 24, 36 };
 
 	std::string DirString = "Right_";
 
@@ -105,7 +106,7 @@ private:
 	GameEngineCollision* BodyCollision = nullptr;
 	GameEngineCollision* SwitchCollision = nullptr;
 	
-	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
+	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.9f);
 	void AccGravity(float _DeltaTime);
 	void DirCheck(const std::string_view& _AnimationName);
 	bool CheckWall( float4 _Pivot);

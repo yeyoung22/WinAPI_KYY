@@ -197,10 +197,6 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="GameEngineActor.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
     <ClCompile Include="GameEngineCollision.cpp">
       <SubType>
       </SubType>

@@ -3,6 +3,7 @@
 #include <GameEngineCore/NumberRenderObject.h>
 #include <GameEngineCore/GameEngineResources.h>
 
+
 enum class PlayerState
 {
 	IDLE,
@@ -153,16 +154,6 @@ protected:
 
 	GameEngineSoundPlayer EffectPlayer;
 
-
-	GameEngineSoundPlayer EffectPlayer1;
-	GameEngineSoundPlayer EffectPlayer2;
-	GameEngineSoundPlayer EffectPlayer3;
-	GameEngineSoundPlayer EffectPlayer4;
-	GameEngineSoundPlayer EffectPlayer5;
-	GameEngineSoundPlayer EffectPlayer6;
-
-
-
 private:
 	bool IsUnderGround = false;
 	bool IsChanged = false;
@@ -210,7 +201,7 @@ private:
 	float FrictionPower = 0.0025f;
 	float ShrinkPower = 10.0f;
 	
-	float BasicVolume = 0.3f;									//Set Volume
+	float BasicVolume = 0.9f;									//Set Volume
 
 	float CameraEndPos = 0.0f;
 
@@ -370,5 +361,5 @@ private:
 	}
 
 
-	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
+	void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.9f);
 };

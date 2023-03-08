@@ -38,6 +38,9 @@ public:
 		return ReturnVector;
 	}
 
+	float4 GetMapImgScale(int _Value);
+
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -51,6 +54,7 @@ private:
 	GameEngineCollision* BodyCollision = nullptr;
 
 	std::vector<GameEngineRender*> MapRenders = std::vector<GameEngineRender*>();
+	std::vector<float4> RenderPosSets = std::vector<float4>();
 	std::vector<std::string> Maps = std::vector<std::string>();
 	std::vector<std::string> ColMaps = std::vector<std::string>();
 };

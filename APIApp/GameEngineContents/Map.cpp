@@ -33,6 +33,8 @@ void Map::Start()
 		MapRender0->SetScaleToImage();
 
 		SumMapWidth = MapRender0->GetImage()->GetImageScale().x;
+
+		RenderPosSets.push_back(StartPos);
 	}
 
 	{
@@ -40,10 +42,11 @@ void Map::Start()
 		MapRender1->SetImage("World1_4.Bmp");
 
 		float4 StartPos = MapRender0->GetImage()->GetImageScale();
-		//StartPos.x += MapRender1->GetImage()->GetImageScale().half().x;
-		StartPos.x += MapRender1->GetImage()->GetImageScale().x;
+		StartPos.x += MapRender1->GetImage()->GetImageScale().half().x;
 		MapRender1->SetPosition({StartPos.x, MapRender1->GetImage()->GetImageScale().half().y});
 		MapRender1->SetScaleToImage();
+
+		RenderPosSets.push_back({StartPos.x, MapRender1->GetImage()->GetImageScale().half().y });
 	}
 
 	{
@@ -65,16 +68,23 @@ void Map::Start()
 
 	MapRenders.push_back(MapRender0);
 	MapRenders.push_back(MapRender1);
+
+	
+
 }
 
 
 void Map::Update(float _DeltaTime)
 {
+	if (0 != Player::Round)
+	{
+		SumMapWidth += GetMapImgScale(1).x;
+	}
+
 	if (true == Player::IsDebugMode)
 	{
 		MapRenders[Player::Round]->SetImage(ColMaps[Player::Round]);
-		float4 StartPos = MapRenders[Player::Round]->GetImage()->GetImageScale().half();
-		MapRenders[Player::Round]->SetPosition(StartPos);
+		MapRenders[Player::Round]->SetPosition(RenderPosSets[Player::Round]);
 		MapRenders[Player::Round]->SetScaleToImage();
 
 		for (int i = 0; i < MapRenders.size(); i++)
@@ -92,8 +102,7 @@ void Map::Update(float _DeltaTime)
 	else if(false == Player::IsDebugMode)
 	{
 		MapRenders[Player::Round]->SetImage(Maps[Player::Round]);
-		float4 StartPos = MapRenders[Player::Round]->GetImage()->GetImageScale().half();
-		MapRenders[Player::Round]->SetPosition(StartPos);
+		MapRenders[Player::Round]->SetPosition(RenderPosSets[Player::Round]);
 		MapRenders[Player::Round]->SetScaleToImage();
 
 		for (int i = 0; i < MapRenders.size(); i++)
@@ -113,4 +122,11 @@ void Map::Update(float _DeltaTime)
 	{
 		IsStageClear = false;
 	}
+}
+
+float4 Map::GetMapImgScale(int _Value)
+{
+
+	float4 CurScale = MapRenders[static_cast<int>(Player::Round) - _Value]->GetImage()->GetImageScale();
+	return CurScale;
 }

@@ -30,6 +30,7 @@ public:
 			Dir = float4::Right;
 		}
 	}
+	bool IsStop = false;
 
 protected:
 	void Start() override;

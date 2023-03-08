@@ -57,6 +57,12 @@ void PlayLevel::SoundLoad()
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("LevelComplete.mp3"));
 	}
 	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Bowser'sCastle.mp3"));
+	}
+	{
+		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Bowser'sCastle_Hurry.mp3"));
+	}
+	{
 		GameEngineResources::GetInst().SoundLoad(Dir.GetPlusFileName("Miss.mp3"));
 
 		Dir.MoveParent();
@@ -281,11 +287,7 @@ void PlayLevel::Loading()
 	//MainPlayer
 	{
 		Player* Actor = CreateActor<Player>();
-		Actor->SetPos({ 160, StartPos.y - 128});					// x = 128+mario.half
-
-		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
-		//Actor->SetPos({ 800, StartPos.y - 128 } );					//800
-		//SetCameraPos({ Actor->GetPos().x -200.0f, 0.0f});
+		//Actor->SetPos({ 160, StartPos.y - 128});					// x = 128+mario.half
 	}
 	//Goomba1
 	{
@@ -362,7 +364,7 @@ void PlayLevel::Loading()
 	//Troopa
 	{
 		Troopa* Actor = CreateActor<Troopa>(MarioRenderOrder::Monster);
-		Actor->SetPos({ 2200, StartPos.y - 128 });			//7000
+		Actor->SetPos({ 6470, StartPos.y - 128 });			//7000
 	}
 	//1_1_ITem1
 	{
@@ -940,12 +942,41 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	MainPlayLevel = this;
 
-	BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
-	BGMPlayer.LoopCount(MaxLoop);
-	BGMPlayer.Volume(BGMVolume);
+	if (1 == Player::Round)
+	{
+		BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("Bowser'sCastle.mp3");
+		BGMPlayer.LoopCount(MaxLoop);
+		BGMPlayer.Volume(BGMVolume);
+	}
+	else
+	{
+		BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
+		BGMPlayer.LoopCount(MaxLoop);
+		BGMPlayer.Volume(BGMVolume);
+	}
 
-	Player::MainPlayer->ResetPlayTimer();
-	Player::MainPlayer->SetPlayerColOn();
+	
+	if (1 == Player::Round)
+	{
+		float4 PrevMapScale = Map::MainMap->GetMapImgScale(1);
+		Player::MainPlayer->SetPos({ PrevMapScale.x + 120, GameEngineWindow::GetScreenSize().half().y - 100});
+		SetCameraPos({ PrevMapScale.x, 0.0f });
+	}
+	else
+	{
+		float4 PrevMapScale = Map::MainMap->GetMapImgScale(0);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		Player::MainPlayer->SetPos({ 160, StartPos.y - 128 });
+		SetCameraPos(float4::Zero);
+
+		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
+		//Player::MainPlayer->SetPos({ 2300, StartPos.y - 128 });					//800
+		//SetCameraPos({ Player::MainPlayer->GetPos().x - 200.0f, 0.0f });
+	}
+
+
+	
+	
 }
 
 void PlayLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)

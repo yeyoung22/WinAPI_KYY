@@ -155,6 +155,9 @@
     <ClCompile Include="ContentsValue.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="..\GameEngineCore\GameEngineActor.cpp">
+      <Filter>Ending</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Title">

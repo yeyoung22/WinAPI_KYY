@@ -17,9 +17,6 @@ public:
 	PlayCollision& operator=(PlayCollision&& _Other) noexcept = delete;
 
 
-	
-	
-
 
 protected:
 	void Start() override;
@@ -29,6 +26,7 @@ private:
 	bool TimerStart = false;
 	bool PointTimerStart = false;
 
+	float NumSpeed = 60.0f;
 	float WaitTime = 0.2f;
 	float PointSetTimer = 0.5f;
 
@@ -36,7 +34,7 @@ private:
 	int PoleLength = 480;
 	int Point = 0;
 
-	float4 NumberScale = { 16, 32 };
+	float4 NumberScale = { 24, 36 };
 
 	NumberRenderObjectEX PointSet;
 

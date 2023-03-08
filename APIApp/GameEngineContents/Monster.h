@@ -31,7 +31,7 @@ public:
 
 
 protected:
-	virtual void SetEffectSound(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.3f);
+	virtual void SetEffectSound(const std::string_view& _String, int _loop = 1, float _Basic= 0.9f);
 
 	virtual void AccGravity(float _DeltaTime){}
 	virtual void InitGravity(bool _IsGround) {}

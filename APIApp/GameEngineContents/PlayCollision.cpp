@@ -6,6 +6,7 @@
 #include "Troopa.h"
 #include "Item.h"
 #include "NumberRenderObjectEX.h"
+#include <GameEnginePlatform/GameEngineWindow.h>
 
 PlayCollision::PlayCollision() 
 {
@@ -156,6 +157,7 @@ void PlayCollision::Update(float _DeltaTime)
 	if (true == PointTimerStart)
 	{
 		PointSetTimer -= _DeltaTime;
+		PointSet.SetMove(float4::Up * NumSpeed * _DeltaTime);
 
 		if (0.0f >= PointSetTimer)
 		{

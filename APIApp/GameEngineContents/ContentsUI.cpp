@@ -180,11 +180,15 @@ void ContentsUI::Update(float _DeltaTime)
 		LifeSets.Off();
 		WorldLevelSets2.Off();
 		MapLevelSets2.Off();
+		TopScoreSets.SetValue(Player::TotalScore);
 	}
 	else if (LevelNames[1] == CurLevelName)
 	{
 		TimerSets.Off();
 		TopScoreSets.Off();
+
+		WorldLevelSets2.SetValue(Player::WorldLevel);
+		MapLevelSets2.SetValue(Player::MapLevel);
 	}
 	else if (LevelNames[2] == CurLevelName)
 	{

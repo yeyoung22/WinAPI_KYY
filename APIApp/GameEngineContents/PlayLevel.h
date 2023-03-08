@@ -21,7 +21,7 @@ public:
 	PlayLevel& operator=(PlayLevel&& _Other) noexcept = delete;
 
 
-	void SetBGMPlayer(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.1f);
+	void SetBGMPlayer(const std::string_view& _String, int _loop = 1, float _BasicVolume = 0.7f);
 	void SetBGMStop()
 	{
 		BGMPlayer.Stop();
@@ -40,7 +40,7 @@ protected:
 private:
 	int MaxLoop = 20;
 	
-	float BGMVolume = 0.1f;
+	float BGMVolume = 0.7f;
 	float HurryUpTime = 100;
 
 	float4 CoinRenScale = { 64.0f, 128.0f };

@@ -53,9 +53,10 @@ private:
 	float WaitTime = 0.3f;
 
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
-	float MoveSpeed = 140.0f;									//Player Speed								
+	float MoveSpeed = 130.0f;									//Player Speed								
 	float MoveSpeed2 = 80.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
+	float NumSpeed = 60.0f;
 
 
 	float4 MoveDir = float4::Zero;
@@ -63,7 +64,7 @@ private:
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };
 	float4 TriggerScale = { 10, 700 };
-	float4 TiriggerCtrlPos = { -700, -350 };
+	float4 TiriggerCtrlPos = { -800, -350 };
 	float4 NumberScale = { 16, 32 };
 
 	MonsterState StateValue = MonsterState::MOVE;

@@ -37,26 +37,31 @@ void Troopa::Start()
 		HeadCollision = CreateCollision(MarioCollisionOrder::Monster);
 		HeadCollision->SetScale({ 30, 20 });
 		HeadCollision->SetPosition({ GetPos().x, GetPos().y - 52 });
+		HeadCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		LeftBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
 		LeftBodyCollision->SetScale({ 10, 45 });
 		LeftBodyCollision->SetPosition({ GetPos().x - 20, GetPos().y - 22 });
+		LeftBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		RightBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
 		RightBodyCollision->SetScale({ 10, 45 });
 		RightBodyCollision->SetPosition({ GetPos().x + 20, GetPos().y - 22 });
+		RightBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
-		LeftShellCollision = CreateCollision(MarioCollisionOrder::Monster);
+		LeftShellCollision = CreateCollision(MarioCollisionOrder::Shell);
 		LeftShellCollision->SetScale({ 30, 45 });
 		LeftShellCollision->SetPosition({ GetPos().x - 12, GetPos().y - 22 });
+		LeftShellCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
-		RightShellCollision = CreateCollision(MarioCollisionOrder::Monster);
+		RightShellCollision = CreateCollision(MarioCollisionOrder::Shell);
 		RightShellCollision->SetScale({ 30, 45 });
 		RightShellCollision->SetPosition({ GetPos().x +12, GetPos().y - 22 });
+		RightShellCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		TriggerCollision = CreateCollision(MarioCollisionOrder::MonsterTrigger);
@@ -131,7 +136,7 @@ void Troopa::Update(float _DeltaTime)
 
 		if (false == Player::InvincibleMode)
 		{
-			if (Player::ModeValue == PlayerMode::SUPERMARIO)
+			if (Player::ModeValue == PlayerMode::SUPERMARIO || Player::ModeValue == PlayerMode::FIREMARIO)
 			{
 				Player::MainPlayer->SetIsShrinkOn();
 				SetEffectSound("pipe.wav");
@@ -378,6 +383,7 @@ void Troopa::IdleUpdate(float _DeltaTime)
 	{
 		SetEffectSound("kick.wav");
 		Dir = float4::Left;
+
 		StateValue = MonsterState::SHELL;
 		return;
 	}
@@ -515,6 +521,8 @@ void Troopa::FallUpdate(float _DeltaTime)
 
 void Troopa::ShellUpdate(float _DeltaTime)
 {
+	WaitTime -= _DeltaTime;
+
 	DirCheck("TroopaShell");
 	AccGravity(_DeltaTime);
 	MoveSpeed = 500.0f;
@@ -536,27 +544,30 @@ void Troopa::ShellUpdate(float _DeltaTime)
 	}
 
 
-
-	if ((true == RightShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-		|| (true == LeftShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-		)
+	if (0.0f >= WaitTime)
 	{
- 		if (false == Player::InvincibleMode)
+		if ((true == RightShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+			|| (true == LeftShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+			)
 		{
-			if (Player::ModeValue == PlayerMode::SUPERMARIO)
+			if (false == Player::InvincibleMode)
 			{
-				Player::MainPlayer->SetIsShrinkOn();
-				SetEffectSound("pipe.wav");
+				if (Player::ModeValue == PlayerMode::SUPERMARIO || Player::ModeValue == PlayerMode::FIREMARIO)
+				{
+					Player::MainPlayer->SetIsShrinkOn();
+					SetEffectSound("pipe.wav");
 
-			}
-			else
-			{
-				--Player::Life;
+				}
+				else
+				{
+					--Player::Life;
 
-				Player::MainPlayer->ChangeState(PlayerState::DEATH);
+					Player::MainPlayer->ChangeState(PlayerState::DEATH);
+				}
 			}
 		}
 	}
+
 
 
 	SetMove(MoveDir * _DeltaTime);
@@ -582,6 +593,7 @@ void Troopa::DeathUpdate(float _DeltaTime)
 	if (true == TimerStart)
 	{
 		WaitTime -= _DeltaTime;
+		PointSet.SetMove(float4::Up * NumSpeed * _DeltaTime);
 		if (0.0f >= WaitTime)
 		{
 			DeathMon->Death();
@@ -596,32 +608,29 @@ void Troopa::DeathUpdate(float _DeltaTime)
 
 void Troopa::Render(float _DeltaTime)
 {
-	//float4 PivotRPos = { ImgHalfWidth, -3 };
-	//float4 PivotLPos = { -ImgHalfWidth, -3 };
+	//HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+	//float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
+	//ActorPos += PivotLPos;
+	////ActorPos.x -= ImgHalfWidth;
 
-	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
-	ActorPos += PivotLPos;
-	//ActorPos.x -= ImgHalfWidth;
+	////<디버깅용_센터 보기위함>
+	//Rectangle(DoubleDC,
+	//	ActorPos.ix() - 5,
+	//	ActorPos.iy() - 5,
+	//	ActorPos.ix() + 5,
+	//	ActorPos.iy() + 5
+	//);
 
-	//<디버깅용_센터 보기위함>
-	Rectangle(DoubleDC,
-		ActorPos.ix() - 5,
-		ActorPos.iy() - 5,
-		ActorPos.ix() + 5,
-		ActorPos.iy() + 5
-	);
+	//float4 right = GetPos() - GetLevel()->GetCameraPos();
+	//right += PivotRPos;
 
-	float4 right = GetPos() - GetLevel()->GetCameraPos();
-	right += PivotRPos;
-
-	//<디버깅용_NextPos 보기위함>
-	Rectangle(DoubleDC,
-		right.ix() - 5,
-		right.iy() - 5,
-		right.ix() + 5,
-		right.iy() + 5
-	);
+	////<디버깅용_NextPos 보기위함>
+	//Rectangle(DoubleDC,
+	//	right.ix() - 5,
+	//	right.iy() - 5,
+	//	right.ix() + 5,
+	//	right.iy() + 5
+	//);
 
 
 

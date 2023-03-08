@@ -258,6 +258,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\GameEngineCore\GameEngineActor.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Block.cpp">
       <SubType>
       </SubType>

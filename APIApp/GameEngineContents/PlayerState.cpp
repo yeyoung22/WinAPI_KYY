@@ -235,7 +235,7 @@ void Player::IdleUpdate(float _Time)
 
 	if (GameEngineInput::IsPress("LeftMove") || GameEngineInput::IsPress("RightMove"))
 	{
-		ChangeState(PlayerState::MOVE);
+ 		ChangeState(PlayerState::MOVE);
 		return; 
 	}
 
@@ -269,7 +269,6 @@ void Player::IdleUpdate(float _Time)
 		)
 	{
 		AccGravity(_Time);
-
 	}
 	else
 	{
@@ -277,10 +276,9 @@ void Player::IdleUpdate(float _Time)
 
 		MoveDir.y = 0.0f;
 		SetPos({ GetPos().x, pos.y });
-		//ChangeState(PlayerState::IDLE);
-		//return;
 	}
 
+	
 	IsGround = LiftUp();
 	InitGravity(IsGround);
 }
@@ -1163,7 +1161,7 @@ void Player::FlagStart()
 		AnimationRender->ChangeAnimation("Right_Hang");
 	}
 	MoveDir.x = 0.0f;
-	WaitTime = 1.0f;
+	WaitTime = 1.5f;
 
 	TimerStop = true;
 
@@ -1192,11 +1190,11 @@ void Player::FlagUpdate(float _Time)
 		SetPos({ GetPos().x + 48, GetPos().y });
 		FlagDownEnd = false;
 
+
 		if (0.0f >= WaitTime);
 		{
 			ChangeState(PlayerState::GOCASTLE);
 			return;
-		
 		}
 
 	}
@@ -1269,8 +1267,18 @@ void Player::GoCastleUpdate(float _Time)
 					EffectPlayer.Stop();
 					IsMoveStop = false;
 					++Round;
+					MapLevel = 4;											//1-4·Î °Ç³Ê¶Ü
 					NumOfCoin = 0;
-					GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
+					//GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
+					
+
+
+
+
+					EndingBack::Ending->SetEndingScene(EndingScene::Clear);
+					GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+
+					return;
 				}
 
 			}

@@ -11,7 +11,8 @@ enum class MarioRenderOrder
 	Block,
 	Player = 100,				//가장 나중에 랜더되어야 함
 	UI,
-	Pipe
+	Pipe,
+	FirePole,
 };
 
 enum class MarioCollisionOrder

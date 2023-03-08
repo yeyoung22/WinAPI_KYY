@@ -28,7 +28,7 @@ int Player::NumOfCoin = 0;
 int Player::WorldLevel = 1;
 int Player::MapLevel = 1;
 int Player::TopScore = 0;
-int Player::Round = 0;
+int Player::Round = 0;  //0
 int Player::Life = 3;
 GameEngineImage* Player::ColImage = nullptr;
 
@@ -153,9 +153,7 @@ void Player::Start()
 
 	ChangeState(PlayerState::IDLE);
 
-	//SHeadCollision->Off();
 	AssignLevels(PlayLevel::MapNames, Round);									//Map이랑 World 지정
-
 }
 
 
@@ -297,48 +295,16 @@ bool  Player::CheckCeiling(float4 _Pos)
 void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	MainPlayer = this;										//When Level is changed,  MainPlayer should be changed this Level's Player
+	std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
+	ColImage = nullptr;
+	ChangeColImage(ChangeColName[Round]);
+	ResetPlayTimer();
+	SetPlayerColOn();
+	AnimationRender->On();
+	ChangeState(PlayerState::IDLE);
 }
 
 
-//For Debuging_벽에 영향을 받지 않고 맵의 끝까지 움직일 수 있음
-bool FreeMove = false;
-
-bool Player::FreeMoveState(float _DeltaTime)
-{
-	if (true == GameEngineInput::IsPress("FreeMoveSwitch"))
-	{
-		FreeMove = true;
-	}
-
-	if (true == FreeMove)
-	{
-		if (GameEngineInput::IsPress("LeftMove"))
-		{
-			SetMove(float4::Left * FreeSpeed * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Left * FreeSpeed * _DeltaTime);
-		}
-		else if (GameEngineInput::IsPress("RightMove"))
-		{
-			SetMove(float4::Right * FreeSpeed * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Right * FreeSpeed * _DeltaTime);
-		}
-		else if (GameEngineInput::IsPress("UpMove"))
-		{
-			SetMove(float4::Up * FreeSpeed * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Up * FreeSpeed * _DeltaTime);
-		}
-		else if (GameEngineInput::IsPress("DownMove"))
-		{
-			SetMove(float4::Down * FreeSpeed * _DeltaTime);
-			GetLevel()->SetCameraMove(float4::Down * FreeSpeed * _DeltaTime);
-		}
-	}
-	if (true == FreeMove)
-	{
-		return true;
-	}
-	return false;
-}
 
 void Player::Update(float _DeltaTime)
 {
@@ -435,7 +401,6 @@ void Player::Update(float _DeltaTime)
 
 				}
 
-
 				if (FindTemType != ItemType::HIDDENCOIN && FindTemType != ItemType::LIFEMUSHROOM)
 				{
 					if (ModeValue == PlayerMode::MARIO)
@@ -480,11 +445,6 @@ void Player::Update(float _DeltaTime)
 				default:
 					break;
 				}
-
-				//박스위로 움직이거나 하다가 떨어져야 함
-
-	
-
 			}
 		}
 		
@@ -567,17 +527,25 @@ void Player::Update(float _DeltaTime)
 
 	if (GameEngineInput::IsDown("StageClear"))
 	{
-		//++Round;
-		//std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
-		//
-		//Map::MainMap->StageClearOn();
-		//MainPlayer->SetPos({ 120, GameEngineWindow::GetScreenSize().half().y });
-		//ChangeColImage(ChangeColName[Round]);
+		/*if (1 <= Round)
+		{
+			Round = 2;
+			EndingBack::Ending->SetEndingScene(EndingScene::Clear);
+			GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 
-		//AssignLevels(PlayLevel::MapNames, Round);
+			return;
+		}
+		else
+		{
+			++Round;
+			std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
+			ChangeColImage(ChangeColName[Round]);
 
-		PlayLevel::MainPlayLevel->SetBGMStop();
-
+			AssignLevels(PlayLevel::MapNames, Round);
+			PlayLevel::MainPlayLevel->SetBGMStop();
+			GameEngineCore::GetInst()->ChangeLevel("OpeningLevel");
+			return;
+		}*/
 		EndingBack::Ending->SetEndingScene(EndingScene::Clear);
 		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
@@ -597,9 +565,18 @@ void Player::Update(float _DeltaTime)
 		SetInvincibleSwitch();
 	}
 	
+	//일정 시간이 남은 경우, BGM변경
 	if (true == IsUnderGround && HurryUpTime > PlayTimer)
 	{
 		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground_Hurry.mp3", MaxLoop);
+	}
+	else if(1 == Round && HurryUpTime > PlayTimer)
+	{ 
+		PlayLevel::MainPlayLevel->SetBGMPlayer("Bowser'sCastle_Hurry.mp3", MaxLoop);
+	}
+	else if (false == IsUnderGround && HurryUpTime > PlayTimer && 1 != Round)
+	{
+		PlayLevel::MainPlayLevel->SetBGMPlayer("RunningAbout_Hurry.mp3", MaxLoop);
 	}
 
 
@@ -631,9 +608,6 @@ void Player::Camera(float4 _Pos)
 	float4 ActPos = GetPos();
 	float4 CameraPos = GetLevel()->GetCameraPos();
 
-	//지울거...------------------------------------------------------------------------------------------------------------------------------------------------Tmp CameraPos
-	//GetLevel()->SetCameraPos({ ActPos.x - 100,CameraPos.y });
-
 	CameraEndPos = Map::SumMapWidth - GameEngineWindow::GetScreenSize().hx();
 
 
@@ -658,16 +632,23 @@ void Player::SetEffectSound(const std::string_view& _String, int _loop, float _B
 
 void Player::Render(float _DeltaTime)
 {
-	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
-	
-	//<디버깅용_센터 보기위함>
-	Rectangle(DoubleDC,					
-		ActorPos.ix() - 5,
-		ActorPos.iy() - 5,
-		ActorPos.ix() + 5,
-		ActorPos.iy() + 5
-	);
+	//HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+	//float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
+
+	////Brush를 이용해 색을 채워넣을 수 있음
+	//HBRUSH MyBrush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+	//HBRUSH OldBrush = (HBRUSH)SelectObject(DoubleDC, MyBrush);
+
+	////<디버깅용_센터 보기위함>
+	//Rectangle(DoubleDC,
+	//	ActorPos.ix() - 5,
+	//	ActorPos.iy() - 5,
+	//	ActorPos.ix() + 5,
+	//	ActorPos.iy() + 5
+	//);
+
+	//SelectObject(DoubleDC, OldBrush);
+	//DeleteObject(MyBrush);
 
 	//float4 right = GetPos() - GetLevel()->GetCameraPos();
 	//right.x += GetImgHalfWidth() - 8;
@@ -771,4 +752,44 @@ void Player::SetPlayerColOn()
 	RightBodyCollision->On();
 	LeftBodyCollision->On();
 	BottomCollision->On();
+}
+
+//For Debuging_벽에 영향을 받지 않고 맵의 끝까지 움직일 수 있음
+bool FreeMove = false;
+
+bool Player::FreeMoveState(float _DeltaTime)
+{
+	if (true == GameEngineInput::IsPress("FreeMoveSwitch"))
+	{
+		FreeMove = true;
+	}
+
+	if (true == FreeMove)
+	{
+		if (GameEngineInput::IsPress("LeftMove"))
+		{
+			SetMove(float4::Left * FreeSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Left * FreeSpeed * _DeltaTime);
+		}
+		else if (GameEngineInput::IsPress("RightMove"))
+		{
+			SetMove(float4::Right * FreeSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Right * FreeSpeed * _DeltaTime);
+		}
+		else if (GameEngineInput::IsPress("UpMove"))
+		{
+			SetMove(float4::Up * FreeSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Up * FreeSpeed * _DeltaTime);
+		}
+		else if (GameEngineInput::IsPress("DownMove"))
+		{
+			SetMove(float4::Down * FreeSpeed * _DeltaTime);
+			GetLevel()->SetCameraMove(float4::Down * FreeSpeed * _DeltaTime);
+		}
+	}
+	if (true == FreeMove)
+	{
+		return true;
+	}
+	return false;
 }

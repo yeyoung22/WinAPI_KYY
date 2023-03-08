@@ -1,4 +1,5 @@
 #include "Goomba.h"
+#include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEngineCore/GameEngineRender.h>
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineLevel.h>
@@ -6,7 +7,6 @@
 #include "Player.h"
 #include "Effect.h"
 
-#include <GameEnginePlatform/GameEngineWindow.h>
 
 Goomba::Goomba() 
 {
@@ -116,7 +116,7 @@ void Goomba::Update(float _DeltaTime)
 				//RightBodyCollision->Off();
 			}
 
-			if (Player::ModeValue == PlayerMode::SUPERMARIO)
+			if (Player::ModeValue == PlayerMode::SUPERMARIO || Player::ModeValue == PlayerMode::FIREMARIO)
 			{
 				Player::MainPlayer->SetIsShrinkOn();
 				SetEffectSound("pipe.wav");
@@ -141,35 +141,19 @@ void Goomba::Update(float _DeltaTime)
 			Effect* HitAttack = Collision[i]->GetOwner<Effect>();
 			HitAttack->Death();
 
+			Player::TotalScore += Point;
+
 			SetEffectSound("stomp.wav");
 			AnimationRender->ChangeAnimation("Goomba_Reverse");
 
 			DeathMon = this;
-
 			IsReverse = true;
 			StateValue = MonsterState::DEATH;
 			return;
 		}
 	}
 
-	//Troopa등껍질이랑 충돌한 경우
-	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
-		|| (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
-	{
-		TimerStart = true;
-
-		SetEffectSound("stomp.wav");
-		AnimationRender->ChangeAnimation("Goomba_Reverse");
-		Player::TotalScore += Point;
-		HeadCollision->Off();
-		LeftBodyCollision->Off();
-		RightBodyCollision->Off();
-		
-		DeathMon = this;
-		IsReverse = true;
-		StateValue = MonsterState::DEATH;
-		return;
-	}
+	
 
 	if (GetLevel()->GetCameraPos().x > GetPos().x)
 	{
@@ -311,11 +295,13 @@ void Goomba::MoveUpdate(float _DeltaTime)
 	if (true == CheckWall(PivotLPos))
 	{
 		Dir = float4::Right;
+		return;
 	}
 
 	if (true == CheckWall(PivotRPos))
 	{
 		Dir = float4::Left;
+		return;
 	}
 
 	//블럭과 충돌한 경우
@@ -367,16 +353,51 @@ void Goomba::MoveUpdate(float _DeltaTime)
 	{
 		for (size_t i = 0; i < Collision.size(); i++)
 		{
-			Monster* FindMonster = Collision[i]->GetOwner<Monster>();
-		//	FindMonster->SetDirSwitch();
+			Goomba* FindMonster = Collision[i]->GetOwner<Goomba>();
+			
+			FindMonster->SetDirSwitch();
 		}
- 		SetDirSwitch();
 
+		SetDirSwitch();
+		return;
 	}
-	
+
 	if (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision))
 	{
+		for (size_t i = 0; i < Collision.size(); i++)
+		{
+			Goomba* FindMonster = Collision[i]->GetOwner<Goomba>();
+			if (0.0f <= FindMonster->Dir.x && 0.0f >= Dir.x)
+			{
+				FindMonster->SetDirSwitch();
+			}
+		}
+
 		SetDirSwitch();
+		return;
+	}
+
+
+	//Troopa등껍질이랑 충돌한 경우
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		|| (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+	{
+		TimerStart = true;
+
+		SetEffectSound("stomp.wav");
+		AnimationRender->ChangeAnimation("Goomba_Reverse");
+		Player::TotalScore += Point;
+
+		HeadCollision->Off();
+		LeftBodyCollision->Off();
+		RightBodyCollision->Off();
+
+		DeathMon = this;
+		IsReverse = true;
+
+		MoveStart = true;
+		StateValue = MonsterState::DEATH;
+		return;
 	}
 }
 
@@ -435,6 +456,8 @@ void Goomba::DeathUpdate(float _DeltaTime)
 	if (true == TimerStart)
 	{
 		WaitTime -= _DeltaTime;
+		PointSet.SetMove(float4::Up * NumSpeed * _DeltaTime);
+
 		if (0.0f >= WaitTime)
 		{
 			DeathMon->Death();
@@ -452,32 +475,29 @@ void Goomba::DeathUpdate(float _DeltaTime)
 
 void Goomba::Render(float _DeltaTime)
 {
-	//float4 PivotRPos = { ImgHalfWidth, -3 };
-	//float4 PivotLPos = { -ImgHalfWidth, -3 };
+	//HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
+	//float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
+	//ActorPos += PivotLPos;
+	////ActorPos.x -= ImgHalfWidth;
 
-	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
-	ActorPos += PivotLPos;
-	//ActorPos.x -= ImgHalfWidth;
+	////<디버깅용_센터 보기위함>
+	//Rectangle(DoubleDC,
+	//	ActorPos.ix() - 5,
+	//	ActorPos.iy() - 5,
+	//	ActorPos.ix() + 5,
+	//	ActorPos.iy() + 5
+	//);
 
-	//<디버깅용_센터 보기위함>
-	Rectangle(DoubleDC,
-		ActorPos.ix() - 5,
-		ActorPos.iy() - 5,
-		ActorPos.ix() + 5,
-		ActorPos.iy() + 5
-	);
+	//float4 right = GetPos() - GetLevel()->GetCameraPos();
+	//right += PivotRPos;
 
-	float4 right = GetPos() - GetLevel()->GetCameraPos();
-	right += PivotRPos;
-
-	//<디버깅용_NextPos 보기위함>
-	Rectangle(DoubleDC,
-		right.ix() - 5,
-		right.iy() - 5,
-		right.ix() + 5,
-		right.iy() + 5
-	);
+	////<디버깅용_NextPos 보기위함>
+	//Rectangle(DoubleDC,
+	//	right.ix() - 5,
+	//	right.iy() - 5,
+	//	right.ix() + 5,
+	//	right.iy() + 5
+	//);
 
 
 
