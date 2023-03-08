@@ -91,6 +91,8 @@ void Goomba::Update(float _DeltaTime)
 
 
 			DeathMon = this;
+			StateValue = MonsterState::DEATH;
+			return;
 		}
 
 		//플레이어와 몬스터의 좌우측 충돌체가 충돌한 경우
@@ -134,6 +136,10 @@ void Goomba::Update(float _DeltaTime)
 			AnimationRender->ChangeAnimation("Goomba_Reverse");
 
 			DeathMon = this;
+
+			IsReverse = true;
+			StateValue = MonsterState::DEATH;
+			return;
 		}
 	}
 
@@ -149,22 +155,14 @@ void Goomba::Update(float _DeltaTime)
 		HeadCollision->Off();
 		LeftBodyCollision->Off();
 		RightBodyCollision->Off();
-
-		AccGravity(_DeltaTime);
-		SetMove(MoveDir * _DeltaTime);
+		
 		DeathMon = this;
+		IsReverse = true;
+		StateValue = MonsterState::DEATH;
+		return;
 	}
 
-	if (true == TimerStart)
-	{
-		WaitTime -= _DeltaTime;
-		if (0.0f >= WaitTime)
-		{
-			DeathMon->Death();
-			TimerStart = false;
-			WaitTime = 0.3f;
-		}
-	}
+	
 }
 
 void Goomba::AccGravity(float _DeltaTime)
@@ -264,6 +262,11 @@ void Goomba::MonsterMove(float _DeltaTime)
 	case MonsterState::FALL:
 	{
 		FallUpdate(_DeltaTime);
+		break;
+	}
+	case MonsterState::DEATH:
+	{
+		DeathUpdate(_DeltaTime);
 		break;
 	}
 	default:
@@ -384,6 +387,30 @@ void Goomba::FallUpdate(float _DeltaTime)
 		return;
 	}
 }
+
+void Goomba::DeathUpdate(float _DeltaTime)
+{
+	if (true == IsReverse)
+	{
+		AccGravity(_DeltaTime);
+		SetMove(MoveDir * _DeltaTime);
+	}
+	
+
+	if (true == TimerStart)
+	{
+		WaitTime -= _DeltaTime;
+		if (0.0f >= WaitTime)
+		{
+			DeathMon->Death();
+			IsReverse = false;
+			TimerStart = false;
+			WaitTime = 0.3f;
+		}
+	}
+
+}
+
 
 
 

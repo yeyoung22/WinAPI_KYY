@@ -35,6 +35,7 @@ private:
 	bool TimerStart = false;
 	bool MoveStart = false;
 	bool IsGround = false;
+	bool IsReverse = false;
 
 	Monster* DeathMon = nullptr;
 
@@ -81,6 +82,7 @@ private:
 	void MonsterMove(float _DeltaTime);
 	void MoveUpdate(float _DeltaTime);
 	void FallUpdate(float _DeltaTime);
+	void DeathUpdate(float _DeltaTime);
 
 };
 

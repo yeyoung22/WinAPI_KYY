@@ -732,7 +732,6 @@ void Player::Render(float _DeltaTime)
 
 void Player::ShrinkEffect(float _DeltaTime)
 {
-	WaitTime -= _DeltaTime;
 	InvincibleTimer -= _DeltaTime;
 
 	InvincibleMode = true;
@@ -747,25 +746,21 @@ void Player::ShrinkEffect(float _DeltaTime)
 	}
 
 	//Mario Mode Change(Mode Down)
-	if (ModeValue == PlayerMode::SUPERMARIO && 1.6f >= WaitTime)
+	if (ModeValue == PlayerMode::SUPERMARIO && 1.6f >= InvincibleTimer)
 	{
 		ChangeMode(PlayerMode::MARIO);
 	}
-	else if (ModeValue == PlayerMode::FIREMARIO && 1.6f >= WaitTime)
+	else if (ModeValue == PlayerMode::FIREMARIO && 1.6f >= InvincibleTimer)
 	{
 		ChangeMode(PlayerMode::SUPERMARIO);
 	}
 
 
-	if (0.0f >= WaitTime)
+	if (0.0f >= InvincibleTimer)
 	{
 		IsShrink = false;
 		IsAlphaOn = false;
 		AnimationRender->SetAlpha(255);
-	}
-
-	if (0.0f > InvincibleTimer)
-	{
 		InvincibleMode = false;
 		InvincibleTimer = 2.0f;
 	}

@@ -1259,12 +1259,14 @@ void Player::GoCastleUpdate(float _Time)
 				--PlayTimer;
 				++TotalScore;
 
-				
+				EffectPlayer.Stop();
+				SetEffectSound("coin.wav");
 			}
 			else
 			{
 				if (0 >= WaitTime)
 				{
+					EffectPlayer.Stop();
 					IsMoveStop = false;
 					++Round;
 					NumOfCoin = 0;
