@@ -51,7 +51,15 @@ void Goomba::Start()
 		TriggerCollision->SetPosition(GetPos() + TiriggerCtrlPos);
 		TriggerCollision->SetDebugRenderType(CT_Rect);
 	}
-	
+	{
+		PointSet.SetOwner(this);
+		PointSet.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
+		PointSet.SetValue(Point);
+		PointSet.SetAlign(Align::Right);
+		PointSet.SetRenderPos({ GetPos().x - 26, GetPos().y - 70 });
+		PointSet.SetCameraEffect(true);
+		PointSet.Off();
+	}
 }
 
 
@@ -133,6 +141,7 @@ void Goomba::Update(float _DeltaTime)
 			Effect* HitAttack = Collision[i]->GetOwner<Effect>();
 			HitAttack->Death();
 
+			SetEffectSound("stomp.wav");
 			AnimationRender->ChangeAnimation("Goomba_Reverse");
 
 			DeathMon = this;
@@ -162,6 +171,10 @@ void Goomba::Update(float _DeltaTime)
 		return;
 	}
 
+	if (GetLevel()->GetCameraPos().x > GetPos().x)
+	{
+		Death();
+	}
 	
 }
 
@@ -248,6 +261,20 @@ void Goomba::SetDirSwitch()
 	{
 		Dir = float4::Left;
 	}
+
+}
+
+void Goomba::SetOnPointSet(int _Point)
+{
+	PointSet.On();
+	PointSet.SetValue(_Point);
+}
+
+void Goomba::SetGoombaColOff()
+{
+	HeadCollision->Off();
+	RightBodyCollision->Off();
+	LeftBodyCollision->Off();
 }
 
 void Goomba::MonsterMove(float _DeltaTime)
@@ -397,6 +424,14 @@ void Goomba::DeathUpdate(float _DeltaTime)
 	}
 	
 
+	//AnimationRender->Off();
+	SetGoombaColOff();
+
+	SetOnPointSet(Point);
+
+
+
+
 	if (true == TimerStart)
 	{
 		WaitTime -= _DeltaTime;
@@ -406,6 +441,7 @@ void Goomba::DeathUpdate(float _DeltaTime)
 			IsReverse = false;
 			TimerStart = false;
 			WaitTime = 0.3f;
+			return;
 		}
 	}
 

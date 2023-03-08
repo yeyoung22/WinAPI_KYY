@@ -9,8 +9,8 @@ enum class MarioRenderOrder
 	PlayerAttack,
 	Item,
 	Block,
-	UI,
 	Player = 100,				//가장 나중에 랜더되어야 함
+	UI,
 	Pipe
 };
 

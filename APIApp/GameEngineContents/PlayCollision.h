@@ -17,6 +17,8 @@ public:
 	PlayCollision& operator=(PlayCollision&& _Other) noexcept = delete;
 
 
+	
+	
 
 
 protected:
@@ -25,15 +27,16 @@ protected:
 
 private:
 	bool TimerStart = false;
-
+	bool PointTimerStart = false;
 
 	float WaitTime = 0.2f;
+	float PointSetTimer = 0.5f;
 
 	int White = RGB(255, 0, 255);
 	int PoleLength = 480;
 	int Point = 0;
 
-	float4 NumberScale = { 10, 10 };
+	float4 NumberScale = { 16, 32 };
 
 	NumberRenderObjectEX PointSet;
 
@@ -42,8 +45,8 @@ private:
 	GameEngineCollision* DeadLineCol3 = nullptr;
 
 	GameEngineCollision* FlagCollision = nullptr;
-
-	void SetPointSet(float4 _Pos);
 	void SetPointSetOff();
+	void SetPointSetOn(int _Point);
+
 };
 

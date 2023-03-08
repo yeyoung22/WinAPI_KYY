@@ -2,6 +2,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/GameEngineResources.h>
 #include <GameEngineCore/GameEngineRender.h>
+#include "NumberRenderObjectEX.h"
 
 enum class ItemType
 {
@@ -70,11 +71,14 @@ private:
 	bool IsSwitchOn = false;
 	bool IsUpEnd = false;
 	bool IsDownEnd = false;
+	bool IsStop = false;
+	
 
 	int Point = 100;
 	int TPoint = 1000;
 	int Black = RGB(0, 0, 0);
 
+	float PointSetOnTimer = 0.8f;
 	float JumpPower = 380.0f;
 	float ImgHalfWidth = 32.0f;
 	float UpLimit = -62.0f;
@@ -86,15 +90,16 @@ private:
 	float4 Dir = float4::Right;						//기본적인 방향: right
 	float4 BasicScale = { 128, 128 };
 	float4 MoveDir = float4::Zero;
-	/*float4 PivotRPos = { ImgHalfWidth - 5, -10 };
-	float4 PivotLPos = { -ImgHalfWidth +5, -10 };*/
 	float4 PivotRPos = {  20, -15 };
 	float4 PivotLPos = { -20, -15 };
+	float4 NumberScale = { 16, 32 };
 
 	std::string DirString = "Right_";
 
 	ItemType PrevItemMode = ItemType::HIDDENCOIN;
 	ItemType ItemMode = ItemType::HIDDENCOIN;
+
+	NumberRenderObjectEX PointSet;
 
 	GameEngineRender* ItemRender = nullptr;
 	GameEngineCollision* BodyCollision = nullptr;
@@ -105,6 +110,7 @@ private:
 	void DirCheck(const std::string_view& _AnimationName);
 	bool CheckWall( float4 _Pivot);
 	bool LiftUp();
+	void SetOnPointSet(int _Point);
 
 	std::map<ItemType, std::string> AnimNames = std::map<ItemType, std::string>();
 };

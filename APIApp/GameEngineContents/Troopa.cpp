@@ -64,7 +64,24 @@ void Troopa::Start()
 		TriggerCollision->SetPosition(GetPos() + TiriggerCtrlPos);
 		TriggerCollision->SetDebugRenderType(CT_Rect);
 	}
-
+	{
+		PointSet.SetOwner(this);
+		PointSet.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
+		PointSet.SetValue(Point);
+		PointSet.SetAlign(Align::Right);
+		PointSet.SetRenderPos({ GetPos().x, GetPos().y - 70 });
+		PointSet.SetCameraEffect(true);
+		PointSet.Off();
+	}
+	{
+		PointSet.SetOwner(this);
+		PointSet.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
+		PointSet.SetValue(Point);
+		PointSet.SetAlign(Align::Right);
+		PointSet.SetRenderPos({ GetPos().x - 26, GetPos().y - 70 });
+		PointSet.SetCameraEffect(true);
+		PointSet.Off();
+	}
 	LeftShellCollision->Off();
 	RightShellCollision->Off();
 
@@ -129,6 +146,45 @@ void Troopa::Update(float _DeltaTime)
 		}
 
 
+	}
+
+	//플레이어의 공격과 충돌한 경우
+	std::vector<GameEngineCollision*> Collision;
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::PlayerAttack), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::PlayerAttack), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		)
+	{
+		TimerStart = true;
+		for (size_t i = 0; i < Collision.size(); i++)
+		{
+			Effect* HitAttack = Collision[i]->GetOwner<Effect>();
+			HitAttack->Death();
+			Player::MainPlayer->TotalScore += Point;
+
+			SetEffectSound("stomp.wav");
+			DirCheck("TroopaShell");
+
+			DeathMon = this;
+
+			StateValue = MonsterState::DEATH;
+			return;
+		}
+	}
+
+	//구멍에 빠진 경우, Death
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::DeadLine), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::DeadLine), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		)
+	{
+		Player::MainPlayer->TotalScore += Point;
+		Death();
+	}
+	if (true == RightShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::DeadLine), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		|| true == LeftShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::DeadLine), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		)
+	{
+		Player::MainPlayer->TotalScore += Point;
+		Death();
 	}
 
 	if (StateValue == MonsterState::IDLE)
@@ -253,6 +309,22 @@ void Troopa::DirCheck(const std::string_view& _AnimationName)
 }
 
 
+void Troopa::SetOnPointSet(int _Point)
+{
+	PointSet.On();
+	PointSet.SetValue(_Point);
+}
+
+void Troopa::SetTroopaColOff()
+{
+	HeadCollision->Off();
+	LeftBodyCollision->Off();
+	RightBodyCollision->Off();
+	RightShellCollision->Off();
+	LeftShellCollision->Off();
+}
+
+
 void Troopa::MonsterMove(float _DeltaTime)
 {
 	switch (StateValue)
@@ -275,6 +347,11 @@ void Troopa::MonsterMove(float _DeltaTime)
 	case MonsterState::SHELL:
 	{
 		ShellUpdate(_DeltaTime);
+		break;
+	}
+	case MonsterState::DEATH:
+	{
+		DeathUpdate(_DeltaTime);
 		break;
 	}
 	default:
@@ -482,12 +559,38 @@ void Troopa::ShellUpdate(float _DeltaTime)
 	}
 
 
-
-
 	SetMove(MoveDir * _DeltaTime);
 
 	IsGround = LiftUp();
 	InitGravity(IsGround);
+
+	if (GetLevel()->GetCameraPos().x > GetPos().x)
+	{
+		Death();
+	}
+}
+
+void Troopa::DeathUpdate(float _DeltaTime)
+{
+
+	AccGravity(_DeltaTime);
+	SetMove(MoveDir * _DeltaTime);
+	
+	SetTroopaColOff();
+	SetOnPointSet(Point);
+
+	if (true == TimerStart)
+	{
+		WaitTime -= _DeltaTime;
+		if (0.0f >= WaitTime)
+		{
+			DeathMon->Death();
+			TimerStart = false;
+			WaitTime = 0.3f;
+
+			return;
+		}
+	}
 }
 
 

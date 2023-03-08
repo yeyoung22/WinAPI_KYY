@@ -8,6 +8,7 @@
 #include "ContentsEnums.h"
 #include "Player.h"
 #include "PlayLevel.h"
+#include "NumberRenderObjectEX.h"
 #include <GameEnginePlatform/GameEngineWindow.h>
 
 Item::Item() 
@@ -65,13 +66,23 @@ void Item::Start()
 	}
 	{
 		SwitchCollision = CreateCollision(MarioCollisionOrder::ItemOn);
-		SwitchCollision->SetScale({ 50, 20 });
+		SwitchCollision->SetScale({ 58, 20 });
 		SwitchCollision->SetPosition({ GetPos().x, GetPos().y - 10});
 		SwitchCollision->SetDebugRenderType(CT_Rect);
 
 		//일단 아이템 꺼둠
 		//BodyCollision->Off();
 	}
+	{
+		PointSet.SetOwner(this);
+		PointSet.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
+		PointSet.SetValue(Point);
+		PointSet.SetAlign(Align::Right);
+		PointSet.SetRenderPos({GetPos().x, GetPos().y  - 70});
+		PointSet.SetCameraEffect(true);
+		PointSet.Off();
+	}
+
 	//기본적으로 꺼둠
 	BodyCollision->Off();
 	ItemRender->ChangeAnimation("HiddenCoin");
@@ -114,26 +125,46 @@ void Item::Update(float _DeltaTime)
 				SetEffectSound("coin.wav");
 				++Player::MainPlayer->NumOfCoin;
 				Player::MainPlayer->TotalScore += Point;
+				Death();
 			}
 			else if (ItemMode == ItemType::SUPERMUSHROOM)
 			{
 				Player::MainPlayer->Player::ChangeState(PlayerState::GROW);
 				Player::MainPlayer->TotalScore += TPoint;
+				
+				ItemRender->Off();
+				BodyCollision->Off();
+				IsStop = true;
+				
+
+
+				SetOnPointSet(TPoint);
 			}
 			else if (ItemMode == ItemType::LIFEMUSHROOM)
 			{
 				SetEffectSound("1-up.wav");
 				++Player::MainPlayer->Life;
 				Player::MainPlayer->TotalScore += TPoint;
+
+				ItemRender->Off();
+				BodyCollision->Off();
+				IsStop = true;
+
+				SetOnPointSet(TPoint);
 			}
 			else if (ItemMode == ItemType::FIREFLOWER)
 			{
 				SetEffectSound("growup.wav");
 				Player::MainPlayer->ModeValue = PlayerMode::FIREMARIO;
 				Player::MainPlayer->TotalScore += TPoint;
+
+				ItemRender->Off();
+				BodyCollision->Off();
+				IsStop = true;
+				SetOnPointSet(TPoint);
 			}
 
-			Death();
+		
 		}
 	}
 
@@ -148,138 +179,145 @@ void Item::Update(float _DeltaTime)
 			break;
 		case ItemType::SUPERMUSHROOM:
 		{
-			//서서히 위로 올라감
-			if (false == IsUpEnd)
+			if (false == IsStop)
 			{
-				MoveDir += float4::Up * MoveSpeed * _DeltaTime;
-				SetMove(float4::Up * MoveSpeed * _DeltaTime);
-
-				if (MoveDir.y <= UpLimit)
+				//서서히 위로 올라감
+				if (false == IsUpEnd)
 				{
-					MoveDir = float4::Zero;
-					IsUpEnd = true;
-					SetBodyColOn();
-					return;
-				}
-			}
-			//블럭을 타고 우측으로 이동
-			if (true == IsUpEnd)
-			{
-				//블럭과 충돌하지 않으면 중력의 영향으로 하강
-				if (false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
-					&& false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-				{
-					MoveDir.x = 0.0f;
-					Gravity = 7000.0f;
-					AccGravity(_DeltaTime);
-					SetMove(MoveDir * _DeltaTime);
-				}
+					MoveDir += float4::Up * MoveSpeed * _DeltaTime;
+					SetMove(float4::Up * MoveSpeed * _DeltaTime);
 
-
-				if (true == LiftUp())
-				{
-					//우측벽과 조우
-					if (true == CheckWall(PivotRPos))
+					if (MoveDir.y <= UpLimit)
 					{
-						Dir = float4::Left;
-						DirCheck("SuperMushroom_Move");
+						MoveDir = float4::Zero;
+						IsUpEnd = true;
+						SetBodyColOn();
+						return;
 					}
-					
-					if(true == CheckWall(PivotLPos))
+				}
+				//블럭을 타고 우측으로 이동
+				if (true == IsUpEnd)
+				{
+					//블럭과 충돌하지 않으면 중력의 영향으로 하강
+					if (false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+						&& false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
 					{
-						Dir = float4::Right;
-						DirCheck("SuperMushroom_Move");
+						MoveDir.x = 0.0f;
+						Gravity = 7000.0f;
+						AccGravity(_DeltaTime);
+						SetMove(MoveDir * _DeltaTime);
 					}
 
-					if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+
+					if (true == LiftUp())
 					{
-						if (0 > Dir.x)
-						{
-							Dir = float4::Right;
-							DirCheck("SuperMushroom_Move");
-						}
-						else
+						//우측벽과 조우
+						if (true == CheckWall(PivotRPos))
 						{
 							Dir = float4::Left;
 							DirCheck("SuperMushroom_Move");
 						}
+
+						if (true == CheckWall(PivotLPos))
+						{
+							Dir = float4::Right;
+							DirCheck("SuperMushroom_Move");
+						}
+
+						if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+						{
+							if (0 > Dir.x)
+							{
+								Dir = float4::Right;
+								DirCheck("SuperMushroom_Move");
+							}
+							else
+							{
+								Dir = float4::Left;
+								DirCheck("SuperMushroom_Move");
+							}
+						}
 					}
+
+
+					SetMove(Dir * MoveSpeed * _DeltaTime);
+
+					//땅 위로 올림
+					LiftUp();
 				}
-				
-
-				SetMove(Dir * MoveSpeed * _DeltaTime);
-
-				//땅 위로 올림
-				LiftUp();
 			}
 			break;
 		}
 		case ItemType::LIFEMUSHROOM:
 		{
-			//서서히 위로 올라감
-			if (false == IsUpEnd)
+			if (false == IsStop)
 			{
-				MoveDir += float4::Up * UpSpeed * _DeltaTime;
-				SetMove(float4::Up * UpSpeed* _DeltaTime);
-
-				if (MoveDir.y <= UpLimit)
+				//서서히 위로 올라감
+				if (false == IsUpEnd)
 				{
-					MoveDir = float4::Zero;
-					IsUpEnd = true;
-					SetBodyColOn();
-					return;
-				}
-			}
-			//블럭을 타고 우측으로 이동
-			if (true == IsUpEnd)
-			{
-				//블럭과 충돌하지 않으면 중력의 영향으로 하강
-				if (false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
-					&& false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
-				{
-					MoveDir.x = 0.0f;
-					Gravity = 7000.0f;
-					AccGravity(_DeltaTime);
-					SetMove(MoveDir * _DeltaTime);
-				}
+					MoveDir += float4::Up * UpSpeed * _DeltaTime;
+					SetMove(float4::Up * UpSpeed * _DeltaTime);
 
-
-				if (true == LiftUp())
-				{
-					//우측벽과 조우
-					if (true == CheckWall(PivotRPos))
+					if (MoveDir.y <= UpLimit)
 					{
-						Dir = float4::Left;
-						DirCheck("1UPMushroom_Move");
+						MoveDir = float4::Zero;
+						IsUpEnd = true;
+						SetBodyColOn();
+						return;
+					}
+				}
+				//블럭을 타고 우측으로 이동
+				if (true == IsUpEnd)
+				{
+					//블럭과 충돌하지 않으면 중력의 영향으로 하강
+					if (false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+						&& false == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+					{
+						MoveDir.x = 0.0f;
+						Gravity = 7000.0f;
+						AccGravity(_DeltaTime);
+						SetMove(MoveDir * _DeltaTime);
 					}
 
-					if (true == CheckWall(PivotLPos))
-					{
-						Dir = float4::Right;
-						DirCheck("1UPMushroom_Move");
-					}
 
-					if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+					if (true == LiftUp())
 					{
-						if (0 > Dir.x)
-						{
-							Dir = float4::Right;
-							DirCheck("1UPMushroom_Move");
-						}
-						else
+						//우측벽과 조우
+						if (true == CheckWall(PivotRPos))
 						{
 							Dir = float4::Left;
 							DirCheck("1UPMushroom_Move");
 						}
+
+						if (true == CheckWall(PivotLPos))
+						{
+							Dir = float4::Right;
+							DirCheck("1UPMushroom_Move");
+						}
+
+						if (true == BodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Monster), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+						{
+							if (0 > Dir.x)
+							{
+								Dir = float4::Right;
+								DirCheck("1UPMushroom_Move");
+							}
+							else
+							{
+								Dir = float4::Left;
+								DirCheck("1UPMushroom_Move");
+							}
+						}
 					}
+
+					SetMove(Dir * MoveSpeed * _DeltaTime);
+
+					//땅 위로 올림
+					LiftUp();
 				}
-
-				SetMove(Dir * MoveSpeed * _DeltaTime);
-
-				//땅 위로 올림
-				LiftUp();
+				break;
 			}
-			break;
+			
 		}
 		case ItemType::FIREFLOWER:
 		{
@@ -326,6 +364,24 @@ void Item::Update(float _DeltaTime)
 			break;
 		}
 	}
+
+	if (true == IsStop)
+	{
+		PointSetOnTimer -= _DeltaTime;
+		if (0.0f >= PointSetOnTimer)
+		{
+			PointSet.Off();
+			Death();
+			IsStop = false;
+			return;
+		}
+	}
+}
+
+void Item::SetOnPointSet(int _Point)
+{
+	PointSet.On();
+	PointSet.SetValue(_Point);
 }
 
 void Item::AccGravity(float _DeltaTime)
@@ -474,9 +530,11 @@ void Item::Render(float _DeltaTime)
 	//float4 PivotLPos = { -ImgHalfWidth, -3 };
 
 	HDC DoubleDC = GameEngineWindow::GetDoubleBufferImage()->GetImageDC();
-	float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();
-	ActorPos += PivotLPos;
+	/*float4 ActorPos = GetPos() - GetLevel()->GetCameraPos();*/
+	/*ActorPos += PivotLPos;*/
 	//ActorPos.x -= ImgHalfWidth;
+
+	float4 ActorPos = PointSet.GetPos() - GetLevel()->GetCameraPos();
 
 	//<디버깅용_센터 보기위함>
 	Rectangle(DoubleDC,
@@ -486,16 +544,16 @@ void Item::Render(float _DeltaTime)
 		ActorPos.iy() + 5
 	);
 
-	float4 right = GetPos() - GetLevel()->GetCameraPos();
-	right += PivotRPos;
+	//float4 right = GetPos() - GetLevel()->GetCameraPos();
+	//right += PivotRPos;
 
-	//<디버깅용_NextPos 보기위함>
-	Rectangle(DoubleDC,
-		right.ix() - 5,
-		right.iy() - 5,
-		right.ix() + 5,
-		right.iy() + 5
-	);
+	////<디버깅용_NextPos 보기위함>
+	//Rectangle(DoubleDC,
+	//	right.ix() - 5,
+	//	right.iy() - 5,
+	//	right.ix() + 5,
+	//	right.iy() + 5
+	//);
 
 	
 

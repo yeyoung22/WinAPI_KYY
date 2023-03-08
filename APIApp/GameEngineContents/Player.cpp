@@ -17,7 +17,6 @@
 #include "QuestionBlock.h"
 #include "Brick.h"
 
-
 //screenSize = {1024, 960}
 bool  Player::IsDebugMode = false;
 bool Player::InvincibleMode = false;
@@ -156,6 +155,7 @@ void Player::Start()
 
 	//SHeadCollision->Off();
 	AssignLevels(PlayLevel::MapNames, Round);									//MapÀÌ¶û World ÁöÁ¤
+
 }
 
 
@@ -553,17 +553,6 @@ void Player::Update(float _DeltaTime)
 
 	}
 
-
-
-	if (StateValue == PlayerState::DEATH)
-	{
-
-		//EndingBack::Ending->SetEndingScene(EndingScene::GameOver);
-		//GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
-	}
-
-
-	
 
 
 	if (true == FreeMoveState(_DeltaTime))

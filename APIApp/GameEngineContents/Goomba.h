@@ -1,5 +1,6 @@
 #pragma once
 #include "Monster.h"
+#include "NumberRenderObjectEX.h"
 
 // 설명 :
 class Goomba : public Monster
@@ -52,22 +53,22 @@ private:
 	float WaitTime = 0.3f;
 
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
-	float MoveSpeed = 170.0f;									//Player Speed								
+	float MoveSpeed = 140.0f;									//Player Speed								
 	float MoveSpeed2 = 80.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 
 
 	float4 MoveDir = float4::Zero;
 	float4 Dir = float4::Left;									//몬스터의 움직이는 방향
-
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };
-
 	float4 TriggerScale = { 10, 700 };
 	float4 TiriggerCtrlPos = { -700, -350 };
-
+	float4 NumberScale = { 16, 32 };
 
 	MonsterState StateValue = MonsterState::MOVE;
+
+	NumberRenderObjectEX PointSet;
 
 	GameEngineCollision* HeadCollision = nullptr;
 	GameEngineCollision* RightBodyCollision = nullptr;
@@ -83,6 +84,8 @@ private:
 	void MoveUpdate(float _DeltaTime);
 	void FallUpdate(float _DeltaTime);
 	void DeathUpdate(float _DeltaTime);
+	void SetOnPointSet(int _Point);
+	void SetGoombaColOff();
 
 };
 

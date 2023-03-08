@@ -18,7 +18,6 @@ ContentsUI::~ContentsUI()
 {
 }
 
-SPSymbolRenderObject SymbolSets;
 std::string_view Symbols = "";
 
 
@@ -209,7 +208,4 @@ void ContentsUI::Update(float _DeltaTime)
 
 
 	TimerSets.SetValue(static_cast<int>(Player::PlayTimer));
-	//AnimationRender->ChangeAnimation("CoinUI");
-
-	
 }

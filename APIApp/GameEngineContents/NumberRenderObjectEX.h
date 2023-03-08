@@ -73,6 +73,12 @@ public:
 	void Off() override;
 	void On() override;
 
+	float4 GetPos()
+	{
+		return Pos;
+	}
+
+
 protected:
 
 private:

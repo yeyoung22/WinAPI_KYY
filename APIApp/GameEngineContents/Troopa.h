@@ -1,5 +1,6 @@
 #pragma once
 #include "Monster.h"
+#include "NumberRenderObjectEX.h"
 
 // 설명 :
 class Troopa : public Monster
@@ -53,20 +54,19 @@ private:
 	float ImgHalfHeight = 64.0f;
 
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
-	float MoveSpeed = 170.0f;									//Player Speed								
+	float MoveSpeed = 140.0f;									//Player Speed								
 	float MoveSpeed2 = 80.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 
 
 	float4 MoveDir = float4::Zero;
 	float4 Dir = float4::Left;									//몬스터의 움직이는 방향
-
-
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };
-
 	float4 TriggerScale = { 10, 700 };
 	float4 TiriggerCtrlPos = { -500, -350 };
+	float4 NumberScale = { 16, 32 };
+
 
 	std::string DirString = "Left_";
 
@@ -81,11 +81,16 @@ private:
 
 	MonsterState StateValue = MonsterState::MOVE;
 
+	NumberRenderObjectEX PointSet;
+
 	void DirCheck(const std::string_view& _AnimationName);
 	void MonsterMove(float _DeltaTime);
 	void IdleUpdate(float _DeltaTime);
 	void MoveUpdate(float _DeltaTime);
 	void FallUpdate(float _DeltaTime);
 	void ShellUpdate(float _DeltaTime);
+	void DeathUpdate(float _DeltaTime);
+	void SetOnPointSet(int _Point);
+	void SetTroopaColOff();
 };
 

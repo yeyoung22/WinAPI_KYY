@@ -43,6 +43,15 @@ void PlayCollision::Start()
 		FlagCollision->SetPosition({ 12706, 480 });
 		FlagCollision->SetDebugRenderType(CT_Rect);
 	}
+	{
+		PointSet.SetOwner(this);
+		PointSet.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), RGB(255, 0, 255));
+		PointSet.SetValue(Point);
+		PointSet.SetAlign(Align::Right);
+		PointSet.SetRenderPos({ GetPos().x, GetPos().y});
+		PointSet.SetCameraEffect(true);
+		PointSet.Off();
+	}
 }
 
 
@@ -86,6 +95,7 @@ void PlayCollision::Update(float _DeltaTime)
 		}
 	}
 
+	//플레이어가 깃발(Pole Goal)에 닿은 경우
 	if (nullptr != FlagCollision)
 	{
 		if ((true == FlagCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Player), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
@@ -94,23 +104,24 @@ void PlayCollision::Update(float _DeltaTime)
 			{
 				float4 TouchPoint = Player::MainPlayer->GetPos();
 				int TouchPix =TouchPoint.iy();
+
 				
-				if (260 >= TouchPix)
+				if (200 < TouchPix && 310 >= TouchPix)
 				{
 					Point = 4000;
 					Player::MainPlayer->TotalScore += Point;
 				}
-				else if (360 < TouchPix && 410 >= TouchPix)
+				else if (310 < TouchPix && 410 >= TouchPix)
 				{
 					Point = 2000;
 					Player::MainPlayer->TotalScore += Point;
 				}
-				else if (410 < TouchPix && 540 >= TouchPix)
+				else if (410 < TouchPix && 580 >= TouchPix)
 				{
 					Point = 800;
 					Player::MainPlayer->TotalScore += Point;
 				}
-				else if (540 < TouchPix && 630 >= TouchPix)
+				else if (580 < TouchPix && 630 >= TouchPix)
 				{
 					Point = 400;
 					Player::MainPlayer->TotalScore += Point;
@@ -120,7 +131,9 @@ void PlayCollision::Update(float _DeltaTime)
 					Point = 100;
 					Player::MainPlayer->TotalScore += Point;
 				}
-				SetPointSet({ TouchPoint.x+20, TouchPoint.y });
+				PointTimerStart = true;
+				SetPointSetOn(Point);
+				PointSet.SetRenderPos({ TouchPoint.x + 120, TouchPoint.y - 80 });
 			}
 
 			FlagCollision->Off();
@@ -135,9 +148,20 @@ void PlayCollision::Update(float _DeltaTime)
 
 		if (0.0f >= WaitTime)
 		{
-			SetPointSetOff();
 			TimerStart = false;
 			WaitTime = 0.2f;
+		}
+	}
+
+	if (true == PointTimerStart)
+	{
+		PointSetTimer -= _DeltaTime;
+
+		if (0.0f >= PointSetTimer)
+		{
+			SetPointSetOff();
+			PointTimerStart = false;
+			PointSetTimer = 0.5f;
 		}
 	}
 
@@ -145,20 +169,14 @@ void PlayCollision::Update(float _DeltaTime)
 	
 }
 
-void PlayCollision::SetPointSet(float4 _Pos)
-{
-	PointSet.SetOwner(this);
-	PointSet.SetImage("Number.bmp", NumberScale, static_cast<int>(MarioRenderOrder::UI), White);
-	PointSet.SetValue(Point);
-	PointSet.SetAlign(Align::Right);
-
-	PointSet.SetRenderPos(_Pos);
-	PointSet.SetCameraEffect(false);
-
-	TimerStart = true;
-}
 
 void PlayCollision::SetPointSetOff()
 {
 	PointSet.Off();
+}
+
+void PlayCollision::SetPointSetOn(int _Point)
+{
+	PointSet.On();
+	PointSet.SetValue(_Point);
 }
