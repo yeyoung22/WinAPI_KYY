@@ -552,9 +552,9 @@ void Player::Update(float _DeltaTime)
 
 
 
-	if (GameEngineInput::IsDown("GoToCastle"))
+	if (GameEngineInput::IsDown("GoToPipe"))
 	{
-		MainPlayer->SetPos({ Map::SumMapWidth - GameEngineWindow::GetScreenSize().x, GameEngineWindow::GetScreenSize().y - 256 });
+		MainPlayer->SetPos({ 3500, GameEngineWindow::GetScreenSize().y - 128 });
 		GetLevel()->SetCameraPos({GetPos().x, 0});
 
 	}

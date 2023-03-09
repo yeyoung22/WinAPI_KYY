@@ -903,7 +903,7 @@ void PlayLevel::Loading()
 		GameEngineInput::CreateKey("BGMPause", 'P');
 		GameEngineInput::CreateKey("FreeMoveSwitch", '1');
 		GameEngineInput::CreateKey("StageClear", '2');
-		GameEngineInput::CreateKey("GoToCastle", '3');
+		GameEngineInput::CreateKey("GoToPipe", '3');
 		GameEngineInput::CreateKey("InvincibleMode", '7');
 		GameEngineInput::CreateKey("DebuggingMode", '8');		//For Debug
 	}

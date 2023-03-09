@@ -54,7 +54,7 @@ private:
 	float ImgHalfHeight = 64.0f;
 
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
-	float MoveSpeed = 130.0f;									//Player Speed								
+	float MoveSpeed = 110.0f;									//Player Speed								
 	float MoveSpeed2 = 80.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 	float NumSpeed = 60.0f;
