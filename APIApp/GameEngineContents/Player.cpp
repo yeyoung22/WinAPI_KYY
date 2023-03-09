@@ -22,7 +22,7 @@ bool  Player::IsDebugMode = false;
 bool Player::InvincibleMode = false;
 bool Player::IsUnderGround = false;
 Player* Player::MainPlayer;
-PlayerMode Player::ModeValue = PlayerMode::FIREMARIO;
+PlayerMode Player::ModeValue = PlayerMode::MARIO;
 float Player::PlayTimer = 400.0f;
 int Player::TotalScore = 0;
 int Player::NumOfCoin = 0;
