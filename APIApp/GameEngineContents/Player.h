@@ -146,6 +146,10 @@ public:
 		return StateValue;
 	}
 
+	bool GetIsTimerStop()
+	{
+		return TimerStop;
+	}
 
 protected:
 	void Start() override;
@@ -156,6 +160,7 @@ protected:
 	GameEngineSoundPlayer EffectPlayer;
 
 private:
+	bool TimerStop = false;
 	bool IsChanged = false;
 	bool IsLeftBrake = false;
 	bool IsGround = false;
@@ -165,7 +170,6 @@ private:
 	bool ColShorter = false;
 	bool FlagDownEnd = false;
 	bool IsMoveStop = false;
-	bool TimerStop = false;
 	bool ChangeSoundHurry = false;
 
 	int White = RGB(255, 255, 255);

@@ -947,8 +947,8 @@ void PlayLevel::Update(float _DeltaTime)
  		EndingBack::Ending->SetEndingScene(EndingScene::TimeOver);
 		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
-
-	if (HurryUpTime == static_cast<int>(Player::PlayTimer))
+	
+	if (HurryUpTime == static_cast<int>(Player::PlayTimer) && false == Player::MainPlayer->GetIsTimerStop())
 	{
 		IsSoundChanged = true;
 	}
