@@ -303,6 +303,7 @@ void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	SetPlayerColOn();
 	AnimationRender->On();
 	ChangeState(PlayerState::IDLE);
+	NumOfCoin = 0;
 }
 
 

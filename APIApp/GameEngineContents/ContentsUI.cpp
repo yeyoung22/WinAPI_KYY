@@ -209,7 +209,7 @@ void ContentsUI::Update(float _DeltaTime)
 	NumCoinSets.SetValue(Player::NumOfCoin);
 	WorldLevelSets.SetValue(Player::WorldLevel);
 	MapLevelSets.SetValue(Player::MapLevel);
-
+	
 
 	TimerSets.SetValue(static_cast<int>(Player::PlayTimer));
 }

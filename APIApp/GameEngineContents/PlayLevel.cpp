@@ -1010,18 +1010,16 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		//Player::MainPlayer->SetPos({ 2300, StartPos.y - 128 });					//800
 		//SetCameraPos({ Player::MainPlayer->GetPos().x - 200.0f, 0.0f });
 	}
-	if (Player::TopScore < Player::TotalScore)
-	{
-		Player::TopScore = Player::TotalScore;
-	}
-
-	
-	
 }
 
 void PlayLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	BGMPlayer.Stop();
+
+	if (Player::TopScore < Player::TotalScore)
+	{
+		Player::TopScore = Player::TotalScore;
+	}
 }
 
 

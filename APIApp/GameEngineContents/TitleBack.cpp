@@ -4,6 +4,7 @@
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include "ContentsEnums.h"
 #include "ContentsUI.h"
+#include "Player.h"
 
 bool TitleBack::IsMultiMode = false;
 
@@ -61,4 +62,6 @@ void TitleBack::Update(float _DeltaTime)
 
 		IsMultiMode = false;
 	}
+
+	Player::TotalScore = 0.0f;
 }
