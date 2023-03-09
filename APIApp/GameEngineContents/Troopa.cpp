@@ -480,6 +480,7 @@ void Troopa::MoveUpdate(float _DeltaTime)
 	{
 		SetDirSwitch();
 	}
+
 	DirCheck("TroopaIdle");
 }
 

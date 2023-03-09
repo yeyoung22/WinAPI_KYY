@@ -356,11 +356,13 @@ void PlayLevel::Loading()
 	{
 		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
 		Actor->SetPos({ 11300, StartPos.y - 128 });
+		Actor->SetTriggerPos({ -835, -350 });
 	}
 	//Goomba14
 	{
 		Goomba* Actor = CreateActor<Goomba>(MarioRenderOrder::Monster);
 		Actor->SetPos({ 11364, StartPos.y - 128 });
+		Actor->SetTriggerPos({ -840, -350 });
 	}
 	//Troopa
 	{
@@ -990,25 +992,6 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		BGMPlayer = GameEngineResources::GetInst().SoundPlayToControl("RunningAbout.mp3");
 		BGMPlayer.LoopCount(MaxLoop);
 		BGMPlayer.Volume(BGMVolume);
-	}
-
-	
-	if (1 == Player::Round)
-	{
-		float4 PrevMapScale = Map::MainMap->GetMapImgScale(1);
-		Player::MainPlayer->SetPos({ PrevMapScale.x + 120, GameEngineWindow::GetScreenSize().half().y - 100});
-		SetCameraPos({ PrevMapScale.x, 0.0f });
-	}
-	else
-	{
-		float4 PrevMapScale = Map::MainMap->GetMapImgScale(0);
-		float4 StartPos = GameEngineWindow::GetScreenSize();
-		Player::MainPlayer->SetPos({ 160, StartPos.y - 128 });
-		SetCameraPos(float4::Zero);
-
-		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
-		//Player::MainPlayer->SetPos({ 2300, StartPos.y - 128 });					//800
-		//SetCameraPos({ Player::MainPlayer->GetPos().x - 200.0f, 0.0f });
 	}
 }
 

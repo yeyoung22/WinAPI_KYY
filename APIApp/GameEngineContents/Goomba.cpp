@@ -153,7 +153,27 @@ void Goomba::Update(float _DeltaTime)
 		}
 	}
 
-	
+	//Troopaµî²®ÁúÀÌ¶û Ãæµ¹ÇÑ °æ¿ì
+	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
+		|| (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
+	{
+		TimerStart = true;
+
+		SetEffectSound("stomp.wav");
+		AnimationRender->ChangeAnimation("Goomba_Reverse");
+		Player::TotalScore += Point;
+
+		HeadCollision->Off();
+		LeftBodyCollision->Off();
+		RightBodyCollision->Off();
+
+		DeathMon = this;
+		IsReverse = true;
+
+		MoveStart = true;
+		StateValue = MonsterState::DEATH;
+		return;
+	}
 
 	if (GetLevel()->GetCameraPos().x > GetPos().x)
 	{
@@ -378,27 +398,7 @@ void Goomba::MoveUpdate(float _DeltaTime)
 	}
 
 
-	//Troopaµî²®ÁúÀÌ¶û Ãæµ¹ÇÑ °æ¿ì
-	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
-		|| (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Shell), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
-	{
-		TimerStart = true;
 
-		SetEffectSound("stomp.wav");
-		AnimationRender->ChangeAnimation("Goomba_Reverse");
-		Player::TotalScore += Point;
-
-		HeadCollision->Off();
-		LeftBodyCollision->Off();
-		RightBodyCollision->Off();
-
-		DeathMon = this;
-		IsReverse = true;
-
-		MoveStart = true;
-		StateValue = MonsterState::DEATH;
-		return;
-	}
 }
 
 void Goomba::FallUpdate(float _DeltaTime)

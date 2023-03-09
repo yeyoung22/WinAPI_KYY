@@ -296,6 +296,25 @@ bool  Player::CheckCeiling(float4 _Pos)
 void Player::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	MainPlayer = this;										//When Level is changed,  MainPlayer should be changed this Level's Player
+
+	if (1 == Player::Round)
+	{
+		float4 PrevMapScale = Map::MainMap->GetMapImgScale(1);
+		SetPos({ PrevMapScale.x + 120, GameEngineWindow::GetScreenSize().half().y - 100 });
+		GetLevel()->SetCameraPos({ PrevMapScale.x, 0.0f });
+	}
+	else
+	{
+		float4 PrevMapScale = Map::MainMap->GetMapImgScale(0);
+		float4 StartPos = GameEngineWindow::GetScreenSize();
+		SetPos({ 160, StartPos.y - 128 });
+		GetLevel()->SetCameraPos(float4::Zero);
+
+		//테스트용 위치 ------------------------------------------------------------지워야 함!!!!!!
+		//Player::MainPlayer->SetPos({ 2300, StartPos.y - 128 });					//800
+		//SetCameraPos({ Player::MainPlayer->GetPos().x - 200.0f, 0.0f });
+	}
+
 	std::vector<std::string> ChangeColName = Map::MainMap->GetColMaps();
 	ColImage = nullptr;
 	ChangeColImage(ChangeColName[Round]);
@@ -508,8 +527,11 @@ void Player::Update(float _DeltaTime)
 		{
 			for (size_t i = 0; i < Collision.size(); i++)
 			{
-				QuestionBlock* FindQBlock = Collision[i]->GetOwner<QuestionBlock>();
+  				QuestionBlock* FindQBlock = Collision[i]->GetOwner<QuestionBlock>();
+				FindQBlock->SetImgChange();
+				FindQBlock->SetQBlockRenOn();
 				FindQBlock->SetHiddenColOff();
+				FindQBlock->SetIsUsedOn();
 			}
 		}
 

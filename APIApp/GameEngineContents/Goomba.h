@@ -64,7 +64,7 @@ private:
 	float4 PivotRPos = { ImgHalfWidth - 8, -3 };
 	float4 PivotLPos = { -ImgHalfWidth + 8, -3 };
 	float4 TriggerScale = { 10, 700 };
-	float4 TiriggerCtrlPos = { -800, -350 };
+	float4 TiriggerCtrlPos = { -835, -350 };
 	float4 NumberScale = { 16, 32 };
 
 	MonsterState StateValue = MonsterState::MOVE;

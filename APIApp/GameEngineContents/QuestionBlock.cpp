@@ -122,3 +122,8 @@ void QuestionBlock::SetQBlockRenOff()
 {
 	BlockRender->Off();
 }
+
+void QuestionBlock::SetQBlockRenOn()
+{
+	BlockRender->On();
+}
