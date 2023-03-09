@@ -49,6 +49,7 @@ class Player : public GameEngineActor
 public:
 	static bool IsDebugMode;								//true: 디버그 모드(ColMap이 랜더, 충돌체 랜더, 플레이어의 좌표 줄력)
 	static bool InvincibleMode;								//무적상태: 몬스터와 부딪혀도 죽지 않음
+	static bool IsUnderGround;
 	static Player* MainPlayer;
 	static PlayerMode ModeValue;							//플레이어의 상태(Mario, SuperMario, FireMario)
 	static float PlayTimer;									//Play Timer
@@ -155,7 +156,6 @@ protected:
 	GameEngineSoundPlayer EffectPlayer;
 
 private:
-	bool IsUnderGround = false;
 	bool IsChanged = false;
 	bool IsLeftBrake = false;
 	bool IsGround = false;
@@ -166,6 +166,7 @@ private:
 	bool FlagDownEnd = false;
 	bool IsMoveStop = false;
 	bool TimerStop = false;
+	bool ChangeSoundHurry = false;
 
 	int White = RGB(255, 255, 255);
 	int Black = RGB(0, 0, 0);
@@ -181,11 +182,10 @@ private:
 
 	int Point = 100;
 
-	float HurryUpTime = 100.0f;
-
 	float Gravity = 200.0f;										//For Decresing JumpPower
 	float ImgHalfWidth = 32.0f;									//To be cut PlayerImg's half size Width and Height
 	float ImgHalfHeight = 64.0f;
+	float FireBallHeight = - 46.0f;
 
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
 	float MoveSpeed = 250.0f;									//Player Speed

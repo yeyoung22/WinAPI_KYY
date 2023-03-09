@@ -826,11 +826,11 @@ void Player::AttackStart()
 
 	if (RightStr == DirString)
 	{
-		Actor->SetPos({ FirePos.x + 36, FirePos.y - ImgHalfHeight });
+		Actor->SetPos({ FirePos.x + 36, FirePos.y + FireBallHeight });
 	}
 	else
 	{
-		Actor->SetPos({ FirePos.x - 36, FirePos.y - ImgHalfHeight });
+		Actor->SetPos({ FirePos.x - 36, FirePos.y + FireBallHeight });
 	}
 
 	Actor->SetEffectDir(DirString);
@@ -1014,6 +1014,7 @@ void Player::DeathUpdate(float _Time)
 		AnimationRender->Off();
 		EndingBack::Ending->SetEndingScene(EndingScene::GameOver);
 		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
+		ModeValue = PlayerMode::MARIO;
 	}
 
 
@@ -1094,7 +1095,6 @@ void Player::EnterLPipeUpdate(float _Time)
 	if (0 >= WaitTime)
 	{
 		IsUnderGround = false;
-		PlayLevel::MainPlayLevel->SetBGMPlayer("RunningAbout.mp3", MaxLoop);
 
 		MoveDir.x = 0.0f;
 		SetPos({ UnderGroundEnd });
@@ -1143,6 +1143,7 @@ void Player::ExitPipeUpdate(float _Time)
 }
 void Player::ExitPipeEnd()
 {
+	PlayLevel::MainPlayLevel->SetBGMPlayer("RunningAbout.mp3", MaxLoop);
 }
 
 

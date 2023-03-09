@@ -43,9 +43,9 @@ private:
 
 
 	float ImgHalfWidth = 32.0f;
-	float JumpPower = 230.0f;
+	float JumpPower = 240.0f;
 	float MoveSpeed = 500.0f;
-	float Gravity = 730.0f;
+	float Gravity = 830.0f;//730
 
 	float4 Dir = float4::Zero;
 	float4 MoveDir = float4::Zero;

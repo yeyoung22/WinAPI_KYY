@@ -272,10 +272,11 @@ void PlayLevel::ImageLoad()
 //Loading 시점: 만들어야할 것들을 만드는 시점
 void PlayLevel::Loading()
 {
+	float4 StartPos = GameEngineWindow::GetScreenSize();
+
 	SoundLoad();
 	ImageLoad();
 
-	float4 StartPos = GameEngineWindow::GetScreenSize();
 	//액터 생성
 	{
 		Map* Actor = CreateActor<Map>();
@@ -931,7 +932,6 @@ void PlayLevel::Update(float _DeltaTime)
 		}
 	}
 
-
 	if (GameEngineInput::IsDown("DebugRenderSwitch") || GameEngineInput::IsDown("DebuggingMode"))
 	{
 		DebugRenderSwitch();
@@ -939,7 +939,7 @@ void PlayLevel::Update(float _DeltaTime)
 
 	if (GameEngineInput::IsDown("TimeChange"))
 	{
-		Player::PlayTimer = 101.0f;
+		Player::PlayTimer = 103.0f;
 	}
 
 	if (0 >= Player::PlayTimer)
@@ -947,6 +947,31 @@ void PlayLevel::Update(float _DeltaTime)
  		EndingBack::Ending->SetEndingScene(EndingScene::TimeOver);
 		GameEngineCore::GetInst()->ChangeLevel("EndingLevel");
 	}
+
+	if (HurryUpTime == static_cast<int>(Player::PlayTimer))
+	{
+		IsSoundChanged = true;
+	}
+
+	if (true == IsSoundChanged)
+	{
+		if (true == Player::IsUnderGround)
+		{
+			SetBGMPlayer("Underground_Hurry.mp3", MaxLoop);
+		}
+	
+		if (false == Player::IsUnderGround)
+		{
+			SetBGMPlayer("RunningAbout_Hurry.mp3", MaxLoop);
+		}
+
+		if (1 == Player::Round)
+		{
+			SetBGMPlayer("Bowser'sCastle_Hurry.mp3", MaxLoop);
+		}
+		IsSoundChanged = false;
+	}
+
 }
 
 

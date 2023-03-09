@@ -20,8 +20,9 @@
 //screenSize = {1024, 960}
 bool  Player::IsDebugMode = false;
 bool Player::InvincibleMode = false;
+bool Player::IsUnderGround = false;
 Player* Player::MainPlayer;
-PlayerMode Player::ModeValue = PlayerMode::MARIO;
+PlayerMode Player::ModeValue = PlayerMode::FIREMARIO;
 float Player::PlayTimer = 400.0f;
 int Player::TotalScore = 0;
 int Player::NumOfCoin = 0;
@@ -312,7 +313,7 @@ void Player::Update(float _DeltaTime)
 	{
 		PlayTimer -= _DeltaTime* TimeSpeed;
 	}
-
+	
 	//플레이어 모드에 따라 머리 부분 충돌체를 교체
 	if (ModeValue == PlayerMode::MARIO && StateValue != PlayerState::DEATH)
 	{
@@ -565,21 +566,6 @@ void Player::Update(float _DeltaTime)
 		SetInvincibleSwitch();
 	}
 	
-	//일정 시간이 남은 경우, BGM변경
-	if (true == IsUnderGround && HurryUpTime > PlayTimer)
-	{
-		PlayLevel::MainPlayLevel->SetBGMPlayer("Underground_Hurry.mp3", MaxLoop);
-	}
-	else if(1 == Round && HurryUpTime > PlayTimer)
-	{ 
-		PlayLevel::MainPlayLevel->SetBGMPlayer("Bowser'sCastle_Hurry.mp3", MaxLoop);
-	}
-	else if (false == IsUnderGround && HurryUpTime > PlayTimer && 1 != Round)
-	{
-		PlayLevel::MainPlayLevel->SetBGMPlayer("RunningAbout_Hurry.mp3", MaxLoop);
-	}
-
-
 	UpdateState(_DeltaTime);
 }
 
