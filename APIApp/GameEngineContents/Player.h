@@ -188,8 +188,8 @@ private:
 	float ImgHalfHeight = 64.0f;
 
 	float TimeSpeed = 2.0f;										//Time Speed Control Constant
-	float MoveSpeed = 240.0f;									//Player Speed
-	float MaxSpeed = 270.0f;									
+	float MoveSpeed = 250.0f;									//Player Speed
+	float MaxSpeed = 278.0f;									
 	float FreeSpeed = 1200.0f;
 	float LeftSpeed = 7.0f;										//남은 속도
 	float PipeEnterSpeed = 68.0f;

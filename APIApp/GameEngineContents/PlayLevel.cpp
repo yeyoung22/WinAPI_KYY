@@ -366,13 +366,19 @@ void PlayLevel::Loading()
 		Troopa* Actor = CreateActor<Troopa>(MarioRenderOrder::Monster);
 		Actor->SetPos({ 6470, StartPos.y - 128 });			//7000
 	}
+	//1_1_TestItem(Item5->코인->Test를 위해 넣은 아이템)
+	{
+		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+		Actor->SetPos({ 1504, 640 });
+		Actor->SetItemMode(ItemType::SUPERMUSHROOM);
+		Actor->SetItemRenderOff();
+	}
 	//1_1_ITem1
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
 		Actor->SetPos({ 1376, 640 });
 		Actor->SetItemMode(ItemType::SUPERMUSHROOM);
 		Actor->SetItemRenderOff();
-		//일단 굼바 끔=------------------------------------------------------------------------------------------
 	}
 	//1_1_Item2
 	{
@@ -394,12 +400,12 @@ void PlayLevel::Loading()
 		Actor->SetPos({ 1060, 640 });
 		Actor->SetItemRenderOff();
 	}
-	//1_1_Item5
-	{
-		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
-		Actor->SetPos({ 1504, 640 });
-		Actor->SetItemRenderOff();
-	}
+	////1_1_Item5
+	//{
+	//	Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
+	//	Actor->SetPos({ 1504, 640 });
+	//	Actor->SetItemRenderOff();
+	//}
 	//1_1_Item6
 	{
 		Item* Actor = CreateActor<Item>(MarioRenderOrder::Item);
@@ -904,6 +910,7 @@ void PlayLevel::Loading()
 		GameEngineInput::CreateKey("FreeMoveSwitch", '1');
 		GameEngineInput::CreateKey("StageClear", '2');
 		GameEngineInput::CreateKey("GoToPipe", '3');
+		GameEngineInput::CreateKey("TimeChange", '4');
 		GameEngineInput::CreateKey("InvincibleMode", '7');
 		GameEngineInput::CreateKey("DebuggingMode", '8');		//For Debug
 	}
@@ -928,6 +935,11 @@ void PlayLevel::Update(float _DeltaTime)
 	if (GameEngineInput::IsDown("DebugRenderSwitch") || GameEngineInput::IsDown("DebuggingMode"))
 	{
 		DebugRenderSwitch();
+	}
+
+	if (GameEngineInput::IsDown("TimeChange"))
+	{
+		Player::PlayTimer = 101.0f;
 	}
 
 	if (0 >= Player::PlayTimer)
@@ -973,7 +985,10 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		//Player::MainPlayer->SetPos({ 2300, StartPos.y - 128 });					//800
 		//SetCameraPos({ Player::MainPlayer->GetPos().x - 200.0f, 0.0f });
 	}
-
+	if (Player::TopScore < Player::TotalScore)
+	{
+		Player::TopScore = Player::TotalScore;
+	}
 
 	
 	
@@ -982,11 +997,6 @@ void PlayLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 void PlayLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	BGMPlayer.Stop();
-
-	if (Player::TopScore < Player::TotalScore)
-	{
-		Player::TopScore = Player::TotalScore;
-	}
 }
 
 
