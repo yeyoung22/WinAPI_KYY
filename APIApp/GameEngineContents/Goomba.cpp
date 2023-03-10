@@ -35,14 +35,14 @@ void Goomba::Start()
 	}
 	{
 		LeftBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
-		LeftBodyCollision->SetScale({ 10, 45 });
-		LeftBodyCollision->SetPosition({ GetPos().x - 20, GetPos().y - 22 });
+		LeftBodyCollision->SetScale({30, 38  });//10, 45
+		LeftBodyCollision->SetPosition({ GetPos().x - 12, GetPos().y - 22 }); // GetPos().x - 20, GetPos().y - 22
 		LeftBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{
 		RightBodyCollision = CreateCollision(MarioCollisionOrder::Monster);
-		RightBodyCollision->SetScale({ 10, 45 });
-		RightBodyCollision->SetPosition({ GetPos().x + 20, GetPos().y - 22 });
+		RightBodyCollision->SetScale({ 30, 38 });
+		RightBodyCollision->SetPosition({ GetPos().x + 12, GetPos().y - 22 });
 		RightBodyCollision->SetDebugRenderType(CT_Rect);
 	}
 	{

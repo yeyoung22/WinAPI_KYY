@@ -646,6 +646,25 @@ void Player::JumpUpdate(float _Time)
 		
 	}
 
+	//Even If Player don't press 'D' or 'A', When Mario Hit a Block While he jumping, He can't Go Away
+	if ((true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		|| (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		//Block과 충돌했으면 못 가게 막음
+		MoveDir.x = 0.0f;
+
+	}
+	if ((true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		|| (true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::Brick), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
+		)
+	{
+		//Block과 충돌했으면 못 가게 막음
+		MoveDir.x = 0.0f;
+
+	}
+
+
 	if ((true == HeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect }))
 		|| (true == SHeadCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::QBlock), .TargetColType = CT_Rect, .ThisColType = CT_Rect })))
 	{

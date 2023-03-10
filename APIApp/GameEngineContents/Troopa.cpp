@@ -176,6 +176,27 @@ void Troopa::Update(float _DeltaTime)
 		}
 	}
 
+	if (true == RightShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::PlayerAttack), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		|| true == LeftShellCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::PlayerAttack), .TargetColType = CT_Rect, .ThisColType = CT_Rect }, Collision)
+		)
+	{
+		TimerStart = true;
+		for (size_t i = 0; i < Collision.size(); i++)
+		{
+			Effect* HitAttack = Collision[i]->GetOwner<Effect>();
+			HitAttack->Death();
+			Player::MainPlayer->TotalScore += Point;
+
+			SetEffectSound("stomp.wav");
+			DirCheck("TroopaShell");
+
+			DeathMon = this;
+
+			StateValue = MonsterState::DEATH;
+			return;
+		}
+	}
+
 	//구멍에 빠진 경우, Death
 	if (true == RightBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::DeadLine), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
 		|| true == LeftBodyCollision->Collision({ .TargetGroup = static_cast<int>(MarioCollisionOrder::DeadLine), .TargetColType = CT_Rect, .ThisColType = CT_Rect })
@@ -578,6 +599,7 @@ void Troopa::ShellUpdate(float _DeltaTime)
 
 	if (GetLevel()->GetCameraPos().x > GetPos().x)
 	{
+		WaitTime = 2.0f;
 		Death();
 	}
 }

@@ -367,7 +367,7 @@ void PlayLevel::Loading()
 	//Troopa
 	{
 		Troopa* Actor = CreateActor<Troopa>(MarioRenderOrder::Monster);
-		Actor->SetPos({ 6470, StartPos.y - 128 });			//7000
+		Actor->SetPos({ 7000, StartPos.y - 128 });			//7000
 	}
 	//1_1_TestItem(Item5->코인->Test를 위해 넣은 아이템)
 	{

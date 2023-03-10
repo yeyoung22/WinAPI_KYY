@@ -128,7 +128,7 @@ void Player::Start()
 	}
 	{
 		RightBodyCollision = CreateCollision(MarioCollisionOrder::Player);
-		RightBodyCollision->SetScale({ 5, 60 });
+		RightBodyCollision->SetScale({ 5, 64 });
 		RightBodyCollision->SetPosition({ GetPos().x + 24, GetPos().y - 32});
 		RightBodyCollision->SetDebugRenderType(CT_Rect);
 	}
